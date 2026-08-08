@@ -8,7 +8,7 @@
 |------|--------|
 | Conjecture statement verified (arXiv:2407.03030) | ✅ done |
 | LEM-A-EXISTS audited | ✅ done |
-| Gδ / complete-metrizability implication audited | ⬜ pending |
+| Gδ / complete-metrizability implication audited | ✅ done |
 | Star-metric construction written | ⬜ pending |
 | Closed-embedding argument audited | ⬜ pending |
 | Japanese report complete | ⬜ pending |
@@ -22,18 +22,24 @@
 The proposed argument for THM-CONJ51 proceeds through six steps:
 
 1. **LEM-A-EXISTS** — ZFC existence of A ⊆ [0,1] with |A| = ℵ₁ and A not Fσ.
-2. Y = [0,1] \ A is not Gδ, hence not completely metrizable (Alexandrov's theorem).
+2. Y = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
+   completely metrizable (Alexandrov–Lavrentiev, applied to the separable
+   ambient space [0,1] only).
 3. A parameterised star-type family of compatible metrics on D (**LEM-STAR-METRIC**).
 4. A bi-Lipschitz embedding Y → Met(D).
 5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**).
-6. Closed subspace of a completely metrizable space is completely metrizable
-   (corollary of Alexandrov) — contradiction (**THM-CONJ51**).
+6. A closed subspace of a completely metrizable space is completely
+   metrizable — proved directly (no separability needed, since Met(D) is
+   not separable) — contradiction (**THM-CONJ51**).
 
 **Note on Met(D):** Met(D) denotes metrics on D *compatible with the discrete
-topology*, not all metrics on the underlying set.
+topology*, not all metrics on the underlying set. Met(D) is not separable;
+see `notes/literature.md` and `notes/proof-audit.md` (Issue #4) for why this
+matters for step 6.
 
-Step 1 (LEM-A-EXISTS) has completed independent audit (report §3,
-2026-08-09). The remaining steps have not.
+Steps 1–2 and 6 (LEM-A-EXISTS; the Gδ / complete-metrizability implication;
+closed-subspace inheritance) have completed independent audit (report §§1,
+3–4, 2026-08-09). Steps 3–5 (LEM-STAR-METRIC, LEM-CLOSED-IMAGE) have not.
 
 ## Open obligations
 

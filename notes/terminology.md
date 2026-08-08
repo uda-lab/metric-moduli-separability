@@ -15,9 +15,9 @@ Quick reference for notation used consistently across the report, paper, and Lea
 | $\varphi$ | The embedding $Y \to \operatorname{Met}(D)$, $t \mapsto d_t$ |
 | $F_\sigma$ | Countable union of closed sets |
 | $G_\delta$ | Countable intersection of open sets |
-| Completely metrizable | A topological space homeomorphic to a complete metric space; equivalently (for subspaces of Polish spaces), a $G_\delta$ subspace (Alexandrov's theorem) |
-| Alexandrov's theorem | A subspace of a Polish space is Polish iff it is a $G_\delta$ set |
-| Closed-subspace inheritance | A closed subspace of a completely metrizable space is completely metrizable (corollary of Alexandrov: closed sets are $G_\delta$) |
+| Completely metrizable | A topological space homeomorphic to a complete metric space. Not the same as **Polish** (= completely metrizable **and** separable) — do not conflate the two |
+| Alexandrov–Lavrentiev $G_\delta$ characterisation | A subspace of a separable (e.g. Polish) space $X$ is completely metrizable iff it is a $G_\delta$ set in $X$. Used only in the separable setting $X=[0,1]$; **must not** be invoked for $\operatorname{Met}(D)$, which is not separable |
+| Closed-subspace inheritance | A closed subspace $C$ of a completely metrizable space $Z$ is completely metrizable — proved directly (a complete metric on $Z$ restricted to $C$ is a complete metric on $C$, since closed subsets of metric spaces are sequentially closed). **No separability needed**; this is the version used for $\operatorname{Met}(D)$ |
 
 **Warning:** $\operatorname{Met}(D)$ is **not** the set of all metrics on the underlying set of $D$.
 A metric on $D$ that induces a non-discrete topology (e.g. a bounded metric identifying
