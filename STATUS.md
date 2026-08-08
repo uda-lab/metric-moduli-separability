@@ -60,7 +60,8 @@ See `notes/proof-audit.md` for detailed open items.
 ## Lean
 
 Lean project initialised (Mathlib v4.32.2, `lean/lakefile.toml`).
-`lem_A_exists` (LEM-A-EXISTS) has a Lean statement (with `sorry`). `Met(D)`
+`lem_A_exists` (LEM-A-EXISTS) is now **sorry-free** (Issue #8, 2026-08-09;
+`#print axioms` shows only `[propext, Classical.choice, Quot.sound]`). `Met(D)`
 is now constructed as `MetD` (`IshikiConj51/Conj51/MainTheorem.lean`), with a
 sorry-free `EMetricSpace` instance matching the source's (extended) supremum
 distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
