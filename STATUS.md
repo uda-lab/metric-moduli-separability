@@ -12,7 +12,7 @@
 | Star-metric construction written | ✅ done |
 | Closed-embedding argument audited | ✅ done |
 | Japanese report complete | ✅ done |
-| Met(D) type defined in Lean | ⬜ pending |
+| Met(D) type defined in Lean | ✅ done |
 | Lean formalisation complete | ⬜ pending |
 | English paper drafted | ⬜ pending |
 | Independent end-to-end review | ⬜ pending |
@@ -59,11 +59,14 @@ See `notes/proof-audit.md` for detailed open items.
 
 ## Lean
 
-Lean project initialised (Mathlib v4.32.2, `lean/lakefile.toml`).  Only
-`lem_A_exists` (LEM-A-EXISTS) has a Lean statement (with `sorry`).  The other
-three stable claim IDs (LEM-STAR-METRIC, LEM-CLOSED-IMAGE, THM-CONJ51) do not
-yet have Lean statements because the required type for Met(D) has not been
-constructed.  See `notes/proof-audit.md` Lean TODO tracker.
+Lean project initialised (Mathlib v4.32.2, `lean/lakefile.toml`).
+`lem_A_exists` (LEM-A-EXISTS) has a Lean statement (with `sorry`). `Met(D)`
+is now constructed as `MetD` (`IshikiConj51/Conj51/MainTheorem.lean`), with a
+sorry-free `EMetricSpace` instance matching the source's (extended) supremum
+distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
+itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
+LEM-STAR-METRIC and LEM-CLOSED-IMAGE still have no Lean statement (Issues #7,
+#9). See `notes/proof-audit.md` Lean TODO / sorry trackers.
 
 ## GitHub Issue work queue
 

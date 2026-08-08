@@ -37,6 +37,10 @@ nearby points) is **not** in $\operatorname{Met}(D)$.  This distinction is essen
 | `Cardinal.aleph 1` | `ℵ₁` |
 | `IsPolishSpace` | Preferred predicate for "Polish space / completely metrizable second-countable" |
 | `IsFSigma` | Defined locally in `Conj51/Cardinality.lean` (no Mathlib built-in as of v4.32.2) |
-| `Met(D)` as a type | **Not yet defined in Lean** — see `Conj51/MainTheorem.lean` TODO |
+| `Met(D)` as a type | `MetD D`, defined in `Conj51/MainTheorem.lean` (Issue #6) as `{d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` |
+| `IsMetricOn` | Raw-function metric axioms (`Conj51/MainTheorem.lean`), used instead of bundling `MetricSpace` so the induced topology can be compared to `⊥` (discrete) separately |
+| $\rho$ (sup-distance on $\operatorname{Met}(D)$) | `MetD.edist`, `ℝ≥0∞`-valued (`Conj51/MainTheorem.lean`); realises `EDist`/`PseudoEMetricSpace`/`EMetricSpace (MetD D)` instances, sorry-free |
+| Completely metrizable (as a Lean predicate) | `TopologicalSpace.IsCompletelyMetrizableSpace`, native to Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed |
+| `THM-CONJ51` in Lean | `thm_conj51` (`Conj51/MainTheorem.lean`): `(D : Type) (hD : #D = Cardinal.aleph 1) : ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` — statement only, proof is a tracked `sorry` (Issue #6) |
 
 *Update as the formalisation develops.*
