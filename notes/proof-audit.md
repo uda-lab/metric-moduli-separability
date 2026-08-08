@@ -23,7 +23,23 @@ Do not record research history in the main report or paper.
 
 ## Failed / abandoned attempts
 
-*(none yet — add entries here as attempts are made and abandoned)*
+### [2026-08-08] Attempt: non-CH branch of LEM-A-EXISTS via direct Fσ-structure contradiction
+
+- Approach: the original report §3 non-CH sketch tried to argue directly
+  from "the structure of an Fσ representation" that a size-ℵ₁ subset of
+  [0,1] cannot be Fσ when ℵ₁ < 𝔠, by noting that a closed superset F ⊇ A
+  with |F| ≥ ℵ₁ would need |F| = 𝔠 > ℵ₁, but stopped there.
+- Why it failed: no actual contradiction was derived. The sketch never
+  established that any single Fσ-piece F_n must itself be uncountable (or
+  otherwise be forced into contradiction) — it only noted an inequality
+  between cardinalities without connecting it back to a bound on |F_n| or
+  on |A| = ⋃F_n. The report explicitly flagged this as "より微妙で，要検証"
+  (more subtle, needs verification) rather than asserting it was complete.
+- What was learned: the correct move is to bound *each* Fσ-piece
+  individually (|F_n| ≤ |A| = ℵ₁ < 𝔠) and apply the perfect set theorem
+  (Cantor–Bendixson corollary) piecewise, forcing every F_n countable, then
+  use closure of countability under countable unions — see report §3 for
+  the completed argument.
 
 Template:
 ```

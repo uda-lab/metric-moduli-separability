@@ -38,7 +38,7 @@ $|D| = \aleph_1$ のとき，$\operatorname{Met}(D)$ は上限距離位相に関
 ### LEM-A-EXISTS
 
 **主張.**  
-ZFC において，$A \subset [0,1]$，$|A| = \aleph_1$，かつ $A$ が $F_\sigma$ でない集合が存在する．
+ZFC において，$A \subseteq [0,1]$，$|A| = \aleph_1$，かつ $A$ が $F_\sigma$ でない集合が存在する．
 
 **記法.** $\mathfrak{c} := 2^{\aleph_0}$（連続体濃度）とおく．Cantor の定理より $\aleph_0 < \mathfrak{c}$．また $\aleph_1$ は最小の非可算基数だから，常に $\aleph_1 \le \mathfrak{c}$（ZFC の定理）．
 
@@ -65,9 +65,12 @@ $A := [0,1] \setminus \mathbb{Q}$（$[0,1]$ 内の無理数全体）とおく．
 
 $\aleph_1 \le \mathfrak{c} = |[0,1]|$ だから，$[0,1]$ の部分集合で濃度がちょうど $\aleph_1$ のものが存在する．そのような集合を一つ取り $A$ とする．$A$ が $F_\sigma$ であると仮定し，$A = \bigcup_{n\in\mathbb{N}} F_n$（各 $F_n$ は $[0,1]$ の閉集合）とする．各 $n$ について $F_n \subseteq A$ だから $|F_n| \le |A| = \aleph_1 < \mathfrak{c}$．したがって上の補題の対偶より，各 $F_n$ は可算．ゆえに $A = \bigcup_n F_n$ は可算個の可算集合の合併だから可算（可算選択公理；ZFC で常に利用可能）．これは $|A| = \aleph_1$（非可算）に矛盾．よって $A$ は $F_\sigma$ でない．
 
-**結論.** 場合 1・場合 2 のいずれでも，$A \subset [0,1]$，$|A| = \aleph_1$，$A \notin F_\sigma$ を満たす集合が構成できる．両場合は排他的かつ網羅的（$\mathsf{CH}$ の真偽による分岐）だから，ZFC において LEM-A-EXISTS が成立する．∎
+**結論.** 場合 1・場合 2 のいずれでも，$A \subseteq [0,1]$，$|A| = \aleph_1$，$A \notin F_\sigma$ を満たす集合が構成できる．両場合は排他的かつ網羅的（$\mathsf{CH}$ の真偽による分岐）だから，ZFC において LEM-A-EXISTS が成立する．∎
 
-*状態: **監査済み**．場合 2 の議論は，以前の報告書で「$F_\sigma$ 集合としての構造から直接矛盾を導くことはより微妙で要検証」として未完成のまま残されていた部分を，完全集合定理（Cantor–Bendixson の定理の系）を用いた数え上げ論法に置き換えて完成させたものである．場合 1（Baire のカテゴリ定理）は $\mathsf{CH}$ の真偽に依存しない独立した議論であり，変更していない．参考文献の詳細は `notes/literature.md` を参照．*
+**別証（remark）：場合分けを回避する一様な構成.**  
+場合分けを避けたい場合は，Bernstein 集合を用いた次の一様な構成もある．$[0,1]$ の Bernstein 集合 $B$（$B$ とその補集合がともに $[0,1]$ のすべての完全集合と交わるように，濃度 $\mathfrak{c}$ の超限帰納法で構成される集合；Oxtoby, *Measure and Category*, 2nd ed., p. 24）を一つ固定し，$B$ の部分集合で濃度 $\aleph_1$ のものを $A$ とする（$\aleph_1 \le \mathfrak{c} = |B|$ より存在する）．$A \subseteq B$ ゆえ $A$ は完全集合を部分集合として持たない：もし完全集合 $P \subseteq A \subseteq B$ ならば，$B$ の補集合は $P$ と交わるという Bernstein 集合の性質に反する．いま $A$ が $F_\sigma$，すなわち $A = \bigcup_n F_n$（$F_n$ 閉）であったとする．$A$ は非可算（$|A|=\aleph_1$）だから，ある $F_n$ は非可算閉集合．Cantor–Bendixson の定理より，非可算閉集合は空でない完全集合を含む．よってその完全集合は $F_n \subseteq A$ の部分集合，すなわち $A$ の完全部分集合となり，$A$ が完全集合を持たないことに反する．よって $A$ は $F_\sigma$ でない．この議論は $\mathsf{CH}$ の成否によらず一様に成立する．
+
+*状態: **監査済み（独立レビュー前）**．場合 2 の議論は，以前の報告書で「$F_\sigma$ 集合としての構造から直接矛盾を導くことはより微妙で要検証」として未完成のまま残されていた部分を，完全集合定理（Cantor–Bendixson の定理の系）を用いた数え上げ論法に置き換えて完成させたものである．場合 1（Baire のカテゴリ定理）は $\mathsf{CH}$ の真偽に依存しない独立した議論であり，変更していない．旧スケッチの記録は `notes/proof-audit.md`（Failed / abandoned attempts）を参照．参考文献の詳細は `notes/literature.md` を参照．*
 
 ---
 
