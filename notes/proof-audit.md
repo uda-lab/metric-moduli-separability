@@ -170,11 +170,22 @@ explicitly and are the places a reviewer should look first.
   the *centre* `y_α` loses isolation, and only for `t = a_α`. This is why
   (C3) is a statement about one specific centre rather than about the whole
   star, and why `d_t` remains a metric there.
-- **(C5) does not use `|A| = ℵ₁`.** The closedness argument works for any
-  non-empty `A ⊆ [0,1]`; the cardinality hypothesis is consumed only by the
-  count `|D| = 2 + ℵ₁ + ℵ₁·ℵ₀ = ℵ₁`, and non-Fσ-ness is consumed only by main
-  proof steps 2–3. This dependency split is stated in report §3.8 so that a
-  later change to LEM-A-EXISTS can be traced to exactly the steps it affects.
+- **Where `|A| = ℵ₁` is used (corrected 2026-08-09 after the PR #17 codex
+  review).** The first draft of report §3.8 claimed that (C1)–(C5) work for any
+  non-empty `A`, with the cardinality consumed only by the count
+  `|D| = 2 + ℵ₁ + ℵ₁·ℵ₀ = ℵ₁`. That was wrong: §3.2 indexes the stars by
+  `α < ω₁` via an injective enumeration `A = {a_α : α < ω₁}`, and such an
+  enumeration exists precisely when `|A| = ℵ₁` (a smaller `A` cannot supply it;
+  a larger one would leave elements of `A` uncovered, breaking the (C3)
+  boundary argument). The accurate split, now in §3.8, is: `|A| = ℵ₁` is used
+  twice at construction time (existence of the `ω₁`-indexed enumeration; the
+  `|D|` count), while the *verification* of (C1)–(C5) uses no cardinality — each
+  proof is local (≤ 3 points, one point vs. its complement, one centre `y_β`,
+  or a per-pair estimate). Weakening the cardinality would require reindexing
+  the stars by `A` itself plus filler points to keep `|D| = ℵ₁`; not done here.
+  Non-Fσ-ness remains consumed only by main proof steps 2–3. The split is
+  recorded so a later change to LEM-A-EXISTS traces to exactly the affected
+  steps.
 - **Finiteness of ρ on the image.** `notes/literature.md` (Issue #2) records
   that the sup-distance on `Met(Z)` is genuinely extended-valued in general.
   Every `d_t` here has range in `[0,2]`, so `ρ(d_t, d_s) ≤ 2 < ∞` and the
