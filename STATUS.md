@@ -46,15 +46,15 @@ three stable claim IDs (LEM-STAR-METRIC, LEM-CLOSED-IMAGE, THM-CONJ51) do not
 yet have Lean statements because the required type for Met(D) has not been
 constructed.  See `notes/proof-audit.md` Lean TODO tracker.
 
-## Planned GitHub Issues (to be created)
+## GitHub Issue work queue
 
-1. Verify exact statement of Conjecture 5.1 in arXiv:2407.03030 and record bibliography
-2. Audit LEM-A-EXISTS — ZFC existence of a non-Fσ subset of [0,1] of cardinality ℵ₁
-3. Audit Gδ / complete-metrizability implication for Y = [0,1] \ A
-4. Write self-contained Japanese proof report (report/report-ja.md)
-5. Define Met(D) as a Lean type and state THM-CONJ51 correctly
-6. Implement star-metric construction in Lean (LEM-STAR-METRIC)
-7. Investigate/formalise cardinality and descriptive-set-theory prerequisites in Lean
-8. Formalise closed embedding and final obstruction (LEM-CLOSED-IMAGE → THM-CONJ51)
-9. Perform independent end-to-end mathematical review
-10. Draft English paper only after proof survives audit
+1. #2 Verify Conjecture 5.1 statement and bibliography
+2. #3 Audit LEM-A-EXISTS in ZFC
+3. #4 Audit the Gδ / complete-metrizability step
+4. #5 Complete the self-contained Japanese proof report
+5. #6 Define Met(D) in Lean and state THM-CONJ51 faithfully
+6. #7 Implement LEM-STAR-METRIC in Lean
+7. #8 Formalise cardinality and descriptive-set prerequisites in Lean
+8. #9 Formalise LEM-CLOSED-IMAGE and the final obstruction
+9. #10 Perform independent end-to-end mathematical review
+10. #11 Draft the English paper after mathematical audit passes
