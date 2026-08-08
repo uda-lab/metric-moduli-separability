@@ -9,9 +9,9 @@
 | Conjecture statement verified (arXiv:2407.03030) | ✅ done |
 | LEM-A-EXISTS audited | ✅ done |
 | Gδ / complete-metrizability implication audited | ✅ done |
-| Star-metric construction written | ⬜ pending |
-| Closed-embedding argument audited | ⬜ pending |
-| Japanese report complete | ⬜ pending |
+| Star-metric construction written | ✅ done |
+| Closed-embedding argument audited | ✅ done |
+| Japanese report complete | ✅ done |
 | Met(D) type defined in Lean | ⬜ pending |
 | Lean formalisation complete | ⬜ pending |
 | English paper drafted | ⬜ pending |
@@ -25,9 +25,14 @@ The proposed argument for THM-CONJ51 proceeds through six steps:
 2. Y = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
    completely metrizable (Alexandrov–Lavrentiev, applied to the separable
    ambient space [0,1] only).
-3. A parameterised star-type family of compatible metrics on D (**LEM-STAR-METRIC**).
-4. A bi-Lipschitz embedding Y → Met(D).
-5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**).
+3. A parameterised star-type family of compatible metrics on D
+   (**LEM-STAR-METRIC**) — explicitly: a reference pair {p,q} at distance
+   1+t, plus one star per element of A with centre-to-endpoint distance
+   s_n(α,t) = min(1, |t−a_α| + 1/n).
+4. A bi-Lipschitz embedding Y → Met(D): |t−s| ≤ ρ(d_t,d_s) ≤ 2|t−s|.
+5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**) — the reference pair
+   recovers the limit parameter t, and d_t ceasing to be compatible for
+   t ∈ A rules out the boundary case.
 6. A closed subspace of a completely metrizable space is completely
    metrizable — proved directly (no separability needed, since Met(D) is
    not separable) — contradiction (**THM-CONJ51**).
@@ -37,9 +42,16 @@ topology*, not all metrics on the underlying set. Met(D) is not separable;
 see `notes/literature.md` and `notes/proof-audit.md` (Issue #4) for why this
 matters for step 6.
 
-Steps 1–2 and 6 (LEM-A-EXISTS; the Gδ / complete-metrizability implication;
-closed-subspace inheritance) have completed independent audit (report §§1,
-3–4, 2026-08-09). Steps 3–5 (LEM-STAR-METRIC, LEM-CLOSED-IMAGE) have not.
+All six steps are now written out in full in `report/report-ja.md`
+(2026-08-09); no mathematically unwritten step remains. Steps 1–2 and 6
+(LEM-A-EXISTS; the Gδ / complete-metrizability implication; closed-subspace
+inheritance) additionally completed an internal audit (Issues #3, #4). Steps
+3–5 (LEM-STAR-METRIC, LEM-CLOSED-IMAGE, report §3.1–§3.8) are newly written
+and have had no review beyond the PR review for Issue #5.
+
+The argument remains a **proof candidate**: end-to-end independent review
+(Issue #10) and the Lean formalisation (Issues #6–#9) are both outstanding,
+so the conjecture must not be described externally as solved.
 
 ## Open obligations
 
