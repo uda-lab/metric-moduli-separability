@@ -68,6 +68,15 @@ itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
 LEM-STAR-METRIC and LEM-CLOSED-IMAGE still have no Lean statement (Issues #7,
 #9). See `notes/proof-audit.md` Lean TODO / sorry trackers.
 
+A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
+`notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
+Alexandrov–Lavrentiev direction needed for the closed-subspace obstruction
+(a completely metrizable subspace is Gδ in its ambient space) is **confirmed
+absent** from Mathlib and must be proved from scratch (Issue #9); the
+Cantor–Bendixson theorem, perfect-set cardinality-continuum fact, `ℵ₁ ≤ 𝔠`,
+and closed-subspace-of-complete-space are all confirmed **available** with
+exact declaration names recorded.
+
 ## GitHub Issue work queue
 
 1. #2 Verify Conjecture 5.1 statement and bibliography
@@ -80,3 +89,4 @@ LEM-STAR-METRIC and LEM-CLOSED-IMAGE still have no Lean statement (Issues #7,
 8. #9 Formalise LEM-CLOSED-IMAGE and the final obstruction
 9. #10 Perform independent end-to-end mathematical review
 10. #11 Draft the English paper after mathematical audit passes
+11. #19 Record Mathlib inventory findings for Lean formalisation prep (Issues #7–#9)
