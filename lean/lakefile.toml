@@ -1,4 +1,3 @@
-[package]
 name = "IshikiConj51"
 version = "0.1.0"
 defaultTargets = ["IshikiConj51"]
