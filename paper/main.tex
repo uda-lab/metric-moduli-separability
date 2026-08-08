@@ -34,9 +34,10 @@
 \maketitle
 
 \begin{abstract}
-  We investigate Conjecture~5.1 of Ishiki~\cite{Ishiki2021}, which
+  We investigate Conjecture~5.1 of Ishiki~\cite{Ishiki2024}, which
   concerns the complete metrizability of the space $\Met(D)$ of metrics
-  on a discrete space $D$, equipped with the supremum-metric topology.
+  on a discrete space $D$ that are compatible with the discrete topology,
+  equipped with the supremum-metric topology.
   We present and analyse a proof candidate showing that $\Met(D)$ is
   \emph{not} completely metrizable when $\lvert D\rvert = \aleph_1$.
   The argument has not yet passed independent mathematical audit;
@@ -48,12 +49,16 @@
 \label{sec:intro}
 
 Let $D$ be an uncountable discrete topological space, and let
-$\Met(D)$ denote the set of all metrics on $D$.  We equip $\Met(D)$
+$\Met(D)$ denote the set of metrics on $D$ that are \emph{compatible
+with the discrete topology} (i.e., whose induced metric topology equals
+the discrete topology on $D$).  Note that not every metric on the
+underlying set of $D$ is compatible with the discrete topology; for an
+infinite $D$ this is a non-trivial restriction.  We equip $\Met(D)$
 with the topology induced by the supremum distance
 \[
   \rho(d, d') \;=\; \sup_{x,y\in D} \lvert d(x,y) - d'(x,y)\rvert.
 \]
-Ishiki~\cite{Ishiki2021} raised a series of conjectures about the
+Ishiki~\cite{Ishiki2024} raised a series of conjectures about the
 topological structure of $\Met(D)$.  Conjecture~5.1 asserts that,
 for $\lvert D\rvert = \aleph_1$, the space $\Met(D)$ is not
 completely metrizable.
@@ -73,10 +78,15 @@ closed (resp.\ intersections of open) sets.
 
 \subsection{Background results}
 
-\begin{theorem}[Alexandrov]
-  A subspace of a completely metrizable space is completely metrizable
-  if and only if it is a $\Gdelta$ set.
+\begin{theorem}[Alexandrov's theorem]
+  A subspace of a Polish space is Polish if and only if it is a
+  $\Gdelta$ set.
 \end{theorem}
+
+\begin{corollary}
+  A closed subspace of a completely metrizable space is completely
+  metrizable.  (Closed sets are $\Gdelta$.)
+\end{corollary}
 
 % ------------------------------------------------------------------
 \section{Main Construction}

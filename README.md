@@ -1,12 +1,18 @@
 # ishiki-conjecture
 
-Research repository for **Conjecture 5.1** from Ishiki (2021), which concerns the
-complete metrizability of the space Met(D) of metrics on a discrete space D.
+Research repository for **Conjecture 5.1** from Ishiki,
+*An isometric extensor of metrics*, arXiv:2407.03030 (2024).
 
 ## Statement under investigation
 
-> For a discrete space D of cardinality ℵ₁, the space Met(D) equipped with the
-> supremum-metric topology is **not** completely metrizable.
+> For a discrete space D of cardinality ℵ₁, the space Met(D) — the set of
+> metrics on D **compatible with the discrete topology**, equipped with the
+> supremum-metric topology — is **not** completely metrizable.
+
+**Note on Met(D):** A metric $d$ on $D$ is *compatible with the discrete topology*
+if the metric topology induced by $d$ equals the discrete topology.
+For an infinite set $D$ this is a non-trivial condition: not every metric on the
+underlying set $D$ is compatible with the discrete topology.
 
 The current argument is a **proof candidate** only.  It has not yet survived
 independent mathematical audit.  See `STATUS.md` for the current state and
@@ -29,7 +35,7 @@ independent mathematical audit.  See `STATUS.md` for the current state and
 | ID | Description |
 |----|-------------|
 | `LEM-A-EXISTS` | ∃ A ⊆ [0,1] with \|A\| = ℵ₁ and A not Fσ |
-| `LEM-STAR-METRIC` | Parameterised star-type metric family on D |
+| `LEM-STAR-METRIC` | Parameterised star-type family of compatible metrics on D |
 | `LEM-CLOSED-IMAGE` | The bi-Lipschitz embedding Y → Met(D) has closed image |
 | `THM-CONJ51` | Met(D) is not completely metrizable (for \|D\| = ℵ₁) |
 
