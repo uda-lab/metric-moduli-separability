@@ -48,18 +48,31 @@ the discrete topology on $D$, under the sup-metric topology.**
 
 **Source-level nuance for the Lean model (acceptance criterion 3):**
 
-- $\operatorname{Met}(Z)$ consists of *ordinary, finite real-valued* metrics
-  ($d : Z \times Z \to [0,\infty)$, i.e. codomain is the reals, not the
-  extended reals). The paper never uses an extended metric (codomain
-  $[0,\infty]$ with $+\infty$ allowed) for $\operatorname{Met}(Z)$ itself.
-  Extended-valued objects only appear as the separate, more general class
-  $\operatorname{CPM}(X)$ of continuous pseudometrics $d : X\times X \to
-  [0,\infty)$ (still finite-valued, merely dropping the triangle-inequality /
-  positive-definiteness-only-on-the-diagonal restriction to metric, and
-  requiring continuity rather than topology-generation). Consequently a
-  faithful Lean model should use Mathlib's finite-valued `MetricSpace` /
-  `PseudoMetricSpace` (`dist : α → α → ℝ`), **not** `EMetricSpace`
-  (`edist : α → α → ℝ≥0∞`).
+- **Each element of $\operatorname{Met}(Z)$ is an ordinary, finite real-valued
+  metric on $Z$** ($d : Z \times Z \to [0,\infty)$): a genuine metric
+  satisfying the triangle inequality and $d(x,y)=0 \iff x=y$, with no
+  individual value equal to $+\infty$. So each member of $\operatorname{Met}(D)$
+  is faithfully modeled by Mathlib's `MetricSpace` (`dist : α → α → ℝ`) on
+  `D`, not `EMetricSpace`.
+- **The ambient supremum distance on the space $\operatorname{Met}(Z)$ itself
+  is genuinely extended-valued.** $\mathcal{D}_Z(d,e) = \sup_{x,y}
+  |d(x,y)-e(x,y)|$ can equal $+\infty$ when $d,e$ are unbounded and differ
+  unboundedly — e.g. on $\mathbb{N}$, $d(m,n)=|m-n|$ and $e(m,n)=|2^m-2^n|$
+  give $\mathcal{D}(d,e)=\infty$. The source paper confirms this explicitly in
+  §2.2 ("Components of spaces of metrics", p. 4): it defines $d \sim e
+  \iff \mathcal{D}_Z(d,e) < \infty$ as an equivalence relation, writes
+  $\mathbf{M}_{<\infty}(Z) = \operatorname{Met}(Z)/{\sim}$, and notes each
+  class in $\mathbf{M}_{<\infty}(Z)$ is a (path-)connected **clopen** subset
+  of $\operatorname{Met}(Z)$ — i.e. $\operatorname{Met}(Z)$ is *not* a single
+  finite-distance metric space; it is a disjoint union of clopen
+  finite-distance components. **A faithful Lean model of "$\operatorname{Met}(D)$
+  with the sup-metric topology" therefore needs an extended metric
+  (`EMetricSpace`, `edist : α → α → ℝ≥0∞`) on $\operatorname{Met}(D)$ itself
+  (or an equivalent topology built from the clopen-component decomposition
+  above) — even though each individual metric `d : D → D → ℝ` in
+  $\operatorname{Met}(D)$ is finite-valued.** Do not conflate the two levels:
+  finite-valued metrics *on* `D`, extended-valued sup-distance *on the space
+  of metrics* $\operatorname{Met}(D)$.
 - **No boundedness restriction.** $\operatorname{BMet}(Z) \subseteq
   \operatorname{Met}(Z)$ is a strictly smaller, separately named subset for
   bounded metrics; $\operatorname{Met}(Z)$ itself imposes no boundedness. Do
