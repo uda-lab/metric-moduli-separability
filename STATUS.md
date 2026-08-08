@@ -62,12 +62,15 @@ See `notes/proof-audit.md` for detailed open items.
 Lean project initialised (Mathlib v4.32.2, `lean/lakefile.toml`).
 `lem_A_exists` (LEM-A-EXISTS) is now **sorry-free** (Issue #8, 2026-08-09;
 `#print axioms` shows only `[propext, Classical.choice, Quot.sound]`). `Met(D)`
-is now constructed as `MetD` (`IshikiConj51/Conj51/MainTheorem.lean`), with a
+is now constructed as `MetD` (`IshikiConj51/Conj51/MetD.lean`; relocated there
+from `MainTheorem.lean` in Issue #7 so the claim modules can import it), with a
 sorry-free `EMetricSpace` instance matching the source's (extended) supremum
 distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
 itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
-LEM-STAR-METRIC and LEM-CLOSED-IMAGE still have no Lean statement (Issues #7,
-#9). See `notes/proof-audit.md` Lean TODO / sorry trackers.
+LEM-STAR-METRIC is now stated and **sorry-free** (`lem_star_metric`,
+`IshikiConj51/Conj51/MetricConstruction.lean`, Issue #7, 2026-08-09);
+LEM-CLOSED-IMAGE still has no Lean statement (Issue #9). See
+`notes/proof-audit.md` Lean TODO / sorry trackers.
 
 A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
 `notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the

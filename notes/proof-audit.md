@@ -15,7 +15,7 @@ Do not record research history in the main report or paper.
 |----|-------|--------|-------|
 | LEM-A-EXISTS | ∃ A ⊆ [0,1], \|A\| = ℵ₁, A not Fσ | ✅ audited (2026-08-09) | See report §3; CH case via irrationals + Baire category, non-CH case via the perfect-set-theorem counting argument. Lean proof still pending (`sorry`), tracked below. |
 | — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ audited (2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
-| LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ written, awaiting independent review (2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean statement still absent (Issue #7). |
+| LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ written, awaiting independent review (2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean formalisation complete and sorry-free (Issue #7, 2026-08-09): `IshikiConj51/Conj51/MetricConstruction.lean`, see below. |
 | LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ written, awaiting independent review (2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean statement still absent (Issue #9). |
 | THM-CONJ51 | Full assembly | ✅ written, awaiting independent review (2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Retains **proof candidate** status until Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) pass. Lean statement still absent (Issue #9). |
 
@@ -217,13 +217,19 @@ is now constructed (below), unblocking these.
 
 | File | Claim ID | Blocked on |
 |------|----------|------------|
-| `IshikiConj51/Conj51/MetricConstruction.lean` | LEM-STAR-METRIC | star-type construction, now written mathematically in report §3.1–§3.5 (Issue #5); Lean formalisation itself is Issue #7 |
-| `IshikiConj51/Conj51/ClosedEmbedding.lean` | LEM-CLOSED-IMAGE | LEM-STAR-METRIC (Issue #7); mathematical construction written in report §3.6–§3.7 (Issue #5); Lean formalisation itself is Issue #9 |
+| `IshikiConj51/Conj51/ClosedEmbedding.lean` | LEM-CLOSED-IMAGE | mathematical construction written in report §3.6–§3.7 (Issue #5); Lean formalisation itself is Issue #9. No longer blocked on LEM-STAR-METRIC, which landed with Issue #7 (see below). |
 
 ## Met(D) construction (Issue #6, 2026-08-09)
 
-`MetD D` and its `EMetricSpace` instance are defined in
-`IshikiConj51/Conj51/MainTheorem.lean`, sorry-free:
+`MetD D` and its `EMetricSpace` instance are sorry-free. They were introduced
+in `IshikiConj51/Conj51/MainTheorem.lean` by Issue #6 and **relocated
+verbatim** to `IshikiConj51/Conj51/MetD.lean` by Issue #7 — `MainTheorem.lean`
+imports the claim modules, so those modules could not import `Met(D)` back
+from it. `MetD.lean` is therefore a shared base module, not a fifth claim
+file: the architecture's 1:1 mapping is still four files ↔ four claim IDs
+(`Cardinality`, `MetricConstruction`, `ClosedEmbedding`, `MainTheorem`), with
+`MetD.lean` sitting underneath all of them. No definition or statement
+changed in the move.
 
 - `IsMetricOn {D} (d : D → D → ℝ) : Prop` — raw-function metric axioms
   (`dist_self`, `eq_of_dist_eq_zero`, `dist_comm`, `dist_triangle`), so the
@@ -251,12 +257,74 @@ is now constructed (below), unblocking these.
   `MetD D` does or does not satisfy it (via the Lavrentiev/closed-subspace
   route from Issue #4) is not attempted here.
 
+## LEM-STAR-METRIC formalisation (Issue #7, 2026-08-09)
+
+`IshikiConj51/Conj51/MetricConstruction.lean` is complete and **sorry-free**.
+
+- Index type `StarIndex A := Bool ⊕ (↥A × Option ℕ)`, transcribing report
+  §3.2: `Sum.inl true/false` are the anchors `p, q`; `Sum.inr (a, none)` is
+  the star centre `y_α`; `Sum.inr (a, some n)` is the satellite `x_{α,n}`.
+  Stars are indexed by `A` itself rather than by `α < ω₁`. Since `|A| = ℵ₁`
+  the report's enumeration is a *bijection* `ω₁ ≃ A`, so this is a
+  relabelling, not a change of construction — report §3.8 records the route.
+- `starSpoke n a t := min 1 (|t − a| + 1/(n+1))` is the report's
+  `s_n(α,t) = min(1, |t − a_α| + 1/n)` reindexed by `k = n+1`, a bijective
+  reindexing of the spoke family (report indexes from `n ≥ 1`, Lean from
+  `n ≥ 0`).
+- Proved: `dStar_isMetricOn` (C1, all `t ∈ [0,1]`), `dStar_topology_eq_bot`
+  (C2, `t ∉ A`), `dStar_topology_ne_bot` (C3, `t ∈ A`), and the report's 系
+  as `dStar_mem_MetD_iff : (∃ h : IsMetricOn (dStar A t), h.topology = ⊥) ↔ t ∉ A`.
+  The left-hand side is literally `MetD (StarIndex A)`'s defining predicate,
+  so no boundedness or uniform-discreteness proxy is substituted.
+- `card_starIndex : #(↥A) = ℵ₁ → #(StarIndex A) = ℵ₁` (report §3.2,
+  `2 + ℵ₁·ℵ₀ = ℵ₁`).
+- The claim ID **LEM-STAR-METRIC** is carried by the aggregate theorem
+  `lem_star_metric (hA : #(↥A) = ℵ₁)`, which conjoins all four obligations the
+  report's §3.1 statement makes: `#(StarIndex A) = ℵ₁`; (C1) for every
+  `t ∈ [0,1]`; the 系 iff; and the existence of the parameter map
+  `φ : ↥([0,1] \ A) → MetD (StarIndex A)` with `(φ t).1 = dStar A t`
+  (report §3.6). The pointwise iff alone would have been *weaker* than the
+  report — it fixes no cardinality and never exposes the family inside
+  `MetD` — so the claim ID was moved off it onto the aggregate
+  (codex review of PR #21). The component lemmas stay individually available
+  for Issue #9.
+- Pointwise Lipschitz estimates `starSpoke_sub_le`, `starRadius_sub_le`,
+  `dStar_sub_le` (`|d_t(u,v) − d_s(u,v)| ≤ 2|t−s|`) and `dStar_anchor_sub`
+  (`= |t−s|` on the anchor pair) — the pair-by-pair half of (C4). Taking
+  suprema to get `|t−s| ≤ ρ(d_t,d_s) ≤ 2|t−s|`, and closedness of the image,
+  remain LEM-CLOSED-IMAGE (Issue #9).
+- General-purpose lemma `IsMetricOn.topology_eq_bot_iff` (in `MetD.lean`,
+  stated for an arbitrary `IsMetricOn`, not for the star family) converts
+  `.topology = ⊥` into the report's §3.4 isolating-radius criterion; Issue #9
+  reuses it.
+
+`#print axioms` on every declaration above yields exactly
+`[propext, Classical.choice, Quot.sound]` — no `sorryAx`:
+`IsMetricOn.topology_eq_bot_iff`, `dStar_isMetricOn`, `dStar_topology_eq_bot`,
+`dStar_topology_ne_bot`, `dStar_mem_MetD_iff`, `lem_star_metric`,
+`card_starIndex`, `starMet`, `dStar_sub_le`, `dStar_anchor_sub`.
+(`thm_conj51` still reports `sorryAx` — that is the tracked `sorry` of the
+sorry tracker above, unchanged by this work.)
+
+**Verification method and its limit.** This container's cgroup ceiling
+(~3.4 GiB) makes a repository-wide `lake build` an OOM risk: `lake` fans out
+one `lean` worker per module and each `import Mathlib` module peaks around
+0.8–1 GiB, and `LEAN_NUM_THREADS` caps only the thread count *inside* one
+process, not the worker count (this lake, 5.0.0-src / Lean 4.32.2, has no
+`-j` flag to cap it either). Issue #7 was therefore verified by
+single-process `lake env lean` passes over the concatenated module sources
+under `flock /tmp/lean-build.lock` — sufficient for elaboration errors and
+for `#print axioms`, but it does **not** exercise the olean/import graph.
+A whole-repository consistency build (every module built explicitly, one at
+a time, in dependency order) is deferred to the Issue #9 PR and must be run
+there once.
+
 ## Mathlib library gaps (v4.32.2)
 
 | Gap | Description | File | Status |
 |-----|-------------|------|--------|
 | `IsFSigma` predicate | No canonical Mathlib built-in; defined locally as `∃ F : ℕ → Set ℝ, (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. | `IshikiConj51/Conj51/Cardinality.lean` | open |
-| `Met(D)` as a type | ~~No Mathlib type for the space of compatible metrics on D with the sup-metric topology.~~ Resolved (Issue #6, 2026-08-09): constructed explicitly as `MetD`, see above. | `IshikiConj51/Conj51/MainTheorem.lean` | resolved |
+| `Met(D)` as a type | ~~No Mathlib type for the space of compatible metrics on D with the sup-metric topology.~~ Resolved (Issue #6, 2026-08-09): constructed explicitly as `MetD`, see above. | `IshikiConj51/Conj51/MetD.lean` (relocated from `MainTheorem.lean` by Issue #7) | resolved |
 | `TopologicalSpace.IsCompletelyMetrizableSpace` | Exists natively in Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed. Confirmed by direct source inspection (Issue #6). | `IshikiConj51/Conj51/MainTheorem.lean` | not a gap (dossier flagged as biggest risk item; resolved by inspection) |
 | Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ in ambient space) | **Confirmed absent** (Issue #19, 2026-08-09). Searched the whole Mathlib tree for any theorem concluding `IsGδ` from a `CompleteSpace`/`IsCompletelyMetrizableSpace`/`PolishSpace` hypothesis — none found. `Mathlib/Topology/MetricSpace/Polish.lean`'s `IsClopenable` machinery goes the *other* direction (Gδ/clopenable ⟹ Polish: `IsClosed.isClopenable`, `IsOpen.isClopenable`, `IsClopenable.compl`, `IsClopenable.iUnion`), and its own module doc says the full Borel ↔ clopenable biconditional (`isClopenable_iff_measurableSet`) awaits an unformalised Lusin–Souslin theorem. **This is the biggest risk item the leader dossier flagged, and it is real**: the direction report §1 background theorem 1 / main-proof step 3 needs (`Y` not Gδ in `[0,1]` ⟹ `Y` not completely metrizable, i.e. the contrapositive of the forward Lavrentiev direction) has no Mathlib lemma to cite and must be proved from scratch in this project (Issue #9). | `IshikiConj51/Conj51/ClosedEmbedding.lean` (planned) | **open — must be proved from scratch (Issue #9)** |
 | Cantor–Bendixson / perfect set theorem | **Used (Issue #8, 2026-08-09).** Ended up not needing `exists_countable_union_perfect_of_isClosed` directly — `IsClosed.exists_nat_bool_injection_of_not_countable` (below) was sufficient on its own for the non-CH branch. | `IshikiConj51/Conj51/Cardinality.lean` | used |

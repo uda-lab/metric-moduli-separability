@@ -37,10 +37,11 @@ nearby points) is **not** in $\operatorname{Met}(D)$.  This distinction is essen
 | `Cardinal.aleph 1` | `ℵ₁` |
 | `IsPolishSpace` | Preferred predicate for "Polish space / completely metrizable second-countable" |
 | `IsFSigma` | Defined locally in `Conj51/Cardinality.lean` (no Mathlib built-in as of v4.32.2) |
-| `Met(D)` as a type | `MetD D`, defined in `Conj51/MainTheorem.lean` (Issue #6) as `{d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` |
-| `IsMetricOn` | Raw-function metric axioms (`Conj51/MainTheorem.lean`), used instead of bundling `MetricSpace` so the induced topology can be compared to `⊥` (discrete) separately |
-| $\rho$ (sup-distance on $\operatorname{Met}(D)$) | `MetD.edist`, `ℝ≥0∞`-valued (`Conj51/MainTheorem.lean`); realises `EDist`/`PseudoEMetricSpace`/`EMetricSpace (MetD D)` instances, sorry-free |
+| `Met(D)` as a type | `MetD D`, defined in `Conj51/MetD.lean` (Issue #6; relocated there from `MainTheorem.lean` in Issue #7 so the claim modules can import it) as `{d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` |
+| `IsMetricOn` | Raw-function metric axioms (`Conj51/MetD.lean`), used instead of bundling `MetricSpace` so the induced topology can be compared to `⊥` (discrete) separately |
+| $\rho$ (sup-distance on $\operatorname{Met}(D)$) | `MetD.edist`, `ℝ≥0∞`-valued (`Conj51/MetD.lean`); realises `EDist`/`PseudoEMetricSpace`/`EMetricSpace (MetD D)` instances, sorry-free |
 | Completely metrizable (as a Lean predicate) | `TopologicalSpace.IsCompletelyMetrizableSpace`, native to Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed |
+| `LEM-STAR-METRIC` in Lean | `lem_star_metric` (`Conj51/MetricConstruction.lean`, Issue #7): for `A ⊆ ℝ` with `#↥A = ℵ₁`, the conjunction of `#(StarIndex A) = ℵ₁`, metricity of every `dStar A t` on `[0,1]`, the 系 `d_t ∈ Met(D) ↔ t ∉ A` (separately `dStar_mem_MetD_iff`), and existence of the parameter map `φ : ↥([0,1] \ A) → MetD (StarIndex A)` — sorry-free |
 | `THM-CONJ51` in Lean | `thm_conj51` (`Conj51/MainTheorem.lean`): `(D : Type) (hD : #D = Cardinal.aleph 1) : ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` — statement only, proof is a tracked `sorry` (Issue #6) |
 
 *Update as the formalisation develops.*
