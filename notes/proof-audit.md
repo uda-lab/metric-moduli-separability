@@ -306,6 +306,19 @@ changed in the move.
 (`thm_conj51` still reports `sorryAx` — that is the tracked `sorry` of the
 sorry tracker above, unchanged by this work.)
 
+**Verification method and its limit.** This container's cgroup ceiling
+(~3.4 GiB) makes a repository-wide `lake build` an OOM risk: `lake` fans out
+one `lean` worker per module and each `import Mathlib` module peaks around
+0.8–1 GiB, and `LEAN_NUM_THREADS` caps only the thread count *inside* one
+process, not the worker count (this lake, 5.0.0-src / Lean 4.32.2, has no
+`-j` flag to cap it either). Issue #7 was therefore verified by
+single-process `lake env lean` passes over the concatenated module sources
+under `flock /tmp/lean-build.lock` — sufficient for elaboration errors and
+for `#print axioms`, but it does **not** exercise the olean/import graph.
+A whole-repository consistency build (every module built explicitly, one at
+a time, in dependency order) is deferred to the Issue #9 PR and must be run
+there once.
+
 ## Mathlib library gaps (v4.32.2)
 
 | Gap | Description | File | Status |
