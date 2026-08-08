@@ -19,6 +19,8 @@
 
 import Mathlib
 
+open Cardinal
+
 /-- Predicate: A is an Fσ set (countable union of closed sets). -/
 def IsFSigma (A : Set ℝ) : Prop :=
   ∃ (F : ℕ → Set ℝ), (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n
