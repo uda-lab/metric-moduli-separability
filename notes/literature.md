@@ -142,10 +142,41 @@ complete.
 
 | Result | Proposed source | Verified? |
 |--------|-----------------|-----------|
-| Alexandrov's theorem: a subspace of a Polish space is Polish iff it is Gδ | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ⬜ (Issue #4) |
-| Closed subspace of a completely metrizable space is completely metrizable | Standard (consequence of Alexandrov or direct argument) | ⬜ (Issue #4) |
+| Alexandrov–Lavrentiev: a subspace of a *separable* completely metrizable (e.g. Polish) space X is completely metrizable iff it is Gδ in X | General (not-necessarily-separable) form: Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179. Polish-specific form commonly cited as Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 number not independently re-verified — used only as a commonly-cited pointer for the Polish case, report cites Engelking/Willard as primary |
+| Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1, background theorem 2 | ✅ audited (Issue #4, 2026-08-09) — this is the version actually used for Met(D), since Met(D) is not separable |
 | Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (perfect set property discussed around p. 150) | ✅ used in LEM-A-EXISTS §3 non-CH branch (Issue #3, 2026-08-09) |
-| Every Gδ subset of a Polish space is Polish (Alexandrov) | Kechris, Thm. 3.11 | ⬜ (Issue #4) |
+
+### References verified for the Gδ / complete-metrizability step (Issue #4, 2026-08-09)
+
+| Result | Source | Role |
+|--------|--------|------|
+| Gδ characterisation of completely metrizable subspaces, general (not-necessarily-separable) form | Engelking, *General Topology*, revised ed., Thm. 4.3.23–4.3.24, p. 274; Willard, *General Topology*, Thm. 24.12, p. 179 | Confirms a Gδ-style theorem exists even without separability, though the report does not rely on it for Met(D) — see below |
+| Elementary fact: a closed subset of a complete metric space is complete (with the restricted metric) | Standard, elementary (proof included directly in report §1, background theorem 2); no non-elementary citation needed | Used for the Met(D) closed-subspace step (report §4 step 5), specifically because it needs no separability hypothesis |
+| Fσ/Gδ complement duality (De Morgan) | Elementary, immediate from the definitions; no external citation needed | Report §4 step 2 |
+
+**On why the report avoids applying the general Engelking/Willard theorem to
+Met(D) despite it not requiring separability:** using the elementary closed-
+subspace argument is simpler and fully self-contained for what step 5 needs
+(only closed sets, not general Gδ sets), and avoids depending on a citation
+whose exact scope (e.g. whether it is stated for arbitrary — possibly very
+large or exotic — metric spaces, or with implicit hypotheses) I have not
+independently audited beyond the one Wikipedia-sourced citation above. The
+original report bug was citing a **Polish-specific** source (implicitly, by
+mislabelling "completely metrizable" as "Polish") for a claim about the
+non-separable Met(D); the fix does not depend on resolving whether some
+general non-separable Gδ theorem also happens to work.
+
+**On Met(D)'s non-separability (used above, not a separate claim ID):** for
+$|D|=\aleph_1$, perturbing a base compatible metric independently near each
+point of $D$ produces an uncountable subset of $\operatorname{Met}(D)$ whose
+elements are pairwise bounded away from each other by a fixed constant, in
+the sup-metric $\rho$; a separable metric space cannot contain such an
+uncountable uniformly-separated set (a standard fact: any $\varepsilon$-net
+of a separable space is countable, and an uncountable $\varepsilon$-separated
+set cannot be covered by a countable $\varepsilon/2$-net). This claim is not
+formally part of any of the four stable IDs and was not re-derived in full
+formal detail here; flagged for double-checking whenever $\operatorname{Met}(D)$
+is formally constructed in Lean (Issue #6).
 
 ### References verified for LEM-A-EXISTS (Issue #3, 2026-08-09)
 

@@ -14,7 +14,7 @@ Do not record research history in the main report or paper.
 | ID | Claim | Status | Notes |
 |----|-------|--------|-------|
 | LEM-A-EXISTS | ∃ A ⊆ [0,1], \|A\| = ℵ₁, A not Fσ | ✅ audited (2026-08-09) | See report §3; CH case via irrationals + Baire category, non-CH case via the perfect-set-theorem counting argument. Lean proof still pending (`sorry`), tracked below. |
-| — | Y = [0,1] \ A not Gδ → not completely metrizable | ⬜ not audited | Needs Alexandrov's theorem reference confirmed |
+| — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ audited (2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
 | LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ⬜ not written | Construction not yet written; blocked on mathematical audit |
 | LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ⬜ not written | Blocked on LEM-STAR-METRIC and Met(D) type in Lean |
 | THM-CONJ51 | Full assembly | ⬜ not written | Blocked on all above |
@@ -83,6 +83,61 @@ Template:
   up to 𝔠-many perfect sets) for no proof-strength gain over the
   elementary two-case argument above, which is already fully rigorous.
   Left as a remark in case a future audit prefers a case-split-free proof.
+
+### [2026-08-09] Closed-subspace inheritance for Met(D) — non-separability misapplication, now fixed
+
+- **Finding.** The report's §1 background theorem stated "完全距離化可能な空間
+  （Polish 空間）の部分空間が完全距離化可能であることと，それが Gδ 集合である
+  ことは同値である" — i.e. it parenthetically identified "完全距離化可能な空間"
+  (completely metrizable space) with "Polish 空間" (Polish space). These are
+  **not** the same: Polish = completely metrizable **and separable**. The
+  report then derived "閉部分空間の遺伝性" (closed-subspace inheritance) as a
+  corollary of this (Polish-flavoured) theorem, and applied it in the main
+  proof (old step 5) to $\operatorname{Met}(D)$. But $\operatorname{Met}(D)$
+  is **not separable** for $|D|=\aleph_1$ (perturbing the base metric near
+  each point of $D$ independently produces an uncountable, uniformly
+  separated subset of $\operatorname{Met}(D)$, which a separable metric space
+  cannot contain). Citing a Polish-specific source (e.g. Kechris Thm 3.11,
+  which is explicitly about Polish spaces) to justify a claim about a
+  non-separable space is a citation-scope error, independent of whether the
+  underlying fact happens to still be true.
+- **Fix.** Split the report's single background theorem into two: background
+  theorem 1 (Alexandrov–Lavrentiev $G_\delta$ characterisation) is now stated
+  and used **only** for the separable ambient space $[0,1]$ (main proof step
+  3); background theorem 2 (closed-subspace inheritance) is now proved
+  directly and elementarily — a complete metric on $Z$ restricted to a closed
+  $C \subseteq Z$ is a complete metric on $C$ — with **no separability
+  hypothesis at all**, and is the only one used for $\operatorname{Met}(D)$
+  (main proof step 5).
+- **Note (not a further error, but worth recording).** The general (not
+  necessarily separable) form of the Gδ-characterisation theorem does exist
+  in the literature (Engelking, *General Topology*, Thm. 4.3.23–4.3.24;
+  Willard, *General Topology*, Thm. 24.12, p. 179 — both independently
+  verified), so it is not strictly true that *no* Gδ-style theorem can ever
+  apply to a non-separable space. The report avoids relying on that general
+  (and citation-wise less commonly pinned down) form regardless, since the
+  elementary closed-subspace argument is simpler, fully self-contained, and
+  sufficient for exactly what step 5 needs.
+- Made the Fσ/Gδ complement duality (main proof step 2) explicit via De
+  Morgan's law, and confirmed the ambient space is consistently $[0,1]$ for
+  both $A$ and $Y$ (as opposed to $\mathbb{R}$), which coincide here since
+  $[0,1]$ is closed in $\mathbb{R}$.
+- Added a one-sentence note (report §1) on why $\operatorname{Met}(D)$'s
+  sup-distance possibly being extended-valued (per the Issue #2 literature
+  finding) does not affect any of the above: complete metrizability is a
+  purely topological property, independent of which compatible metric
+  witnesses it.
+- **Follow-up flagged, not fixed here (out of scope for Issue #4):**
+  `paper/main.tex` §"Background results" (lines 81–89) contains the exact
+  same pre-fix bug — an "Alexandrov's theorem" stated for Polish spaces,
+  with a "closed subspace inheritance" corollary drawn from it without
+  qualification. `paper/main.tex` is a not-yet-audited draft (Issue #11,
+  blocked on the mathematical audit passing) and wasn't in this issue's
+  acceptance criteria, so it was left untouched — but whoever drafts the
+  English paper (Issue #11) should mirror the report-ja.md §1 fix (split
+  into a separable-only Gδ characterisation and a separability-free
+  closed-subspace lemma) rather than translate the current buggy English
+  text as-is.
 
 ---
 
