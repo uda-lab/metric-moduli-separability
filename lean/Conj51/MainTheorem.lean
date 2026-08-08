@@ -21,11 +21,20 @@ import IshikiConj51.Conj51.ClosedEmbedding
     Let D be a discrete space of cardinality ℵ₁.
     Then Met(D), equipped with the supremum-metric topology,
     is not completely metrizable.
+
+    Note on Lean statement: formalising "Met(D) is not completely metrizable"
+    requires first constructing a suitable type for Met(D) (the space of metrics
+    on D with the supremum topology) and the correct notion of complete
+    metrizability for that type.  As a placeholder we assert False with sorry,
+    which is replaced with a properly typed statement once LEM-CLOSED-IMAGE
+    is in place.
+
     Status: SORRY — all lemmas pending independent audit. -/
 theorem thm_conj51
     (D : Type*) [TopologicalSpace D] [DiscreteTopology D]
     (hD : #D = Cardinal.aleph 1) :
-    ¬ CompleteSpace (UniformSpace.Completion D) := by
-  -- TODO: replace stub with assembly of LEM-A-EXISTS, LEM-STAR-METRIC,
-  -- LEM-CLOSED-IMAGE once each is audited and formalised.
+    -- TODO: replace with the correct statement once Met(D) is formalised.
+    -- The intended claim is: the type of metrics on D with the sup-metric
+    -- topology does not admit a complete metric.
+    False := by
   sorry

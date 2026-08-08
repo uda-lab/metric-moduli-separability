@@ -47,6 +47,14 @@ Template:
 |------|------|-------|----------|
 | `Conj51/Cardinality.lean` | `lem_A_exists` | LEM-A-EXISTS | high |
 | `Conj51/MetricConstruction.lean` | `lem_star_metric` | LEM-STAR-METRIC | high |
+| `Conj51/ClosedEmbedding.lean` | `lem_closed_image` | LEM-CLOSED-IMAGE | high |
 | `Conj51/MainTheorem.lean` | `thm_conj51` | THM-CONJ51 | highest |
 
 No `sorry` must remain in the final formalisation.
+
+## Mathlib library gaps
+
+| Gap | Description | File | Status |
+|-----|-------------|------|--------|
+| `IsFSigma` predicate | Mathlib v4.32.2 has no single `IsFSigma` predicate; the definition is inlined in `Cardinality.lean` as `∃ (F : ℕ → Set ℝ), (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. Verify before formalisation whether a better match exists. | `Conj51/Cardinality.lean` | open |
+| Met(D) type | There is no canonical Lean/Mathlib type for the space of metrics on D with the sup-metric topology.  Needs explicit construction before `thm_conj51` can be given a correct type. | `Conj51/MainTheorem.lean` | open |
