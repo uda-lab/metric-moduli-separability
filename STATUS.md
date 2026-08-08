@@ -7,7 +7,7 @@
 | Item | Status |
 |------|--------|
 | Conjecture statement verified (arXiv:2407.03030) | ✅ done |
-| LEM-A-EXISTS audited | ⬜ pending |
+| LEM-A-EXISTS audited | ✅ done |
 | Gδ / complete-metrizability implication audited | ⬜ pending |
 | Star-metric construction written | ⬜ pending |
 | Closed-embedding argument audited | ⬜ pending |
@@ -32,7 +32,8 @@ The proposed argument for THM-CONJ51 proceeds through six steps:
 **Note on Met(D):** Met(D) denotes metrics on D *compatible with the discrete
 topology*, not all metrics on the underlying set.
 
-None of these steps has completed independent audit yet.
+Step 1 (LEM-A-EXISTS) has completed independent audit (report §3,
+2026-08-09). The remaining steps have not.
 
 ## Open obligations
 

@@ -142,10 +142,30 @@ complete.
 
 | Result | Proposed source | Verified? |
 |--------|-----------------|-----------|
-| Alexandrov's theorem: a subspace of a Polish space is Polish iff it is Gδ | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ⬜ |
-| Closed subspace of a completely metrizable space is completely metrizable | Standard (consequence of Alexandrov or direct argument) | ⬜ |
-| Every uncountable closed subset of ℝ has cardinality **c** (continuum) | Perfect set theorem; Kechris §6 or Kunen | ⬜ |
-| Every Gδ subset of a Polish space is Polish (Alexandrov) | Kechris, Thm. 3.11 | ⬜ |
+| Alexandrov's theorem: a subspace of a Polish space is Polish iff it is Gδ | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ⬜ (Issue #4) |
+| Closed subspace of a completely metrizable space is completely metrizable | Standard (consequence of Alexandrov or direct argument) | ⬜ (Issue #4) |
+| Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (perfect set property discussed around p. 150) | ✅ used in LEM-A-EXISTS §3 non-CH branch (Issue #3, 2026-08-09) |
+| Every Gδ subset of a Polish space is Polish (Alexandrov) | Kechris, Thm. 3.11 | ⬜ (Issue #4) |
+
+### References verified for LEM-A-EXISTS (Issue #3, 2026-08-09)
+
+| Result | Source | Role |
+|--------|--------|------|
+| Cantor–Bendixson theorem (every closed subset of a Polish space decomposes as a perfect set plus a countable set) | Kechris, *Classical Descriptive Set Theory*, GTM 156 (Springer, 1995), §6; perfect set property discussed around p. 150 | Non-CH branch: every uncountable closed F ⊆ [0,1] has \|F\| = 𝔠 |
+| Baire category theorem (a nonempty complete metric space is not meager in itself) | Kelley, *General Topology*, Theorem 34, p. 200; equivalently Willard, *General Topology*, Corollary 25.4 | CH branch: [0,1] \ ℚ is not Fσ |
+| ℵ₁ ≤ 𝔠 and Cantor's theorem ℵ₀ < 𝔠 | Standard ZFC cardinal arithmetic (ℵ₁ is the least uncountable cardinal; 𝔠 = 2^ℵ₀ is uncountable by Cantor's theorem) | Both branches |
+| κ infinite, λ ≤ κ countable ⇒ κ = \|A\|+λ forces \|A\|=κ; countable union of countable sets is countable | Standard ZFC cardinal arithmetic (uses countable choice, available in ZFC) | CH branch cardinality count; non-CH branch final contradiction |
+
+I could not independently pin exact Kechris theorem/page numbers beyond the
+"§6 / p. 150" region confirmed via a secondary source (Wikipedia's citation
+of Kechris 1995, p. 150 for the perfect set property) — general web search
+is unavailable in this environment and I did not have independent access to
+paginate the book itself. The Kelley/Willard citations for the Baire category
+theorem are quoted directly from a source that cites them with exact
+theorem/page numbers, so those are higher-confidence. Re-verify against a
+physical/PDF copy of Kechris before treating "p. 150" as exact for the
+Cantor–Bendixson theorem statement itself (as opposed to the perfect set
+property definition, which is what p. 150 is confirmed to anchor).
 
 ---
 

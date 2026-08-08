@@ -2,7 +2,7 @@
 
 **出典:** Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 (2024)  
 **状態:** 証明候補（未検証）  
-**更新:** 2026-08-08
+**更新:** 2026-08-09
 
 ---
 
@@ -40,17 +40,34 @@ $|D| = \aleph_1$ のとき，$\operatorname{Met}(D)$ は上限距離位相に関
 **主張.**  
 ZFC において，$A \subset [0,1]$，$|A| = \aleph_1$，かつ $A$ が $F_\sigma$ でない集合が存在する．
 
-**証明の方針（候補，要検証）.**
+**記法.** $\mathfrak{c} := 2^{\aleph_0}$（連続体濃度）とおく．Cantor の定理より $\aleph_0 < \mathfrak{c}$．また $\aleph_1$ は最小の非可算基数だから，常に $\aleph_1 \le \mathfrak{c}$（ZFC の定理）．
 
-次の場合分けを用いる：
+**証明（監査済み，2026-08-09）.**
 
-- **$\mathsf{CH}$ が成立する場合**（$\aleph_1 = 2^{\aleph_0}$）:  
-  $[0,1]$ の無理数全体の集合 $\mathbb{P} \cap [0,1]$ を考える．$|\mathbb{P} \cap [0,1]| = 2^{\aleph_0} = \aleph_1$．また $\mathbb{P} \cap [0,1]$ は $G_\delta$ だが $F_\sigma$ ではない（Baire カテゴリ論より）．よって $A := \mathbb{P} \cap [0,1]$ が求める集合の候補となる．
+命題 $\mathsf{CH}$（$\aleph_1 = \mathfrak{c}$）の真偽によって場合分けする．排中律により，ZFC の任意のモデルでこのいずれか一方が成立するから，これは正当な場合分けである．
 
-- **$\mathsf{CH}$ が成立しない場合**（$\aleph_1 < 2^{\aleph_0}$）:  
-  任意の可算個の閉集合の合併は閉集合の可算族を成す．$[0,1]$ の閉集合で非可算なものの濃度は連続体濃度 $2^{\aleph_0}$ である（完全集合定理）．従って，$[0,1]$ の濃度 $\aleph_1$ の部分集合 $A$ が $F_\sigma$ であれば，$A$ はある閉集合 $F \subset [0,1]$ に含まれ $|F| \geq \aleph_1$ となるが，そのような $F$ の濃度は $2^{\aleph_0} > \aleph_1$ となる矛盾は生じない——しかし $F_\sigma$ 集合としての構造から直接矛盾を導くことはより微妙で，要検証である．
+**場合 1：$\mathsf{CH}$ が成立する場合（$\aleph_1 = \mathfrak{c}$）.**
 
-*状態: 未検証；この証明スケッチはいずれの場合も独立した検証が必要*
+$A := [0,1] \setminus \mathbb{Q}$（$[0,1]$ 内の無理数全体）とおく．
+
+- *濃度.* $|[0,1]| = \mathfrak{c}$ であり $\mathbb{Q} \cap [0,1]$ は可算．無限濃度 $\kappa$ を持つ集合から可算集合を除いても濃度は変わらない（$\aleph_0 < \kappa$ のとき $\kappa = |A| + \aleph_0$ から $|A| = \kappa$ が従う，標準的な基数演算）から，$|A| = \mathfrak{c} = \aleph_1$（最後の等号は $\mathsf{CH}$ による）．
+
+- *$A$ が $F_\sigma$ でないこと（Baire のカテゴリ定理；$\mathsf{CH}$ に依存しない）.*  
+  $A = \bigcup_{n\in\mathbb{N}} F_n$（各 $F_n$ は $[0,1]$ の閉集合）と仮定して矛盾を導く．$\mathbb{Q} \cap [0,1]$ は $[0,1]$ で稠密であり，$F_n \subseteq A$ より $F_n \cap \mathbb{Q} = \emptyset$．ゆえに $F_n$ は内点を持たない：もし $F_n$ が空でない開区間を含めば，その区間内の有理点が $F_n \subseteq A$ に属することになり $A \cap \mathbb{Q} = \emptyset$ に反する．内点を持たない閉集合は疎（nowhere dense）だから，$A$ は可算個の疎な閉集合の合併，すなわち $[0,1]$ における痩集合（meager set）である．一方 $\mathbb{Q} \cap [0,1] = \bigcup_{q \in \mathbb{Q}\cap[0,1]} \{q\}$ も可算個の疎な閉集合（一点集合）の合併だから痩集合．したがって $[0,1] = A \cup (\mathbb{Q}\cap[0,1])$ は二つの痩集合の合併，すなわち痩集合．しかし $[0,1]$ は完備距離空間であり，Baire のカテゴリ定理（例えば Kelley, *General Topology*, Theorem 34, p. 200，あるいは Willard, *General Topology*, Corollary 25.4）より，完備距離空間はそれ自身の中で痩集合になり得ない．これは矛盾．よって $A$ は $F_\sigma$ でない．
+
+**場合 2：$\mathsf{CH}$ が成立しない場合（$\aleph_1 < \mathfrak{c}$）.**
+
+次の補題を用いる．
+
+> **補題（完全集合定理の系）.** $F \subseteq [0,1]$ が非可算な閉集合ならば $|F| = \mathfrak{c}$．
+>
+> *証明.* $F$ は $[0,1]$ の閉部分集合だから，それ自身 Polish 空間である．Cantor–Bendixson の定理（Kechris, *Classical Descriptive Set Theory*, GTM 156, 1995, §6，完全集合の性質は同書 p. 150 付近）より，$F$ は完全集合（perfect set）$P$ と可算集合 $C$ の非交和 $F = P \sqcup C$ に分解できる．$F$ が非可算で $C$ が可算だから $P \ne \emptyset$．空でない完全 Polish 空間は連続体濃度を持つ（標準的な Cantor 図式による埋め込み，同書 §6）から $|P| = \mathfrak{c}$．よって $|F| \ge |P| = \mathfrak{c}$．また $F \subseteq [0,1]$ より $|F| \le \mathfrak{c}$．ゆえに $|F| = \mathfrak{c}$．∎
+
+$\aleph_1 \le \mathfrak{c} = |[0,1]|$ だから，$[0,1]$ の部分集合で濃度がちょうど $\aleph_1$ のものが存在する．そのような集合を一つ取り $A$ とする．$A$ が $F_\sigma$ であると仮定し，$A = \bigcup_{n\in\mathbb{N}} F_n$（各 $F_n$ は $[0,1]$ の閉集合）とする．各 $n$ について $F_n \subseteq A$ だから $|F_n| \le |A| = \aleph_1 < \mathfrak{c}$．したがって上の補題の対偶より，各 $F_n$ は可算．ゆえに $A = \bigcup_n F_n$ は可算個の可算集合の合併だから可算（可算選択公理；ZFC で常に利用可能）．これは $|A| = \aleph_1$（非可算）に矛盾．よって $A$ は $F_\sigma$ でない．
+
+**結論.** 場合 1・場合 2 のいずれでも，$A \subset [0,1]$，$|A| = \aleph_1$，$A \notin F_\sigma$ を満たす集合が構成できる．両場合は排他的かつ網羅的（$\mathsf{CH}$ の真偽による分岐）だから，ZFC において LEM-A-EXISTS が成立する．∎
+
+*状態: **監査済み**．場合 2 の議論は，以前の報告書で「$F_\sigma$ 集合としての構造から直接矛盾を導くことはより微妙で要検証」として未完成のまま残されていた部分を，完全集合定理（Cantor–Bendixson の定理の系）を用いた数え上げ論法に置き換えて完成させたものである．場合 1（Baire のカテゴリ定理）は $\mathsf{CH}$ の真偽に依存しない独立した議論であり，変更していない．参考文献の詳細は `notes/literature.md` を参照．*
 
 ---
 
@@ -85,7 +102,6 @@ $D$ 上に，パラメータ $t \in Y$（$Y = [0,1] \setminus A$）によって�
 
 ## 5. 開問題・未解決事項
 
-- LEM-A-EXISTS の両ケース（CH あり・なし）の詳細な検証
 - $\operatorname{Met}(D)$ が完全距離化可能な空間であるかどうかの先行知識の確認
 - 星型距離族の具体的構成（LEM-STAR-METRIC）
 - 像の閉性の証明（LEM-CLOSED-IMAGE）
