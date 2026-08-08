@@ -123,6 +123,6 @@ Status: statement only (Issue #6). The proof depends on LEM-A-EXISTS
 still open, `MetricConstruction.lean` / `ClosedEmbedding.lean`), and the
 closed-subspace-inheritance argument audited in Issue #4. Tracked as a
 `sorry` in notes/proof-audit.md; not claimed as proved by this issue. -/
-theorem thm_conj51 (D : Type) (hD : #D = Cardinal.aleph 1) :
+theorem thm_conj51 (D : Type*) (hD : #D = Cardinal.aleph 1) :
     ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D) := by
   sorry
