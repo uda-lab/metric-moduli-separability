@@ -1,12 +1,12 @@
 # Project Status
 
-**Updated:** 2026-08-08
+**Updated:** 2026-08-09
 
 ## Overall
 
 | Item | Status |
 |------|--------|
-| Conjecture statement verified (arXiv:2407.03030) | ⬜ pending |
+| Conjecture statement verified (arXiv:2407.03030) | ✅ done |
 | LEM-A-EXISTS audited | ⬜ pending |
 | Gδ / complete-metrizability implication audited | ⬜ pending |
 | Star-metric construction written | ⬜ pending |
