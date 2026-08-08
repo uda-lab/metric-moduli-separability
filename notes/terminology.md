@@ -13,6 +13,13 @@ Quick reference for notation used consistently across the report, paper, and Lea
 | $Y$ | $[0,1] \setminus A$ |
 | $d_t$ | Star-type metric on $D$ compatible with the discrete topology, parametrised by $t \in Y$ |
 | $\varphi$ | The embedding $Y \to \operatorname{Met}(D)$, $t \mapsto d_t$ |
+| $a_\alpha$ | The $\alpha$-th element of $A$ under a fixed **injective** enumeration $A = \{a_\alpha : \alpha < \omega_1\}$ (report §3.2) |
+| $\{p, q\}$ | 基準対 (reference pair): the two points of $D$ with $d_t(p,q) = 1+t$, used to recover the parameter $t$ from a metric (report §3.2) |
+| $C_\alpha$ | 第 $\alpha$ 星 (the $\alpha$-th star): the block $\{y_\alpha\} \cup \{x_{\alpha,n} : n \in \mathbb{N}_{\ge 1}\}$ of $D$ |
+| $y_\alpha$ | 中心 (centre) of the star $C_\alpha$ |
+| $x_{\alpha,n}$ | 端点 (endpoint) of the star $C_\alpha$, indexed by $n \in \mathbb{N}_{\ge 1}$ |
+| $s_n(\alpha, t)$ | $\min(1, \lvert t - a_\alpha \rvert + 1/n)$ — the centre-to-endpoint distance $d_t(y_\alpha, x_{\alpha,n})$ (report §3.2) |
+| ブロック (block) | An element of the partition $D = \{p,q\} \sqcup \bigsqcup_{\alpha < \omega_1} C_\alpha$ (report §3.2) |
 | $F_\sigma$ | Countable union of closed sets |
 | $G_\delta$ | Countable intersection of open sets |
 | Completely metrizable | A topological space homeomorphic to a complete metric space. Not the same as **Polish** (= completely metrizable **and** separable) — do not conflate the two |

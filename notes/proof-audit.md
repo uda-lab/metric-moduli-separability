@@ -15,9 +15,9 @@ Do not record research history in the main report or paper.
 |----|-------|--------|-------|
 | LEM-A-EXISTS | ∃ A ⊆ [0,1], \|A\| = ℵ₁, A not Fσ | ✅ audited (2026-08-09) | See report §3; CH case via irrationals + Baire category, non-CH case via the perfect-set-theorem counting argument. Lean proof still pending (`sorry`), tracked below. |
 | — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ audited (2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
-| LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ⬜ not written | Construction not yet written; blocked on mathematical audit |
-| LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ⬜ not written | Blocked on LEM-STAR-METRIC and Met(D) type in Lean |
-| THM-CONJ51 | Full assembly | ⬜ not written | Blocked on all above |
+| LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ written, awaiting independent review (2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean statement still absent (Issue #7). |
+| LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ written, awaiting independent review (2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean statement still absent (Issue #9). |
+| THM-CONJ51 | Full assembly | ✅ written, awaiting independent review (2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Retains **proof candidate** status until Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) pass. Lean statement still absent (Issue #9). |
 
 ---
 
@@ -138,6 +138,66 @@ Template:
   into a separable-only Gδ characterisation and a separability-free
   closed-subspace lemma) rather than translate the current buggy English
   text as-is.
+- **Second follow-up, added 2026-08-09 (Issue #5), also not fixed here:**
+  `paper/main.tex` line 101 states LEM-A-EXISTS with `A \subset [0,1]`, while
+  `report/report-ja.md` uses `A \subseteq [0,1]`. The report was unified to
+  `⊆` throughout under Issue #5; `paper/main.tex` was left alone for the same
+  out-of-scope reason as above. Issue #11 should unify it, since the four
+  stable claim IDs must read identically across report, paper, and Lean.
+
+### [2026-08-09] LEM-STAR-METRIC / LEM-CLOSED-IMAGE — construction written out; verification notes
+
+Recorded while writing report §3.1–§3.8 (Issue #5). No error was found in the
+construction being written up, but the following points were checked
+explicitly and are the places a reviewer should look first.
+
+- **Triangle-inequality case split is exhaustive by construction.** The proof
+  partitions `D = {p,q} ⊔ ⨆_α C_α` and then splits three distinct points by
+  how they distribute over that partition: all in one block (only a star is
+  possible, since `{p,q}` has two elements), two in one block plus one
+  outside (sub-split by whether the shared block is a star or `{p,q}`), and
+  all three in distinct blocks. That is the complete list of distributions,
+  which is why no residual case can hide. In the last case `p` and `q` cannot
+  both occur, so every pair is a cross-block pair at distance 1 — this is the
+  step that would break if `d_t(p,q)` were allowed to exceed 2.
+- **Where `t ≤ 1` is load-bearing.** Only in case (c): `d_t(p,q) = 1+t ≤ 2 =
+  d_t(p,z) + d_t(z,q)`. A reference-pair distance `1+t` with `t > 1` would
+  violate the triangle inequality through any third point. The parameter
+  interval `[0,1]` therefore cannot be widened without rescaling the
+  reference pair.
+- **Isolation of the endpoints does not depend on `t`.** `δ(x_{α,n}) =
+  s_n(α,t) ≥ 1/n > 0` holds for every `t ∈ [0,1]`, including `t ∈ A`. Only
+  the *centre* `y_α` loses isolation, and only for `t = a_α`. This is why
+  (C3) is a statement about one specific centre rather than about the whole
+  star, and why `d_t` remains a metric there.
+- **Where `|A| = ℵ₁` is used (corrected 2026-08-09 after the PR #17 codex
+  review).** The first draft of report §3.8 claimed that (C1)–(C5) work for any
+  non-empty `A`, with the cardinality consumed only by the count
+  `|D| = 2 + ℵ₁ + ℵ₁·ℵ₀ = ℵ₁`. That was wrong: §3.2 indexes the stars by
+  `α < ω₁` via an injective enumeration `A = {a_α : α < ω₁}`, and such an
+  enumeration exists precisely when `|A| = ℵ₁` (a smaller `A` cannot supply it;
+  a larger one would leave elements of `A` uncovered, breaking the (C3)
+  boundary argument). The accurate split, now in §3.8, is: `|A| = ℵ₁` is used
+  twice at construction time (existence of the `ω₁`-indexed enumeration; the
+  `|D|` count), while the *verification* of (C1)–(C5) uses no cardinality — each
+  proof is local (≤ 3 points, one point vs. its complement, one centre `y_β`,
+  or a per-pair estimate). Weakening the cardinality would require reindexing
+  the stars by `A` itself plus filler points to keep `|D| = ℵ₁`; not done here.
+  Non-Fσ-ness remains consumed only by main proof steps 2–3. The split is
+  recorded so a later change to LEM-A-EXISTS traces to exactly the affected
+  steps.
+- **Finiteness of ρ on the image.** `notes/literature.md` (Issue #2) records
+  that the sup-distance on `Met(Z)` is genuinely extended-valued in general.
+  Every `d_t` here has range in `[0,2]`, so `ρ(d_t, d_s) ≤ 2 < ∞` and the
+  whole image lies in a single finite-distance (clopen) component of
+  `Met(D)`. The (C4)/(C5) arguments therefore never manipulate `∞`.
+- **Not used: a uniformly discrete construction.** Making the satellite
+  distances bounded below by a single constant would simplify (C2) but would
+  narrow the family to uniformly discrete metrics, which per
+  `notes/literature.md` is strictly stronger than the source's compatibility
+  condition. The construction deliberately lets `inf_n s_n(α,t) → 0` as
+  `t → a_α`, since that degeneration is exactly what makes the image closed
+  rather than merely embedded.
 
 ---
 
