@@ -206,25 +206,55 @@ explicitly and are the places a reviewer should look first.
 | File | Declaration | Claim ID | Priority | Notes |
 |------|-------------|----------|----------|-------|
 | `IshikiConj51/Conj51/Cardinality.lean` | `lem_A_exists` | LEM-A-EXISTS | high | Mathematical audit complete (report §3, 2026-08-09); Lean formalisation of the two-case argument is still open (Issue #8). |
+| `IshikiConj51/Conj51/MainTheorem.lean` | `thm_conj51` | THM-CONJ51 | high | Statement only (Issue #6, 2026-08-09) — hypothesis `#D = Cardinal.aleph 1` and conclusion `¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` faithfully match report §2/source Conjecture 5.1, no weakening. Proof depends on LEM-STAR-METRIC (Issue #7) and LEM-CLOSED-IMAGE (Issue #9). `#print axioms thm_conj51` confirms `sorryAx` is isolated to this declaration alone — it does not leak into `MetD`'s instances (all sorry-free, axioms `[propext, Classical.choice, Quot.sound]` only). |
 
 No `sorry` must remain in the final formalisation.
 
 ## Lean TODO tracker (no theorem statement yet)
 
-The following claim IDs do **not** yet have Lean theorem statements because
-the required mathematical objects (notably the `Met(D)` type) are not yet
-formalised.  The stable IDs will be attached to theorems only once the
-statements faithfully represent the mathematical claims.
+The following claim IDs do **not** yet have Lean theorem statements. `Met(D)`
+is now constructed (below), unblocking these.
 
 | File | Claim ID | Blocked on |
 |------|----------|------------|
-| `IshikiConj51/Conj51/MetricConstruction.lean` | LEM-STAR-METRIC | star-type construction + audit |
-| `IshikiConj51/Conj51/ClosedEmbedding.lean` | LEM-CLOSED-IMAGE | LEM-STAR-METRIC + Met(D) type |
-| `IshikiConj51/Conj51/MainTheorem.lean` | THM-CONJ51 | all above + Met(D) type |
+| `IshikiConj51/Conj51/MetricConstruction.lean` | LEM-STAR-METRIC | star-type construction, now written mathematically in report §3.1–§3.5 (Issue #5); Lean formalisation itself is Issue #7 |
+| `IshikiConj51/Conj51/ClosedEmbedding.lean` | LEM-CLOSED-IMAGE | LEM-STAR-METRIC (Issue #7); mathematical construction written in report §3.6–§3.7 (Issue #5); Lean formalisation itself is Issue #9 |
+
+## Met(D) construction (Issue #6, 2026-08-09)
+
+`MetD D` and its `EMetricSpace` instance are defined in
+`IshikiConj51/Conj51/MainTheorem.lean`, sorry-free:
+
+- `IsMetricOn {D} (d : D → D → ℝ) : Prop` — raw-function metric axioms
+  (`dist_self`, `eq_of_dist_eq_zero`, `dist_comm`, `dist_triangle`), so the
+  induced topology can be compared to the discrete topology `⊥` separately
+  from bundling a full `MetricSpace` structure.
+- `MetD D := {d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` — exactly
+  the source's `Met(D)`: ordinary finite-valued metrics on `D` inducing the
+  discrete topology, no boundedness or uniform-discreteness restriction.
+- `MetD.edist d e := ⨆ p : D × D, ENNReal.ofReal |d.1 p.1 p.2 - e.1 p.1 p.2|`
+  — the source's sup-distance, genuinely extended-valued (`ℝ≥0∞`), matching
+  the Issue #2/#4 finding that the *ambient* distance on the space `Met(D)`
+  can be infinite even though each individual metric on `D` is finite-valued.
+  `edist_self`, `edist_comm`, `edist_triangle`, `eq_of_edist_eq_zero` are all
+  proved (not `sorry`); `#print axioms` on each shows only
+  `[propext, Classical.choice, Quot.sound]`.
+- `EDist` / `PseudoEMetricSpace` / `EMetricSpace` instances registered for
+  `MetD D` from the above, giving `MetD D` a genuine `TopologicalSpace`
+  instance via Mathlib's standard uniformity-from-edist construction — this
+  *is* the supremum-metric topology.
+- `thm_conj51` uses Mathlib's `TopologicalSpace.IsCompletelyMetrizableSpace`
+  (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`), which already
+  exists in Mathlib v4.32.2. This resolves the leader dossier's flagged
+  "biggest risk item" (§D: "Lavrentiev 方向...最大のリスク項目") for the
+  *statement* — the predicate needed no local definition. The *proof* that
+  `MetD D` does or does not satisfy it (via the Lavrentiev/closed-subspace
+  route from Issue #4) is not attempted here.
 
 ## Mathlib library gaps (v4.32.2)
 
 | Gap | Description | File | Status |
 |-----|-------------|------|--------|
 | `IsFSigma` predicate | No canonical Mathlib built-in; defined locally as `∃ F : ℕ → Set ℝ, (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. | `IshikiConj51/Conj51/Cardinality.lean` | open |
-| `Met(D)` as a type | No Mathlib type for the space of compatible metrics on D with the sup-metric topology.  Must be constructed explicitly. | `IshikiConj51/Conj51/MainTheorem.lean` | open |
+| `Met(D)` as a type | ~~No Mathlib type for the space of compatible metrics on D with the sup-metric topology.~~ Resolved (Issue #6, 2026-08-09): constructed explicitly as `MetD`, see above. | `IshikiConj51/Conj51/MainTheorem.lean` | resolved |
+| `TopologicalSpace.IsCompletelyMetrizableSpace` | Exists natively in Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed. Confirmed by direct source inspection (Issue #6). | `IshikiConj51/Conj51/MainTheorem.lean` | not a gap (dossier flagged as biggest risk item; resolved by inspection) |
