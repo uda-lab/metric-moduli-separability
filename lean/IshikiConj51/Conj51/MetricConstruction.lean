@@ -25,8 +25,11 @@
 --   (C1) `dStar_isMetricOn`      — `d_t` is a metric for every `t ∈ [0,1]`.
 --   (C2) `dStar_topology_eq_bot` — for `t ∉ A` it induces the discrete topology.
 --   (C3) `dStar_topology_ne_bot` — for `t ∈ A` it does not.
---   `lem_star_metric`            — the report's 系: `d_t ∈ Met(D) ↔ t ∈ Y`.
+--   `dStar_mem_MetD_iff`         — the report's 系: `d_t ∈ Met(D) ↔ t ∈ Y`.
 --   `card_starIndex`             — `|D| = ℵ₁` (report §3.2).
+--   `lem_star_metric`            — LEM-STAR-METRIC itself: the conjunction of
+--     `|D| = ℵ₁`, (C1), the 系, and the existence of the parameter map
+--     `φ : Y → MetD (StarIndex A)` of report §3.6.
 -- Together with the pointwise Lipschitz estimates `dStar_sub_le` /
 -- `dStar_anchor_sub` (report §3.6, the pair-by-pair half of (C4)) that the
 -- bi-Lipschitz embedding is built from.  The supremum-level estimate
@@ -320,18 +323,19 @@ theorem dStar_topology_ne_bot (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : �
   simp only [starRadius, add_zero, starSpoke, sub_self, abs_zero, zero_add]
   exact lt_of_le_of_lt (min_le_right _ _) hn
 
-/-- **LEM-STAR-METRIC** (report §3.1–§3.5, including the 系 closing §3.5).
-For the star-type family `d_t` on `D = StarIndex A`, membership in `Met(D)`
-characterises the parameter set exactly:
-`d_t ∈ Met(D) ⟺ t ∈ Y = [0,1] \ A`.
+/-- The 系 closing report §3.5: for the star-type family `d_t` on
+`D = StarIndex A`, membership in `Met(D)` characterises the parameter set
+exactly, `d_t ∈ Met(D) ⟺ t ∈ Y = [0,1] \ A`.
 
 The left-hand side is literally `MetD (StarIndex A)`'s defining predicate, so
-this says: the family `(d_t)_{t ∈ Y}` is a family of metrics on `D`
-*compatible with the discrete topology* (no boundedness, no uniform
-discreteness), and no parameter outside `Y` contributes to it.
-`dStar_isMetricOn` supplies (C1) separately for all `t ∈ [0,1]`, and
-`card_starIndex` supplies `|D| = ℵ₁`. -/
-theorem lem_star_metric (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
+this says: each `d_t` with `t ∈ Y` is a metric on `D` *compatible with the
+discrete topology* (no boundedness, no uniform discreteness), and no
+parameter outside `Y` contributes to it.
+
+This is the pointwise half of LEM-STAR-METRIC; the claim ID is carried by the
+aggregate `lem_star_metric` below, which also pins `|D| = ℵ₁` and exposes the
+whole family inside `MetD`. -/
+theorem dStar_mem_MetD_iff (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) :
     (∃ h : IsMetricOn (dStar A t), h.topology = ⊥) ↔ t ∉ A := by
   constructor
   · rintro ⟨h, hbot⟩ htA
@@ -363,6 +367,44 @@ theorem card_starIndex {A : Set ℝ} (hA : #(↥A) = aleph 1) : #(StarIndex A) =
   show #(Bool ⊕ (↥A × Option ℕ)) = aleph 1
   rw [mk_sum, lift_id, lift_id, mk_bool, hprod]
   exact add_eq_right hℵ h2
+
+/-! ## LEM-STAR-METRIC -/
+
+/-- **LEM-STAR-METRIC** (report §3.1–§3.6).
+
+Given `A ⊆ ℝ` with `|A| = ℵ₁`, the star construction produces a discrete
+index set `D = StarIndex A` of cardinality `ℵ₁` together with the family
+`(d_t)_{t ∈ [0,1]}` such that
+
+1. `|D| = ℵ₁` — the source's hypothesis on the underlying discrete space
+   (report §3.1, §3.2);
+2. every `d_t`, `t ∈ [0,1]`, is a metric on `D` — (C1), report §3.3;
+3. `d_t` induces the discrete topology **iff** `t ∉ A` — (C2) together with
+   (C3), report §3.4–§3.5.  Note this is an iff: the failure at `t ∈ A` is
+   part of the claim, since it is what makes the image closed in Issue #9;
+4. consequently the parameter map `φ : Y = [0,1] \ A → Met(D)`, `t ↦ d_t`,
+   exists as a genuine map into `MetD (StarIndex A)`, with `φ t` carried by
+   `d_t` — report §3.6.
+
+Clause 4 is what "a family of metrics `d_t ∈ Met(D)` parametrised by `t ∈ Y`"
+means in the report; clauses 1–3 are its hypotheses and defining properties.
+`MetD` is the unweakened `Met(D)` of `Conj51/MetD.lean` — no boundedness and
+no uniform discreteness is assumed anywhere.
+
+The component lemmas (`card_starIndex`, `dStar_isMetricOn`,
+`dStar_mem_MetD_iff`, `dStar_topology_eq_bot`, `dStar_topology_ne_bot`,
+`starMet`) remain available individually; Issue #9 consumes those directly. -/
+theorem lem_star_metric {A : Set ℝ} (hA : #(↥A) = aleph 1) :
+    #(StarIndex A) = aleph 1 ∧
+    (∀ t ∈ Set.Icc (0 : ℝ) 1, IsMetricOn (dStar A t)) ∧
+    (∀ t ∈ Set.Icc (0 : ℝ) 1,
+        ((∃ h : IsMetricOn (dStar A t), h.topology = ⊥) ↔ t ∉ A)) ∧
+    ∃ φ : ↥(Set.Icc (0 : ℝ) 1 \ A) → MetD (StarIndex A),
+      ∀ t : ↥(Set.Icc (0 : ℝ) 1 \ A), (φ t).1 = dStar A (t : ℝ) :=
+  ⟨card_starIndex hA,
+    fun _ ht => dStar_isMetricOn A ht,
+    fun _ ht => dStar_mem_MetD_iff A ht,
+    ⟨fun t => starMet A t.2.1 t.2.2, fun _ => rfl⟩⟩
 
 /-! ## Pointwise Lipschitz estimates (report §3.6, pair-by-pair half of (C4))
 

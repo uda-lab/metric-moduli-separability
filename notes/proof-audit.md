@@ -273,11 +273,21 @@ changed in the move.
   `n ≥ 0`).
 - Proved: `dStar_isMetricOn` (C1, all `t ∈ [0,1]`), `dStar_topology_eq_bot`
   (C2, `t ∉ A`), `dStar_topology_ne_bot` (C3, `t ∈ A`), and the report's 系
-  as `lem_star_metric : (∃ h : IsMetricOn (dStar A t), h.topology = ⊥) ↔ t ∉ A`.
+  as `dStar_mem_MetD_iff : (∃ h : IsMetricOn (dStar A t), h.topology = ⊥) ↔ t ∉ A`.
   The left-hand side is literally `MetD (StarIndex A)`'s defining predicate,
   so no boundedness or uniform-discreteness proxy is substituted.
 - `card_starIndex : #(↥A) = ℵ₁ → #(StarIndex A) = ℵ₁` (report §3.2,
   `2 + ℵ₁·ℵ₀ = ℵ₁`).
+- The claim ID **LEM-STAR-METRIC** is carried by the aggregate theorem
+  `lem_star_metric (hA : #(↥A) = ℵ₁)`, which conjoins all four obligations the
+  report's §3.1 statement makes: `#(StarIndex A) = ℵ₁`; (C1) for every
+  `t ∈ [0,1]`; the 系 iff; and the existence of the parameter map
+  `φ : ↥([0,1] \ A) → MetD (StarIndex A)` with `(φ t).1 = dStar A t`
+  (report §3.6). The pointwise iff alone would have been *weaker* than the
+  report — it fixes no cardinality and never exposes the family inside
+  `MetD` — so the claim ID was moved off it onto the aggregate
+  (codex review of PR #21). The component lemmas stay individually available
+  for Issue #9.
 - Pointwise Lipschitz estimates `starSpoke_sub_le`, `starRadius_sub_le`,
   `dStar_sub_le` (`|d_t(u,v) − d_s(u,v)| ≤ 2|t−s|`) and `dStar_anchor_sub`
   (`= |t−s|` on the anchor pair) — the pair-by-pair half of (C4). Taking
@@ -291,8 +301,10 @@ changed in the move.
 `#print axioms` on every declaration above yields exactly
 `[propext, Classical.choice, Quot.sound]` — no `sorryAx`:
 `IsMetricOn.topology_eq_bot_iff`, `dStar_isMetricOn`, `dStar_topology_eq_bot`,
-`dStar_topology_ne_bot`, `lem_star_metric`, `card_starIndex`, `starMet`,
-`dStar_sub_le`, `dStar_anchor_sub`.
+`dStar_topology_ne_bot`, `dStar_mem_MetD_iff`, `lem_star_metric`,
+`card_starIndex`, `starMet`, `dStar_sub_le`, `dStar_anchor_sub`.
+(`thm_conj51` still reports `sorryAx` — that is the tracked `sorry` of the
+sorry tracker above, unchanged by this work.)
 
 ## Mathlib library gaps (v4.32.2)
 
