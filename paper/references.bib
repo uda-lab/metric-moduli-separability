@@ -14,3 +14,102 @@
                   v4 PDF (2024-09-20). Statement and location verified
                   independently; see \texttt{notes/literature.md}.}
 }
+
+% The following four entries back citations that appear inside the
+% proofs transcribed from report/report-ja.md (Issue #11); theorem/page
+% numbers as recorded in notes/literature.md and notes/proof-audit.md.
+
+@book{Kechris1995,
+  author    = {Kechris, Alexander S.},
+  title     = {Classical Descriptive Set Theory},
+  series    = {Graduate Texts in Mathematics},
+  volume    = {156},
+  publisher = {Springer-Verlag},
+  year      = {1995},
+  note      = {Theorem 3.11 (Alexandrov--Lavrentiev $G_\delta$
+               characterisation, Polish case) and the Cantor--Bendixson
+               perfect-set theorem (\S6). The precise theorem/page numbers
+               as cited here have not been independently re-verified
+               against a physical or scanned copy (see
+               \texttt{notes/literature.md}); the paper's non-$\Fsigma$
+               existence lemma re-derives the perfect-set consequence it
+               uses from scratch rather than relying on this citation for
+               the proof step itself, and the general (non-separable)
+               $G_\delta$ characterisation is additionally cited to the
+               independently verified Engelking and Willard entries
+               below.}
+}
+
+@book{Engelking1989,
+  author    = {Engelking, Ryszard},
+  title     = {General Topology},
+  edition   = {Revised and completed},
+  series    = {Sigma Series in Pure Mathematics},
+  volume    = {6},
+  publisher = {Heldermann Verlag},
+  year      = {1989},
+  note      = {Theorem 4.3.23--4.3.24: general (not-necessarily-separable)
+               form of the $G_\delta$ characterisation of complete
+               metrizability.}
+}
+
+@book{Willard2004,
+  author    = {Willard, Stephen},
+  title     = {General Topology},
+  publisher = {Dover Publications},
+  year      = {2004},
+  note      = {Reprint of the 1970 Addison-Wesley edition. Theorem 24.12,
+               p.~179 (general $G_\delta$ characterisation) and
+               Corollary 25.4 (Baire category theorem for complete metric
+               spaces).}
+}
+
+@book{Kelley1955,
+  author    = {Kelley, John L.},
+  title     = {General Topology},
+  publisher = {Van Nostrand},
+  year      = {1955},
+  note      = {Theorem 34, p.~200 (Baire category theorem for complete
+               metric spaces).}
+}
+
+@book{Oxtoby1980,
+  author    = {Oxtoby, John C.},
+  title     = {Measure and Category},
+  edition   = {2nd},
+  series    = {Graduate Texts in Mathematics},
+  volume    = {2},
+  publisher = {Springer-Verlag},
+  year      = {1980},
+  note      = {p.~24: existence of a Bernstein set, used only in the
+               remark following the paper's non-$\Fsigma$ existence lemma
+               for an alternative construction not adopted in the main
+               proof.}
+}
+
+% Related work (Section~\ref{sec:related}); Koshino's separable
+% sigma-compactness theorem that directly motivates Conjecture 5.1 is
+% discussed only as recalled inside \cite{Ishiki2024} and is not cited
+% separately here, since its own bibliographic details (no arXiv id or
+% DOI found) could not be independently verified -- see
+% notes/literature.md.
+
+@article{Koshino2022,
+  author  = {Koshino, Katsuhisa},
+  title   = {Recognizing the topologies of spaces of metrics with the
+             topology of uniform convergence},
+  journal = {Bull. Pol. Acad. Sci. Math.},
+  volume  = {70},
+  number  = {2},
+  pages   = {165--171},
+  year    = {2022},
+  doi     = {10.4064/ba220523-18-4}
+}
+
+@misc{Ishiki2024Baire,
+  author        = {Ishiki, Yoshito},
+  title         = {Spaces of metrics are Baire},
+  year          = {2024},
+  eprint        = {2402.04565},
+  archivePrefix = {arXiv}
+}
