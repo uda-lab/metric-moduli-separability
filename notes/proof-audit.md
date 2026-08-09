@@ -399,7 +399,35 @@ here, with every module built explicitly, one at a time, in dependency order
 `flock /tmp/lean-build.lock` with `LEAN_NUM_THREADS=1`. This does exercise the
 olean/import graph, closing the gap Issue #7 left open. `Relabel.lean` was added
 to the library root `IshikiConj51.lean` when created, so it is inside the
-default build target rather than only compiling in isolation.
+default build target rather than only compiling in isolation, and the root
+module `IshikiConj51` was itself built afterwards, so the guard actually runs
+over the new file.
+
+**`#print axioms` audit (Issue #9, 2026-08-09).** Run against the built
+library root. No custom axiom is introduced anywhere, and `sorryAx` is pinned
+to exactly one declaration:
+
+| Declaration | Axioms |
+|---|---|
+| `lem_A_exists` | `[propext, Classical.choice, Quot.sound]` |
+| `lem_star_metric` | `[propext, Classical.choice, Quot.sound]` |
+| `lem_closed_image` | `[propext, Classical.choice, Quot.sound]` |
+| `isClosedEmbedding_starParam` | `[propext, Classical.choice, Quot.sound]` |
+| `isClosed_range_starParam` | `[propext, Classical.choice, Quot.sound]` |
+| `range_starParam` | `[propext, Classical.choice, Quot.sound]` |
+| `MetD.relabelIsometry` | `[propext, Classical.choice, Quot.sound]` |
+| `MetD.edist_comap` | `[propext, Classical.choice, Quot.sound]` |
+| `isFSigma_of_isGdelta_sdiff` | `[propext, Classical.choice, Quot.sound]` |
+| `thm_conj51_of_lavrentiev` | `[propext, Classical.choice, Quot.sound]` |
+| `thm_conj51` | `[propext, sorryAx, Classical.choice, Quot.sound]` |
+
+The three standard entries are Lean's ordinary logical dependencies
+(propositional extensionality, the axiom of choice, and soundness of
+quotients) — i.e. classical ZFC-style reasoning, which is what the report's
+argument uses (LEM-A-EXISTS is a ZFC existence proof). The `sorryAx` on
+`thm_conj51`, and its absence from `thm_conj51_of_lavrentiev`, is the machine
+check that the one remaining gap is precisely the `lavrentiev` hypothesis and
+nothing else.
 
 ## Mathlib library gaps (v4.32.2)
 
