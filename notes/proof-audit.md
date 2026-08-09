@@ -16,8 +16,8 @@ Do not record research history in the main report or paper.
 | LEM-A-EXISTS | ∃ A ⊆ [0,1], \|A\| = ℵ₁, A not Fσ | ✅ audited (2026-08-09) | See report §3; CH case via irrationals + Baire category, non-CH case via the perfect-set-theorem counting argument. Lean proof still pending (`sorry`), tracked below. |
 | — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ audited (2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
 | LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ written, awaiting independent review (2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean formalisation complete and sorry-free (Issue #7, 2026-08-09): `IshikiConj51/Conj51/MetricConstruction.lean`, see below. |
-| LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ written, awaiting independent review (2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean statement still absent (Issue #9). |
-| THM-CONJ51 | Full assembly | ✅ written, awaiting independent review (2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Retains **proof candidate** status until Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) pass. Lean statement still absent (Issue #9). |
+| LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ written, awaiting independent review (2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean formalisation complete and sorry-free (Issue #9, 2026-08-09): `lem_closed_image`, `IshikiConj51/Conj51/ClosedEmbedding.lean`, see below. |
+| THM-CONJ51 | Full assembly | ✅ written, awaiting independent review (2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Retains **proof candidate** status until Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) pass. Lean assembly of §4 complete (Issue #9, 2026-08-09) as `thm_conj51_of_lavrentiev`; `thm_conj51` itself keeps one tracked `sorry` pending Issue #23 (Alexandrov–Lavrentiev direction). |
 
 ---
 
@@ -206,18 +206,16 @@ explicitly and are the places a reviewer should look first.
 | File | Declaration | Claim ID | Priority | Notes |
 |------|-------------|----------|----------|-------|
 | ~~`IshikiConj51/Conj51/Cardinality.lean`~~ | ~~`lem_A_exists`~~ | LEM-A-EXISTS | — | **Resolved (Issue #8, 2026-08-09): sorry-free.** CH branch (irrationals, Baire category via `IsMeagre`/`not_isMeagre_of_isOpen`) and non-CH branch (perfect set theorem via `IsClosed.exists_nat_bool_injection_of_not_countable`) both formalised, matching report §3 (Issue #3) exactly, no weakening. `#print axioms lem_A_exists` confirms `[propext, Classical.choice, Quot.sound]` only. |
-| `IshikiConj51/Conj51/MainTheorem.lean` | `thm_conj51` | THM-CONJ51 | high | Statement only (Issue #6, 2026-08-09) — hypothesis `#D = Cardinal.aleph 1` and conclusion `¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` faithfully match report §2/source Conjecture 5.1, no weakening. Proof depends on LEM-STAR-METRIC (Issue #7) and LEM-CLOSED-IMAGE (Issue #9). `#print axioms thm_conj51` confirms `sorryAx` is isolated to this declaration alone — it does not leak into `MetD`'s instances (all sorry-free, axioms `[propext, Classical.choice, Quot.sound]` only). |
+| `IshikiConj51/Conj51/MainTheorem.lean` | `thm_conj51` | THM-CONJ51 | high | **Sorry count: 1 — the only `sorry` in the repository.** Statement unchanged since Issue #6 — hypothesis `#D = Cardinal.aleph 1` and conclusion `¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` faithfully match report §2/source Conjecture 5.1, no weakening. As of Issue #9 the *entire* report §4 assembly is proved in the sibling `thm_conj51_of_lavrentiev`, which differs only by carrying the Alexandrov–Lavrentiev direction as an explicit hypothesis (see below); the remaining `sorry` therefore represents exactly one missing ingredient, Issue #23's `isGδ_of_isCompletelyMetrizableSpace`, and nothing else. `#print axioms thm_conj51` confirms `sorryAx` is isolated to this declaration alone — it does not leak into `lem_A_exists`, `lem_star_metric`, `lem_closed_image`, `thm_conj51_of_lavrentiev`, or `MetD`'s instances (all sorry-free, axioms `[propext, Classical.choice, Quot.sound]` only). |
 
 No `sorry` must remain in the final formalisation.
 
 ## Lean TODO tracker (no theorem statement yet)
 
-The following claim IDs do **not** yet have Lean theorem statements. `Met(D)`
-is now constructed (below), unblocking these.
-
-| File | Claim ID | Blocked on |
-|------|----------|------------|
-| `IshikiConj51/Conj51/ClosedEmbedding.lean` | LEM-CLOSED-IMAGE | mathematical construction written in report §3.6–§3.7 (Issue #5); Lean formalisation itself is Issue #9. No longer blocked on LEM-STAR-METRIC, which landed with Issue #7 (see below). |
+Empty as of Issue #9 (2026-08-09): every claim ID now has a Lean theorem
+statement — `lem_A_exists`, `lem_star_metric`, `lem_closed_image`,
+`thm_conj51`. Remaining Lean work is proof completion, not statement
+authoring, and is tracked in the sorry tracker above.
 
 ## Module map note: `GDeltaComplete.lean` (Issue #23, 2026-08-09)
 
@@ -329,7 +327,79 @@ under `flock /tmp/lean-build.lock` — sufficient for elaboration errors and
 for `#print axioms`, but it does **not** exercise the olean/import graph.
 A whole-repository consistency build (every module built explicitly, one at
 a time, in dependency order) is deferred to the Issue #9 PR and must be run
-there once.
+there once. **Discharged: that build was run in the Issue #9 PR — see the
+next section.**
+
+## LEM-CLOSED-IMAGE and the §4 assembly (Issue #9, 2026-08-09)
+
+Files: `IshikiConj51/Conj51/ClosedEmbedding.lean` (new content, was a
+placeholder), `IshikiConj51/Conj51/Relabel.lean` (new module),
+`IshikiConj51/Conj51/MainTheorem.lean` (proof added),
+`IshikiConj51/Conj51/MetD.lean` (five generic `ρ` lemmas appended).
+
+**Two deliberate departures from the report's presentation.** Neither changes
+what is proved; both are recorded here rather than in the report, which stays
+the mathematical source of truth.
+
+1. *"Bi-Lipschitz homeomorphism onto its image" is packaged as
+   `Topology.IsClosedEmbedding`.* The report speaks of the subspace
+   `φ(Y) ⊆ Met(D)`; `IsClosedEmbedding φ` is definitionally "φ is a
+   homeomorphism onto its image, and that image is closed". This is the exact
+   shape Mathlib's inheritance theorem consumes, so no separate transfer along
+   `Y ≃ₜ φ(Y)` is needed. The report's quantitative estimate (C4) is *also*
+   kept, as the first conjunct of `lem_closed_image`, so nothing is lost:
+   the embedding is recorded as bi-Lipschitz with the report's constants
+   (`1` and `2`), not merely as a topological embedding.
+2. *Report §3.7's sequential argument is replaced by a closed-set
+   description.* Instead of extracting a limit parameter from a sequence
+   `d_{t_k} → e`, the formalisation proves
+   `range φ = {e | anchorParam e ∈ [0,1]} ∩ ⋂_{u,v} {e | e u v = d_{anchorParam e} u v}`
+   where `anchorParam e := e p q − 1` is 手順1's readout of the parameter from
+   the anchor pair. Both factors are closed: `anchorParam` is continuous
+   (1-Lipschitz minus a constant), and each equation is between two continuous
+   functions of `e`, the second being `2`-Lipschitz composed with
+   `anchorParam` — that 2-Lipschitz estimate *is* `ρ(d_{t_k}, d_t) ≤ 2|t_k−t|`,
+   the engine of 手順2.
+
+   The subtle point worth flagging for review: 手順3 (`t ∉ A`) is deliberately
+   **not** imposed as a condition in the closed description. It is *derived*
+   from `e ∈ Met(D)` via (C3) (`dStar_mem_MetD_iff`), which is what makes the
+   description an exact equality rather than a containment. The `t ∈ [0,1]`
+   factor, by contrast, genuinely must be imposed: the metric axioms alone
+   only force `t ∈ [−1,1]`.
+
+**Why `Relabel.lean` exists.** THM-CONJ51 is stated for an arbitrary `D` with
+`#D = ℵ₁`, while the construction produces one particular such set,
+`StarIndex A`. `MetD.relabelIsometry (σ : D ≃ E) : MetD E ≃ᵢ MetD D` transports
+`Met(–)` along any bijection: relabelling preserves the metric axioms, preserves
+discreteness (the isolating radius of `σ u` serves for `u`), and preserves `ρ`
+exactly, since `σ × σ` reindexes the defining supremum bijectively. The report
+makes the same remark informally in §3.2/§3.8.
+
+**No-smuggle audit of the `lavrentiev` hypothesis.** `thm_conj51_of_lavrentiev`
+assumes `∀ Y : Set ℝ, IsCompletelyMetrizableSpace Y → IsGδ Y`. This is report §1
+background theorem 1 specialised to the ambient space `ℝ`. It mentions no
+`Met(D)`, no `A`, and no cardinality; it is a statement purely about subsets of
+the line, and it is a genuine classical theorem being formalised independently
+in Issue #23. It therefore does not contain the conclusion. It is nonetheless
+outstanding **debt, not progress** — the chain is not sorry-free until Issue #23
+lands and `thm_conj51` becomes
+`thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD`.
+
+**Statement-gate check on `lem_closed_image`.** No hypothesis on `#A` is
+assumed — matching report §3.8, where cardinality enters only via
+LEM-STAR-METRIC clause 1 — and `MetD` is the unweakened `Met(D)`: no
+boundedness and no uniform-discreteness restriction anywhere in the module.
+
+**Verification method (Issue #9).** Unlike Issue #7, this work was verified by
+a real olean build: the deferred whole-repository consistency build was run
+here, with every module built explicitly, one at a time, in dependency order
+(`MetD` → `Relabel` → `Cardinality` → `MetricConstruction` → `ClosedEmbedding`
+→ `MainTheorem`), each as a single-target `lake build <module>` under
+`flock /tmp/lean-build.lock` with `LEAN_NUM_THREADS=1`. This does exercise the
+olean/import graph, closing the gap Issue #7 left open. `Relabel.lean` was added
+to the library root `IshikiConj51.lean` when created, so it is inside the
+default build target rather than only compiling in isolation.
 
 ## Mathlib library gaps (v4.32.2)
 
@@ -338,10 +408,10 @@ there once.
 | `IsFSigma` predicate | No canonical Mathlib built-in; defined locally as `∃ F : ℕ → Set ℝ, (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. | `IshikiConj51/Conj51/Cardinality.lean` | open |
 | `Met(D)` as a type | ~~No Mathlib type for the space of compatible metrics on D with the sup-metric topology.~~ Resolved (Issue #6, 2026-08-09): constructed explicitly as `MetD`, see above. | `IshikiConj51/Conj51/MetD.lean` (relocated from `MainTheorem.lean` by Issue #7) | resolved |
 | `TopologicalSpace.IsCompletelyMetrizableSpace` | Exists natively in Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed. Confirmed by direct source inspection (Issue #6). | `IshikiConj51/Conj51/MainTheorem.lean` | not a gap (dossier flagged as biggest risk item; resolved by inspection) |
-| Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ in ambient space) | **Resolved locally (Issue #23, 2026-08-09).** Confirmed absent from Mathlib v4.32.2 (Issue #19); proved from scratch as `isGδ_of_isCompletelyMetrizableSpace {X} [MetricSpace X] {Y : Set X} (h : IsCompletelyMetrizableSpace Y) : IsGδ Y` in a new module, general form (no separability assumption). Proof: X-diameter-restricted oscillation argument (leader dossier §E) — `Uₙ := ⋃₀ {V open, X-bounded, X-diam V < 1/(n+1), and diam of V's Y-trace < 1/(n+1)}` (using `Bornology.IsBounded` + `Metric.diam` rather than `EMetric`/`Metric.ediam`, to sidestep the "unbounded set has junk diam 0" trap while staying in the finite-real API); `Y = (⋂ₙ Uₙ) ∩ closure Y`, forward inclusion via shrinking balls, backward inclusion via a Cauchy sequence (`cauchySeq_of_le_tendsto_0` / `cauchySeq_tendsto_of_complete`) converging both to the test point (in `X`) and into `Y` (via `Y`'s upgraded complete metric), forcing equality by uniqueness of limits (`tendsto_nhds_unique`). `Y`'s closure is Gδ via `PerfectlyNormalSpace.closed_gdelta` (automatic for metric spaces); `Uₙ` is Gδ via `IsGδ.iInter_of_isOpen`; combined via `IsGδ.inter`. `#print axioms` confirms `[propext, Classical.choice, Quot.sound]` only. **Real Lean instance-diamond found and fixed along the way**: `letI := upgradeIsCompletelyMetrizable Y` alone was not sufficient — `Y : Set X` already carries a competing global `Subtype.pseudoMetricSpace`/`instBornologySubtype` instance chain (the *ambient*, possibly non-complete restricted metric), and several Mathlib lemmas (`cauchySeq_of_le_tendsto_0`, `IsBounded.subset`) silently resolved to that ambient instance instead of the upgraded complete one, causing type mismatches only surfaced once `CompleteSpace` was actually needed. Fixed by explicitly re-`letI`-ing `MetricSpace`/`PseudoMetricSpace`/`UniformSpace`/`Bornology` Y-instances from the upgrade before using any of them, forcing consistent resolution throughout. | `IshikiConj51/Conj51/GDeltaComplete.lean` | **resolved** |
+| Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ in ambient space) | **Resolved locally (Issue #23, 2026-08-09).** Confirmed absent from Mathlib v4.32.2 (Issue #19); proved from scratch as `isGδ_of_isCompletelyMetrizableSpace {X} [MetricSpace X] {Y : Set X} (h : IsCompletelyMetrizableSpace Y) : IsGδ Y` in a new module, general form (no separability assumption). Proof: X-diameter-restricted oscillation argument (leader dossier §E) — `Uₙ := ⋃₀ {V open, X-bounded, X-diam V < 1/(n+1), and diam of V's Y-trace < 1/(n+1)}` (using `Bornology.IsBounded` + `Metric.diam` rather than `EMetric`/`Metric.ediam`, to sidestep the "unbounded set has junk diam 0" trap while staying in the finite-real API); `Y = (⋂ₙ Uₙ) ∩ closure Y`, forward inclusion via shrinking balls, backward inclusion via a Cauchy sequence (`cauchySeq_of_le_tendsto_0` / `cauchySeq_tendsto_of_complete`) converging both to the test point (in `X`) and into `Y` (via `Y`'s upgraded complete metric), forcing equality by uniqueness of limits (`tendsto_nhds_unique`). `Y`'s closure is Gδ via `PerfectlyNormalSpace.closed_gdelta` (automatic for metric spaces); `Uₙ` is Gδ via `IsGδ.iInter_of_isOpen`; combined via `IsGδ.inter`. `#print axioms` confirms `[propext, Classical.choice, Quot.sound]` only. **Real Lean instance-diamond found and fixed along the way**: `letI := upgradeIsCompletelyMetrizable Y` alone was not sufficient — `Y : Set X` already carries a competing global `Subtype.pseudoMetricSpace`/`instBornologySubtype` instance chain (the *ambient*, possibly non-complete restricted metric), and several Mathlib lemmas (`cauchySeq_of_le_tendsto_0`, `IsBounded.subset`) silently resolved to that ambient instance instead of the upgraded complete one, causing type mismatches only surfaced once `CompleteSpace` was actually needed. Fixed by explicitly re-`letI`-ing `MetricSpace`/`PseudoMetricSpace`/`UniformSpace`/`Bornology` Y-instances from the upgrade before using any of them, forcing consistent resolution throughout. **Consumed by Issue #9 (2026-08-09):** `thm_conj51_of_lavrentiev`'s explicit `lavrentiev` hypothesis is exactly this lemma instantiated at `X := ℝ`, so `thm_conj51` discharges to `thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD`. No ℝ-ambient ↔ `[0,1]`-ambient conversion lemma is needed: the report's "Gδ in [0,1]" step is carried out in the ambient line and the intersection with the closed set `[0,1]` happens inside `isFSigma_of_isGdelta_sdiff`. | `IshikiConj51/Conj51/GDeltaComplete.lean` | **resolved** |
 | Cantor–Bendixson / perfect set theorem | **Used (Issue #8, 2026-08-09).** Ended up not needing `exists_countable_union_perfect_of_isClosed` directly — `IsClosed.exists_nat_bool_injection_of_not_countable` (below) was sufficient on its own for the non-CH branch. | `IshikiConj51/Conj51/Cardinality.lean` | used |
 | Perfect set has cardinality continuum | **Used (Issue #8, 2026-08-09).** `IsClosed.exists_nat_bool_injection_of_not_countable` (`Mathlib/Topology/MetricSpace/Perfect.lean:135`, requires `[PolishSpace α]`, satisfied by `ℝ`): closed + uncountable ⟹ injection from `ℕ → Bool` (cardinality `𝔠`) into the set. Composed with `Cardinal.mk_le_of_injective` and `Cardinal.mk_arrow`/`mk_bool`/`mk_nat` to get `𝔠 ≤ #(F n)`. | `IshikiConj51/Conj51/Cardinality.lean` | used |
 | `ℵ₁ ≤ 𝔠` | **Used (Issue #8, 2026-08-09).** `aleph_one_le_continuum : ℵ₁ ≤ 𝔠` (`Mathlib/SetTheory/Cardinal/Continuum.lean:85`) — exact match, no derivation needed. Also used `aleph0_lt_aleph_one`, `aleph0_lt_continuum`, `le_mk_iff_exists_subset`, `mk_sdiff_add_mk`, `add_lt_of_lt`, `mk_Icc_real`, `Cardinal.le_aleph0_iff_set_countable`. | `IshikiConj51/Conj51/Cardinality.lean` | used |
-| Closed subspace of complete space is complete | `instance IsClosed.completeSpace_coe [CompleteSpace α] {s : Set α} [hs : IsClosed s] : CompleteSpace s` (`Mathlib/Topology/UniformSpace/UniformEmbedding.lean:320`) — exact match for the Issue #4 elementary closed-subspace-inheritance argument; no manual Cauchy-sequence proof needed in Lean. | `IshikiConj51/Conj51/ClosedEmbedding.lean` (planned, Issue #9) | available |
+| Closed subspace of complete space is complete | `instance IsClosed.completeSpace_coe [CompleteSpace α] {s : Set α} [hs : IsClosed s] : CompleteSpace s` (`Mathlib/Topology/UniformSpace/UniformEmbedding.lean:320`) — exact match for the Issue #4 elementary closed-subspace-inheritance argument; no manual Cauchy-sequence proof needed in Lean. **Superseded in practice (Issue #9, 2026-08-09):** the assembly does not need to descend to `CompleteSpace`, because Mathlib states the inheritance directly at the level of the predicate the theorem is about — `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace` (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean:249`), with the companion `IsClosed.isCompletelyMetrizableSpace` (:295). Neither assumes separability, which is exactly what the non-separable `Met(D)` requires (Issue #4). | `IshikiConj51/Conj51/MainTheorem.lean` (Issue #9) | used (via `IsClosedEmbedding.IsCompletelyMetrizableSpace`) |
 | "ℚ is not Gδ" as a standalone lemma | Not found under that name. Not actually needed: report §3 (LEM-A-EXISTS, CH branch) argues directly via the Baire category theorem on meager sets, never via a "ℚ is not Gδ" fact. (Mathlib does have `IsGδ.setOf_irrational : IsGδ {x | Irrational x}` — the complementary *positive* fact — in `Mathlib/Topology/Instances/Irrational.lean:41`, available if ever wanted as a cross-check, but not load-bearing.) | — | not a gap (not needed) |
 | Baire category / meagre-set API (CH branch) | **Used (Issue #8, 2026-08-09).** `IsMeagre`, `IsNowhereDense`, `isClosed_isNowhereDense_iff_compl`, `isMeagre_iUnion`, `IsMeagre.union`/`.mono`, `not_isMeagre_of_isOpen` (`Mathlib/Topology/GDelta/Basic.lean`, `Mathlib/Topology/Baire/Lemmas.lean`; `BaireSpace ℝ` is automatic from `IsCompletelyPseudoMetrizableSpace`). Singleton nowhere-density used `PerfectSpace.not_isolated`/`dense_compl_singleton` (`Mathlib/Topology/Perfect.lean`, `Mathlib/Topology/ClusterPt.lean`; `PerfectSpace ℝ` is automatic from `[T1Space] [ConnectedSpace] [Nontrivial]`), and `Rat.denseRange_cast` for density of ℚ. | `IshikiConj51/Conj51/Cardinality.lean` | used |

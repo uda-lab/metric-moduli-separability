@@ -69,14 +69,27 @@ distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
 itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
 LEM-STAR-METRIC is now stated and **sorry-free** (`lem_star_metric`,
 `IshikiConj51/Conj51/MetricConstruction.lean`, Issue #7, 2026-08-09);
-LEM-CLOSED-IMAGE still has no Lean statement (Issue #9). See
-`notes/proof-audit.md` Lean TODO / sorry trackers.
+LEM-CLOSED-IMAGE is now stated and **sorry-free** (`lem_closed_image`,
+`IshikiConj51/Conj51/ClosedEmbedding.lean`, Issue #9, 2026-08-09), together
+with a supporting new module `IshikiConj51/Conj51/Relabel.lean` (`Met(D)`
+transports along any bijection of the index set, so the concrete
+`StarIndex A` construction reaches an arbitrary `D` of the same cardinality).
+
+**Every claim ID now has a Lean statement, and the repository contains
+exactly one `sorry`:** `thm_conj51`. The whole of report §4 is assembled and
+proved in `thm_conj51_of_lavrentiev` (Issue #9), which differs from
+`thm_conj51` only by carrying the Alexandrov–Lavrentiev direction as an
+explicit hypothesis about subsets of ℝ. Discharging that hypothesis is
+Issue #23; when it lands, `thm_conj51` becomes a one-line application. Until
+then the Lean chain is **not** complete, and the conjecture must still not be
+described as solved. See `notes/proof-audit.md` sorry tracker.
 
 A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
 `notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
 Alexandrov–Lavrentiev direction needed for the closed-subspace obstruction
 (a completely metrizable subspace is Gδ in its ambient space) is **confirmed
-absent** from Mathlib and must be proved from scratch (Issue #9); the
+absent** from Mathlib (re-confirmed in Issue #9) and must be proved from
+scratch — now tracked as its own Issue #23; the
 Cantor–Bendixson theorem, perfect-set cardinality-continuum fact, `ℵ₁ ≤ 𝔠`,
 and closed-subspace-of-complete-space are all confirmed **available** with
 exact declaration names recorded.
@@ -94,3 +107,4 @@ exact declaration names recorded.
 9. #10 Perform independent end-to-end mathematical review
 10. #11 Draft the English paper after mathematical audit passes
 11. #19 Record Mathlib inventory findings for Lean formalisation prep (Issues #7–#9)
+12. #23 Formalise the Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ)
