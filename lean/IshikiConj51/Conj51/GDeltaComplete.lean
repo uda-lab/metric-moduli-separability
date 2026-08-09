@@ -11,9 +11,9 @@
 -- it from scratch via the X-diameter-restricted oscillation argument
 -- (leader session dossier §E).
 --
--- Mathematical usage: report/report-ja.md §1 background theorem 1 and §4
--- step 3 (Y ⊆ [0,1] not Gδ ⟹ Y not completely metrizable is the
--- contrapositive of this lemma, specialised to X = ℝ, Y = [0,1]).
+-- Mathematical usage: report/report-ja.md §1 定理 1.1 and §4 step 3
+-- (A^∁ not Gδ in [0,1] ⟹ A^∁ not completely metrizable is the
+-- contrapositive of this lemma, specialised at the ambient space X = ℝ).
 --
 -- Status: sorry-free.
 

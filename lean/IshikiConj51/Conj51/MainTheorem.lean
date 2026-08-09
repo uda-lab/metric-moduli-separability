@@ -27,14 +27,14 @@
 --   step 4  `isClosedEmbedding_starParam`      (ClosedEmbedding.lean, Issue #9)
 --           together with `MetD.relabelIsometry` (Relabel.lean), which moves
 --           the construction from the concrete `StarIndex A` to an arbitrary
---           `D` of the same cardinality — report §3.2/§3.8
+--           `D` of the same cardinality — report §3.2
 --   step 5  `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace`
---           (Mathlib; background theorem 2, no separability assumed)
+--           (Mathlib; report §1 定理 1.2, no separability assumed)
 --   step 6  the contradiction closing `thm_conj51_of_lavrentiev`
 --
 -- Steps 2–6 are stated and proved here in full.  Step 3 — the
 -- Lavrentiev–Alexandrov direction "completely metrizable subspace of a metric
--- space is Gδ" (report §1 background theorem 1) — is absent from Mathlib
+-- space is Gδ" (report §1 定理 1.1) — is absent from Mathlib
 -- v4.32.2 and was Issue #23's deliverable; it is kept as the explicit
 -- hypothesis `lavrentiev` of `thm_conj51_of_lavrentiev` so that the §4
 -- assembly stays readable and its independence is auditable, and `thm_conj51`
@@ -56,10 +56,10 @@ open Cardinal
 open scoped ENNReal
 
 /-- Report §4 step 2 (De Morgan).  If `A ⊆ [0,1]` and the complement
-`Y = [0,1] \ A` is `Gδ` in `ℝ`, then `A` is `Fσ`: writing `Y = ⋂ₙ Uₙ` with
+`A^∁ = [0,1] \ A` is `Gδ` in `ℝ`, then `A` is `Fσ`: writing `A^∁ = ⋂ₙ Uₙ` with
 `Uₙ` open, `A = ⋃ₙ ([0,1] ∩ Uₙᶜ)` and each term is closed.
 
-The intersection with `[0,1]` is what lets a statement about `Y` inside the
+The intersection with `[0,1]` is what lets a statement about `A^∁` inside the
 *ambient* line yield `Fσ`-ness of `A` inside the line as well; it works
 because `[0,1]` is itself closed. -/
 theorem isFSigma_of_isGdelta_sdiff {A : Set ℝ} (hAsub : A ⊆ Set.Icc 0 1)
@@ -85,7 +85,7 @@ theorem isFSigma_of_isGdelta_sdiff {A : Set ℝ} (hAsub : A ⊆ Set.Icc 0 1)
 
 This is the complete assembly of report §4 with its one Mathlib-absent
 ingredient isolated as the hypothesis `lavrentiev`, which is exactly report §1
-background theorem 1 specialised to the ambient space `ℝ`:
+定理 1.1 specialised to the ambient space `ℝ`:
 
 > a subset of `ℝ` that is completely metrizable in its subspace topology is
 > `Gδ` in `ℝ`.
@@ -117,7 +117,7 @@ theorem thm_conj51_of_lavrentiev
   -- steps 4b and 5: LEM-CLOSED-IMAGE plus closed-subspace inheritance
   haveI hY : TopologicalSpace.IsCompletelyMetrizableSpace (StarParamSpace A) :=
     (isClosedEmbedding_starParam A).IsCompletelyMetrizableSpace
-  -- step 3: Lavrentiev, applied to `Y = [0,1] \ A`
+  -- step 3: Lavrentiev, applied to `A^∁ = [0,1] \ A`
   have hGdelta : IsGδ (Set.Icc (0 : ℝ) 1 \ A) := lavrentiev _ hY
   -- steps 2 and 6: `A` would be Fσ, contradicting LEM-A-EXISTS
   exact hAnotFsigma (isFSigma_of_isGdelta_sdiff hAsub hGdelta)
@@ -126,19 +126,15 @@ theorem thm_conj51_of_lavrentiev
 `Met(D)` — equipped with the supremum-metric topology — is not completely
 metrizable.
 
-This matches the report's (`report/report-ja.md` §2) and the source's
-(Ishiki, arXiv:2407.03030, Conjecture 5.1) statement exactly: no bounded,
-uniformly-discrete, or otherwise weakened proxy is substituted.
+This matches the report's (`report/report-ja.md` §2, 定理 2.1) and the
+source's (Ishiki, arXiv:2407.03030, Conjecture 5.1) statement exactly: no
+bounded, uniformly-discrete, or otherwise weakened proxy is substituted.
 
 Status: **proved, sorry-free** (Issue #9, 2026-08-09). The whole of report §4
 is proved in `thm_conj51_of_lavrentiev`, and its one hypothesis is discharged
 by `isGδ_of_isCompletelyMetrizableSpace` (Issue #23, `GDeltaComplete.lean`)
 instantiated at the ambient space `X := ℝ`. `#print axioms thm_conj51` gives
-`[propext, Classical.choice, Quot.sound]` — no `sorryAx`, no custom axioms.
-
-(The mathematics remains a *proof candidate* pending Issue #10's independent
-end-to-end review; "sorry-free in Lean" certifies that the formal chain is
-complete, not that the informal argument has been externally audited.) -/
+`[propext, Classical.choice, Quot.sound]` — no `sorryAx`, no custom axioms. -/
 theorem thm_conj51 (D : Type*) (hD : #D = Cardinal.aleph 1) :
     ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D) :=
   thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD

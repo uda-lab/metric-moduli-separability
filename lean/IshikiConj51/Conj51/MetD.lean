@@ -78,7 +78,7 @@ theorem IsMetricOn.dist_toMetricSpace {D : Type*} {d : D → D → ℝ} (h : IsM
 
 /-- **Discreteness criterion.** The topology induced by a metric `d` is the
 discrete topology exactly when every point has a radius that isolates it.
-This is the elementary criterion used in the report (§3.4): `d` induces the
+This is the elementary criterion used in the report (§3.3 (C2)): `d` induces the
 discrete topology iff `δ(u) := inf_{v ≠ u} d(u,v) > 0` for every `u`.
 
 Stated generally (for any `IsMetricOn`) because Issue #7 needs both
