@@ -86,9 +86,9 @@ None remain (E10 submission readiness audit, Issue #27, 2026-08-09):
 the obligations table in `notes/proof-audit.md` is fully resolved, the Lean
 sorry count is 0, and the superseded PR #30 was closed. The E10 entry in
 `notes/proof-audit.md` records the go/no-go judgment (**go**, with
-owner-side submission-time notes: fill `\author{}`/date, keep the
-no-external-review framing, optionally pin Kechris page numbers against a
-physical copy).
+owner-side submission-time notes: fill `\author{}`/date and keep the
+no-external-review framing; the load-bearing Kechris citations are verified
+at full-statement level and cited number-precisely).
 
 ## Lean
 

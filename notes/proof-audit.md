@@ -667,7 +667,7 @@ All eight entries resolve to verification records:
 | Entry | Verification record |
 |-------|--------------------|
 | `Ishiki2024` | v4 PDF full-text check, Issue #2 (literature.md "Primary source") |
-| `Kechris1995` | Theorem numbers now cross-checked against independent secondary sources under this issue — see below |
+| `Kechris1995` | Load-bearing citation (non-CH branch); statements + numbers verified under this issue — see below |
 | `Engelking1989` | Thm 4.3.23–4.3.24 verified, Issue #4 |
 | `Willard2004` | Thm 24.12 p. 179 / Cor 25.4 verified, Issue #4 / #3 |
 | `Kelley1955` | Thm 34 p. 200 quoted from sources citing exact numbers, Issue #3 |
@@ -675,22 +675,32 @@ All eight entries resolve to verification records:
 | `Koshino2022` | DOI-verified against the v4 PDF reference list, Issue #2 |
 | `Ishiki2024Baire` | arXiv abstract page, Issue #2 |
 
-**Kechris theorem numbers (previously the only flagged-unverified item).**
-Web verification was attempted under this issue and succeeded at the
-secondary-source level: a published preprint (arXiv:2010.01573, §4) cites
-"[Kechris, *Classical Descriptive Set Theory*], Theorem 3.11" for exactly
-Alexandroff's lemma ("A ⊆ X … is completely metrisable if and only if it is
-a Gδ-subset of X"), and multiple descriptive-set-theory sources give the
-Cantor–Bendixson theorem as Kechris **Theorem 6.4** ("Let X be a Polish
-space. Then X can be uniquely written as X = P ∪ C, with P perfect and C
-countable") — inside §6, as the bib note's "(§6)" pointer says. Neither was
-checked against a physical/scanned copy of the book itself; the
-`references.bib` note and `notes/literature.md` were updated to say exactly
-that. **Judgment: the paper's existing treatment is valid** — the
-load-bearing citations for the Gδ characterisation are the independently
-verified Engelking/Willard entries, the perfect-set consequence is re-derived
-from scratch inside the paper's Lemma 3.1 proof, and the Kechris citation is
-a convenience pointer whose imprecision risk is disclosed in the bib note.
+**Kechris theorem numbers (previously the only flagged-unverified item) —
+now verified at full-statement level; the citation is load-bearing.**
+The PR #33 codex review correctly flagged that an earlier draft of this
+entry called the Kechris citation a "convenience pointer" whose consequence
+is "re-derived from scratch" in the paper: that was wrong. In the non-CH
+branch of Lemma 3.1, the paper obtains the perfect subset of an uncountable
+closed set *directly from the cited Cantor–Bendixson theorem*, and the
+cardinality-𝔠 step from the cited Cantor-scheme results — only the assembly
+around them is written out. The Kechris citation is therefore load-bearing
+for the natural-language paper, and a secondary-only number check would not
+have sufficed for the submission gate. Resolution, per the review's first
+option (verify the load-bearing citation against the book): all statements
+the paper uses were verified verbatim against a full-text transcription of
+the book that preserves its numbering (Sleziak's "kechris" notes; quoted in
+`notes/literature.md`), corroborated by independent citing literature
+(arXiv:2010.01573 for Thm 3.11) — **Thm 3.11** (Gδ characterisation, both
+directions), **Thm 6.2 / Cor 6.3** (Cantor-scheme embedding; nonempty
+perfect Polish space has cardinality 2^ℵ₀), **Thm 6.4** (Cantor–Bendixson).
+The paper now cites these number-precisely (`\cite[Theorem~6.4]` and
+`\cite[Theorem~6.2, Corollary~6.3]` in Lemma 3.1; `\cite[Thm.~3.11]` was
+already precise in Theorem 2.1), and the bib note records the load-bearing
+status and the verification honestly. Page numbers are not cited anywhere,
+so no page-level check is needed. Independent safety nets for the
+*mathematics* (as opposed to the bibliography): the Gate B reviewer
+re-derived the non-CH branch from scratch (Issue #10 entry §2), and the Lean
+chain proves the corresponding step through Mathlib with no book citation.
 **Koshino's 2024 manuscript** (the separable σ-compactness theorem) remains
 deliberately uncited — bibliographically unverifiable per literature.md — and
 the paper refers to the result only as "attributed there to Koshino" inside
@@ -737,10 +747,11 @@ notes (none blocking, all owner-side):
    claim it; the certification basis is this audit trail plus the Lean
    `#print axioms` audit. Any submission cover material should preserve that
    framing.
-3. The Kechris citation rests on secondary-source confirmation of the
-   theorem numbers (see §3); if the venue's standards require page-precise
-   citations, verify against a copy of the book — the bib note already says
-   so.
+3. The Kechris citation is load-bearing in Lemma 3.1's non-CH branch and is
+   verified at full-statement level against a numbering-preserving
+   transcription of the book, with number-precise cites in the paper (see
+   §3). Page numbers are not cited; if the venue nonetheless requires
+   page-precise citations, consult the printed book at that point.
 
 The judgment and its basis were recorded on
 [issue #27](https://github.com/uda-lab/ishiki-conjecture/issues/27) before
