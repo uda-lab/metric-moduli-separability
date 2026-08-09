@@ -142,7 +142,7 @@ complete.
 
 | Result | Proposed source | Verified? |
 |--------|-----------------|-----------|
-| Alexandrov–Lavrentiev: a subspace of a *separable* completely metrizable (e.g. Polish) space X is completely metrizable iff it is Gδ in X | General (not-necessarily-separable) form: Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179. Polish-specific form commonly cited as Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 number not independently re-verified — used only as a commonly-cited pointer for the Polish case, report cites Engelking/Willard as primary |
+| Alexandrov–Lavrentiev: a subspace of a *separable* completely metrizable (e.g. Polish) space X is completely metrizable iff it is Gδ in X | General (not-necessarily-separable) form: Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179. Polish-specific form commonly cited as Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 number cross-checked against independent secondary sources (Issue #27 / E10, 2026-08-09 — see below), not against the book itself; report cites Engelking/Willard as primary |
 | Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1, background theorem 2 | ✅ audited (Issue #4, 2026-08-09) — this is the version actually used for Met(D), since Met(D) is not separable |
 | Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (perfect set property discussed around p. 150) | ✅ used in LEM-A-EXISTS §3 non-CH branch (Issue #3, 2026-08-09) |
 
@@ -188,7 +188,32 @@ is formally constructed in Lean (Issue #6).
 | κ infinite, λ ≤ κ countable ⇒ κ = \|A\|+λ forces \|A\|=κ; countable union of countable sets is countable | Standard ZFC cardinal arithmetic (uses countable choice, available in ZFC) | CH branch cardinality count; non-CH branch final contradiction |
 | Bernstein set (a set meeting every uncountable closed set, whose complement also meets every uncountable closed set; exists in ZFC by a length-𝔠 transfinite recursion) | Oxtoby, *Measure and Category*, 2nd ed. (Springer GTM 2), p. 24 (definition) | Case-split-free alternative proof (report §3, "別証" remark): a subset of a Bernstein set of size ℵ₁ contains no perfect set, hence is not Fσ by Cantor–Bendixson |
 
-I could not independently pin exact Kechris theorem/page numbers beyond the
+**Update (Issue #27 / E10, 2026-08-09): Kechris theorem numbers cross-checked
+against independent secondary sources via web search.** Two of the previously
+unpinned numbers are now confirmed at the secondary-source level:
+
+* **Kechris Thm 3.11 = the Alexandroff Gδ characterisation.** The published
+  preprint arXiv:2010.01573 ("On the complete metrisability of spaces of
+  contractive semigroups", §4) cites "[Kechris, *Classical Descriptive Set
+  Theory*], Theorem 3.11" for precisely: "Let X be a completely metrisable
+  space. Then A ⊆ X viewed with the relative topology is completely
+  metrisable if and only if it is a Gδ-subset of X" (Alexandroff's lemma).
+  Independent search results likewise place Thm 3.11 in §3.C ("Polish
+  subspaces of Polish spaces"). This covers the direction and case the paper
+  cites it for.
+* **Cantor–Bendixson = Kechris Thm 6.4, in §6.** Multiple
+  descriptive-set-theory sources quote Kechris Theorem 6.4 as: "Let X be a
+  Polish space. Then X can be uniquely written as X = P ∪ C, with P a
+  perfect subset of X and C countable." Consistent with the "§6" pointer
+  already recorded below.
+
+Neither was verified against a physical or scanned copy of the book itself;
+`paper/references.bib`'s Kechris note discloses exactly this. The paper's
+defensive structure (perfect-set consequence re-derived from scratch;
+Engelking/Willard as the verified primary citations for the general Gδ
+characterisation) is unchanged and remains the load-bearing path.
+
+Original Issue #3 record (kept for provenance): I could not independently pin exact Kechris theorem/page numbers beyond the
 "§6 / p. 150" region confirmed via a secondary source (Wikipedia's citation
 of Kechris 1995, p. 150 for the perfect set property) — general web search
 is unavailable in this environment and I did not have independent access to
@@ -215,7 +240,7 @@ paper.
 | `CompleteSpace` / `PseudoMetricSpace` | `Mathlib.Topology.UniformSpace.*` | available |
 | Cardinals / `Cardinal.aleph` | `Mathlib.SetTheory.Cardinal.Aleph` | available |
 | Gδ: `IsGdelta` | `Mathlib.Topology.GDelta.Basic` | available |
-| Closed subspace of Polish is Polish | `IsPolishSpace.isClosed_univ` or similar | **verify** |
+| Closed subspace of Polish is Polish | ~~`IsPolishSpace.isClosed_univ` or similar — verify~~ | superseded (Issue #9 / E10, Issue #27): no Polish-specific lemma needed — the assembly uses `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace` (no separability hypothesis), see `notes/proof-audit.md` Mathlib gaps table |
 | `IsFSigma` predicate | — | **absent** — defined locally in `Conj51/Cardinality.lean` |
 
 ---

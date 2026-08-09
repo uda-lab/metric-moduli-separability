@@ -610,6 +610,144 @@ decision explicitly and accurately.
 
 ---
 
+### [2026-08-09] Issue #27 — E10 submission readiness audit
+
+Final pre-submission gate, per issue #27's acceptance criteria. Performed by
+the agent responsible for issue #27 only — not an author of the report (#5),
+the paper (#11/#29/#32), or the Lean sources (#6–#9, #23), and not the
+Issue #10 or Issue #26 reviewer.
+
+#### 1. Gate verdicts, explicitly recorded (issue #27 naming)
+
+Issue #27 names the gates as: **A** = self-contained natural-language proof,
+**B** = independent mathematical review, **C** = Lean sorry-free with an
+explained `#print axioms` audit. (The Issue #10 entry above uses A/B for the
+first two; the project-plan naming in report §4 — plan-Gate A = independent
+review, B = Lean formalisation, C = report ↔ Lean statement agreement —
+covers the same three verdicts. All namings are decided affirmative.)
+
+| Gate | Question | Verdict | Evidence |
+|------|----------|---------|----------|
+| **A** | Is `report/report-ja.md` a self-contained natural-language proof? | **PASS** | Issue #10 entry above, verdict table ("Gate A … PASS": §3 explicit construction with (C1)–(C5) proved in full; §4's six steps each invoke only results proved in the same document, with the sole textbook citation stated precisely). Recorded via [issue #10](https://github.com/uda-lab/ishiki-conjecture/issues/10) / PR #28, merge `5b6e61d`. |
+| **B** | Independent end-to-end mathematical review: does the argument prove Conjecture 5.1 for \|D\| = ℵ₁? | **PASS — no mathematical gap found** | Issue #10 entry above: from-scratch reconstruction of all six steps by an agent uninvolved in #2–#9, nine failed adversarial attacks (A1–A9), numerical spot-check, report ↔ Lean cross-check. Same evidence trail as Gate A. Third-leg (paper) consistency added by the Issue #26 / E9 entry above ([issue #26](https://github.com/uda-lab/ishiki-conjecture/issues/26), landed on main in merge `dfcabd3`). |
+| **C** | Is the Lean chain sorry-free, with an explained `#print axioms` audit? | **PASS** | Sorry count 0 (sorry tracker below; `grep` + axiom tables). Per-claim `#print axioms` table in the Issue #9 section below: every declaration reports exactly `[propext, Classical.choice, Quot.sound]`, with the explanation that these are Lean's three standard classical axioms matching the report's ZFC reasoning and that `sorryAx` is absent. Independently re-run by the Issue #10 reviewer on a from-scratch rebuild at `4009275` (Issue #10 entry §6, transcript included). |
+
+The proof-candidate label was lifted by owner decision on the basis of these
+verdicts (comment by t-uda on
+[PR #29](https://github.com/uda-lab/ishiki-conjecture/pull/29), implemented in
+issue #31 / [PR #32](https://github.com/uda-lab/ishiki-conjecture/pull/32),
+merge `dfcabd3`).
+
+#### 2. Open-obligation sweep
+
+* `STATUS.md`: every row of the Overall table is resolved (✅); no pending
+  row remains.
+* This file's Open obligations table: all five rows ✅ (Gate B passed); the
+  sorry tracker reports 0 and the Lean TODO tracker is empty. The Mathlib
+  library gaps table's `IsFSigma` row reads "open" only in the sense of an
+  *upstream Mathlib gap* handled by the local definition — it is not a
+  project obligation; the row's status text was clarified under this issue.
+* `notes/literature.md` had one stale marker: the Mathlib coverage row
+  "Closed subspace of Polish is Polish — **verify**" predated Issue #9,
+  which needed no Polish-specific lemma (the assembly uses
+  `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace`, no separability
+  hypothesis). Fixed under this issue.
+* [PR #30](https://github.com/uda-lab/ishiki-conjecture/pull/30) (E9 record)
+  was still open although its entire content had already landed on main via
+  PR #32's merge `dfcabd3` (whose branch was built on top of it). Verified by
+  diffing the PR head against main (main = PR #30's text + later additions,
+  no losses) and closed as superseded, with the verification recorded in the
+  closing comment. No other open issue or PR remains besides issue #27
+  itself.
+
+#### 3. Bibliography verification (`paper/references.bib` ↔ `notes/literature.md`)
+
+All eight entries resolve to verification records:
+
+| Entry | Verification record |
+|-------|--------------------|
+| `Ishiki2024` | v4 PDF full-text check, Issue #2 (literature.md "Primary source") |
+| `Kechris1995` | Theorem numbers now cross-checked against independent secondary sources under this issue — see below |
+| `Engelking1989` | Thm 4.3.23–4.3.24 verified, Issue #4 |
+| `Willard2004` | Thm 24.12 p. 179 / Cor 25.4 verified, Issue #4 / #3 |
+| `Kelley1955` | Thm 34 p. 200 quoted from sources citing exact numbers, Issue #3 |
+| `Oxtoby1980` | p. 24 Bernstein set, Issue #3 |
+| `Koshino2022` | DOI-verified against the v4 PDF reference list, Issue #2 |
+| `Ishiki2024Baire` | arXiv abstract page, Issue #2 |
+
+**Kechris theorem numbers (previously the only flagged-unverified item).**
+Web verification was attempted under this issue and succeeded at the
+secondary-source level: a published preprint (arXiv:2010.01573, §4) cites
+"[Kechris, *Classical Descriptive Set Theory*], Theorem 3.11" for exactly
+Alexandroff's lemma ("A ⊆ X … is completely metrisable if and only if it is
+a Gδ-subset of X"), and multiple descriptive-set-theory sources give the
+Cantor–Bendixson theorem as Kechris **Theorem 6.4** ("Let X be a Polish
+space. Then X can be uniquely written as X = P ∪ C, with P perfect and C
+countable") — inside §6, as the bib note's "(§6)" pointer says. Neither was
+checked against a physical/scanned copy of the book itself; the
+`references.bib` note and `notes/literature.md` were updated to say exactly
+that. **Judgment: the paper's existing treatment is valid** — the
+load-bearing citations for the Gδ characterisation are the independently
+verified Engelking/Willard entries, the perfect-set consequence is re-derived
+from scratch inside the paper's Lemma 3.1 proof, and the Kechris citation is
+a convenience pointer whose imprecision risk is disclosed in the bib note.
+**Koshino's 2024 manuscript** (the separable σ-compactness theorem) remains
+deliberately uncited — bibliographically unverifiable per literature.md — and
+the paper refers to the result only as "attributed there to Koshino" inside
+`\cite{Ishiki2024}`, which is the correct handling.
+
+#### 4. Overclaim scan of `paper/main.tex` (full text)
+
+* The result is stated in ordinary declarative theorem language ("We prove
+  this statement in ZFC" / Theorem 4.2 with proof), which the recorded gate
+  verdicts and the owner's label decision support.
+* The only verification claims made are: the Lean formalisation (appendix;
+  sorry-free, three standard axioms, "re-run independently during the
+  mathematical review described in the repository's audit record") — i.e.
+  project-internal audit and machine-checking. **No wording implies external
+  peer review, journal validation, or community acceptance.** The front
+  matter is explicitly marked "Draft --- not for circulation".
+* `report/report-ja.md` §4 位置づけ and `STATUS.md` carry the matching
+  explicit caveat that verification to date is internal audit + Lean only.
+
+#### 5. Build and statement-consistency check
+
+* `latexmk -C` (full clean) followed by `latexmk -pdf -halt-on-error main.tex`:
+  builds from scratch with no errors; the only log warnings are benign
+  hyperref PDF-string notes; no undefined references or citations. Output
+  13 pages (after the Kechris bib-note update under this issue). Build
+  artifacts are gitignored and not committed.
+* Abstract and introduction cross-checked against Theorem 4.2: same
+  hypothesis (\|D\| = ℵ₁, discrete D), same conclusion (Met(D) with the
+  sup-distance topology not completely metrizable), same proof skeleton
+  (non-Fσ set → non-Gδ complement → star family → closed embedding →
+  closed-subspace inheritance). The abstract's "supremum distance" topology
+  phrasing matches the theorem's "supremum-metric topology". Consistent.
+
+#### 6. Go/no-go judgment
+
+**GO** — the paper is submission-ready from the mathematics, formalisation,
+and document-consistency standpoints, with the following submission-time
+notes (none blocking, all owner-side):
+
+1. `\author{}` is empty and `\date{Draft --- not for circulation}` — to be
+   filled/removed by the owner at actual submission; intentional for the
+   repository draft.
+2. External peer review has not taken place and the paper correctly does not
+   claim it; the certification basis is this audit trail plus the Lean
+   `#print axioms` audit. Any submission cover material should preserve that
+   framing.
+3. The Kechris citation rests on secondary-source confirmation of the
+   theorem numbers (see §3); if the venue's standards require page-precise
+   citations, verify against a copy of the book — the bib note already says
+   so.
+
+The judgment and its basis were recorded on
+[issue #27](https://github.com/uda-lab/ishiki-conjecture/issues/27) before
+close.
+
+---
+
 ## Lean sorry tracker
 
 | File | Declaration | Claim ID | Priority | Notes |
@@ -862,7 +1000,7 @@ finds no proxy weakening; the audit entry is above.
 
 | Gap | Description | File | Status |
 |-----|-------------|------|--------|
-| `IsFSigma` predicate | No canonical Mathlib built-in; defined locally as `∃ F : ℕ → Set ℝ, (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. | `IshikiConj51/Conj51/Cardinality.lean` | open |
+| `IsFSigma` predicate | No canonical Mathlib built-in; defined locally as `∃ F : ℕ → Set ℝ, (∀ n, IsClosed (F n)) ∧ A = ⋃ n, F n`. | `IshikiConj51/Conj51/Cardinality.lean` | open upstream (Mathlib gap); handled locally — not a project obligation (E10, Issue #27) |
 | `Met(D)` as a type | ~~No Mathlib type for the space of compatible metrics on D with the sup-metric topology.~~ Resolved (Issue #6, 2026-08-09): constructed explicitly as `MetD`, see above. | `IshikiConj51/Conj51/MetD.lean` (relocated from `MainTheorem.lean` by Issue #7) | resolved |
 | `TopologicalSpace.IsCompletelyMetrizableSpace` | Exists natively in Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed. Confirmed by direct source inspection (Issue #6). | `IshikiConj51/Conj51/MainTheorem.lean` | not a gap (dossier flagged as biggest risk item; resolved by inspection) |
 | Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ in ambient space) | **Resolved locally (Issue #23, 2026-08-09).** Confirmed absent from Mathlib v4.32.2 (Issue #19); proved from scratch as `isGδ_of_isCompletelyMetrizableSpace {X} [MetricSpace X] {Y : Set X} (h : IsCompletelyMetrizableSpace Y) : IsGδ Y` in a new module, general form (no separability assumption). Proof: X-diameter-restricted oscillation argument (leader dossier §E) — `Uₙ := ⋃₀ {V open, X-bounded, X-diam V < 1/(n+1), and diam of V's Y-trace < 1/(n+1)}` (using `Bornology.IsBounded` + `Metric.diam` rather than `EMetric`/`Metric.ediam`, to sidestep the "unbounded set has junk diam 0" trap while staying in the finite-real API); `Y = (⋂ₙ Uₙ) ∩ closure Y`, forward inclusion via shrinking balls, backward inclusion via a Cauchy sequence (`cauchySeq_of_le_tendsto_0` / `cauchySeq_tendsto_of_complete`) converging both to the test point (in `X`) and into `Y` (via `Y`'s upgraded complete metric), forcing equality by uniqueness of limits (`tendsto_nhds_unique`). `Y`'s closure is Gδ via `PerfectlyNormalSpace.closed_gdelta` (automatic for metric spaces); `Uₙ` is Gδ via `IsGδ.iInter_of_isOpen`; combined via `IsGδ.inter`. `#print axioms` confirms `[propext, Classical.choice, Quot.sound]` only. **Real Lean instance-diamond found and fixed along the way**: `letI := upgradeIsCompletelyMetrizable Y` alone was not sufficient — `Y : Set X` already carries a competing global `Subtype.pseudoMetricSpace`/`instBornologySubtype` instance chain (the *ambient*, possibly non-complete restricted metric), and several Mathlib lemmas (`cauchySeq_of_le_tendsto_0`, `IsBounded.subset`) silently resolved to that ambient instance instead of the upgraded complete one, causing type mismatches only surfaced once `CompleteSpace` was actually needed. Fixed by explicitly re-`letI`-ing `MetricSpace`/`PseudoMetricSpace`/`UniformSpace`/`Bornology` Y-instances from the upgrade before using any of them, forcing consistent resolution throughout. **Consumed by Issue #9 (2026-08-09):** `thm_conj51_of_lavrentiev`'s explicit `lavrentiev` hypothesis is exactly this lemma instantiated at `X := ℝ`, so `thm_conj51` discharges to `thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD`. No ℝ-ambient ↔ `[0,1]`-ambient conversion lemma is needed: the report's "Gδ in [0,1]" step is carried out in the ambient line and the intersection with the closed set `[0,1]` happens inside `isFSigma_of_isGdelta_sdiff`. | `IshikiConj51/Conj51/GDeltaComplete.lean` | **resolved** |
