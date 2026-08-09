@@ -8,3 +8,4 @@ paper/*.log
 paper/*.out
 paper/*.pdf
 paper/*.synctex.gz
+report/*.pdf

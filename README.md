@@ -64,6 +64,20 @@ lake build
 
 No CI is configured.  Local / manual validation is sufficient at this stage.
 
+## Building PDF / TeX Report
+
+To compile `report/report-ja.md` into PDF or TeX using Pandoc and LuaLaTeX:
+
+```sh
+cd report
+
+# Compile to PDF
+pandoc report-ja.md -o report-ja.pdf --pdf-engine=lualatex -V documentclass=bxjsarticle -V classoption=lualatex,ja=standard
+
+# Generate TeX file
+pandoc report-ja.md -o report-ja.tex -s --pdf-engine=lualatex -V documentclass=bxjsarticle -V classoption=lualatex,ja=standard
+```
+
 ## License
 
 See `LICENSE`.

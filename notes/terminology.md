@@ -22,7 +22,7 @@ Quick reference for notation used consistently across the report, paper, and Lea
 | $s_n(\alpha, t)$ | $\min(1, \lvert t - a_\alpha \rvert + 1/(n+1))$ for $n \in \mathbb{N}$ — the distance $d_t(y_\alpha, x_{\alpha,n})$ (report §3.3; matches the indexing of the Lean `starSpoke` definition in `Conj51/MetricConstruction.lean`) |
 | $F_\sigma$ | Countable union of closed sets |
 | $G_\delta$ | Countable intersection of open sets |
-| Completely metrizable | A topological space homeomorphic to a complete metric space. Not the same as **Polish** (= completely metrizable **and** separable) — do not conflate the two. Japanese: 完全距離化可能 |
+| Completely metrizable | A topological space homeomorphic to a complete metric space. Not the same as **Polish** (= completely metrizable **and** separable) — do not conflate the two. Japanese: 完備距離化可能 |
 | Alexandrov–Lavrentiev $G_\delta$ characterisation | Forward direction (the only one used, via its contrapositive, applied to $X=[0,1]$): $X$ metrizable, $S \subseteq X$ completely metrizable $\Rightarrow$ $S$ is $G_\delta$ in $X$ — stated in this generality (no separability on $X$) as Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 (§3.C, p. 17); general form also in Engelking Thm. 4.3.23–4.3.24 and Willard Thm. 24.12. The reverse direction ($G_\delta$ $\Rightarrow$ completely metrizable) genuinely needs $X$ completely metrizable — e.g. $X=\mathbb{Q}$, $S=X$ is trivially $G_\delta$ in itself but not completely metrizable — and is not used |
 | Closed-subspace inheritance | A closed subspace $Y$ of a completely metrizable space $X$ is completely metrizable — proved directly (a complete metric on $X$ restricted to $Y$ is complete, since closed subsets of metric spaces are sequentially closed). **No separability needed**; this is the fact used for $\operatorname{Met}(D)$ |
 
@@ -40,7 +40,8 @@ nearby points) is **not** in $\operatorname{Met}(D)$.  This distinction is essen
 | unordered pair | 非順序対（「無順序対」は廃止） |
 | index set of spokes | $n \in \mathbb{N}$ with $1/(n+1)$（$\mathbb{N}_{\ge 1}$ と $1/n$ は廃止；Lean 実装と一致） |
 | complement of $A$ | $A^\complement$（standalone $Y$ は廃止；全体集合 $[0,1]$ は一度だけ明記） |
-| retired construction nicknames | 「第 $\alpha$ 星」「中心」「端点」「基準対」「ブロック」は廃止 — $C_\alpha$, $y_\alpha$, $x_{\alpha,n}$, $\{p,q\}$, 「分割の要素」を直接使う（Lean identifiers `StarIndex`, `starBlock` 等は proof engineering 上の内部名として存続） |
+| font for sets/spaces ($\mathbf{N}, \mathbf{R}$ vs $\mathbb{N}, \mathbb{R}$) | $\mathbf{N}, \mathbf{R}$ と $\mathbb{N}, \mathbb{R}$ はともに許容（タイプセット環境によって劣悪な黒板太字を避けるため） |
+| retired construction nicknames | 「第 $\alpha$ 星」「中心」「端点」「基準対」「ブロック」は廃止 — $C_\alpha$, $y_\alpha$, $x_{\alpha,n}$, $\{p,q\}$, 「分割の成分」を直接使う（Lean identifiers `StarIndex`, `starBlock` 等は proof engineering 上の内部名として存続） |
 
 ## Lean naming conventions
 

@@ -1,0 +1,506 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  lualatex,ja=standard]{bxjsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{ux4f0aux6577ux4e88ux60f3-5.1-ux306eux8a3cux660e}{%
+\section{伊敷予想 5.1
+の証明}\label{ux4f0aux6577ux4e88ux60f3-5.1-ux306eux8a3cux660e}}
+
+本報告書では，Ishiki {[}1{]} の Conjecture 5.1，すなわち濃度
+\(\aleph_1\) の離散位相空間 \(D\) に対して \(\operatorname{Met}(D)\)
+が完備距離化可能でないことを，ZFC の定理として証明する．
+
+\hypertarget{ux8a18ux53f7ux3068ux8a2dux5b9a}{%
+\subsection{1. 記号と設定}\label{ux8a18ux53f7ux3068ux8a2dux5b9a}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.50}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.50}}@{}}
+\toprule
+記号 & 意味 \\
+\midrule
+\endhead
+\(D\) & 濃度 \(\aleph_1\) の離散位相空間 \\
+\(\operatorname{Met}(D)\) & \(D\)
+の離散位相を誘導する距離の全体．上限距離位相を備える \\
+\(\rho(d_1, d_2)\) &
+\(\sup_{x,y\in D} \lvert d_1(x,y) - d_2(x,y)\rvert\)（\(\operatorname{Met}(D)\)
+上の上限距離） \\
+\([0,1]\) & 実数の閉単位区間 \\
+\(\omega_1\) & 最小の非可算順序数 \\
+\(\aleph_1\) & 最小の非可算基数 \\
+\(\mathfrak{c}\) & 連続体濃度 \(2^{\aleph_0}\) \\
+\(S^\complement\) & 部分集合 \(S \subseteq [0,1]\) の補集合
+\([0,1] \setminus S\)．本報告書で補集合は常に全体集合 \([0,1]\)
+でとる \\
+\bottomrule
+\end{longtable}
+
+\(\operatorname{Met}(D)\) は集合 \(D\)
+上の距離すべての集合ではない．離散でない位相を誘導する距離は
+\(\operatorname{Met}(D)\) に属さない．
+
+基数については，Cantor の定理より \(\aleph_0 < \mathfrak{c}\)
+であり，\(\aleph_1\) は最小の非可算基数だから
+\(\aleph_1 \le \mathfrak{c}\) が ZFC で成り立つ．
+
+\textbf{定理 1.1（完備距離化可能部分空間の \(G_\delta\) 性 {[}2, Theorem
+3.11{]}）.} \(X\) を距離化可能空間，\(S \subseteq X\)
+を相対位相に関して完備距離化可能な部分空間とする．このとき \(S\) は
+\(X\) の \(G_\delta\) 集合である．
+
+本報告書では，この定理を対偶の形で \(X = [0,1]\) に対してのみ用いる（§4
+ステップ 3）．同じ一般形は {[}3, Theorems 4.3.23--4.3.24{]} および {[}4,
+Theorem 24.12{]} にもある．
+
+\textbf{定理 1.2（閉部分空間の完備距離化可能性）.} \(X\)
+を完備距離化可能な空間，\(Y \subseteq X\) を閉部分集合とする．このとき
+\(Y\) は相対位相に関して完備距離化可能である．
+
+\emph{証明の方針.} \(X\) 上の完備距離の制限が閉部分空間 \(Y\)
+上で完備になることから従う．
+
+本報告書で \(\operatorname{Met}(D)\)
+に適用する完備距離化可能性についての事実は定理 1.2 のみである（§4
+ステップ 5）．
+
+\textbf{Remark（上限距離の値域）.} 上限距離 \(\rho(d_1, d_2)\)
+は，\(d_1, d_2\) が非有界で差が非有界のとき \(+\infty\)
+をとりうる．しかし \(\min(\rho, 1)\) は \(\rho\)
+と同一の位相を定める有限値の距離だから，\(\operatorname{Met}(D)\)
+は通常の意味で距離化可能であり，完備距離化可能性は位相のみで定まる性質だから，このことは以下の議論に影響しない．なお
+§3 で構成する距離族の値域はすべて \([0,2]\) に含まれ，そこで現れる
+\(\rho\) の値はすべて有限である．
+
+\hypertarget{ux4e3bux5b9aux7406}{%
+\subsection{2. 主定理}\label{ux4e3bux5b9aux7406}}
+
+\textbf{定理 2.1（伊敷予想 5.1）.} \(\lvert D\rvert = \aleph_1\)
+ならば，\(\operatorname{Met}(D)\)
+は上限距離位相に関して完備距離化可能でない．
+
+証明は §4 で与える．§3 で必要な補題を準備する．
+
+\hypertarget{ux88dcux984c}{%
+\subsection{3. 補題}\label{ux88dcux984c}}
+
+\hypertarget{f_sigma-ux3067ux306aux3044ux6fc3ux5ea6-aleph_1-ux306eux96c6ux5408}{%
+\subsubsection{\texorpdfstring{3.1 \(F_\sigma\) でない濃度 \(\aleph_1\)
+の集合}{3.1 F\_\textbackslash sigma でない濃度 \textbackslash aleph\_1 の集合}}\label{f_sigma-ux3067ux306aux3044ux6fc3ux5ea6-aleph_1-ux306eux96c6ux5408}}
+
+\textbf{補題 3.1（閉集合の濃度）.} \(F \subseteq [0,1]\)
+を閉集合とする．\(\lvert F\rvert < \mathfrak{c}\) ならば \(F\)
+は可算である．
+
+\emph{証明.} 対偶を示す．\(F\) を非可算な閉集合とする．\(F\) は
+\([0,1]\) の閉部分集合だからそれ自身 Polish
+空間であり，Cantor--Bendixson の定理 {[}2, Theorem 6.4{]} より完全集合
+\(P\) と可算集合 \(C\) の非交和 \(F = P \sqcup C\) に分解できる．\(F\)
+が非可算で \(C\) が可算だから \(P \ne \emptyset\) であり，空でない完全
+Polish 空間は濃度 \(\mathfrak{c}\) を持つ {[}2, Theorem 6.2, Corollary
+6.3{]}．よって \(\lvert F\rvert \ge \lvert P\rvert = \mathfrak{c}\)
+である．
+
+\textbf{補題 3.2（\(F_\sigma\) でない集合の存在）.} \(F_\sigma\)
+でない濃度 \(\aleph_1\) の集合 \(A \subseteq [0,1]\) が存在する．
+
+\emph{証明.} 連続体仮説
+\(\mathsf{CH}\)（\(\aleph_1 = \mathfrak{c}\)）の成否で場合を分ける．
+
+\textbf{場合 1（\(\mathsf{CH}\) が成立するとき）.}
+\(A := [0,1] \setminus \mathbf{Q}\)（\([0,1]\)
+内の無理数全体）とおく．\(\lvert[0,1]\rvert = \mathfrak{c}\) で
+\(\mathbf{Q} \cap [0,1]\) は可算だから \(\lvert A\rvert = \mathfrak{c}\)
+であり，\(\mathsf{CH}\) より \(\lvert A\rvert = \aleph_1\)．
+
+\(A\) が \(F_\sigma\) でないことを示す（この部分は \(\mathsf{CH}\)
+を用いない）．\(A = \bigcup_{n\in\mathbf{N}} F_n\)（各 \(F_n\) は
+\([0,1]\) の閉集合）と仮定する．\(\mathbf{Q} \cap [0,1]\) は \([0,1]\)
+で稠密で \(F_n \cap \mathbf{Q} = \emptyset\) だから，各 \(F_n\)
+は内点を持たない閉集合，したがって疎（nowhere
+dense）である．\(\mathbf{Q} \cap [0,1]\)
+も可算個の一点集合の合併として痩集合（meager
+set）だから，\([0,1] = A \cup (\mathbf{Q} \cap [0,1])\) は \([0,1]\)
+の痩集合となり，完備距離空間は自身の中で痩せていないという Baire
+のカテゴリ定理 {[}4, Corollary 25.4{]} に反する．よって \(A\) は
+\(F_\sigma\) でない．
+
+\textbf{場合 2（\(\mathsf{CH}\)
+が成立しないとき，\(\aleph_1 < \mathfrak{c}\)）.}
+\(\aleph_1 \le \mathfrak{c} = \lvert[0,1]\rvert\) だから，濃度
+\(\aleph_1\) の部分集合 \(A \subseteq [0,1]\)
+が存在する．\(A = \bigcup_{n\in\mathbf{N}} F_n\)（各 \(F_n\)
+は閉集合）と仮定すると，各 \(n\) について
+\(\lvert F_n\rvert \le \lvert A\rvert = \aleph_1 < \mathfrak{c}\)
+だから，補題 3.1 より \(F_n\) は可算である．よって \(A\)
+は可算個の可算集合の合併として可算となり，\(\lvert A\rvert = \aleph_1\)
+に矛盾する．ゆえに \(A\) は \(F_\sigma\) でない．
+
+\textbf{Remark（場合分けを避ける構成）.} \(\mathsf{CH}\)
+による場合分けを避けるなら，Bernstein 集合による一様な構成もある．\(B\)
+と \(B^\complement\) がともに \([0,1]\)
+のすべての非可算閉集合と交わるような集合
+\(B \subseteq [0,1]\)（Bernstein
+集合，\(\lvert B\rvert = \mathfrak{c}\)）が超限帰納法で構成できる {[}5,
+p.~24{]}．濃度 \(\aleph_1\) の部分集合 \(A \subseteq B\)
+をとる．\(A = \bigcup_n F_n\)（各 \(F_n\) は閉集合）と書ければ，\(A\)
+は非可算だからある \(F_n\) は非可算閉集合であり，\(F_n \subseteq B\) は
+\(B^\complement\) がすべての非可算閉集合と交わることに反する．よってこの
+\(A\) も \(F_\sigma\) でなく，この議論は \(\mathsf{CH}\)
+の成否によらない．
+
+\hypertarget{ux8a2dux5b9aux306eux6b63ux898fux5316}{%
+\subsubsection{3.2
+設定の正規化}\label{ux8a2dux5b9aux306eux6b63ux898fux5316}}
+
+補題 3.3 以降では，\(D\) を §3.3
+で定める具体的な集合にとる．これで一般性を失わないことを先に確認する．離散位相空間の位相型はその濃度のみで定まり，離散空間の間の全単射
+\(f : D \to D'\) は同相写像である．対応
+\(d \mapsto d \circ (f \times f)\) は \(D'\) 上の距離を \(D\)
+上の距離に移し，誘導する位相を保つから，\(\operatorname{Met}(D')\) から
+\(\operatorname{Met}(D)\) への全単射を与える（逆写像は \(f^{-1}\)
+による同じ対応）．さらに \(\sup\) をとる添字集合が \(f \times f\)
+で全単射に移り合うから，この対応は上限距離 \(\rho\)
+を保つ．すなわち等長同型である．したがって \(\operatorname{Met}(D)\)
+の距離空間としての（特に位相空間としての）同型類は \(\lvert D\rvert\)
+のみで定まる．
+
+\hypertarget{ux8dddux96e2ux65cfux306eux69cbux6210}{%
+\subsubsection{3.3
+距離族の構成}\label{ux8dddux96e2ux65cfux306eux69cbux6210}}
+
+補題 3.2 の与える
+\(A \subseteq [0,1]\)（\(\lvert A\rvert = \aleph_1\)，\(A\) は
+\(F_\sigma\) でない）と，単射な列挙
+\[A = \{a_\alpha : \alpha < \omega_1\}, \qquad \alpha \ne \beta \implies a_\alpha \ne a_\beta\]
+を固定する．
+
+\textbf{補題 3.3（距離族の構成）.} 濃度 \(\aleph_1\) の離散空間 \(D\)
+と，\(D\) 上の距離の族 \((d_t)_{t \in [0,1]}\) であって
+\[d_t \in \operatorname{Met}(D) \iff t \in A^\complement\]
+を満たすものが存在する．
+
+\textbf{構成.} 台集合を
+\[D := \{p, q\} \ \sqcup\ \{y_\alpha : \alpha < \omega_1\} \ \sqcup\ \{x_{\alpha,n} : \alpha < \omega_1,\ n \in \mathbf{N}\}\]
+（三つの部分は互いに交わらず，各添字は相異なる元を与える）で定め，離散位相を与える．濃度は
+\[\lvert D\rvert = 2 + \aleph_1 + \aleph_1 \cdot \aleph_0 = \aleph_1\]
+である．\(\alpha < \omega_1\) に対して
+\[C_\alpha := \{y_\alpha\} \cup \{x_{\alpha,n} : n \in \mathbf{N}\}\]
+とおくと， \[D = \{p,q\} \ \sqcup \bigsqcup_{\alpha<\omega_1} C_\alpha\]
+は \(D\) の分割である．
+
+\(t \in [0,1]\)，\(\alpha < \omega_1\)，\(n \in \mathbf{N}\) に対して
+\[s_n(\alpha, t) := \min\bigl(1,\ \lvert t - a_\alpha\rvert + 1/(n+1)\bigr)\]
+とおく．\(0 < s_n(\alpha,t) \le 1\) である．
+
+\(t \in [0,1]\) に対し，写像 \(d_t : D \times D \to [0,2]\)
+を，\(d_t(u,u) := 0\) と，相異なる 2
+点の非順序対に対する次の表とで定める（表は非順序対に値を与えるから，\(d_t\)
+は対称である）．
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+非順序対 \(\{u,v\}\) & \(d_t(u,v)\) \\
+\midrule
+\endhead
+\(\{p,\ q\}\) & \(1 + t\) \\
+\(\{y_\alpha,\ x_{\alpha,n}\}\) & \(s_n(\alpha,t)\) \\
+\(\{x_{\alpha,n},\ x_{\alpha,m}\}\)（\(n \ne m\)） &
+\(s_n(\alpha,t) + s_m(\alpha,t)\) \\
+上記以外（分割の相異なる成分に属する 2 点） & \(1\) \\
+\bottomrule
+\end{longtable}
+
+補題 3.3 の主張を，(C1) \(d_t\) は距離である，(C2)
+\(t \in A^\complement\) ならば \(d_t \in \operatorname{Met}(D)\)，(C3)
+\(t \in A\) ならば
+\(d_t \notin \operatorname{Met}(D)\)，の三つに分けて示す．
+
+\textbf{(C1) 任意の \(t \in [0,1]\) に対し，\(d_t\) は \(D\)
+上の距離である．}
+
+\emph{証明.} 対称性と \(d_t(u,u) = 0\)
+は定義による．表の各値は正だから，\(d_t(u,v) = 0\) と \(u = v\)
+は同値である．
+
+三角不等式 \(d_t(u,w) \le d_t(u,v) + d_t(v,w)\) は，\(u,v,w\)
+のうちに一致する 2 点があれば自明だから，相異なる 3
+点について示す．\(\alpha\) を固定した文脈では \(s_n := s_n(\alpha,t)\)
+と略記する．表より，相異なる 2 点の距離は常に \(2\)
+以下であり，分割の相異なる成分に属する 2 点の距離は \(1\) である．3
+点が分割とどう交わるかで場合を分ける．
+
+\textbf{場合 (a)　3 点が分割の同一成分に属する.} 3 点が属する成分は 2
+元集合 \(\{p, q\}\) ではなく，ある \(C_\alpha\) である．3 点が
+\(y_\alpha,\ x_{\alpha,n},\ x_{\alpha,m}\)（\(n \ne m\)）のとき，検証すべき不等式は
+\[s_n + s_m \le s_n + s_m \quad (y_\alpha \text{ 経由}), \qquad s_n \le (s_n + s_m) + s_m \quad (x_{\alpha,m} \text{ 経由})\]
+の 2 つ（残りはその対称形）であり，いずれも成り立つ．3 点が
+\(x_{\alpha,n},\ x_{\alpha,m},\ x_{\alpha,k}\)（添字は相異なる）のときは
+\[s_n + s_m \le (s_n + s_k) + (s_k + s_m).\]
+
+\textbf{場合 (b)　ちょうど 2 点が分割の同一成分 \(E\) に属する.}
+\(u, v \in E\)，\(z \notin E\) とすると \(d_t(u,z) = d_t(v,z) = 1\)
+だから
+\[d_t(u,v) \le 2 = d_t(u,z) + d_t(z,v), \qquad d_t(u,z) = 1 \le d_t(u,v) + d_t(v,z).\]
+
+\textbf{場合 (c)　3 点が分割の相異なる 3 成分に属する.} 3
+つの対の距離はすべて \(1\) であり，\(1 \le 1 + 1\)．
+
+場合 (a)--(c) は 3 点の配置を尽くすから，三角不等式が成り立つ．
+
+\textbf{(C2) \(t \in A^\complement\) ならば
+\(d_t \in \operatorname{Met}(D)\) である．}
+
+\emph{証明.} 距離 \(d\) の誘導する位相が離散位相であることは，各
+\(u \in D\) に対して
+\[\delta(u) := \inf_{v \in D,\ v \ne u} d(u,v) > 0\]
+が成り立つことと同値である．\(t \in A^\complement\)
+を固定し，各点でこれを確かめる．
+
+\begin{itemize}
+\tightlist
+\item
+  \(u = p\) のとき，\(d_t(p,q) = 1+t \ge 1\) で他のすべての点への距離は
+  \(1\) だから \(\delta(p) = 1\)．\(u = q\) も同様に \(\delta(q) = 1\)．
+\item
+  \(u = x_{\alpha,n}\) のとき，\(u\) から出る距離の値は
+  \(s_n(\alpha,t)\)（\(y_\alpha\)
+  へ），\(s_n(\alpha,t) + s_m(\alpha,t)\)（\(x_{\alpha,m}\)，\(m \ne n\)
+  へ），\(1\)（\(C_\alpha\) の外へ）だから，\(s_n(\alpha,t) \le 1\) より
+  \[\delta(x_{\alpha,n}) = s_n(\alpha,t) \ge 1/(n+1) > 0.\]
+\item
+  \(u = y_\alpha\) のとき，値は
+  \(s_n(\alpha,t)\)（\(n \in \mathbf{N}\)）と \(1\)
+  である．\(n \to \infty\) のとき
+  \(\lvert t-a_\alpha\rvert + 1/(n+1) \downarrow \lvert t-a_\alpha\rvert\)
+  であり，\(r \mapsto \min(1,r)\) は連続かつ単調非減少だから
+  \[\delta(y_\alpha) = \min\bigl(1, \lvert t - a_\alpha\rvert\bigr).\]
+  \(t \in A^\complement\) かつ \(a_\alpha \in A\) より
+  \(t \ne a_\alpha\) だから \(\delta(y_\alpha) > 0\)．
+\end{itemize}
+
+よって \(d_t\) の誘導する位相は離散位相であり，(C1) と合わせて
+\(d_t \in \operatorname{Met}(D)\)．
+
+\textbf{(C3) \(t \in A\) ならば \(d_t \notin \operatorname{Met}(D)\)
+である．}
+
+\emph{証明.} \(t = a_\beta\)（\(\beta < \omega_1\)）とする．(C1) より
+\(d_{a_\beta}\) は \(D\) 上の距離である．一方
+\[s_n(\beta, a_\beta) = \min\bigl(1,\ 1/(n+1)\bigr) = 1/(n+1)\] だから
+\(d_{a_\beta}(y_\beta, x_{\beta,n}) = 1/(n+1)\) であり，任意の
+\(\varepsilon > 0\) に対し \(1/(n+1) < \varepsilon\) となる
+\(n \in \mathbf{N}\) をとれば，\(y_\beta\) の \(\varepsilon\)-近傍は
+\(x_{\beta,n} \ne y_\beta\) を含む．よって \(\{y_\beta\}\)
+は開でなく，\(d_{a_\beta}\) の誘導する位相は離散位相と異なる．
+
+(C2) と (C3) より
+\(d_t \in \operatorname{Met}(D) \iff t \in A^\complement\)
+が成り立ち，補題 3.3 が示された．
+
+\hypertarget{ux9589ux57cbux3081ux8fbcux307f}{%
+\subsubsection{3.4 閉埋め込み}\label{ux9589ux57cbux3081ux8fbcux307f}}
+
+\textbf{補題 3.4（閉埋め込み）.} \(A^\complement\) に \([0,1]\)
+からの相対位相を与える．写像
+\(\varphi : A^\complement \to \operatorname{Met}(D)\)，\(t \mapsto d_t\)
+は双リプシッツ埋め込みであり，像 \(\varphi(A^\complement)\) は
+\(\operatorname{Met}(D)\) の閉集合である．
+
+補題 3.3 の \(A\)，\(D\)，\((d_t)_{t \in [0,1]}\)
+をそのまま用いる．距離族の値域が \([0,2]\) に含まれるから，以下に現れる
+\(\rho\) の値はすべて有限である．主張を (C4)（双リプシッツ評価）と
+(C5)（像の閉性）に分けて示す．
+
+\textbf{(C4) 任意の \(s, t \in [0,1]\) に対して
+\(\lvert t - s\rvert \le \rho(d_t, d_s) \le 2\,\lvert t - s\rvert\)．}
+
+\emph{証明.} 下界は
+\(\lvert d_t(p,q) - d_s(p,q)\rvert = \lvert(1+t)-(1+s)\rvert = \lvert t-s\rvert\)
+による．上界は，各非順序対で
+\(\lvert d_t(u,v) - d_s(u,v)\rvert \le 2\lvert t-s\rvert\)
+を確かめて上限をとればよい．\(\{p,q\}\) では差は
+\(\lvert t-s\rvert\)．\(r \mapsto \min(1,r)\) と
+\(r \mapsto \lvert r - a_\alpha\rvert + 1/(n+1)\) はともに
+\(1\)-Lipschitz だから合成 \(r \mapsto s_n(\alpha,r)\) も
+\(1\)-Lipschitz であり，\(\{y_\alpha, x_{\alpha,n}\}\) では差は高々
+\(\lvert t-s\rvert\)，\(\{x_{\alpha,n}, x_{\alpha,m}\}\) では高々
+\(2\lvert t-s\rvert\)．その他の対では値は \(t\) によらず \(1\) で，差は
+\(0\)．
+
+\textbf{系.} (C2) より \(\varphi(t) := d_t\) は \(A^\complement\) から
+\(\operatorname{Met}(D)\) への写像を定める．(C4) の下界より \(\varphi\)
+は単射であり，両側評価より \(\varphi\) は \(A^\complement\) から像
+\(\varphi(A^\complement)\)（\(\operatorname{Met}(D)\)
+の相対位相を与える）への双リプシッツ同相，すなわち双リプシッツ埋め込みである．
+
+\textbf{(C5) \(\varphi(A^\complement)\) は \(\operatorname{Met}(D)\)
+の閉集合である．}
+
+\emph{証明.} \(\operatorname{Met}(D)\) の位相は距離 \(\min(\rho,1)\)
+が定めるから，閉包の点は点列の極限として得られる．\(d' \in \operatorname{Met}(D)\)
+を \(\varphi(A^\complement)\)
+の閉包の点とし，\(t_k \in A^\complement\)（\(k \in \mathbf{N}\)）を
+\(\rho(d_{t_k}, d') \to 0\)
+となるように取る．\(d' \in \varphi(A^\complement)\) を示す．
+
+\textbf{手順 1（パラメータの回収）.}
+\(\lvert d_{t_k}(p,q) - d'(p,q)\rvert \le \rho(d_{t_k}, d') \to 0\) より
+\(1 + t_k \to d'(p,q)\)，すなわち \(t_k \to t := d'(p,q) - 1\)
+である．各 \(t_k \in [0,1]\) で \([0,1]\) は閉だから \(t \in [0,1]\)
+であり，(C1) より \(d_t\) は \(D\)
+上の距離として定まる（\(d_t \in \operatorname{Met}(D)\)
+はまだ主張しない）．
+
+\textbf{手順 2（極限の同定）.} \(u, v \in D\) を任意に固定する．(C4)
+より \(\rho(d_{t_k}, d_t) \le 2\lvert t_k - t\rvert \to 0\) だから
+\[\lvert d'(u,v) - d_t(u,v)\rvert \le \rho(d', d_{t_k}) + \rho(d_{t_k}, d_t) \longrightarrow 0 \quad (k \to \infty)\]
+であり，左辺は \(k\) によらないから \(d'(u,v) = d_t(u,v)\)．よって
+\(d' = d_t\)．
+
+\textbf{手順 3（\(t \in A\) の排除）.} 仮定より
+\(d' \in \operatorname{Met}(D)\) だから，手順 2 より
+\(d_t = d' \in \operatorname{Met}(D)\) である．\(t \in A\) ならば (C3)
+より \(d_t \notin \operatorname{Met}(D)\)
+となって矛盾するから，\(t \in A^\complement\) である．
+
+以上より \(d' = d_t = \varphi(t) \in \varphi(A^\complement)\)
+となり，\(\varphi(A^\complement)\) は閉である．
+
+パラメータの極限が \(A\)
+に落ちる場合を排除できることが閉性の本質であり，それを与えるのが (C3)
+である．(C4) の系と (C5) より補題 3.4 が示された．
+
+\hypertarget{ux4e3bux5b9aux7406ux306eux8a3cux660e}{%
+\subsection{4.
+主定理の証明}\label{ux4e3bux5b9aux7406ux306eux8a3cux660e}}
+
+\textbf{定理 2.1 の証明.} §3.2 より，\(D\) としては §3.3
+で構成した具体的な集合を取ってよい．
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{ステップ 1.} 補題 3.2 の
+  \(A \subseteq [0,1]\)（\(\lvert A\rvert = \aleph_1\)，\(A\) は
+  \(F_\sigma\) でない）をとる．
+\item
+  \textbf{ステップ 2.} \(F_\sigma\) と \(G_\delta\)
+  の補集合双対により，\(A\) が \([0,1]\) で \(F_\sigma\)
+  でないことから，\(A^\complement\) は \([0,1]\) で \(G_\delta\)
+  でない．
+\item
+  \textbf{ステップ 3.} 定理 1.1 の対偶を距離化可能空間 \(X = [0,1]\)
+  に適用して，\(A^\complement\) は \([0,1]\)
+  の部分空間として完備距離化可能でない．
+\item
+  \textbf{ステップ 4.} 補題 3.3・補題 3.4
+  より，\(\varphi : A^\complement \to \operatorname{Met}(D)\)，\(t \mapsto d_t\)
+  は像 \(\varphi(A^\complement)\)
+  への同相写像であり，\(\varphi(A^\complement)\) は
+  \(\operatorname{Met}(D)\) の閉部分集合である．
+\item
+  \textbf{ステップ 5.} \(\operatorname{Met}(D)\)
+  が完備距離化可能であると仮定すると，定理 1.2 より閉部分集合
+  \(\varphi(A^\complement)\)
+  も完備距離化可能であり，完備距離化可能性は同相で保たれるから，ステップ
+  4 の同相より \(A^\complement\) も完備距離化可能となる．これはステップ
+  3 に矛盾する．
+\item
+  \textbf{ステップ 6.} よって \(\operatorname{Met}(D)\)
+  は完備距離化可能でない．
+\end{itemize}
+
+\textbf{Remark（濃度条件 \(\lvert A\rvert = \aleph_1\) の使用箇所）.}
+補題 3.2 の与える 2 条件の役割は分かれている．\(A\) が \(F_\sigma\)
+でないことは証明のステップ 2--3 でのみ用いる．濃度条件
+\(\lvert A\rvert = \aleph_1\) は §3.3 の構成の 2 箇所，すなわち \(A\) の
+\(\omega_1\) による単射列挙と，濃度計算
+\(\lvert D\rvert = 2 + \aleph_1 + \aleph_1 \cdot \aleph_0 = \aleph_1\)
+とで用いる．構成がひとたび与えられた後は，(C1)--(C5)
+の検証は濃度を用いない．
+
+\hypertarget{ux53c2ux8003ux6587ux732e}{%
+\subsection{5. 参考文献}\label{ux53c2ux8003ux6587ux732e}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Y. Ishiki, \emph{An isometric extensor of metrics}, arXiv:2407.03030
+  (2024).
+\item
+  A. S. Kechris, \emph{Classical Descriptive Set Theory}, Graduate Texts
+  in Mathematics 156, Springer-Verlag, 1995.
+\item
+  R. Engelking, \emph{General Topology}, revised ed., Sigma Series in
+  Pure Mathematics 6, Heldermann Verlag, 1989.
+\item
+  S. Willard, \emph{General Topology}, Addison-Wesley, 1970（Dover 版
+  2004）.
+\item
+  J. C. Oxtoby, \emph{Measure and Category}, 2nd ed., Graduate Texts in
+  Mathematics 2, Springer-Verlag, 1980.
+\end{enumerate}
+
+\end{document}
