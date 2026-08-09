@@ -14,9 +14,13 @@ if the metric topology induced by $d$ equals the discrete topology.
 For an infinite set $D$ this is a non-trivial condition: not every metric on the
 underlying set $D$ is compatible with the discrete topology.
 
-The current argument is a **proof candidate** only.  It has not yet survived
-independent mathematical audit.  See `STATUS.md` for the current state and
-`notes/proof-audit.md` for open obligations.
+The argument has passed the project's internal verification gates: an
+independent end-to-end mathematical audit (Issue #10) and a sorry-free Lean 4
+formalisation whose `#print axioms` shows only the three standard axioms.
+On this basis the owner lifted the **proof candidate** label on 2026-08-09
+(PR #29 comment).  The result has not yet been reviewed by any outside party
+or journal.  See `STATUS.md` for the current state and
+`notes/proof-audit.md` for the audit records.
 
 ## Repository layout
 
