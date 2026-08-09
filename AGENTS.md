@@ -27,7 +27,7 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 <!-- Managed section: update with apply input, or omit/pass [] to remove. -->
 - Fσ has no Mathlib predicate (v4.32.2): use the local `IsFSigma` in `Conj51/Cardinality.lean`; `IsSigmaCompact` is NOT a valid proxy.
 - A claim ID may be attached to a Lean declaration only when the statement faithfully matches the report; do not silently weaken (e.g. to bounded or uniformly discrete metrics). Final result must be sorry-free with an explained `#print axioms` audit.
-- Japanese report follows `notes/terminology.md` (完全距離化可能 = completely metrizable); use wabun-math-style / math-claim-integrity skills for report edits.
+- Japanese report follows `notes/terminology.md` (完備距離化可能 = completely metrizable); use wabun-math-style / math-claim-integrity skills for report edits. Report exposition assumes analysis/general-topology experts: apply exposition-flow for concise, readable, self-contained proofs; do not expand routine standard facts beyond what verification needs.
 - Record failed proof attempts in `notes/proof-audit.md`, never in the report or paper.
 
 ## Architecture
