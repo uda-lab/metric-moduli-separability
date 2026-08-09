@@ -17,7 +17,7 @@ Do not record research history in the main report or paper.
 | — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
 | LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean formalisation complete and sorry-free (Issue #7, 2026-08-09): `IshikiConj51/Conj51/MetricConstruction.lean`, see below. |
 | LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean formalisation complete and sorry-free (Issue #9, 2026-08-09): `lem_closed_image`, `IshikiConj51/Conj51/ClosedEmbedding.lean`, see below. |
-| THM-CONJ51 | Full assembly | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Plan-Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) are all now decided in the affirmative, but the **proof candidate** label is retained: dropping it is the owner's call, not the reviewer's. Lean assembly of §4 complete (Issue #9, 2026-08-09) as `thm_conj51_of_lavrentiev`. **`thm_conj51` is now proved sorry-free**: Issue #23's Alexandrov–Lavrentiev direction (`isGδ_of_isCompletelyMetrizableSpace`, `GDeltaComplete.lean`, merged in PR #25) discharges the `lavrentiev` hypothesis at `X := ℝ`, and `#print axioms thm_conj51` gives `[propext, Classical.choice, Quot.sound]`. Gate B (Issue #10) was carried out on 2026-08-09 by an agent uninvolved in #2–#9 and found **no mathematical gap**; see the Issue #10 audit-findings entry below for the reconstruction, the failed counterexample attempts, and the reviewer's own `#print axioms` run. |
+| THM-CONJ51 | Full assembly | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Plan-Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) are all now decided in the affirmative, and the **proof candidate** label was lifted by owner decision (PR #29 comment, 2026-08-09; Issue #31). Lean assembly of §4 complete (Issue #9, 2026-08-09) as `thm_conj51_of_lavrentiev`. **`thm_conj51` is now proved sorry-free**: Issue #23's Alexandrov–Lavrentiev direction (`isGδ_of_isCompletelyMetrizableSpace`, `GDeltaComplete.lean`, merged in PR #25) discharges the `lavrentiev` hypothesis at `X := ℝ`, and `#print axioms thm_conj51` gives `[propext, Classical.choice, Quot.sound]`. Gate B (Issue #10) was carried out on 2026-08-09 by an agent uninvolved in #2–#9 and found **no mathematical gap**; see the Issue #10 audit-findings entry below for the reconstruction, the failed counterexample attempts, and the reviewer's own `#print axioms` run. |
 
 ---
 
@@ -507,6 +507,106 @@ example : Cardinal.aleph 1 ≤ Cardinal.continuum := Cardinal.aleph_one_le_conti
   `|A| = κ` non-Fσ (any uncountable `A` of size `< 𝔠` is non-Fσ; for `κ = 𝔠`
   take the irrationals). Not claimed in the report, and not formalised — noted
   only because it costs nothing and would be the obvious next question.
+
+---
+
+### [2026-08-09] Issue #26 — E9 cross-artifact claim consistency check (paper ↔ report ↔ Lean)
+
+Performed by an agent uninvolved in the paper (#11), report (#5), or Lean
+(#6–#9, #23) work. Scope: the four stable claim IDs across `paper/main.tex`
+(post-PR #29 full rewrite), `report/report-ja.md`, and
+`lean/IshikiConj51/Conj51/*.lean`; plus terminology per `notes/terminology.md`.
+This complements the Issue #10 review §5 (report ↔ Lean, checked at `4009275`)
+by adding the third leg: the paper's final wording, which did not exist in its
+present form at the time of #10.
+
+"一致" below means: hypotheses and conclusion agree across all three artifacts —
+no silent weakening, no silent strengthening, no proxy formalisation. Line
+numbers refer to the files as of this entry's commit.
+
+#### Cross-check matrix (claim ID × 3 artifacts)
+
+| Claim ID | paper/main.tex | report/report-ja.md | Lean | Verdict |
+|----------|----------------|---------------------|------|---------|
+| LEM-A-EXISTS | Lemma 3.1, lines 209–213: "In ZFC, there exists A ⊆ [0,1] with \|A\| = ℵ₁ such that A is not an Fσ set." Proof: CH case split, lines 215–272. | §3 lines 46–49: 同一主張（ZFC，A ⊆ [0,1]，\|A\| = ℵ₁，A は Fσ でない）; CH 場合分け lines 53–76; Bernstein 別証 line 79 = paper Remark 3.2 (lines 274–283). | `lem_A_exists` (`Cardinality.lean:136–143`): `∃ A : Set ℝ, A ⊆ Set.Icc 0 1 ∧ #A = aleph 1 ∧ ¬ IsFSigma A`; `IsFSigma` local (lines 30–31), not `IsSigmaCompact`. | **一致.** Lean's `IsFSigma` uses ℝ-closed sets; for A ⊆ [0,1] this is equivalent to Fσ-in-[0,1] (any closed F ⊆ A lies in [0,1], and [0,1] is closed in ℝ) — re-derived for this check, consistent with report §4 step 2's remark (line 276). |
+| LEM-STAR-METRIC | Lemma 3.3, lines 293–299: ∃ discrete D, \|D\| = ℵ₁, family (d_t)_{t∈[0,1]} of metrics with d_t ∈ Met(D) ⟺ t ∈ Y. Construction lines 308–350; (C1)–(C3) lines 352–422. | 主張 lines 87–88 states the constructive direction (family (d_t)_{t∈Y} ⊆ Met(D)); the same section proves (C1) for all t ∈ [0,1] (§3.3), (C2) (§3.4), (C3) (§3.5), and the 系 "d_t ∈ Met(D) ⟺ t ∈ Y" (line 194). | `lem_star_metric` (`MetricConstruction.lean:397–407`): conjunction of `#(StarIndex A) = ℵ₁`, (C1) for all t ∈ [0,1], the iff, and existence of φ : ↥([0,1] \ A) → MetD. | **一致.** Paper and Lean state the aggregate (family + iff); the report's headline 主張 is the Y-direction only, but the iff is proved and displayed as the 系 of the same claim-ID section (line 194), so no artifact asserts anything the others lack. Lean hypothesis is `#A = ℵ₁` for arbitrary `A : Set ℝ` (non-Fσ not assumed) — strictly more general, matching report §3.8: the Fσ condition enters only in THM-CONJ51. Spoke reindexing n ↦ n+1 (ℕ≥1 → ℕ) is bijective (file header lines 14–22), not a weakening. |
+| LEM-CLOSED-IMAGE | Lemma 4.1, lines 431–436: φ : Y → Met(D), t ↦ d_t is a bi-Lipschitz embedding with closed image. (C4) two-sided estimate \|t−s\| ≤ ρ ≤ 2\|t−s\| lines 438–457; (C5) lines 464–495. | 主張 lines 204–205: 同一主張（双リプシッツ埋め込み，像は閉）; (C4) §3.6 lines 211–212; (C5) §3.7 lines 234–250. | `lem_closed_image` (`ClosedEmbedding.lean:211–217`): `(∀ t s, edist t s ≤ edist (φ t) (φ s) ∧ edist (φ t) (φ s) ≤ 2 * edist t s) ∧ IsClosedEmbedding (starParam A)`. | **一致.** `IsClosedEmbedding` is definitionally "homeomorphism onto image + image closed"; the (C4) constants 1 and 2 are kept explicitly, so "bi-Lipschitz" is not degraded to a mere topological embedding. Lean replaces the report/paper sequential (C5) argument with the closed-set description `range φ = StarRange A` — presentation difference only, audited in the Issue #9/#10 entries above; re-verified here: 手順3 (t ∉ A) is derived from e ∈ Met(D) via (C3) in `range_starParam` (lines 145–155), exactly the report's line 248 step. |
+| THM-CONJ51 | Theorem 4.2, lines 497–501: "If \|D\| = ℵ₁, then Met(D), with the supremum-metric topology, is not completely metrizable." Labelled candidate. Proof lines 503–530 = report §4 steps 1–6. | §2 lines 37–38: 同一主張（\|D\| = ℵ₁ のとき Met(D) は上限距離位相に関して完全距離化可能でない）; 証明候補 line 40; proof §4 lines 273–280. | `thm_conj51` (`MainTheorem.lean:142–144`): `(D : Type*) (hD : #D = aleph 1) : ¬ IsCompletelyMetrizableSpace (MetD D)`. | **一致.** `MetD D` (`MetD.lean:102–103`) is the unweakened Met(D): finite-valued metric, induced topology = ⊥ (discrete), no boundedness/uniform-discreteness proxy; the topology on `MetD D` comes from the `EMetricSpace` instance whose `edist` is the sup distance (`MetD.lean:113–114`) = sup-metric topology. Discreteness of D is carried by the `⊥` comparison inside `MetD`, equivalent to "D discrete" since Met(D) depends only on the underlying set. Universe/lift handling audited in Issue #10 §5. |
+
+#### Ambient design decision (Gδ in [0,1] vs. IsGδ in ℝ) — equivalence re-checked
+
+Report §4 steps 2–3 (and paper Theorem 4.2 steps 2–3) work with Gδ/Fσ **in
+[0,1]**; Lean works with `IsGδ`/`IsFSigma` **in ℝ** throughout, and
+`isFSigma_of_isGdelta_sdiff` (`MainTheorem.lean:65–82`) converts
+`IsGδ ([0,1] \ A)` (ℝ-ambient) to `IsFSigma A` (ℝ-ambient) by intersecting
+with the closed set [0,1]. The two forms differ but are equivalent —
+re-derived independently for this check rather than taken from the earlier
+audits:
+
+* For S ⊆ [0,1]: S Fσ-in-[0,1] ⟺ S Fσ-in-ℝ, because a set closed in [0,1] is
+  closed in ℝ ([0,1] being closed in ℝ), and conversely any closed-in-ℝ F ⊆ S
+  is contained in [0,1], hence closed in [0,1].
+* For Y = [0,1] \ A: Y Gδ-in-[0,1] ⟺ Y Gδ-in-ℝ, because [0,1] is closed in a
+  metric space, hence itself Gδ in ℝ, so Y = [0,1] ∩ G (G Gδ-in-ℝ) is Gδ-in-ℝ;
+  the converse is intersection with [0,1].
+* The set identity inside `isFSigma_of_isGdelta_sdiff` — from
+  [0,1] \ A = ⋂ₙ Uₙ (Uₙ open in ℝ) and A ⊆ [0,1], conclude
+  A = ⋃ₙ ([0,1] ∩ Uₙᶜ) with each term closed in ℝ — checked by hand in both
+  directions.
+
+Verdict: **形式が異なるが等価、監査済み** (consistent with the Issue #9/#23
+entries above); the paper's appendix (lines 596–602) states this design
+decision explicitly and accurately.
+
+#### Terminology check (notes/terminology.md, JA/EN)
+
+* **Met(D) meaning preserved verbatim in all three.** terminology.md line 8
+  ("metrics compatible with the discrete topology … supremum-metric topology")
+  = report lines 12–13 (「離散位相に**適合する**距離の全体，上限距離位相を装備」
+  plus the 注意 that this is *not* all metrics on the set) = paper lines 58–67
+  (compatible with the discrete topology, "a genuine restriction", sup-distance
+  topology) = Lean `MetD` docstring and definition (`MetD.lean:97–103`).
+* **Extended-valued ρ** acknowledged in all three: report §1 注意 (line 31),
+  paper Remark 2.3 (lines 167–177), Lean `MetD.edist : ℝ≥0∞`
+  (`MetD.lean:109–114`) — with the same resolution (min(ρ,1) / topology-only
+  dependence) in report and paper.
+* **完全距離化可能 = completely metrizable** used consistently; both report
+  (line 20–29) and paper (§2.1 lines 115–120, §2.2) keep the
+  Polish-vs-completely-metrizable distinction and the separable/non-separable
+  split of the two background theorems, per terminology.md lines 25–27.
+* Minor, non-blocking: Lean source uses "anchor (pair/Param)" for what the
+  report calls 基準対 and the paper "reference pair". Identifier naming only;
+  terminology.md's Lean-naming table does not bind it and no statement depends
+  on the name.
+
+#### Findings
+
+* **E9-F1 (staleness, non-mathematical): report §5 third bullet (line 292) is
+  outdated.** It still asserts that `paper/main.tex` retains the invalid
+  Polish-based derivation of closed-subspace inheritance and a mismatched
+  LEM-STAR-METRIC statement (the Issue #10 F1 items). PR #29 (merged
+  2026-08-09) rewrote the paper and fixed all F1 items — verified directly in
+  this check (paper §2.2 lines 122–165 has the corrected split; Lemma 3.3 is
+  the family+iff statement; appendix reports sorry-free with the three standard
+  axioms). Per the cross-artifact discipline, this entry does **not** edit the
+  report; proposal recorded on the Issue #26 PR: reopen Issue #5 (owner of the
+  report) — or fold into E10 (#27) — to refresh report §5's Issue #11 bullet.
+* No mathematical mismatch found in any of the four claim IDs. The
+  "proof candidate" framing (paper abstract line 45, Theorem 4.2 label; report
+  lines 4, 40, 282) is intentionally preserved pending owner decision and was
+  left untouched.
+
+> **Post-decision note (2026-08-09, Issue #31).** The entry above is a
+> historical snapshot: its line references and its description of the
+> "proof candidate" framing describe the artifacts **as of PR #30's commit,
+> before the owner's decision**. Later the same day the owner lifted the
+> proof-candidate label (PR #29 comment; implemented in Issue #31 / PR #32),
+> which rewrote exactly the framing passages cited above (paper abstract,
+> Theorem 4.2 label, report lines 4/40/282) into declarative form and
+> refreshed report §5's Issue #11 bullet — resolving this entry's reopen
+> proposal without reopening Issue #5. The claim-ID consistency verdicts in
+> the matrix are unaffected: hypotheses and conclusions were not touched by
+> the relabelling.
 
 ---
 

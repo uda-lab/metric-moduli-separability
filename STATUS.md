@@ -16,10 +16,11 @@
 | Lean formalisation complete | ✅ done (sorry-free, 2026-08-09) |
 | English paper drafted | ✅ done (Issue #11, 2026-08-09) |
 | Independent end-to-end review | ✅ done (Gate B passed, Issue #10, 2026-08-09) |
+| Proof-candidate label | ✅ lifted (owner decision, PR #29 comment, 2026-08-09) |
 
-## Proof candidate
+## The proof
 
-The proposed argument for THM-CONJ51 proceeds through six steps:
+The argument for THM-CONJ51 proceeds through six steps:
 
 1. **LEM-A-EXISTS** — ZFC existence of A ⊆ [0,1] with |A| = ℵ₁ and A not Fσ.
 2. Y = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
@@ -61,9 +62,13 @@ mismatches) all failed to break the argument, and the four claim IDs were
 confirmed to be formalised faithfully rather than by a weakened proxy. Evidence
 is recorded in `notes/proof-audit.md` (Issue #10 entry).
 
-Retaining or dropping the **proof candidate** label is the owner's decision, not
-the reviewer's; this repository keeps the label until the owner rules otherwise,
-so the conjecture is still not to be described externally as solved.
+**The proof-candidate label has been lifted by owner decision** (comment by
+t-uda on PR #29, 2026-08-09), on the basis of the Gate A–C verdicts above.
+The result may be stated in ordinary declarative theorem language. Wording
+that implies *external* peer validation is still to be avoided: verification
+to date consists of the project's internal independent audit (Issue #10) and
+the machine-checked Lean formalisation, not review by an outside party or a
+journal.
 
 ## Open obligations
 
@@ -105,9 +110,7 @@ The Lean chain is therefore complete, and Gate B (Issue #10) has re-run
 and confirmed the three standard axioms with no `sorryAx`, as well as checking
 that the Lean statements render the source's notions faithfully (no bounded /
 uniformly discrete proxy; `#D = ℵ₁` exact; the `lavrentiev` hypothesis of
-`thm_conj51_of_lavrentiev` is discharged non-circularly). The conjecture is
-nevertheless still not to be described externally as solved while the proof
-candidate label stands.
+`thm_conj51_of_lavrentiev` is discharged non-circularly).
 
 A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
 `notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
@@ -136,10 +139,10 @@ entries for the four textbooks the transcribed proofs actually cite
 related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565); the
 bibliographically unverifiable Koshino manuscript remains uncited, per
 `notes/literature.md`. The paper compiles cleanly with `latexmk -pdf`
-(after adding `lmodern`/`booktabs` to the preamble). Per the acceptance
-criteria of Issue #11 and the project-wide proof-candidate convention, the
-paper states the theorem in ordinary declarative form but does not add any
-"solved" framing beyond what Gate A/B (Issue #10) already supports.
+(after adding `lmodern`/`booktabs` to the preamble). Following the owner's
+2026-08-09 decision lifting the proof-candidate label (Issue #31), the paper
+states the theorem and its proof in ordinary declarative form, while avoiding
+wording that would imply external peer validation.
 
 ## GitHub Issue work queue
 

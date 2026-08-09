@@ -42,8 +42,8 @@
   metrics on $D$ that are compatible with the discrete topology, equipped
   with the topology induced by the supremum distance. Ishiki's
   Conjecture~5.1 asserts that $\Met(D)$ is not completely metrizable when
-  $\lvert D\rvert = \aleph_1$. We present a proof candidate for this
-  statement, in ZFC: an elementary argument that exhibits, inside
+  $\lvert D\rvert = \aleph_1$. We prove this statement in ZFC, by an
+  elementary argument that exhibits, inside
   $[0,1]$, a set that is simultaneously of cardinality $\aleph_1$ and not
   an $\Fsigma$ set, then transports the resulting non-$\Gdelta$
   obstruction into $\Met(D)$ through an explicit closed embedding. The
@@ -81,7 +81,7 @@ for the least uncountable case:
   metrizable.}
 \end{quote}
 
-We present a proof candidate for this conjecture. The source paper also
+We prove this conjecture. The source paper also
 raises several further questions about $\Met(D)$ for other cardinalities
 and other topological properties; those are outside the scope of this
 paper, which addresses only Conjecture~5.1 as stated above.
@@ -494,7 +494,7 @@ $A$: there $d_t$ remains a metric but loses compatibility with the
 discrete topology, and membership of the limit $e$ in $\Met(D)$ rules that
 case out.
 
-\begin{theorem}[THM-CONJ51 --- Ishiki Conjecture~5.1, candidate]
+\begin{theorem}[THM-CONJ51 --- Ishiki Conjecture~5.1]
   \label{thm:conj51}
   If $\lvert D\rvert = \aleph_1$, then $\Met(D)$, with the supremum-metric
   topology, is not completely metrizable.
@@ -539,7 +539,7 @@ $\mathsf{CH}$ inside the proof of Lemma~\ref{lem:A-exists}
 outright, and exactly one of them applies in any given model of ZFC — not
 an additional hypothesis on $D$ or on the ambient set theory.
 
-The argument has also been verified independently of this exposition: it
+The argument is also machine-checked: it
 is formalised in the Lean~4 proof assistant, checked against Mathlib, and
 is sorry-free (no unproved gaps and no project-specific axioms). The
 formalisation is described in the Appendix; it serves as a
