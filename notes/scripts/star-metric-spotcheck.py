@@ -75,6 +75,7 @@ def check_c1(ts):
                 pos_fail += 1
                 print("  POSITIVITY FAIL", t, u, v)
     print(f"(C1) triangle violations: {tri_fail}, positivity violations: {pos_fail}")
+    assert tri_fail == 0 and pos_fail == 0, "(C1) failed -- see the violations above"
 
 
 # ------------------------------------------- (C2)/(C3) isolation radius delta

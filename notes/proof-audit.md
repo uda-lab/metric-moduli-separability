@@ -17,7 +17,7 @@ Do not record research history in the main report or paper.
 | — | Y = [0,1] \ A not Gδ → not completely metrizable | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | See report §1 (background theorems 1–2) and §4 steps 2–3, 5. Fσ/Gδ complement duality made explicit (De Morgan); Alexandrov–Lavrentiev used only for the separable ambient [0,1]; closed-subspace inheritance for the non-separable Met(D) now uses an elementary, separability-free argument instead. |
 | LEM-STAR-METRIC | Star-type family of compatible metrics on D parametrised by Y | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §3.1–§3.5: explicit construction (reference pair + ω₁ stars, s_n(α,t) = min(1, \|t−a_α\| + 1/n)) with full proofs of (C1) metric axioms, (C2) compatibility for t ∈ Y, (C3) loss of compatibility at t ∈ A. Lean formalisation complete and sorry-free (Issue #7, 2026-08-09): `IshikiConj51/Conj51/MetricConstruction.lean`, see below. |
 | LEM-CLOSED-IMAGE | Bi-Lipschitz embedding with closed image | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §3.6–§3.7: (C4) \|t−s\| ≤ ρ(d_t,d_s) ≤ 2\|t−s\| and (C5) closedness of φ(Y), including the boundary case where the limit parameter lands in A and (C3) supplies the contradiction. Lean formalisation complete and sorry-free (Issue #9, 2026-08-09): `lem_closed_image`, `IshikiConj51/Conj51/ClosedEmbedding.lean`, see below. |
-| THM-CONJ51 | Full assembly | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Retains **proof candidate** status until Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) pass. Lean assembly of §4 complete (Issue #9, 2026-08-09) as `thm_conj51_of_lavrentiev`. **`thm_conj51` is now proved sorry-free**: Issue #23's Alexandrov–Lavrentiev direction (`isGδ_of_isCompletelyMetrizableSpace`, `GDeltaComplete.lean`, merged in PR #25) discharges the `lavrentiev` hypothesis at `X := ℝ`, and `#print axioms thm_conj51` gives `[propext, Classical.choice, Quot.sound]`. Gate B (Issue #10) was carried out on 2026-08-09 by an agent uninvolved in #2–#9 and found **no mathematical gap**; see the Issue #10 audit-findings entry below for the reconstruction, the failed counterexample attempts, and the reviewer's own `#print axioms` run. |
+| THM-CONJ51 | Full assembly | ✅ 独立監査通過 / Gate B passed (Issue #10, 2026-08-09) | Report §4 steps 1–6; no mathematically unwritten step remains. Plan-Gates A–C (independent review, Lean formalisation, report/Lean statement agreement) are all now decided in the affirmative, but the **proof candidate** label is retained: dropping it is the owner's call, not the reviewer's. Lean assembly of §4 complete (Issue #9, 2026-08-09) as `thm_conj51_of_lavrentiev`. **`thm_conj51` is now proved sorry-free**: Issue #23's Alexandrov–Lavrentiev direction (`isGδ_of_isCompletelyMetrizableSpace`, `GDeltaComplete.lean`, merged in PR #25) discharges the `lavrentiev` hypothesis at `X := ℝ`, and `#print axioms thm_conj51` gives `[propext, Classical.choice, Quot.sound]`. Gate B (Issue #10) was carried out on 2026-08-09 by an agent uninvolved in #2–#9 and found **no mathematical gap**; see the Issue #10 audit-findings entry below for the reconstruction, the failed counterexample attempts, and the reviewer's own `#print axioms` run. |
 
 ---
 
@@ -527,8 +527,9 @@ Empty as of Issue #9 (2026-08-09): every claim ID now has a Lean theorem
 statement — `lem_A_exists`, `lem_star_metric`, `lem_closed_image`,
 `thm_conj51` — and, as of the Issue #23 merge and the discharge performed in
 Issue #9, every one of them is proved. No Lean proof work remains for the
-claim IDs; the outstanding project work is mathematical review (Issue #10,
-Gate B) and the English paper (Issue #11).
+claim IDs. Mathematical review (Issue #10, Gate B) has since been completed —
+see the Issue #10 audit-findings entry above — so the outstanding project work
+is the English paper (Issue #11).
 
 ## Module map note: `GDeltaComplete.lean` (Issue #23, 2026-08-09)
 
@@ -748,11 +749,14 @@ formal chain from LEM-A-EXISTS through LEM-STAR-METRIC, LEM-CLOSED-IMAGE and
 the Lavrentiev direction to THM-CONJ51 is complete inside this repository,
 with nothing deferred to a future Mathlib release.
 
-This is a statement about the *formal* chain only. It does not discharge
-Gate B (Issue #10): whether `MetD`, `dStar`, `IsFSigma` and the `IsGδ`
-ambient convention faithfully render the source's notions is a question about
-the statements, which `#print axioms` cannot answer. See the statement-gate
-notes in the Issue #9 section above.
+This is a statement about the *formal* chain only. By itself it does not
+discharge Gate B (Issue #10): whether `MetD`, `dStar`, `IsFSigma` and the
+`IsGδ` ambient convention faithfully render the source's notions is a question
+about the statements, which `#print axioms` cannot answer. See the
+statement-gate notes in the Issue #9 section above. That remaining question was
+settled separately by the Issue #10 review (2026-08-09), whose §5 cross-checks
+each claim ID's Lean statement against the report and the arXiv source and
+finds no proxy weakening; the audit entry is above.
 
 ## Mathlib library gaps (v4.32.2)
 
