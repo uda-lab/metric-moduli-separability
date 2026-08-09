@@ -206,16 +206,20 @@ explicitly and are the places a reviewer should look first.
 | File | Declaration | Claim ID | Priority | Notes |
 |------|-------------|----------|----------|-------|
 | ~~`IshikiConj51/Conj51/Cardinality.lean`~~ | ~~`lem_A_exists`~~ | LEM-A-EXISTS | — | **Resolved (Issue #8, 2026-08-09): sorry-free.** CH branch (irrationals, Baire category via `IsMeagre`/`not_isMeagre_of_isOpen`) and non-CH branch (perfect set theorem via `IsClosed.exists_nat_bool_injection_of_not_countable`) both formalised, matching report §3 (Issue #3) exactly, no weakening. `#print axioms lem_A_exists` confirms `[propext, Classical.choice, Quot.sound]` only. |
-| `IshikiConj51/Conj51/MainTheorem.lean` | `thm_conj51` | THM-CONJ51 | high | **Sorry count: 1 — the only `sorry` in the repository.** Statement unchanged since Issue #6 — hypothesis `#D = Cardinal.aleph 1` and conclusion `¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` faithfully match report §2/source Conjecture 5.1, no weakening. As of Issue #9 the *entire* report §4 assembly is proved in the sibling `thm_conj51_of_lavrentiev`, which differs only by carrying the Alexandrov–Lavrentiev direction as an explicit hypothesis (see below); the remaining `sorry` therefore represents exactly one missing ingredient, Issue #23's `isGδ_of_isCompletelyMetrizableSpace`, and nothing else. `#print axioms thm_conj51` confirms `sorryAx` is isolated to this declaration alone — it does not leak into `lem_A_exists`, `lem_star_metric`, `lem_closed_image`, `thm_conj51_of_lavrentiev`, or `MetD`'s instances (all sorry-free, axioms `[propext, Classical.choice, Quot.sound]` only). |
+| ~~`IshikiConj51/Conj51/MainTheorem.lean`~~ | ~~`thm_conj51`~~ | THM-CONJ51 | — | **Resolved (Issue #9, 2026-08-09): sorry-free.** This was the repository's last `sorry`. Statement unchanged since Issue #6 — hypothesis `#D = Cardinal.aleph 1` and conclusion `¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` faithfully match report §2 / source Conjecture 5.1, with no weakening (not bounded, not uniformly discrete). The entire report §4 assembly is proved in the sibling `thm_conj51_of_lavrentiev`, which differs only by carrying the Alexandrov–Lavrentiev direction as the explicit hypothesis `lavrentiev : ∀ Y : Set ℝ, IsCompletelyMetrizableSpace ↥Y → IsGδ Y`; that hypothesis is now discharged by Issue #23's `isGδ_of_isCompletelyMetrizableSpace` (`GDeltaComplete.lean`, merged in PR #25) at `X := ℝ`, so the proof is the single application `thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD`. `#print axioms thm_conj51` now reports `[propext, Classical.choice, Quot.sound]` — `sorryAx` gone. |
 
-No `sorry` must remain in the final formalisation.
+**Sorry count: 0.** No `sorry` remains anywhere in `lean/`, and no declaration in the
+repository introduces a custom `axiom`. Verified by `grep -rn '\bsorry\b' lean/`
+(prose mentions only) together with the `#print axioms` table below.
 
 ## Lean TODO tracker (no theorem statement yet)
 
 Empty as of Issue #9 (2026-08-09): every claim ID now has a Lean theorem
 statement — `lem_A_exists`, `lem_star_metric`, `lem_closed_image`,
-`thm_conj51`. Remaining Lean work is proof completion, not statement
-authoring, and is tracked in the sorry tracker above.
+`thm_conj51` — and, as of the Issue #23 merge and the discharge performed in
+Issue #9, every one of them is proved. No Lean proof work remains for the
+claim IDs; the outstanding project work is mathematical review (Issue #10,
+Gate B) and the English paper (Issue #11).
 
 ## Module map note: `GDeltaComplete.lean` (Issue #23, 2026-08-09)
 
@@ -223,9 +227,12 @@ authoring, and is tracked in the sorry tracker above.
 four claim-ID files (it carries no `LEM-`/`THM-` stable ID of its own). It
 holds `isGδ_of_isCompletelyMetrizableSpace`, a general-purpose supporting
 lemma (the Lavrentiev–Alexandrov direction — see the Mathlib library gaps
-entry above) that Issue #9's LEM-CLOSED-IMAGE/THM-CONJ51 assembly in
-`ClosedEmbedding.lean` is expected to cite for the `Y ⊆ [0,1]` step (report
-§1 background theorem 1 / §4 step 3), specialising `X := ℝ`. It is imported
+entry above). Issue #9's THM-CONJ51 assembly cites it for the `Y ⊆ [0,1]`
+step (report §1 background theorem 1 / §4 step 3), specialising `X := ℝ`.
+The citation happens in `MainTheorem.lean`, not `ClosedEmbedding.lean` as
+originally anticipated: `ClosedEmbedding.lean` proves LEM-CLOSED-IMAGE only,
+and the §4 assembly that consumes both it and this lemma lives in
+`MainTheorem.lean`. It is imported
 from the library root `IshikiConj51.lean` alongside the four claim-ID
 modules.
 
@@ -313,8 +320,9 @@ changed in the move.
 `IsMetricOn.topology_eq_bot_iff`, `dStar_isMetricOn`, `dStar_topology_eq_bot`,
 `dStar_topology_ne_bot`, `dStar_mem_MetD_iff`, `lem_star_metric`,
 `card_starIndex`, `starMet`, `dStar_sub_le`, `dStar_anchor_sub`.
-(`thm_conj51` still reports `sorryAx` — that is the tracked `sorry` of the
-sorry tracker above, unchanged by this work.)
+(At the time of Issue #7 `thm_conj51` still reported `sorryAx`; that last
+`sorry` was discharged in Issue #9 after Issue #23 merged — see the sorry
+tracker above.)
 
 **Verification method and its limit.** This container's cgroup ceiling
 (~3.4 GiB) makes a repository-wide `lake build` an OOM risk: `lake` fans out
@@ -403,9 +411,9 @@ default build target rather than only compiling in isolation, and the root
 module `IshikiConj51` was itself built afterwards, so the guard actually runs
 over the new file.
 
-**`#print axioms` audit (Issue #9, 2026-08-09).** Run against the built
-library root. No custom axiom is introduced anywhere, and `sorryAx` is pinned
-to exactly one declaration:
+**`#print axioms` audit (Issue #9, 2026-08-09; re-run after the Issue #23
+merge discharged the last `sorry`).** Run against the built library root. No
+custom axiom is introduced anywhere, and no declaration depends on `sorryAx`:
 
 | Declaration | Axioms |
 |---|---|
@@ -419,15 +427,23 @@ to exactly one declaration:
 | `MetD.edist_comap` | `[propext, Classical.choice, Quot.sound]` |
 | `isFSigma_of_isGdelta_sdiff` | `[propext, Classical.choice, Quot.sound]` |
 | `thm_conj51_of_lavrentiev` | `[propext, Classical.choice, Quot.sound]` |
-| `thm_conj51` | `[propext, sorryAx, Classical.choice, Quot.sound]` |
+| `thm_conj51` | `[propext, Classical.choice, Quot.sound]` |
+| `isGδ_of_isCompletelyMetrizableSpace` (Issue #23) | `[propext, Classical.choice, Quot.sound]` |
 
 The three standard entries are Lean's ordinary logical dependencies
 (propositional extensionality, the axiom of choice, and soundness of
 quotients) — i.e. classical ZFC-style reasoning, which is what the report's
-argument uses (LEM-A-EXISTS is a ZFC existence proof). The `sorryAx` on
-`thm_conj51`, and its absence from `thm_conj51_of_lavrentiev`, is the machine
-check that the one remaining gap is precisely the `lavrentiev` hypothesis and
-nothing else.
+argument uses (LEM-A-EXISTS is a ZFC existence proof). The capstone
+`thm_conj51` is pinned to exactly that list: `sorryAx` is absent, so the
+formal chain from LEM-A-EXISTS through LEM-STAR-METRIC, LEM-CLOSED-IMAGE and
+the Lavrentiev direction to THM-CONJ51 is complete inside this repository,
+with nothing deferred to a future Mathlib release.
+
+This is a statement about the *formal* chain only. It does not discharge
+Gate B (Issue #10): whether `MetD`, `dStar`, `IsFSigma` and the `IsGδ`
+ambient convention faithfully render the source's notions is a question about
+the statements, which `#print axioms` cannot answer. See the statement-gate
+notes in the Issue #9 section above.
 
 ## Mathlib library gaps (v4.32.2)
 

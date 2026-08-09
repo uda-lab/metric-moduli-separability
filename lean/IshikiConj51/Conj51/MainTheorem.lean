@@ -35,14 +35,20 @@
 -- Steps 2–6 are stated and proved here in full.  Step 3 — the
 -- Lavrentiev–Alexandrov direction "completely metrizable subspace of a metric
 -- space is Gδ" (report §1 background theorem 1) — is absent from Mathlib
--- v4.32.2 and is Issue #23's deliverable; until it lands it is carried as the
--- explicit hypothesis `lavrentiev` of `thm_conj51_of_lavrentiev`, and
--- `thm_conj51` itself keeps a tracked `sorry`.  See notes/proof-audit.md.
+-- v4.32.2 and was Issue #23's deliverable; it is kept as the explicit
+-- hypothesis `lavrentiev` of `thm_conj51_of_lavrentiev` so that the §4
+-- assembly stays readable and its independence is auditable, and `thm_conj51`
+-- discharges that hypothesis with Issue #23's `isGδ_of_isCompletelyMetrizableSpace`
+-- (`GDeltaComplete.lean`) at `X := ℝ`.
+--
+-- Status: sorry-free.  This module contained the repository's last `sorry`;
+-- it was discharged in Issue #9 once #23 merged.  See notes/proof-audit.md.
 
 import Mathlib
 import IshikiConj51.Conj51.MetD
 import IshikiConj51.Conj51.Relabel
 import IshikiConj51.Conj51.Cardinality
+import IshikiConj51.Conj51.GDeltaComplete
 import IshikiConj51.Conj51.MetricConstruction
 import IshikiConj51.Conj51.ClosedEmbedding
 
@@ -124,10 +130,15 @@ This matches the report's (`report/report-ja.md` §2) and the source's
 (Ishiki, arXiv:2407.03030, Conjecture 5.1) statement exactly: no bounded,
 uniformly-discrete, or otherwise weakened proxy is substituted.
 
-Status: the whole of report §4 is proved in `thm_conj51_of_lavrentiev`; the
-only step still missing is the Lavrentiev–Alexandrov direction (Issue #23,
-`GDeltaComplete.lean`), which discharges the `lavrentiev` hypothesis. Tracked
-as a `sorry` in notes/proof-audit.md; not claimed as proved. -/
+Status: **proved, sorry-free** (Issue #9, 2026-08-09). The whole of report §4
+is proved in `thm_conj51_of_lavrentiev`, and its one hypothesis is discharged
+by `isGδ_of_isCompletelyMetrizableSpace` (Issue #23, `GDeltaComplete.lean`)
+instantiated at the ambient space `X := ℝ`. `#print axioms thm_conj51` gives
+`[propext, Classical.choice, Quot.sound]` — no `sorryAx`, no custom axioms.
+
+(The mathematics remains a *proof candidate* pending Issue #10's independent
+end-to-end review; "sorry-free in Lean" certifies that the formal chain is
+complete, not that the informal argument has been externally audited.) -/
 theorem thm_conj51 (D : Type*) (hD : #D = Cardinal.aleph 1) :
-    ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D) := by
-  sorry
+    ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D) :=
+  thm_conj51_of_lavrentiev (fun _ h => isGδ_of_isCompletelyMetrizableSpace h) D hD
