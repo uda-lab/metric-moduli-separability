@@ -17,6 +17,8 @@
 | English paper drafted | ✅ done (Issue #11, 2026-08-09) |
 | Independent end-to-end review | ✅ done (Gate B passed, Issue #10, 2026-08-09) |
 | Proof-candidate label | ✅ lifted (owner decision, PR #29 comment, 2026-08-09) |
+| E9 cross-artifact consistency (paper ↔ report ↔ Lean) | ✅ done (Issue #26, 2026-08-09; recorded in `notes/proof-audit.md`) |
+| E10 submission readiness audit | ✅ **go** (Issue #27, 2026-08-09; see `notes/proof-audit.md`) |
 
 ## The proof
 
@@ -51,7 +53,15 @@ inheritance) additionally completed an internal audit (Issues #3, #4).
 The Lean formalisation of all six steps is complete and sorry-free
 (Issues #6–#9, #23; 2026-08-09).
 
-**Gate A and Gate B are both passed** (Issue #10, 2026-08-09). An independent
+**Gates A, B and C are all passed.** In the submission-audit naming
+(Issue #27): Gate A — the report is a self-contained natural-language proof —
+and Gate B — independent end-to-end mathematical review — were both decided
+**PASS** by the Issue #10 review (2026-08-09; verdict table in
+`notes/proof-audit.md`, Issue #10 entry). Gate C — Lean sorry-free with an
+explained `#print axioms` audit — is **PASS** via Issues #6–#9/#23 (zero
+`sorry`, every declaration depending only on `[propext, Classical.choice,
+Quot.sound]`; per-claim table in `notes/proof-audit.md`), independently
+re-run by the Issue #10 reviewer on a from-scratch rebuild. An independent
 end-to-end review, carried out by an agent uninvolved in Issues #2–#9 working
 only from the arXiv source and the repository's primary documents, found **no
 mathematical gap**: all six steps were reconstructed from scratch, nine
@@ -72,7 +82,13 @@ journal.
 
 ## Open obligations
 
-See `notes/proof-audit.md` for detailed open items.
+None remain (E10 submission readiness audit, Issue #27, 2026-08-09):
+the obligations table in `notes/proof-audit.md` is fully resolved, the Lean
+sorry count is 0, and the superseded PR #30 was closed. The E10 entry in
+`notes/proof-audit.md` records the go/no-go judgment (**go**, with
+owner-side submission-time notes: fill `\author{}`/date and keep the
+no-external-review framing; the load-bearing Kechris citations are verified
+at full-statement level and cited number-precisely).
 
 ## Lean
 
@@ -158,3 +174,6 @@ wording that would imply external peer validation.
 10. #11 Draft the English paper after mathematical audit passes
 11. #19 Record Mathlib inventory findings for Lean formalisation prep (Issues #7–#9)
 12. #23 Formalise the Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ)
+13. #26 E9: Cross-check paper ↔ report ↔ Lean claim consistency
+14. #31 Lift proof-candidate status per owner decision (Gates A–C passed)
+15. #27 E10: Submission readiness audit
