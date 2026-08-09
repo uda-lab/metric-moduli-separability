@@ -1,16 +1,16 @@
 -- Conj51.ClosedEmbedding
 --
--- LEM-CLOSED-IMAGE: the parameter map `φ : Y → Met(D)`, `t ↦ d_t`, of
--- report/report-ja.md §3.6 is a bi-Lipschitz embedding of `Y = [0,1] \ A`
--- into `Met(D)` whose image is closed.
+-- LEM-CLOSED-IMAGE (report 補題 3.4): the parameter map `φ : A^∁ → Met(D)`,
+-- `t ↦ d_t`, of report/report-ja.md §3.4 is a bi-Lipschitz embedding of
+-- `A^∁ = [0,1] \ A` into `Met(D)` whose image is closed.
 --
--- Mathematical source of truth: `report/report-ja.md` §3.6 (C4) and §3.7 (C5).
+-- Mathematical source of truth: `report/report-ja.md` §3.4, (C4) and (C5).
 --
 -- What is proved here:
 --   `edist_le_edist_starParam`   — (C4) lower bound `|t−s| ≤ ρ(d_t, d_s)`.
 --   `edist_starParam_le`         — (C4) upper bound `ρ(d_t, d_s) ≤ 2|t−s|`.
 --   `range_starParam`            — (C5) the image is cut out by the three
---     conditions of report §3.7 (手順1–手順3).
+--     conditions of report §3.4 (C5) (手順1–手順3).
 --   `isClosed_starRange`         — (C5) that description is a closed set.
 --   `isClosedEmbedding_starParam`— φ is a closed embedding.
 --   `lem_closed_image`           — LEM-CLOSED-IMAGE itself.
@@ -19,14 +19,14 @@
 -- mathematics), both recorded in notes/proof-audit.md:
 --
 --   * The report speaks of "a bi-Lipschitz homeomorphism onto its image",
---     i.e. of the subspace `φ(Y) ⊆ Met(D)`.  Here the same content is
+--     i.e. of the subspace `φ(A^∁) ⊆ Met(D)`.  Here the same content is
 --     packaged as `Topology.IsClosedEmbedding (starParam A)`, which is
 --     definitionally "φ is a homeomorphism onto its image *and* that image
 --     is closed".  This is the form Mathlib's closed-subspace inheritance
 --     theorem (`Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace`)
---     consumes, so no separate transfer along `Y ≃ₜ φ(Y)` is needed.
+--     consumes, so no separate transfer along `A^∁ ≃ₜ φ(A^∁)` is needed.
 --
---   * Report §3.7 argues with a sequence `d_{t_k} → e` and extracts a limit
+--   * Report §3.4 (C5) argues with a sequence `d_{t_k} → e` and extracts a limit
 --     parameter.  The formalisation replaces the sequence by the equivalent
 --     *closed-set description* of the image:
 --         range φ = {e | anchorParam e ∈ [0,1]}
@@ -50,13 +50,13 @@ import IshikiConj51.Conj51.MetricConstruction
 open Topology
 open scoped ENNReal
 
-/-! ## The parameter map `φ : Y → Met(D)` (report §3.6) -/
+/-! ## The parameter map `φ : A^∁ → Met(D)` (report §3.4) -/
 
-/-- The parameter space `Y = [0,1] \ A` of the report, as a subtype of `ℝ`
+/-- The parameter space `A^∁ = [0,1] \ A` of the report, as a subtype of `ℝ`
 carrying the subspace topology. -/
 abbrev StarParamSpace (A : Set ℝ) : Type := ↥(Set.Icc (0 : ℝ) 1 \ A)
 
-/-- The report's `φ : Y → Met(D)`, `t ↦ d_t` (§3.6), as a map of types.  This
+/-- The report's `φ : A^∁ → Met(D)`, `t ↦ d_t` (§3.4), as a map of types.  This
 is clause 4 of `lem_star_metric` made into a named function. -/
 noncomputable def starParam (A : Set ℝ) (t : StarParamSpace A) : MetD (StarIndex A) :=
   starMet A t.2.1 t.2.2
@@ -70,7 +70,7 @@ theorem edist_subtype_real {S : Set ℝ} (t s : ↥S) :
   rw [edist_dist, Subtype.dist_eq, Real.dist_eq]
 
 /-- Each pair-value of the star family is `2`-Lipschitz in the parameter
-(report §3.6); this is `dStar_sub_le` repackaged. -/
+(report §3.4); this is `dStar_sub_le` repackaged. -/
 theorem lipschitzWith_dStar (A : Set ℝ) (u v : StarIndex A) :
     LipschitzWith 2 (fun t : ℝ => dStar A t u v) :=
   LipschitzWith.of_dist_le_mul fun t s => by
@@ -79,7 +79,7 @@ theorem lipschitzWith_dStar (A : Set ℝ) (u v : StarIndex A) :
 
 /-! ## (C4): the bi-Lipschitz estimate `|t−s| ≤ ρ(d_t, d_s) ≤ 2|t−s|` -/
 
-/-- **(C4) lower bound** (report §3.6).  The anchor pair alone already
+/-- **(C4) lower bound** (report §3.4).  The anchor pair alone already
 separates the parameters: `|t − s| = |d_t(p,q) − d_s(p,q)| ≤ ρ(d_t, d_s)`. -/
 theorem edist_le_edist_starParam (A : Set ℝ) (t s : StarParamSpace A) :
     edist t s ≤ edist (starParam A t) (starParam A s) := by
@@ -88,7 +88,7 @@ theorem edist_le_edist_starParam (A : Set ℝ) (t s : StarParamSpace A) :
     (Sum.inl true) (Sum.inl false)
   rwa [starParam_coe, starParam_coe, dStar_anchor_sub] at h
 
-/-- **(C4) upper bound** (report §3.6).  Every entry of the distance table
+/-- **(C4) upper bound** (report §3.4).  Every entry of the distance table
 moves by at most `2|t − s|`, hence so does the supremum. -/
 theorem edist_starParam_le (A : Set ℝ) (t s : StarParamSpace A) :
     edist (starParam A t) (starParam A s) ≤ 2 * edist t s := by
@@ -108,16 +108,16 @@ theorem lipschitzWith_starParam (A : Set ℝ) : LipschitzWith 2 (starParam A) :=
 theorem antilipschitzWith_starParam (A : Set ℝ) : AntilipschitzWith 1 (starParam A) := fun t s => by
   simpa using edist_le_edist_starParam A t s
 
-/-- φ is injective — the lower bound of (C4), report §3.6 系. -/
+/-- φ is injective — the lower bound of (C4), report §3.4 系. -/
 theorem starParam_injective (A : Set ℝ) : Function.Injective (starParam A) := by
   intro t s h
   have hle := edist_le_edist_starParam A t s
   rw [h, edist_self, le_zero_iff] at hle
   exact edist_eq_zero.mp hle
 
-/-! ## (C5): the image is closed (report §3.7) -/
+/-! ## (C5): the image is closed (report §3.4) -/
 
-/-- Report §3.7 手順1: the anchor pair reads the parameter back off an
+/-- Report §3.4 (C5) 手順1: the anchor pair reads the parameter back off an
 arbitrary element of `Met(D)`, since `d_t(p,q) = 1 + t`. -/
 noncomputable def anchorParam (A : Set ℝ) (e : MetD (StarIndex A)) : ℝ :=
   e.1 (Sum.inl true) (Sum.inl false) - 1
@@ -130,16 +130,16 @@ theorem continuous_anchorParam (A : Set ℝ) : Continuous (anchorParam A) :=
     anchorParam A (starParam A t) = (t : ℝ) := by
   simp [anchorParam, dStar_anchor]
 
-/-- The closed description of `φ(Y)` used in place of report §3.7's sequential
+/-- The closed description of `φ(A^∁)` used in place of report §3.4 (C5)'s sequential
 argument: an element of `Met(D)` lies in the image exactly when its anchor
 parameter lies in `[0,1]` and it coincides with the star metric of that
-parameter.  The remaining condition of §3.7, `t ∉ A` (手順3), is *not* imposed
+parameter.  The remaining condition of (C5), `t ∉ A` (手順3), is *not* imposed
 here — it is a consequence of membership in `Met(D)` by (C3), which is what
 makes this description exact (`range_starParam`). -/
 def StarRange (A : Set ℝ) : Set (MetD (StarIndex A)) :=
   {e | anchorParam A e ∈ Set.Icc (0 : ℝ) 1 ∧ ∀ u v, e.1 u v = dStar A (anchorParam A e) u v}
 
-/-- **(C5), exactness** (report §3.7).  Note the direction that uses (C3): if
+/-- **(C5), exactness** (report §3.4).  Note the direction that uses (C3): if
 `e ∈ Met(D)` agrees with `d_t` then `t ∉ A`, because `d_t` for `t ∈ A` is not
 compatible with the discrete topology.  This is 手順3. -/
 theorem range_starParam (A : Set ℝ) : Set.range (starParam A) = StarRange A := by
@@ -154,7 +154,7 @@ theorem range_starParam (A : Set ℝ) : Set.range (starParam A) = StarRange A :=
       (dStar_mem_MetD_iff A hIcc).mp (MetD.exists_isMetricOn_of_val_eq e hval)
     exact ⟨⟨anchorParam A e, hIcc, hA⟩, Subtype.ext hval.symm⟩
 
-/-- **(C5), closedness** (report §3.7).  Both factors of the description are
+/-- **(C5), closedness** (report §3.4).  Both factors of the description are
 closed: `anchorParam` is continuous (手順1), and for fixed `u, v` the two
 sides of the defining equation are continuous in `e` — `e ↦ e u v` because it
 is one term of the supremum, and `e ↦ d_{anchorParam e} u v` because
@@ -180,7 +180,7 @@ theorem isClosed_range_starParam (A : Set ℝ) : IsClosed (Set.range (starParam 
   exact isClosed_starRange A
 
 /-- φ is a closed embedding: a homeomorphism onto its image, and that image is
-closed in `Met(D)`.  This is report §3.6 系 together with §3.7. -/
+closed in `Met(D)`.  This is report §3.4, the 系 of (C4) together with (C5). -/
 theorem isClosedEmbedding_starParam (A : Set ℝ) :
     IsClosedEmbedding (starParam A) :=
   ⟨⟨(antilipschitzWith_starParam A).isInducing (lipschitzWith_starParam A).continuous,
@@ -189,17 +189,17 @@ theorem isClosedEmbedding_starParam (A : Set ℝ) :
 
 /-! ## LEM-CLOSED-IMAGE -/
 
-/-- **LEM-CLOSED-IMAGE** (report §3.6–§3.7).
+/-- **LEM-CLOSED-IMAGE** (report 補題 3.4, §3.4).
 
-For `A ⊆ ℝ` the parameter map `φ : Y = [0,1] \ A → Met(D)`, `t ↦ d_t`, of the
-star construction satisfies
+For `A ⊆ ℝ` the parameter map `φ : A^∁ = [0,1] \ A → Met(D)`, `t ↦ d_t`, of
+the star construction satisfies
 
 1. the bi-Lipschitz estimate `|t − s| ≤ ρ(d_t, d_s) ≤ 2|t − s|` — (C4),
-   report §3.6 (here in the extended-distance form carried by `MetD`, where
-   `edist t s = ENNReal.ofReal |t − s|` on the subtype `Y ⊆ ℝ`);
+   report §3.4 (here in the extended-distance form carried by `MetD`, where
+   `edist t s = ENNReal.ofReal |t − s|` on the subtype `A^∁ ⊆ ℝ`);
 2. φ is a closed embedding — i.e. a homeomorphism onto its image (the 系 of
-   report §3.6, which follows from clause 1) and that image is closed in
-   `Met(D)` (C5, report §3.7).
+   (C4), report §3.4, which follows from clause 1) and that image is closed
+   in `Met(D)` (C5, report §3.4).
 
 Clause 1 implies injectivity and both continuity and openness onto the image,
 so clause 2's embedding half is *not* an extra assumption; it is recorded
@@ -207,7 +207,8 @@ explicitly because it is the form the closed-subspace inheritance theorem
 consumes in `MainTheorem.lean`.
 
 No hypothesis on `|A|` is needed: cardinality enters only through
-LEM-STAR-METRIC's clause 1 (`|D| = ℵ₁`), never in (C4)/(C5) — report §3.8. -/
+LEM-STAR-METRIC's clause 1 (`|D| = ℵ₁`), never in (C4)/(C5) — see the Remark
+closing report §4. -/
 theorem lem_closed_image (A : Set ℝ) :
     (∀ t s : StarParamSpace A,
         edist t s ≤ edist (starParam A t) (starParam A s) ∧

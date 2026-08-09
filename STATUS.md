@@ -25,15 +25,15 @@
 The argument for THM-CONJ51 proceeds through six steps:
 
 1. **LEM-A-EXISTS** — ZFC existence of A ⊆ [0,1] with |A| = ℵ₁ and A not Fσ.
-2. Y = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
-   completely metrizable (Alexandrov–Lavrentiev, applied to the separable
-   ambient space [0,1] only).
+2. A^∁ = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
+   completely metrizable (Alexandrov–Lavrentiev forward direction, applied
+   to the ambient space [0,1] only).
 3. A parameterised star-type family of compatible metrics on D
-   (**LEM-STAR-METRIC**) — explicitly: a reference pair {p,q} at distance
-   1+t, plus one star per element of A with centre-to-endpoint distance
-   s_n(α,t) = min(1, |t−a_α| + 1/n).
-4. A bi-Lipschitz embedding Y → Met(D): |t−s| ≤ ρ(d_t,d_s) ≤ 2|t−s|.
-5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**) — the reference pair
+   (**LEM-STAR-METRIC**) — explicitly: a pair {p,q} at distance
+   1+t, plus one set C_α per element of A with distances
+   d_t(y_α, x_{α,n}) = s_n(α,t) = min(1, |t−a_α| + 1/(n+1)), n ∈ ℕ.
+4. A bi-Lipschitz embedding A^∁ → Met(D): |t−s| ≤ ρ(d_t,d_s) ≤ 2|t−s|.
+5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**) — the pair {p,q}
    recovers the limit parameter t, and d_t ceasing to be compatible for
    t ∈ A rules out the boundary case.
 6. A closed subspace of a completely metrizable space is completely

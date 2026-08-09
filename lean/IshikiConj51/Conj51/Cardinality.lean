@@ -15,9 +15,10 @@
 -- in Mathlib; the definition must be unfolded explicitly.
 -- See notes/proof-audit.md (sorry tracker) for status.
 --
--- Proof matches the audited two-case argument in report/report-ja.md §3
--- (Issue #3): CH branch via irrationals + the Baire category theorem,
--- non-CH branch via the perfect set theorem. See notes/proof-audit.md
+-- Proof matches the audited two-case argument in report/report-ja.md §3.1
+-- (補題 3.2; Issue #3): CH branch via irrationals + the Baire category
+-- theorem, non-CH branch via the closed-set cardinality lemma (補題 3.1,
+-- from the perfect set theorem). See notes/proof-audit.md
 -- (Issue #8) for the Mathlib declaration names used at each step.
 --
 -- Status: sorry-free.
@@ -132,7 +133,7 @@ theorem lem_A_exists_of_not_CH (hnCH : Cardinal.aleph 1 < (𝔠 : Cardinal.{0}))
 /-- LEM-A-EXISTS: There exists a subset of [0,1] of cardinality ℵ₁ that is
     not an Fσ set.
     Proof: case split on CH; see `lem_A_exists_of_CH` /
-    `lem_A_exists_of_not_CH` (report §3, audited in Issue #3). -/
+    `lem_A_exists_of_not_CH` (report §3.1, 補題 3.2; audited in Issue #3). -/
 theorem lem_A_exists :
     ∃ A : Set ℝ, A ⊆ Set.Icc 0 1 ∧
     (#A = Cardinal.aleph 1) ∧

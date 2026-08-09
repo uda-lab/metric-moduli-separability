@@ -142,9 +142,9 @@ complete.
 
 | Result | Proposed source | Verified? |
 |--------|-----------------|-----------|
-| Alexandrov–Lavrentiev: a subspace of a *separable* completely metrizable (e.g. Polish) space X is completely metrizable iff it is Gδ in X | General (not-necessarily-separable) form: Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179. Polish-specific form commonly cited as Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 verified at full-statement level against a numbering-preserving transcription of the book (Issue #27 / E10, 2026-08-09 — see below); report cites Engelking/Willard as primary |
-| Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1, background theorem 2 | ✅ audited (Issue #4, 2026-08-09) — this is the version actually used for Met(D), since Met(D) is not separable |
-| Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (perfect set property discussed around p. 150) | ✅ used in LEM-A-EXISTS §3 non-CH branch (Issue #3, 2026-08-09) |
+| Alexandrov–Lavrentiev, forward direction: X metrizable, S ⊆ X completely metrizable ⇒ S is Gδ in X (no separability on X) | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 (§3.C, p. 17) — stated there in exactly this metrizable-X generality; general form also in Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 verified at full-statement level against a numbering-preserving transcription of the book (Issue #27 / E10, 2026-08-09 — see below), and re-confirmed with section/page (§3.C starting p. 17, via the book's printed table of contents, d-nb.info/941717364/04) in Issue #34 (2026-08-09); report 定理 1.1 and paper Thm. 2.1 now state this metrizable-X form and cite Kechris as primary |
+| Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1 定理 1.2 | ✅ audited (Issue #4, 2026-08-09) — this is the version actually used for Met(D), since Met(D) is not separable |
+| Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (Thm. 6.4 in §6.B, from p. 32; Thm. 6.2/Cor. 6.3 in §6.A, from p. 31; section pages re-confirmed via the printed table of contents in Issue #34) | ✅ used in report 補題 3.1, applied in the non-CH branch of 補題 3.2 (= LEM-A-EXISTS) (Issue #3, 2026-08-09) |
 
 ### References verified for the Gδ / complete-metrizability step (Issue #4, 2026-08-09)
 
@@ -246,6 +246,20 @@ disabled; no direct access to paginate either book), so they are intentionally
 **not** asserted here to avoid false precision. Re-verify against a
 physical/PDF copy of both books before citing exact theorem numbers in the
 paper.
+
+**Update (Issue #34, 2026-08-09): citation set finalised for the reader-facing
+artifacts.** The report's bibliography is now self-contained (report §5 lists
+Ishiki, Kechris, Engelking, Willard, Oxtoby; no pointer to this file). The
+Baire category theorem is cited to Willard, Cor. 25.4 only — the redundant
+Kelley (Thm. 34, p. 200) citation was dropped from both report and paper, and
+the `Kelley1955` entry was removed from `paper/references.bib` (the Kelley
+verification record above remains valid as provenance). Kechris Thm. 3.11 is
+now the primary citation for the background Gδ theorem in both report (定理
+1.1) and paper (Thm. 2.1), stated in its metrizable-X form; its verbatim
+statement ("If X is metrizable and Y ⊆ X is completely metrizable, then Y is
+a Gδ in X. ...") was re-confirmed against the numbering-preserving
+transcription and independent citing literature, and its location (§3.C,
+p. 17) against the printed table of contents (d-nb.info/941717364/04).
 
 ---
 

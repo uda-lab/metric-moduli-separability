@@ -9,10 +9,11 @@
 -- discreteness, and preserves the supremum distance *exactly* (the supremum
 -- is over `D × D`, which `σ` reindexes bijectively).  So `Met(E) ≃ᵢ Met(D)`.
 --
--- The report makes the same remark informally in §3.2/§3.8: the enumeration
--- `A = {a_α : α < ω₁}` is a bijection, so indexing the stars by `A` or by `ω₁`
--- gives the same construction up to relabelling, and `|A| = ℵ₁` is used only
--- for indexing and the cardinality computation.
+-- The report makes the same remark informally in §3.2 (with the role of
+-- `|A| = ℵ₁` summarised in the Remark closing §4): the enumeration
+-- `A = {a_α : α < ω₁}` is a bijection, so indexing the sets `C_α` by `A` or
+-- by `ω₁` gives the same construction up to relabelling, and `|A| = ℵ₁` is
+-- used only for indexing and the cardinality computation.
 --
 -- Status: sorry-free.
 
