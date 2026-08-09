@@ -14,7 +14,7 @@
 | Japanese report complete | ✅ done |
 | Met(D) type defined in Lean | ✅ done |
 | Lean formalisation complete | ✅ done (sorry-free, 2026-08-09) |
-| English paper drafted | ⬜ pending |
+| English paper drafted | ✅ done (Issue #11, 2026-08-09) |
 | Independent end-to-end review | ✅ done (Gate B passed, Issue #10, 2026-08-09) |
 
 ## Proof candidate
@@ -118,6 +118,28 @@ scratch — now tracked as its own Issue #23; the
 Cantor–Bendixson theorem, perfect-set cardinality-continuum fact, `ℵ₁ ≤ 𝔠`,
 and closed-subspace-of-complete-space are all confirmed **available** with
 exact declaration names recorded.
+
+## English paper
+
+`paper/main.tex` (Issue #11, 2026-08-09) now carries the full proof of all
+four claim IDs, transcribed from the audited `report/report-ja.md` with no
+altered hypotheses or conclusions. This fixes the three documentation
+defects recorded as finding F1 of the Issue #10 audit
+(`notes/proof-audit.md`): the Polish-only "Alexandrov's theorem" misuse is
+replaced by the report's separable/non-separable split
+(Theorems 2.1–2.2); the LEM-STAR-METRIC statement now matches the report's
+claim instead of the placeholder "suitable bi-Lipschitz properties"
+wording; and the stale "all theorems are stubs (`sorry`)" appendix claim
+and `A \subset` notation are both corrected. `references.bib` gained
+entries for the four textbooks the transcribed proofs actually cite
+(Kechris, Engelking, Willard, Kelley) plus a short, source-verified
+related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565); the
+bibliographically unverifiable Koshino manuscript remains uncited, per
+`notes/literature.md`. The paper compiles cleanly with `latexmk -pdf`
+(after adding `lmodern`/`booktabs` to the preamble). Per the acceptance
+criteria of Issue #11 and the project-wide proof-candidate convention, the
+paper states the theorem in ordinary declarative form but does not add any
+"solved" framing beyond what Gate A/B (Issue #10) already supports.
 
 ## GitHub Issue work queue
 
