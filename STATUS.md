@@ -15,7 +15,7 @@
 | Met(D) type defined in Lean | ✅ done |
 | Lean formalisation complete | ✅ done (sorry-free, 2026-08-09) |
 | English paper drafted | ⬜ pending |
-| Independent end-to-end review | ⬜ pending |
+| Independent end-to-end review | ✅ done (Gate B passed, Issue #10, 2026-08-09) |
 
 ## Proof candidate
 
@@ -45,17 +45,25 @@ matters for step 6.
 All six steps are now written out in full in `report/report-ja.md`
 (2026-08-09); no mathematically unwritten step remains. Steps 1–2 and 6
 (LEM-A-EXISTS; the Gδ / complete-metrizability implication; closed-subspace
-inheritance) additionally completed an internal audit (Issues #3, #4). Steps
-3–5 (LEM-STAR-METRIC, LEM-CLOSED-IMAGE, report §3.1–§3.8) are newly written
-and have had no review beyond the PR review for Issue #5.
+inheritance) additionally completed an internal audit (Issues #3, #4).
 
-The Lean formalisation of all six steps is now complete and sorry-free
-(Issues #6–#9, #23; 2026-08-09). The argument nevertheless remains a **proof
-candidate**: end-to-end independent mathematical review (Issue #10, Gate B) is
-still outstanding, so the conjecture must not be described externally as
-solved. A machine-checked proof certifies that the formal statements entail one
-another; it does not certify that `MetD`, `dStar`, and `IsFSigma` faithfully
-render the source's notions — that is exactly what Gate B reviews.
+The Lean formalisation of all six steps is complete and sorry-free
+(Issues #6–#9, #23; 2026-08-09).
+
+**Gate A and Gate B are both passed** (Issue #10, 2026-08-09). An independent
+end-to-end review, carried out by an agent uninvolved in Issues #2–#9 working
+only from the arXiv source and the repository's primary documents, found **no
+mathematical gap**: all six steps were reconstructed from scratch, nine
+adversarial attacks (ambient ℝ vs [0,1], non-separability, extended-valued
+sup metric, uniform discreteness, the boundary case t ∈ A, cardinal arithmetic
+without CH, consistency with Koshino's separable theorem, and two Lean-vs-report
+mismatches) all failed to break the argument, and the four claim IDs were
+confirmed to be formalised faithfully rather than by a weakened proxy. Evidence
+is recorded in `notes/proof-audit.md` (Issue #10 entry).
+
+Retaining or dropping the **proof candidate** label is the owner's decision, not
+the reviewer's; this repository keeps the label until the owner rules otherwise,
+so the conjecture is still not to be described externally as solved.
 
 ## Open obligations
 
@@ -92,10 +100,14 @@ the ambient space `X := ℝ`, making `thm_conj51` a one-line application.
 the three standard Lean axioms only, with no `sorryAx`. The full per-claim
 axiom table is in `notes/proof-audit.md`.
 
-The Lean chain is therefore complete. The conjecture must still not be
-described externally as solved: Gate B (Issue #10, independent end-to-end
-mathematical review — in particular of whether the Lean statements faithfully
-render the source's notions) has not yet been passed.
+The Lean chain is therefore complete, and Gate B (Issue #10) has re-run
+`#print axioms` independently on a from-scratch rebuild of the merged `main`
+and confirmed the three standard axioms with no `sorryAx`, as well as checking
+that the Lean statements render the source's notions faithfully (no bounded /
+uniformly discrete proxy; `#D = ℵ₁` exact; the `lavrentiev` hypothesis of
+`thm_conj51_of_lavrentiev` is discharged non-circularly). The conjecture is
+nevertheless still not to be described externally as solved while the proof
+candidate label stands.
 
 A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
 `notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
