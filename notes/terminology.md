@@ -19,7 +19,7 @@ Quick reference for notation used consistently across the report, paper, and Lea
 | $C_\alpha$ | The part $\{y_\alpha\} \cup \{x_{\alpha,n} : n \in \mathbb{N}\}$ of the partition $D = \{p,q\} \sqcup \bigsqcup_{\alpha < \omega_1} C_\alpha$ (report §3.3) |
 | $y_\alpha$ | The point of $C_\alpha$ at distance $s_n(\alpha,t)$ from each $x_{\alpha,n}$; through it every within-$C_\alpha$ distance is realised |
 | $x_{\alpha,n}$ | The other points of $C_\alpha$, indexed by $n \in \mathbb{N}$ |
-| $s_n(\alpha, t)$ | $\min(1, \lvert t - a_\alpha \rvert + 1/(n+1))$ for $n \in \mathbb{N}$ — the distance $d_t(y_\alpha, x_{\alpha,n})$ (report §3.3; matches the Lean `spokeLen` indexing) |
+| $s_n(\alpha, t)$ | $\min(1, \lvert t - a_\alpha \rvert + 1/(n+1))$ for $n \in \mathbb{N}$ — the distance $d_t(y_\alpha, x_{\alpha,n})$ (report §3.3; matches the indexing of the Lean `starSpoke` definition in `Conj51/MetricConstruction.lean`) |
 | $F_\sigma$ | Countable union of closed sets |
 | $G_\delta$ | Countable intersection of open sets |
 | Completely metrizable | A topological space homeomorphic to a complete metric space. Not the same as **Polish** (= completely metrizable **and** separable) — do not conflate the two. Japanese: 完全距離化可能 |
