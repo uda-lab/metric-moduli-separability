@@ -4,6 +4,7 @@
 
 import IshikiConj51.Conj51.MetD
 import IshikiConj51.Conj51.Cardinality
+import IshikiConj51.Conj51.GDeltaComplete
 import IshikiConj51.Conj51.MetricConstruction
 import IshikiConj51.Conj51.ClosedEmbedding
 import IshikiConj51.Conj51.MainTheorem
