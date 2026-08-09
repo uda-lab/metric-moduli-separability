@@ -13,7 +13,7 @@
 | Closed-embedding argument audited | ✅ done |
 | Japanese report complete | ✅ done |
 | Met(D) type defined in Lean | ✅ done |
-| Lean formalisation complete | ⬜ pending |
+| Lean formalisation complete | ✅ done (sorry-free, 2026-08-09) |
 | English paper drafted | ⬜ pending |
 | Independent end-to-end review | ⬜ pending |
 
@@ -49,9 +49,13 @@ inheritance) additionally completed an internal audit (Issues #3, #4). Steps
 3–5 (LEM-STAR-METRIC, LEM-CLOSED-IMAGE, report §3.1–§3.8) are newly written
 and have had no review beyond the PR review for Issue #5.
 
-The argument remains a **proof candidate**: end-to-end independent review
-(Issue #10) and the Lean formalisation (Issues #6–#9) are both outstanding,
-so the conjecture must not be described externally as solved.
+The Lean formalisation of all six steps is now complete and sorry-free
+(Issues #6–#9, #23; 2026-08-09). The argument nevertheless remains a **proof
+candidate**: end-to-end independent mathematical review (Issue #10, Gate B) is
+still outstanding, so the conjecture must not be described externally as
+solved. A machine-checked proof certifies that the formal statements entail one
+another; it does not certify that `MetD`, `dStar`, and `IsFSigma` faithfully
+render the source's notions — that is exactly what Gate B reviews.
 
 ## Open obligations
 
@@ -66,17 +70,39 @@ is now constructed as `MetD` (`IshikiConj51/Conj51/MetD.lean`; relocated there
 from `MainTheorem.lean` in Issue #7 so the claim modules can import it), with a
 sorry-free `EMetricSpace` instance matching the source's (extended) supremum
 distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
-itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
+itself is now both stated and proved (`thm_conj51`, sorry-free as of Issue #9).
 LEM-STAR-METRIC is now stated and **sorry-free** (`lem_star_metric`,
 `IshikiConj51/Conj51/MetricConstruction.lean`, Issue #7, 2026-08-09);
-LEM-CLOSED-IMAGE still has no Lean statement (Issue #9). See
-`notes/proof-audit.md` Lean TODO / sorry trackers.
+LEM-CLOSED-IMAGE is now stated and **sorry-free** (`lem_closed_image`,
+`IshikiConj51/Conj51/ClosedEmbedding.lean`, Issue #9, 2026-08-09), together
+with a supporting new module `IshikiConj51/Conj51/Relabel.lean` (`Met(D)`
+transports along any bijection of the index set, so the concrete
+`StarIndex A` construction reaches an arbitrary `D` of the same cardinality).
+
+**Every claim ID now has a Lean statement and a sorry-free proof; the
+repository contains zero `sorry` and zero custom axioms.** The whole of report
+§4 is assembled and proved in `thm_conj51_of_lavrentiev` (Issue #9), which
+differs from `thm_conj51` only by carrying the Alexandrov–Lavrentiev direction
+as an explicit hypothesis about subsets of ℝ. That hypothesis is discharged by
+`isGδ_of_isCompletelyMetrizableSpace` (Issue #23,
+`IshikiConj51/Conj51/GDeltaComplete.lean`, merged in PR #25) instantiated at
+the ambient space `X := ℝ`, making `thm_conj51` a one-line application.
+
+`#print axioms thm_conj51` reports `[propext, Classical.choice, Quot.sound]` —
+the three standard Lean axioms only, with no `sorryAx`. The full per-claim
+axiom table is in `notes/proof-audit.md`.
+
+The Lean chain is therefore complete. The conjecture must still not be
+described externally as solved: Gate B (Issue #10, independent end-to-end
+mathematical review — in particular of whether the Lean statements faithfully
+render the source's notions) has not yet been passed.
 
 A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
 `notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
 Alexandrov–Lavrentiev direction needed for the closed-subspace obstruction
 (a completely metrizable subspace is Gδ in its ambient space) is **confirmed
-absent** from Mathlib and must be proved from scratch (Issue #9); the
+absent** from Mathlib (re-confirmed in Issue #9) and must be proved from
+scratch — now tracked as its own Issue #23; the
 Cantor–Bendixson theorem, perfect-set cardinality-continuum fact, `ℵ₁ ≤ 𝔠`,
 and closed-subspace-of-complete-space are all confirmed **available** with
 exact declaration names recorded.
@@ -94,3 +120,4 @@ exact declaration names recorded.
 9. #10 Perform independent end-to-end mathematical review
 10. #11 Draft the English paper after mathematical audit passes
 11. #19 Record Mathlib inventory findings for Lean formalisation prep (Issues #7–#9)
+12. #23 Formalise the Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ)

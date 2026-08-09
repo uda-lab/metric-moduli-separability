@@ -28,6 +28,13 @@
 -- condition into the elementary "every point has an isolating radius"
 -- criterion used by both Issue #7 and Issue #9.  It is stated for an
 -- arbitrary `IsMetricOn`, not for the star family, so that it is reusable.
+--
+-- Issue #9 added the small generic API for the ambient supremum distance at
+-- the end of the `MetD` namespace (`edist_def`, `ofReal_abs_sub_le_edist`,
+-- `edist_le_of_forall`, `lipschitzWith_apply`, `exists_isMetricOn_of_val_eq`).
+-- These are consumed by both `ClosedEmbedding.lean` and `Relabel.lean`, so
+-- they live here rather than in either one.  Nothing in the Issue #6 material
+-- above them was altered.
 
 import Mathlib
 
@@ -145,5 +152,39 @@ noncomputable instance : PseudoEMetricSpace (MetD D) where
 
 noncomputable instance : EMetricSpace (MetD D) where
   eq_of_edist_eq_zero := eq_of_edist_eq_zero
+
+/-! ### Generic API for the ambient supremum distance (Issue #9)
+
+Small reusable facts about `ρ`, needed by both `ClosedEmbedding.lean` (to see
+the image of the parameter map as a closed set) and `Relabel.lean` (to see
+relabelling as an isometry). -/
+
+/-- Unfolding of the ambient supremum distance on `Met(D)`. -/
+theorem edist_def (e f : MetD D) :
+    edist e f = ⨆ p : D × D, ENNReal.ofReal |e.1 p.1 p.2 - f.1 p.1 p.2| := rfl
+
+/-- Each pair contributes a term to the supremum defining `ρ`. -/
+theorem ofReal_abs_sub_le_edist (e f : MetD D) (u v : D) :
+    ENNReal.ofReal |e.1 u v - f.1 u v| ≤ edist e f := by
+  rw [edist_def]
+  exact le_iSup (fun p : D × D => ENNReal.ofReal |e.1 p.1 p.2 - f.1 p.1 p.2|) (u, v)
+
+/-- A uniform bound over all pairs bounds `ρ`. -/
+theorem edist_le_of_forall {e f : MetD D} {c : ℝ≥0∞}
+    (h : ∀ u v, ENNReal.ofReal |e.1 u v - f.1 u v| ≤ c) : edist e f ≤ c := by
+  rw [edist_def]
+  exact iSup_le fun p => h p.1 p.2
+
+/-- Evaluation at a fixed pair is `1`-Lipschitz on `Met(D)`. -/
+theorem lipschitzWith_apply (u v : D) : LipschitzWith 1 (fun e : MetD D => e.1 u v) := by
+  intro e f
+  simp only [ENNReal.coe_one, one_mul, edist_dist, Real.dist_eq]
+  exact ofReal_abs_sub_le_edist e f u v
+
+/-- A metric that agrees pointwise with a member of `Met(D)` is itself
+compatible with the discrete topology. -/
+theorem exists_isMetricOn_of_val_eq {d : D → D → ℝ} (e : MetD D) (h : e.1 = d) :
+    ∃ hm : IsMetricOn d, hm.topology = ⊥ := by
+  subst h; exact e.2
 
 end MetD
