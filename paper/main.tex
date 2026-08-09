@@ -42,14 +42,13 @@
   metrics on $D$ that are compatible with the discrete topology, equipped
   with the topology induced by the supremum distance. Ishiki's
   Conjecture~5.1 asserts that $\Met(D)$ is not completely metrizable when
-  $\lvert D\rvert = \aleph_1$. We give a proof of this statement in ZFC.
-  The argument is elementary: it exhibits, inside $[0,1]$, a set that is
-  simultaneously of cardinality $\aleph_1$ and not an $\Fsigma$ set, then
-  transports the resulting non-$\Gdelta$ obstruction into $\Met(D)$ through
-  an explicit closed embedding. The proof has been checked by an
-  independent mathematical review that found no gap, and it is additionally
-  verified by a machine-checked formalisation in Lean~4, described in the
-  appendix.
+  $\lvert D\rvert = \aleph_1$. We present a proof candidate for this
+  statement, in ZFC: an elementary argument that exhibits, inside
+  $[0,1]$, a set that is simultaneously of cardinality $\aleph_1$ and not
+  an $\Fsigma$ set, then transports the resulting non-$\Gdelta$
+  obstruction into $\Met(D)$ through an explicit closed embedding. The
+  argument is accompanied by a machine-checked formalisation in Lean~4,
+  described in the appendix.
 \end{abstract}
 
 % ------------------------------------------------------------------
@@ -82,10 +81,10 @@ for the least uncountable case:
   metrizable.}
 \end{quote}
 
-We prove this conjecture. The source paper also raises several further
-questions about $\Met(D)$ for other cardinalities and other topological
-properties; those are outside the scope of this paper, which addresses
-only Conjecture~5.1 as stated above.
+We present a proof candidate for this conjecture. The source paper also
+raises several further questions about $\Met(D)$ for other cardinalities
+and other topological properties; those are outside the scope of this
+paper, which addresses only Conjecture~5.1 as stated above.
 
 The proof strategy is the following. We first produce, using only ZFC (no
 extra set-theoretic hypothesis), a set $A \subseteq [0,1]$ with
@@ -495,7 +494,7 @@ $A$: there $d_t$ remains a metric but loses compatibility with the
 discrete topology, and membership of the limit $e$ in $\Met(D)$ rules that
 case out.
 
-\begin{theorem}[THM-CONJ51]
+\begin{theorem}[THM-CONJ51 --- Ishiki Conjecture~5.1, candidate]
   \label{thm:conj51}
   If $\lvert D\rvert = \aleph_1$, then $\Met(D)$, with the supremum-metric
   topology, is not completely metrizable.
