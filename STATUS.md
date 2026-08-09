@@ -70,7 +70,7 @@ is now constructed as `MetD` (`IshikiConj51/Conj51/MetD.lean`; relocated there
 from `MainTheorem.lean` in Issue #7 so the claim modules can import it), with a
 sorry-free `EMetricSpace` instance matching the source's (extended) supremum
 distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
-itself is now stated (`thm_conj51`, with a tracked `sorry` for the proof).
+itself is now both stated and proved (`thm_conj51`, sorry-free as of Issue #9).
 LEM-STAR-METRIC is now stated and **sorry-free** (`lem_star_metric`,
 `IshikiConj51/Conj51/MetricConstruction.lean`, Issue #7, 2026-08-09);
 LEM-CLOSED-IMAGE is now stated and **sorry-free** (`lem_closed_image`,
