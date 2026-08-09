@@ -596,6 +596,18 @@ decision explicitly and accurately.
   lines 4, 40, 282) is intentionally preserved pending owner decision and was
   left untouched.
 
+> **Post-decision note (2026-08-09, Issue #31).** The entry above is a
+> historical snapshot: its line references and its description of the
+> "proof candidate" framing describe the artifacts **as of PR #30's commit,
+> before the owner's decision**. Later the same day the owner lifted the
+> proof-candidate label (PR #29 comment; implemented in Issue #31 / PR #32),
+> which rewrote exactly the framing passages cited above (paper abstract,
+> Theorem 4.2 label, report lines 4/40/282) into declarative form and
+> refreshed report §5's Issue #11 bullet — resolving this entry's reopen
+> proposal without reopening Issue #5. The claim-ID consistency verdicts in
+> the matrix are unaffected: hypotheses and conclusions were not touched by
+> the relabelling.
+
 ---
 
 ## Lean sorry tracker
