@@ -29,7 +29,8 @@
 
 % ------------------------------------------------------------------
 \title{On Ishiki's Conjecture~5.1:\\
-       Non-Complete-Metrizability of $\Met(D)$ for $\lvert D\rvert=\aleph_1$}
+       Failure of Complete Metrizability of $\Met(D)$ for
+       $\lvert D\rvert=\aleph_1$}
 \author{Tomoki Uda\thanks{Nanzan University.
   Email: \texttt{uda0@nanzan-u.ac.jp}.
   ORCID: \href{https://orcid.org/0000-0002-6073-1572}{0000-0002-6073-1572}.}}
@@ -43,11 +44,10 @@
   metrics on $D$ that are compatible with the discrete topology, equipped
   with the topology induced by the supremum distance. Ishiki's
   Conjecture~5.1 asserts that $\Met(D)$ is not completely metrizable when
-  $\lvert D\rvert = \aleph_1$. We prove this statement in ZFC, by an
-  elementary argument that exhibits, inside $[0,1]$, a set of cardinality
-  $\aleph_1$ that is not an $\Fsigma$ set, then transports the resulting
-  non-$\Gdelta$ obstruction into $\Met(D)$ through an explicit closed
-  embedding. The argument has been machine-checked in the Lean~4 proof
+  $\lvert D\rvert = \aleph_1$. We prove this in ZFC by constructing a
+  set $A \subseteq [0,1]$ of cardinality $\aleph_1$ that is not
+  $\Fsigma$ and transporting the resulting non-$\Gdelta$ obstruction
+  into $\Met(D)$ via an explicit closed embedding. The argument has been machine-checked in the Lean~4 proof
   assistant.
 \end{abstract}
 
@@ -73,9 +73,10 @@ Remark~\ref{rem:extended-rho}).
 Koshino~\cite{Koshino2024} proved that a separable metrizable space $X$
 is $\sigma$-compact if and only if the space of bounded admissible
 metrics on $X$, with the supremum metric, is completely metrizable (the
-corollary in \cite{Koshino2024}). Ishiki~\cite{Ishiki2024} recalls this
-result in the form that $\Met(X)$ is completely metrizable if and only if
-$X$ is $\sigma$-compact for separable $X$, and proposes to remove the
+corollary in \cite{Koshino2024}). Ishiki~\cite{Ishiki2024}, citing
+Koshino, states the corresponding characterisation in terms of
+$\Met(X)$ — for separable $X$, $\Met(X)$ is completely metrizable if
+and only if $X$ is $\sigma$-compact — and proposes to remove the
 separability hypothesis. Conjecture~5.1 of \cite{Ishiki2024} is the
 resulting question for the least uncountable case:
 
@@ -505,6 +506,31 @@ exactly what (C3) provides.
   \end{enumerate}
 \end{proof}
 
+\section{Related Work}
+\label{sec:related}
+
+Koshino's characterisation for bounded admissible metrics
+\cite{Koshino2024}, together with the $\Met(X)$ formulation recalled
+from \cite{Ishiki2024} in the introduction, provides the separable
+baseline from which Conjecture~5.1 departs; Theorem~\ref{thm:conj51}
+settles its least uncountable discrete case. Beyond the
+characterisation itself, \cite{Koshino2024} shows that the space of
+bounded admissible metrics on a metrizable space fails to be completely
+metrizable whenever the space contains a closed copy of the irrationals,
+by constructing a closed embedding of a rational parameter subspace
+$Q' \subseteq [0,1]$ into that space through a one-parameter family of
+metrics. Both arguments parameterise metrics by a non-completely-%
+metrizable subspace of a compact interval and force the offending
+boundary parameters outside the space of admissible metrics;
+Section~\ref{sec:closed-image} plays this role with the parameter set
+$A^\complement$. A different
+result of Koshino concerns recognising the topology of $\Met(X)$ from
+data about the topology of uniform convergence \cite{Koshino2022}.
+Ishiki \cite{Ishiki2024Baire} proves that $\Met(X)$ is comeagre in
+$\mathrm{CPM}(X)$, the space of continuous pseudometrics on $X$; this
+result is used in \cite{Ishiki2024}'s proof of its own Theorem~1.1, but
+plays no role in the proof given here.
+
 \section{Concluding Remarks}
 \label{sec:concluding}
 
@@ -517,28 +543,6 @@ an additional hypothesis on $D$ or on the ambient set theory.
 
 The argument has also been formalised and machine-checked in the Lean~4
 proof assistant against the Mathlib library.
-
-\section{Related Work}
-\label{sec:related}
-
-Koshino's characterisation for bounded admissible metrics
-\cite{Koshino2024}, together with the $\Met(X)$ formulation recalled
-from \cite{Ishiki2024} in the introduction, provides the separable
-baseline from which Conjecture~5.1 departs; Theorem~\ref{thm:conj51}
-settles its least uncountable discrete case. Beyond the
-characterisation itself, \cite{Koshino2024} shows that the space of
-bounded admissible metrics on a metrizable space fails to be completely
-metrizable whenever the space contains a closed copy of the irrationals,
-by exhibiting one-parameter families of metrics that embed closed copies
-of sets of rationals; the closed-embedding technique of
-Section~\ref{sec:closed-image} is of the same flavour, with the
-parameter set $A^\complement$ in place of the rationals. A different
-result of Koshino concerns recognising the topology of $\Met(X)$ from
-data about the topology of uniform convergence \cite{Koshino2022}.
-Ishiki \cite{Ishiki2024Baire} proves a genericity (comeagreness) result
-about $\Met(X)$ inside a larger ambient space of pseudometric-type
-objects; this result is used in \cite{Ishiki2024}'s proof of its own
-Theorem~1.1, but plays no role in the proof given here.
 
 % ------------------------------------------------------------------
 \section*{Acknowledgements}

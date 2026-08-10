@@ -112,7 +112,7 @@ complete.
 | Title | *On the Borel complexity and the complete metrizability of spaces of metrics* |
 | Venue | Anal. Geom. Metr. Spaces **12** (2024), no. 1, art. 20240014 (published 2024-11-11, CC-BY 4.0) |
 | DOI / arXiv | [10.1515/agms-2024-0014](https://doi.org/10.1515/agms-2024-0014); [arXiv:2403.07421](https://arxiv.org/abs/2403.07421) (v1: 2024-03-12, v2: 2024-04-07, math.GN) |
-| Role | The direct motivating result Conjecture 5.1 generalizes (removing separability). |
+| Role | A direct motivation for Conjecture 5.1, which addresses the least uncountable discrete case of the nonseparable problem. |
 | Statement caveat | The published paper studies $AM(X)$ = **bounded** admissible (continuous) metrics with the sup-metric. Its main **Theorem and Corollary are unnumbered** ("Theorem." / "Corollary."). The Corollary (verbatim, arXiv v2 p. 2 = published version): "Let $X$ be a separable metrizable space. Then $X$ is $\sigma$-compact if and only if $AM(X)$ is completely metrizable." The $\operatorname{Met}(X)$ form is how Ishiki (arXiv:2407.03030, §5) recalls the result; the paper cites Koshino for the $AM(X)$ statement and attributes the $\operatorname{Met}(X)$ form to Ishiki's recollection — do not silently identify the two spaces. |
 | Status | **Verified against the arXiv v2 PDF full text and the Crossref record of the DOI** (2026-08-10, Issue #36). Supersedes the 2026-08-09 "no arXiv/DOI found" record: the earlier arXiv API search missed the deposit (primary class math.GN). Now cited directly as `Koshino2024` in `paper/references.bib`. |
 
