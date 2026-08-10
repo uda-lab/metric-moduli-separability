@@ -1,19 +1,21 @@
 # arXiv v1 Submission — Metadata Draft and Owner Checklist
 
 Issue #38. Manuscript frozen in #36 (merge `36635b9`). The bundle is produced
-by `paper/make-arxiv-bundle.sh` (main.tex + main.bbl only; arXiv does not run
-BibTeX). Everything below is prepared so that **the only remaining action is
-the owner's deliberate final submit click**.
+by `paper/make-arxiv-bundle.sh` (main.tex + main.bbl only; the pre-generated
+`main.bbl` is supplied so arXiv's TeX system does not need to process
+`references.bib`, which is deliberately excluded). Everything below is
+prepared so that **the only remaining action is the owner's deliberate final
+submit click**.
 
 ## Track C — metadata (copy into the arXiv submission form)
 
 | Field | Value |
 |-------|-------|
-| Title | On Ishiki's Conjecture 5.1: Failure of Complete Metrizability of $\mathrm{Met}(D)$ for $\|D\| = \aleph_1$ |
+| Title | On Ishiki's Conjecture 5.1: Failure of Complete Metrizability of $\mathrm{Met}(D)$ for $\lvert D\rvert = \aleph_1$ |
 | Authors | Tomoki Uda (Nanzan University) |
 | Primary category | math.GN (General Topology) |
 | Cross-list (optional) | math.LO — the proof is ZFC-sensitive (CH case split, cardinal arithmetic); owner's call, not required |
-| MSC 2020 (optional) | Primary 54E35; Secondary 54E50, 54H05 |
+| MSC 2020 (optional) | 54E35 (Primary) 54E50, 54H05 (Secondary) |
 | Comments | 11 pages. The argument is machine-checked in the Lean 4 proof assistant. |
 | ORCID | 0000-0002-6073-1572 — confirm it is linked to the submitting arXiv account (arXiv account settings), matching the manuscript footnote |
 | Journal-ref / DOI | **leave empty** (do not invent) |
@@ -37,9 +39,14 @@ TeX with macros expanded):
 1. Log into arXiv, start a new submission, select `math.GN`.
 2. If the account is already endorsed / auto-endorsed for math.GN: record
    "endorsement: not required" on issue #38 and continue.
-3. If endorsement is required: use the arXiv-generated request and send it
-   **privately** to Yoshito Ishiki. Record only pass/fail on the issue —
-   never endorsement codes or e-mail contents.
+3. If endorsement is required: first confirm the intended endorser is
+   eligible — use the "Which of these authors are endorsers?" link at the
+   bottom of the abstract page of an arXiv paper of theirs (e.g.
+   arXiv:2403.07421 or arXiv:2407.03030 for math.GN). If Yoshito Ishiki is
+   eligible, use the arXiv-generated request and send it **privately** to
+   him; otherwise pick another personally known, eligible subject-area
+   endorser. Record only pass/fail on the issue — never endorsement codes
+   or e-mail contents.
 4. Endorsement is an arXiv access mechanism, not peer review.
 
 ## Track D — license (owner decision; do not delegate)
@@ -49,12 +56,15 @@ arXiv offers: (1) arXiv.org perpetual non-exclusive license (minimal),
 (6) CC0.
 
 Consideration for the recorded journal targets (*Topology and its
-Applications*, Elsevier; *Fundamenta Mathematicae*): the **minimal arXiv
-non-exclusive license** keeps every later transfer/OA option open, while CC
-licenses are irrevocable and can constrain a later publisher agreement, so
-the minimal license is the conservative default; verify the target
-journal's current preprint policy at submission time. **The choice is the
-owner's; record it on issue #38 before submitting.**
+Applications*, Elsevier; *Fundamenta Mathematicae*): every arXiv license,
+including the minimal one, is irrevocable for the posted version. The
+**minimal arXiv non-exclusive license** grants arXiv the narrowest rights
+and therefore generally preserves the most flexibility for a later
+publisher agreement, while CC licenses grant broader reuse rights that some
+publishers cannot accommodate; the minimal license is the conservative
+default. Verify the target journal's current preprint policy at submission
+time. **The choice is the owner's; record it on issue #38 before
+submitting.**
 
 ## Track E — arXiv dry run (owner, with agent support on failures)
 
