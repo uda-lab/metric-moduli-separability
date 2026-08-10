@@ -20,7 +20,8 @@
 | E9 cross-artifact consistency (paper ↔ report ↔ Lean) | ✅ done (Issue #26, 2026-08-09; recorded in `notes/proof-audit.md`) |
 | E10 submission readiness audit | ✅ **go** (Issue #27, 2026-08-09; see `notes/proof-audit.md`) |
 | arXiv v1 manuscript freeze (Issue #36) | ✅ frozen (owner-approved PR #39, merge `36635b9`, 2026-08-10) |
-| arXiv v1 submission prep (Issue #38) | 🔄 agent-side prep done (PR #40); owner actions remain — see `notes/arxiv-submission.md` |
+| arXiv v1 submission prep (Issue #38) | 🔄 metadata/checklist prepared; owner actions remain — see `notes/arxiv-submission.md` |
+| arXiv source build/upload workflow (Issue #41) | ✅ simplified (project-local PDFLaTeX config; ordinary source upload) |
 | Provisional journal target | *Topology and its Applications* (alternative: *Fundamenta Mathematicae*) — recorded per Issue #36 §6; no journal-specific formatting before arXiv v1 |
 
 ## The proof
@@ -159,7 +160,7 @@ related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565). Koshino's
 motivating paper, unverifiable in 2026-08-09 searches, was found published
 (Anal. Geom. Metr. Spaces 12 (2024), art. 20240014; arXiv:2403.07421) and
 is cited directly as of Issue #36 (2026-08-10) — see `notes/literature.md`
-for the AM(X)-vs-Met(X) statement caveat. The paper compiles cleanly with `latexmk -pdf`
+for the AM(X)-vs-Met(X) statement caveat. The paper compiles cleanly with `cd paper && latexmk main.tex`
 (after adding `lmodern`/`booktabs` to the preamble). Following the owner's
 2026-08-09 decision lifting the proof-candidate label (Issue #31), the paper
 states the theorem and its proof in ordinary declarative form, while avoiding
