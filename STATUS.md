@@ -1,6 +1,6 @@
 # Project Status
 
-**Updated:** 2026-08-09
+**Updated:** 2026-08-10
 
 ## Overall
 
@@ -19,6 +19,8 @@
 | Proof-candidate label | ✅ lifted (owner decision, PR #29 comment, 2026-08-09) |
 | E9 cross-artifact consistency (paper ↔ report ↔ Lean) | ✅ done (Issue #26, 2026-08-09; recorded in `notes/proof-audit.md`) |
 | E10 submission readiness audit | ✅ **go** (Issue #27, 2026-08-09; see `notes/proof-audit.md`) |
+| arXiv v1 manuscript freeze (Issue #36) | 🔄 in progress (2026-08-10; owner review gate before merge) |
+| Provisional journal target | *Topology and its Applications* (alternative: *Fundamenta Mathematicae*) — recorded per Issue #36 §6; no journal-specific formatting before arXiv v1 |
 
 ## The proof
 
@@ -152,9 +154,11 @@ wording; and the stale "all theorems are stubs (`sorry`)" appendix claim
 and `A \subset` notation are both corrected. `references.bib` gained
 entries for the four textbooks the transcribed proofs actually cite
 (Kechris, Engelking, Willard, Kelley) plus a short, source-verified
-related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565); the
-bibliographically unverifiable Koshino manuscript remains uncited, per
-`notes/literature.md`. The paper compiles cleanly with `latexmk -pdf`
+related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565). Koshino's
+motivating paper, unverifiable in 2026-08-09 searches, was found published
+(Anal. Geom. Metr. Spaces 12 (2024), art. 20240014; arXiv:2403.07421) and
+is cited directly as of Issue #36 (2026-08-10) — see `notes/literature.md`
+for the AM(X)-vs-Met(X) statement caveat. The paper compiles cleanly with `latexmk -pdf`
 (after adding `lmodern`/`booktabs` to the preamble). Following the owner's
 2026-08-09 decision lifting the proof-candidate label (Issue #31), the paper
 states the theorem and its proof in ordinary declarative form, while avoiding

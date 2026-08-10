@@ -26,13 +26,14 @@
 \newcommand{\Fsigma}{F_{\!\sigma}}
 \newcommand{\Gdelta}{G_{\!\delta}}
 \newcommand{\Cont}{\mathfrak{c}}
-\DeclareUnicodeCharacter{03B4}{\ensuremath{\delta}}
 
 % ------------------------------------------------------------------
 \title{On Ishiki's Conjecture~5.1:\\
        Non-Complete-Metrizability of $\Met(D)$ for $\lvert D\rvert=\aleph_1$}
-\author{}
-\date{\textit{Draft --- not for circulation}}
+\author{Tomoki Uda\thanks{Nanzan University.
+  Email: \texttt{uda0@nanzan-u.ac.jp}.
+  ORCID: \href{https://orcid.org/0000-0002-6073-1572}{0000-0002-6073-1572}.}}
+\date{}
 
 \begin{document}
 \maketitle
@@ -46,8 +47,8 @@
   elementary argument that exhibits, inside $[0,1]$, a set of cardinality
   $\aleph_1$ that is not an $\Fsigma$ set, then transports the resulting
   non-$\Gdelta$ obstruction into $\Met(D)$ through an explicit closed
-  embedding. The argument is accompanied by a machine-checked
-  formalisation in Lean~4, described in the appendix.
+  embedding. The argument has been machine-checked in the Lean~4 proof
+  assistant.
 \end{abstract}
 
 % ------------------------------------------------------------------
@@ -69,11 +70,14 @@ affect complete metrizability, which is a property of a topology and not
 of any particular compatible metric witnessing it (see
 Remark~\ref{rem:extended-rho}).
 
-Ishiki~\cite{Ishiki2024} recalls a theorem, attributed there to Koshino,
-that for separable $X$, $\Met(X)$ is completely metrizable if and only if
-$X$ is $\sigma$-compact, and proposes to remove the separability
-hypothesis. Conjecture~5.1 of \cite{Ishiki2024} is the resulting question
-for the least uncountable case:
+Koshino~\cite{Koshino2024} proved that a separable metrizable space $X$
+is $\sigma$-compact if and only if the space of bounded admissible
+metrics on $X$, with the supremum metric, is completely metrizable (the
+corollary in \cite{Koshino2024}). Ishiki~\cite{Ishiki2024} recalls this
+result in the form that $\Met(X)$ is completely metrizable if and only if
+$X$ is $\sigma$-compact for separable $X$, and proposes to remove the
+separability hypothesis. Conjecture~5.1 of \cite{Ishiki2024} is the
+resulting question for the least uncountable case:
 
 \begin{quote}
   \emph{If $\lvert D\rvert = \aleph_1$, then $\Met(D)$ is not completely
@@ -190,7 +194,8 @@ metrizability that we apply to $\Met(D)$.
   $2^{\aleph_1}$ of them and hence be uncountable. So $\Met(D)$ is not
   separable. This fact plays no logical role in the proof below; it
   records that Conjecture~5.1 lies genuinely outside the separable
-  setting of the theorem of Koshino recalled in the introduction.
+  setting of Koshino's characterisation~\cite{Koshino2024} recalled in
+  the introduction.
 \end{remark}
 
 \section{Main Construction}
@@ -314,13 +319,15 @@ pairs, by
   $\{y_\alpha, x_{\alpha,n}\}$ & $s_n(\alpha,t)$ \\
   $\{x_{\alpha,n},x_{\alpha,m}\}$, $n\ne m$ &
     $s_n(\alpha,t)+s_m(\alpha,t)$ \\
-  Any other pair (two points in distinct parts of the partition) & $1$ \\
+  Any other pair & $1$ \\
   \bottomrule
 \end{tabular}
 \end{center}
 
-The table assigns values to unordered pairs, so $d_t$ is symmetric; its
-range lies in $[0,2]$ since $0 < s_n \le 1$ and $0\le t\le 1$.
+The table assigns values to unordered pairs, so $d_t$ is symmetric; the
+final row covers exactly the pairs whose two points lie in distinct
+parts of the partition. The range of $d_t$ lies in $[0,2]$ since
+$0 < s_n \le 1$ and $0\le t\le 1$.
 
 \paragraph{(C1) $d_t$ is a metric, for every $t \in [0,1]$.} Definiteness
 and symmetry are immediate; every table entry is strictly positive, so
@@ -390,9 +397,7 @@ if $t \in A^\complement$. This proves Lemma~\ref{lem:star-metric}.
   By the equality case in (C1), the distance between two points
   $x_{\alpha,n}$ and $x_{\alpha,m}$ of a common $C_\alpha$ is realised by
   the path through $y_\alpha$, so each $(C_\alpha, d_t)$ is isometric to
-  a metric star. This geometric feature is not used in the sequel; it
-  gives the construction its name (\texttt{star}) in the Lean
-  formalisation described in the appendix.
+  a metric star. This geometric feature is not used in the sequel.
 \end{remark}
 
 \section{Proof of the Main Theorem}
@@ -510,72 +515,34 @@ $\mathsf{CH}$ inside the proof of Lemma~\ref{lem:A-exists}
 outright, and exactly one of them applies in any given model of ZFC — not
 an additional hypothesis on $D$ or on the ambient set theory.
 
-The argument is also machine-checked: it
-is formalised in the Lean~4 proof assistant, checked against Mathlib, and
-is sorry-free (no unproved gaps and no project-specific axioms). The
-formalisation is described in the Appendix; it serves as a
-reproducibility and proof-assurance artifact for the mathematical content
-above, not as an independent presentation of the result.
+The argument has also been formalised and machine-checked in the Lean~4
+proof assistant against the Mathlib library.
 
 \section{Related Work}
 \label{sec:related}
 
-The theorem recalled in the introduction, attributed to Koshino, situates
-Theorem~\ref{thm:conj51} as the removal of a separability hypothesis from
-a known separable characterisation; a different, independently published
-result of Koshino concerns recognising the topology of $\Met(X)$ from data
-about the topology of uniform convergence \cite{Koshino2022}. Ishiki
-\cite{Ishiki2024Baire} proves a genericity (comeagreness) result about
-$\Met(X)$ inside a larger ambient space of pseudometric-type objects; this
-result is used in \cite{Ishiki2024}'s proof of its own Theorem~1.1, but
-plays no role in the proof given here.
+Koshino's characterisation \cite{Koshino2024}, recalled in the
+introduction, situates Theorem~\ref{thm:conj51} as the removal of a
+separability hypothesis from a known separable equivalence. Beyond the
+characterisation itself, \cite{Koshino2024} shows that the space of
+bounded admissible metrics on a metrizable space fails to be completely
+metrizable whenever the space contains a closed copy of the irrationals,
+by exhibiting one-parameter families of metrics that embed closed copies
+of sets of rationals; the closed-embedding technique of
+Section~\ref{sec:closed-image} is of the same flavour, with the
+parameter set $A^\complement$ in place of the rationals. A different
+result of Koshino concerns recognising the topology of $\Met(X)$ from
+data about the topology of uniform convergence \cite{Koshino2022}.
+Ishiki \cite{Ishiki2024Baire} proves a genericity (comeagreness) result
+about $\Met(X)$ inside a larger ambient space of pseudometric-type
+objects; this result is used in \cite{Ishiki2024}'s proof of its own
+Theorem~1.1, but plays no role in the proof given here.
 
 % ------------------------------------------------------------------
-\appendix
-\section*{Appendix: Lean~4 Formalisation}
-\label{sec:lean}
+\section*{Acknowledgements}
 
-The argument of Sections~\ref{sec:prelim}--\ref{sec:closed-image} has been
-formalised in Lean~4 against Mathlib (v4.32.2), in the \texttt{lean/}
-subdirectory of the accompanying repository. Each result below has a
-Lean declaration matching the corresponding lemma or theorem in this paper
-in hypotheses and conclusion, with no boundedness, uniform-discreteness,
-or other proxy weakening:
-
-\begin{center}
-\begin{tabular}{lll}
-  \toprule
-  Result & Lean declaration & File \\
-  \midrule
-  Lemma~\ref{lem:A-exists} & \texttt{lem\_A\_exists} &
-    \texttt{Conj51/Cardinality.lean} \\
-  Lemma~\ref{lem:star-metric} & \texttt{lem\_star\_metric} &
-    \texttt{Conj51/MetricConstruction.lean} \\
-  Lemma~\ref{lem:closed-image} & \texttt{lem\_closed\_image} &
-    \texttt{Conj51/ClosedEmbedding.lean} \\
-  Theorem~\ref{thm:conj51} & \texttt{thm\_conj51} &
-    \texttt{Conj51/MainTheorem.lean} \\
-  \bottomrule
-\end{tabular}
-\end{center}
-
-The space $\Met(D)$ itself is formalised as \texttt{MetD} in
-\texttt{Conj51/MetD.lean}, with an extended-valued (\texttt{ENNReal})
-supremum distance matching Remark~\ref{rem:extended-rho}, and
-compatibility with the discrete topology formalised as the isolation
-condition of (C2)/(C3) in Section~\ref{subsec:star}, not uniform
-discreteness. The direction of Theorem~\ref{thm:background-gdelta} that
-the proof uses — a completely metrizable subspace of a metric space is
-$\Gdelta$ in the ambient space — is absent from Mathlib and is proved
-from scratch as \texttt{isGδ\_of\_isCompletelyMetrizableSpace} in
-\texttt{Conj51/GDeltaComplete.lean} and specialised to the ambient space
-$\mathbb{R}$ inside \texttt{thm\_conj51}.
-
-The full development contains zero \texttt{sorry} and introduces no
-project-specific axioms: \texttt{\#print axioms thm\_conj51} reports
-exactly \texttt{[propext, Classical.choice, Quot.sound]}, the three
-axioms standard to Lean~4/Mathlib developments using classical logic and
-quotients.
+The author is grateful to Yoshito Ishiki for helpful comments on an
+earlier version of this manuscript.
 
 % ------------------------------------------------------------------
 \bibliographystyle{plain}
