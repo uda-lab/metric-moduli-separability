@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Build a reproducible arXiv v1 source bundle for paper/main.tex.
 #
-# arXiv does not run BibTeX, so the bundle ships a pre-built main.bbl
-# alongside main.tex; references.bib is intentionally excluded. The
-# bundle is verified by extracting it into a clean directory and
-# compiling with plain pdflatex (no latexmk, no .bib) twice.
+# The bundle intentionally supplies a pre-generated main.bbl so that
+# arXiv's TeX system does not need to process references.bib (which is
+# deliberately excluded from the bundle). The bundle is verified by
+# extracting it into a clean directory and compiling with plain
+# pdflatex (no latexmk, no .bib) twice, and is only published to
+# paper/arxiv-v1.tar.gz after every check passes.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,6 +16,19 @@ BUNDLE_PATH="${PAPER_DIR}/${BUNDLE_NAME}"
 EXPECTED_PAGES=11
 
 log() { printf '==> %s\n' "$1"; }
+
+# ---------------------------------------------------------------------
+# 0. Invalidate any pre-existing bundle up front. A failed build or a
+#    failed verification below must never leave a stale or rejected
+#    archive sitting at BUNDLE_PATH looking uploadable.
+# ---------------------------------------------------------------------
+log "Removing any pre-existing bundle at ${BUNDLE_PATH}"
+rm -f "${BUNDLE_PATH}"
+
+STAGE_DIR="$(mktemp -d)"
+VERIFY_DIR="$(mktemp -d)"
+CANDIDATE_PATH="$(mktemp "${PAPER_DIR}/.arxiv-v1.XXXXXX.tar.gz")"
+trap 'rm -rf "${STAGE_DIR}" "${VERIFY_DIR}"; rm -f "${CANDIDATE_PATH}"' EXIT
 
 # ---------------------------------------------------------------------
 # 1. Rebuild main.bbl freshly via latexmk in paper/.
@@ -33,27 +48,27 @@ fi
 # ---------------------------------------------------------------------
 # 2. Stage exactly main.tex and main.bbl into a temp dir.
 # ---------------------------------------------------------------------
-STAGE_DIR="$(mktemp -d)"
-trap 'rm -rf "${STAGE_DIR}" "${VERIFY_DIR:-}"' EXIT
-
 log "Staging bundle contents in ${STAGE_DIR}"
 cp "${PAPER_DIR}/main.tex" "${STAGE_DIR}/main.tex"
 cp "${PAPER_DIR}/main.bbl" "${STAGE_DIR}/main.bbl"
 
 # ---------------------------------------------------------------------
-# 3. Create the tarball with the two files at the archive root.
+# 3. Create a candidate tarball with the two files at the archive
+#    root. Tar and gzip metadata are pinned (sorted order, zeroed
+#    owner/group, fixed mtime, no gzip name/mtime) so the archive is
+#    byte-for-byte reproducible across runs given identical inputs.
 # ---------------------------------------------------------------------
-log "Creating ${BUNDLE_PATH}"
-rm -f "${BUNDLE_PATH}"
-tar -czf "${BUNDLE_PATH}" -C "${STAGE_DIR}" main.tex main.bbl
+log "Creating candidate bundle ${CANDIDATE_PATH}"
+tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
+    -cf - -C "${STAGE_DIR}" main.tex main.bbl \
+  | gzip -n -9 > "${CANDIDATE_PATH}"
 
 # ---------------------------------------------------------------------
-# 4. Verification: extract into a fresh dir, compile with plain
-#    pdflatex twice (no latexmk, no .bib available).
+# 4. Verification: extract the candidate into a fresh dir, compile
+#    with plain pdflatex twice (no latexmk, no .bib available).
 # ---------------------------------------------------------------------
-VERIFY_DIR="$(mktemp -d)"
-log "Verifying bundle by extraction + pdflatex in ${VERIFY_DIR}"
-tar -xzf "${BUNDLE_PATH}" -C "${VERIFY_DIR}"
+log "Verifying candidate bundle by extraction + pdflatex in ${VERIFY_DIR}"
+tar -xzf "${CANDIDATE_PATH}" -C "${VERIFY_DIR}"
 
 (
   cd "${VERIFY_DIR}"
@@ -99,10 +114,22 @@ if [[ "${PAGE_COUNT}" -ne "${EXPECTED_PAGES}" ]]; then
 fi
 
 # ---------------------------------------------------------------------
-# 5. Summary.
+# 5. All checks passed: atomically publish the candidate as the
+#    bundle. mktemp created CANDIDATE_PATH in PAPER_DIR itself, so
+#    this mv is a same-filesystem rename (atomic).
+# ---------------------------------------------------------------------
+log "All checks passed; publishing ${BUNDLE_PATH}"
+mv "${CANDIDATE_PATH}" "${BUNDLE_PATH}"
+chmod 644 "${BUNDLE_PATH}"
+
+BUNDLE_SHA256="$(sha256sum "${BUNDLE_PATH}" | awk '{print $1}')"
+
+# ---------------------------------------------------------------------
+# 6. Summary.
 # ---------------------------------------------------------------------
 log "Bundle verification passed"
 echo
 echo "Bundle:      ${BUNDLE_PATH}"
 echo "Contents:    $(tar -tzf "${BUNDLE_PATH}" | tr '\n' ' ')"
 echo "PDF pages:   ${PAGE_COUNT}"
+echo "SHA-256:     ${BUNDLE_SHA256}"
