@@ -51,6 +51,7 @@ fi
 log "Staging bundle contents in ${STAGE_DIR}"
 cp "${PAPER_DIR}/main.tex" "${STAGE_DIR}/main.tex"
 cp "${PAPER_DIR}/main.bbl" "${STAGE_DIR}/main.bbl"
+chmod 644 "${STAGE_DIR}/main.tex" "${STAGE_DIR}/main.bbl"
 
 # ---------------------------------------------------------------------
 # 3. Create a candidate tarball with the two files at the archive
@@ -60,6 +61,7 @@ cp "${PAPER_DIR}/main.bbl" "${STAGE_DIR}/main.bbl"
 # ---------------------------------------------------------------------
 log "Creating candidate bundle ${CANDIDATE_PATH}"
 tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' \
+    --mode='u=rw,go=r' \
     -cf - -C "${STAGE_DIR}" main.tex main.bbl \
   | gzip -n -9 > "${CANDIDATE_PATH}"
 
