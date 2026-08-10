@@ -1,10 +1,10 @@
 # arXiv v1 Submission — Metadata Draft and Owner Checklist
 
-Issue #38. Manuscript frozen in #36 (merge `36635b9`). The bundle is produced
-by `paper/make-arxiv-bundle.sh` (main.tex + main.bbl only; the pre-generated
-`main.bbl` is supplied so arXiv's TeX system does not need to process
-`references.bib`, which is deliberately excluded). **Agent-side preparation
-is complete**; the owner actions below remain — endorsement (Track A),
+Issue #38. Manuscript frozen in #36 (merge `36635b9`). The arXiv sources are
+`main.tex` and the pre-generated `main.bbl`; supplying the latter means that
+arXiv's TeX system does not need to process `references.bib`, which is
+deliberately excluded. **Agent-side preparation is complete**; the owner
+actions below remain — endorsement (Track A),
 acknowledgement consent, license choice (Track D), metadata entry (Track C),
 the upload/compile/inspect dry run (Track E) — ending with the deliberate
 final submit click.
@@ -70,15 +70,17 @@ submitting.**
 
 ## Track E — arXiv dry run (owner, with agent support on failures)
 
-1. Run `paper/make-arxiv-bundle.sh`; upload `paper/arxiv-v1.tar.gz` to an
-   incomplete arXiv submission.
+1. Run `cd paper && latexmk main.tex`. Upload `main.tex` and `main.bbl` to an
+   incomplete arXiv submission, either directly or in the optional archive
+   created from `paper/` with
+   `tar -czf arxiv-v1.tar.gz main.tex main.bbl`.
 2. Let arXiv compile; inspect the compilation log for errors/warnings.
 3. Inspect the arXiv-generated PDF **page by page** against the local
    `paper/main.pdf` at `36635b9`: title, author footnote (affiliation,
    e-mail, ORCID link), abstract, all theorem/lemma statements, the
    construction table, references, hyperlinks.
 4. If anything differs or fails, report on issue #38 — fixes go through a
-   normal PR, then rebuild the bundle and repeat.
+   normal PR, then rebuild the source files or archive and repeat.
 5. The arXiv-generated PDF is the authoritative compatibility check.
 
 ## Final pre-submit checklist (owner)
