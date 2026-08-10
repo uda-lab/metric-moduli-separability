@@ -4,6 +4,7 @@
 \usepackage{lmodern}
 \usepackage{hyperref}
 \usepackage{microtype}
+\usepackage{mathtools}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{booktabs}
@@ -12,6 +13,7 @@
 % Theorem environments
 % ------------------------------------------------------------------
 \newtheorem{theorem}{Theorem}[section]
+\newtheorem{fact}[theorem]{Fact}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -28,8 +30,8 @@
 \newcommand{\Cont}{\mathfrak{c}}
 
 % ------------------------------------------------------------------
-\title{On Ishiki's Conjecture~5.1:\\
-       Failure of Complete Metrizability of $\Met(D)$ for
+\title{On Ishiki's Conjecture:\\
+       $\Met(D)$ Is Not Completely Metrizable for
        $\lvert D\rvert=\aleph_1$}
 \author{Tomoki Uda\thanks{Nanzan University.
   Email: \texttt{uda0@nanzan-u.ac.jp}.
@@ -46,24 +48,19 @@
   Conjecture~5.1 asserts that $\Met(D)$ is not completely metrizable when
   $\lvert D\rvert = \aleph_1$. We prove this in ZFC by constructing a
   set $A \subseteq [0,1]$ of cardinality $\aleph_1$ that is not
-  $\Fsigma$ and transporting the resulting non-$\Gdelta$ obstruction
-  into $\Met(D)$ via an explicit closed embedding. The argument has been machine-checked in the Lean~4 proof
-  assistant.
+  $\Fsigma$ and embedding its complement as a closed subspace of $\Met(D)$.
+  The proof has also been formalised in Lean~4.
 \end{abstract}
 
 % ------------------------------------------------------------------
 \section{Introduction}
 \label{sec:intro}
 
-Let $D$ be an infinite discrete topological space, and let $\Met(D)$
-denote the set of metrics on $D$ that are \emph{compatible with the
-discrete topology}: those $d$ for which the metric topology induced by
-$d$ equals the discrete topology on $D$. This is a genuine restriction —
-not every metric on the underlying set of $D$ induces the discrete
-topology on it. We equip $\Met(D)$ with the topology induced by the
-supremum distance
+Let $D$ be an infinite discrete space, and let $\Met(D)$ denote the set
+of metrics on $D$ compatible with its topology. We equip $\Met(D)$ with
+the topology induced by the supremum distance
 \[
-  \rho(d, d') \;=\; \sup_{x,y\in D} \lvert d(x,y) - d'(x,y)\rvert ,
+  \rho(d, d') = \sup_{x,y\in D} \lvert d(x,y) - d'(x,y)\rvert ,
 \]
 which may take the value $+\infty$ for unbounded $d,d'$; this does not
 affect complete metrizability, which is a property of a topology and not
@@ -73,11 +70,10 @@ Remark~\ref{rem:extended-rho}).
 Koshino~\cite{Koshino2024} proved that a separable metrizable space $X$
 is $\sigma$-compact if and only if the space of bounded admissible
 metrics on $X$, with the supremum metric, is completely metrizable (the
-corollary in \cite{Koshino2024}). Ishiki~\cite{Ishiki2024}, citing
-Koshino, states the corresponding characterisation in terms of
-$\Met(X)$ — for separable $X$, $\Met(X)$ is completely metrizable if
-and only if $X$ is $\sigma$-compact — and proposes to remove the
-separability hypothesis. Conjecture~5.1 of \cite{Ishiki2024} is the
+corollary in \cite{Koshino2024}). Ishiki~\cite{Ishiki2024} states the
+corresponding characterisation in terms of $\Met(X)$: for separable $X$,
+$\Met(X)$ is completely metrizable if and only if $X$ is $\sigma$-compact.
+Conjecture~5.1 of \cite{Ishiki2024} is the
 resulting question for the least uncountable case:
 
 \begin{quote}
@@ -90,8 +86,8 @@ raises several further questions about $\Met(D)$ for other cardinalities
 and other topological properties; those are outside the scope of this
 paper, which addresses only Conjecture~5.1 as stated above.
 
-The proof strategy is the following. We first produce, using only ZFC (no
-extra set-theoretic hypothesis), a set $A \subseteq [0,1]$ with
+The proof strategy is the following. Working in ZFC, we first construct
+a set $A \subseteq [0,1]$ with
 $\lvert A\rvert = \aleph_1$ that is not an $\Fsigma$ subset of $[0,1]$
 (Lemma~\ref{lem:A-exists}). Its complement $A^\complement =
 [0,1]\setminus A$ is then not a $\Gdelta$ subset of $[0,1]$, hence not
@@ -100,10 +96,12 @@ family $(d_t)_{t\in[0,1]}$ of metrics on a discrete space $D$ of
 cardinality $\aleph_1$ that lie in $\Met(D)$ exactly for $t \in
 A^\complement$ (Lemma~\ref{lem:star-metric}), and show that $t \mapsto
 d_t$ restricts to a bi-Lipschitz embedding of $A^\complement$ onto a
-\emph{closed} subset of $\Met(D)$ (Lemma~\ref{lem:closed-image}). If
-$\Met(D)$ were completely metrizable, this closed image would inherit
-complete metrizability, and hence so would $A^\complement$ —
-contradicting the first step. This proves Theorem~\ref{thm:conj51}.
+\emph{closed} subset of $\Met(D)$ (Lemma~\ref{lem:closed-image}).
+If $\Met(D)$ were completely metrizable, then the image
+$\varphi[A^\complement]$, being closed in $\Met(D)$, would also be
+completely metrizable, and hence so would $A^\complement$.
+This contradicts the fact that $A^\complement$ is not completely
+metrizable and proves Theorem~\ref{thm:conj51}.
 
 \section{Preliminaries}
 \label{sec:prelim}
@@ -112,14 +110,13 @@ contradicting the first step. This proves Theorem~\ref{thm:conj51}.
 
 Throughout, $\omega_1$ denotes the first uncountable ordinal, and
 $\aleph_1 = \lvert\omega_1\rvert$ the first uncountable cardinal.
-$\Cont := 2^{\aleph_0}$ denotes the cardinality of the continuum; by
+$\Cont \coloneqq 2^{\aleph_0}$ denotes the cardinality of the continuum; by
 Cantor's theorem $\aleph_0 < \Cont$, and since $\aleph_1$ is the least
-uncountable cardinal, $\aleph_1 \le \Cont$ is a theorem of ZFC (whether or
-not $\aleph_1 = \Cont$, i.e. the continuum hypothesis $\mathsf{CH}$,
-holds). We write $\Fsigma$ (resp.\ $\Gdelta$) for the usual classes of
+uncountable cardinal, $\aleph_1 \le \Cont$ in ZFC.
+We write $\Fsigma$ (resp.\ $\Gdelta$) for the usual classes of
 countable unions of closed sets (resp.\ countable intersections of open
 sets), relative to whichever ambient space is under discussion. For $S
-\subseteq [0,1]$ we write $S^\complement := [0,1] \setminus S$;
+\subseteq [0,1]$ we write $S^\complement \coloneqq [0,1] \setminus S$;
 complements are always taken relative to $[0,1]$. A topological space is
 \emph{completely metrizable} if it is homeomorphic to a complete metric
 space; this is weaker than \emph{Polish}, which additionally requires
@@ -129,74 +126,50 @@ separability.
 \label{subsec:background}
 
 The proof uses two classical facts about complete metrizability:
-Theorem~\ref{thm:background-gdelta} is applied to the ambient space
-$[0,1]$, and Theorem~\ref{thm:background-closed} to $\Met(D)$.
+Fact~\ref{thm:background-gdelta} is applied to the ambient space
+$[0,1]$, and Fact~\ref{thm:background-closed} to $\Met(D)$.
 
-\begin{theorem}[Alexandrov--Lavrentiev]
+\begin{fact}[Alexandrov--Lavrentiev]
   \label{thm:background-gdelta}
   Let $X$ be a metrizable space and $S \subseteq X$. If $S$ is
   completely metrizable in the subspace topology, then $S$ is a $\Gdelta$
   subset of $X$.
-\end{theorem}
+\end{fact}
 This is the forward direction of the classical $\Gdelta$-characterisation
 of complete metrizability, stated in this generality in
 \cite[Theorem~3.11]{Kechris1995}; see also
 \cite[Theorems~4.3.23--4.3.24]{Engelking1989} and
-\cite[Theorem~24.12]{Willard2004}. We use only this direction, through
-its contrapositive, applied in Section~\ref{sec:closed-image} to
-$X = [0,1]$.
+\cite[Theorem~24.12]{Willard2004}.
 
-\begin{theorem}[Closed-subspace inheritance]
+\begin{fact}
   \label{thm:background-closed}
-  Let $X$ be a completely metrizable space and $Y \subseteq X$ a closed
-  subset. Then $Y$, in the subspace topology, is completely metrizable.
-\end{theorem}
-\begin{proof}
-  Fix a complete metric $d$ on $X$ inducing its topology. The restriction
-  $d|_{Y\times Y}$ induces the subspace topology on $Y$, so it suffices to
-  show that $d|_{Y\times Y}$ is complete. Let $(x_n)_n$ be a Cauchy
-  sequence in $(Y, d|_Y)$. It is also a Cauchy sequence in $(X,d)$, so by
-  completeness of $d$ it converges to some $x \in X$. In any metric space,
-  a closed set is closed under limits of sequences of its own points, so
-  $x \in Y$. Hence $(x_n)_n$ converges to $x$ within $(Y,d|_Y)$, which is
-  therefore complete, and $Y$ is completely metrizable.
-\end{proof}
-Theorem~\ref{thm:background-closed} is the only fact about complete
+  A closed subspace of a completely metrizable space is completely metrizable.
+\end{fact}
+% \begin{fact}
+%   Let $X$ be a completely metrizable space and $Y \subseteq X$ a closed
+%   subset. Then $Y$, in the subspace topology, is completely metrizable.
+% \end{fact}
+% \begin{proof}
+%   Fix a complete metric $d$ on $X$ inducing its topology. The restriction
+%   $d|_{Y\times Y}$ induces the subspace topology on $Y$, so it suffices to
+%   show that $d|_{Y\times Y}$ is complete. Let $(x_n)_n$ be a Cauchy
+%   sequence in $(Y, d|_Y)$. It is also a Cauchy sequence in $(X,d)$, so by
+%   completeness of $d$ it converges to some $x \in X$. In any metric space,
+%   a closed set is closed under limits of sequences of its own points, so
+%   $x \in Y$. Hence $(x_n)_n$ converges to $x$ within $(Y,d|_Y)$, which is
+%   therefore complete, and $Y$ is completely metrizable.
+% \end{proof}
+Fact~\ref{thm:background-closed} is the only fact about complete
 metrizability that we apply to $\Met(D)$.
 
-\begin{remark}[The supremum distance may be extended-valued]
+\begin{remark}[The supremum distance is an extended metric]
   \label{rem:extended-rho}
-  $\rho(d,d')$ can equal $+\infty$ when $d,d'$ are unbounded and their
-  difference is unbounded. This does not affect any statement below:
-  $\min(\rho,1)$ induces the same topology as $\rho$ and is an ordinary
-  finite-valued metric, so $\Met(D)$ is metrizable in the usual sense, and
-  complete metrizability is a topological property, independent of which
-  compatible metric witnesses it. In any case, every metric constructed in
+  For unbounded metrics, $\rho(d,d')$ may be infinite. This causes no
+  difficulty: $\min(\rho,1)$ induces the same topology as $\rho$ and is an
+  ordinary metric. Thus $\Met(D)$ is metrizable, and complete metrizability
+  depends only on its topology. In any case, every metric constructed in
   Section~\ref{sec:main} takes values in $[0,2]$, so all instances of
   $\rho$ appearing there are finite.
-\end{remark}
-
-\begin{remark}[$\Met(D)$ is not separable for $\lvert D\rvert = \aleph_1$]
-  \label{rem:not-separable}
-  Since $\aleph_1 = \aleph_1\cdot 2$, partition $D$ into $\aleph_1$
-  disjoint pairs $\{u_\alpha,v_\alpha\}$ ($\alpha<\omega_1$). For
-  $\varepsilon : \omega_1 \to \{1/3,\,2/3\}$, define $d_\varepsilon(u_\alpha,
-  v_\alpha) := \varepsilon(\alpha)$ and $d_\varepsilon(x,y):=1$ for any two
-  points $x,y$ lying in different pairs. Every triangle inequality
-  involving a cross-pair edge holds, since a within-pair value lies in
-  $\{1/3,2/3\}\subseteq(0,2)$ and $1 \le \tfrac13+1$; so $d_\varepsilon$ is
-  a metric, and every point is at distance $\ge 1/3$ from every other
-  point, so $d_\varepsilon \in \Met(D)$. If $\varepsilon \ne \varepsilon'$
-  differ at some $\alpha$, then $\rho(d_\varepsilon,d_{\varepsilon'}) \ge
-  \lvert\varepsilon(\alpha)-\varepsilon'(\alpha)\rvert = 1/3$, uniformly in
-  $\alpha$. This gives $2^{\aleph_1}$ points of $\Met(D)$ pairwise at
-  distance $\ge 1/3$; the open balls of radius $1/6$ around them are
-  pairwise disjoint, so any dense subset of $\Met(D)$ must meet all
-  $2^{\aleph_1}$ of them and hence be uncountable. So $\Met(D)$ is not
-  separable. This fact plays no logical role in the proof below; it
-  records that Conjecture~5.1 lies genuinely outside the separable
-  setting of Koshino's characterisation~\cite{Koshino2024} recalled in
-  the introduction.
 \end{remark}
 
 \section{Main Construction}
@@ -231,28 +204,25 @@ metrizability that we apply to $\Met(D)$.
   We split on whether the continuum hypothesis $\mathsf{CH}$
   ($\aleph_1 = \Cont$) holds.
 
-  \paragraph{Case 1: $\mathsf{CH}$ holds.} Let $A := [0,1]\setminus
-  \mathbb{Q}$, the irrationals in $[0,1]$. Since $[0,1]$ has cardinality
-  $\Cont$ and $\mathbb{Q}\cap[0,1]$ is countable, $\lvert A\rvert =
-  \Cont = \aleph_1$, the last equality by $\mathsf{CH}$.
+  \medskip
+  \noindent\textbf{Case 1: $\aleph_1=\Cont$.}
+  Let $A=[0,1]\setminus\mathbf{Q}$. Since $[0,1]$ has cardinality $\Cont$
+  and $\mathbf{Q}\cap[0,1]$ is countable, $|A|=\Cont=\aleph_1$.
 
-  $A$ is not $\Fsigma$ (this part does not use $\mathsf{CH}$): suppose
-  $A = \bigcup_n F_n$ with each $F_n$ closed in $[0,1]$. Since
-  $\mathbb{Q}\cap[0,1]$ is dense and $F_n \subseteq A$ is disjoint from
-  it, each $F_n$ is a closed set with empty interior, hence nowhere
-  dense; and $\mathbb{Q}\cap[0,1]$ is meagre as a countable union of
-  singletons. So $[0,1] = A \cup (\mathbb{Q}\cap[0,1])$ would be meagre
-  in itself, contradicting the Baire category theorem
-  \cite[Corollary~25.4]{Willard2004}. Hence $A$ is not $\Fsigma$.
+  Suppose for contradiction that $A=\bigcup_n F_n$, where each $F_n$ is
+  closed in $[0,1]$. Since $\mathbf{Q}\cap[0,1]$ is dense and $F_n\subseteq A$,
+  each $F_n$ has empty interior and is therefore nowhere dense. The set
+  $\mathbf{Q}\cap[0,1]$ is also meagre. Hence $[0,1]$ would be meagre in
+  itself, contradicting the Baire category theorem.
 
-  \paragraph{Case 2: $\mathsf{CH}$ fails, i.e.\ $\aleph_1 < \Cont$.}
-  Since $\aleph_1 \le \Cont = \lvert[0,1]\rvert$, fix any $A \subseteq
-  [0,1]$ with $\lvert A\rvert = \aleph_1$. Suppose $A = \bigcup_n F_n$
-  with each $F_n$ closed in $[0,1]$. Then $\lvert F_n\rvert \le
-  \lvert A\rvert = \aleph_1 < \Cont$ for every $n$, so each $F_n$ is
-  countable by Lemma~\ref{lem:closed-card}. Hence $A$ is a countable
-  union of countable sets, so countable — contradicting
-  $\lvert A\rvert = \aleph_1$. So $A$ is not $\Fsigma$.
+  \medskip
+  \noindent\textbf{Case 2: $\aleph_1<\Cont$.}
+  Choose $A\subseteq[0,1]$ with $|A|=\aleph_1$. Suppose for contradiction
+  that $A=\bigcup_n F_n$, where each $F_n$ is closed in $[0,1]$. Since
+  $|F_n|\le|A|=\aleph_1<\Cont$, Lemma~\ref{lem:closed-card} implies that
+  every $F_n$ is countable. Hence $A$ is countable, contradicting $|A|=\aleph_1$.
+
+  In either case, $A$ is not $\Fsigma$.
 \end{proof}
 
 \begin{remark}
@@ -263,9 +233,7 @@ metrizability that we apply to $\Met(D)$.
   \cite[p.~24]{Oxtoby1980}. Take $A \subseteq B$ with $\lvert A\rvert =
   \aleph_1$. If $A = \bigcup_n F_n$ with each $F_n$ closed, then some
   $F_n$ is an uncountable closed set contained in $B$, contradicting
-  that $B^\complement$ meets every uncountable closed set. This argument
-  is uniform in $\mathsf{CH}$; we use the two-case argument above, which
-  is fully elementary.
+  that $B^\complement$ meets every uncountable closed set.
 \end{remark}
 
 \subsection{A parametrised family of metrics}
@@ -283,196 +251,186 @@ Lemma~\ref{lem:A-exists} together with an injective enumeration $A =
   \Met(D)$ holds if and only if $t \in A^\complement$.
 \end{lemma}
 
-Since a bijection of index sets induces an isometric isomorphism of
-$\Met(D)$'s onto one another (compose a metric with the bijection on both
-coordinates, which visibly preserves compatibility with the discrete
-topology and the supremum distance), $\Met(D)$ up to isometric isomorphism
-depends only on $\lvert D\rvert$; it therefore suffices to construct the
-family for one convenient concrete $D$ of cardinality $\aleph_1$.
+\begin{proof}
+  A bijection $f \colon D\to D'$ induces an isometric isomorphism between
+  $\Met(D)$ and $\Met(D')$ by relabelling the two arguments of each metric.
+  Since the isometry type of $\Met(D)$ depends only on $|D|$, it suffices
+  to consider the space $D$ constructed below.
 
-\paragraph{Construction.} Let
-\[
-  D := \{p,q\} \ \sqcup\ \{y_\alpha : \alpha<\omega_1\} \ \sqcup\
-  \{x_{\alpha,n} : \alpha < \omega_1,\ n \in \mathbb{N}\},
-\]
-a disjoint union with $\lvert D\rvert = 2 + \aleph_1 + \aleph_1\cdot
-\aleph_0 = \aleph_1$, carrying the discrete topology. For $\alpha <
-\omega_1$ let $C_\alpha := \{y_\alpha\} \cup \{x_{\alpha,n} :
-n\in\mathbb{N}\}$. Then
-\[
-  D = \{p,q\} \sqcup \bigsqcup_{\alpha<\omega_1} C_\alpha
-\]
-is a partition of $D$. For $t \in [0,1]$, $\alpha < \omega_1$,
-$n \in \mathbb{N}$, set
-\[
-  s_n(\alpha,t) := \min\bigl(1,\ \lvert t-a_\alpha\rvert + 1/(n+1)\bigr)
-  \in (0,1].
-\]
-Define $d_t : D \times D \to [0,2]$ by $d_t(u,u)=0$ and, on distinct
-pairs, by
+  \medskip\noindent\textbf{Construction.} Let
+  \[
+    D \coloneqq \{p,q\} \sqcup \{y_\alpha : \alpha<\omega_1\} \sqcup
+    \{x_{\alpha,n} : \alpha < \omega_1,\ n \in \mathbf{N}\},
+  \]
+  a disjoint union with $\lvert D\rvert = 2 + \aleph_1 + \aleph_1\cdot
+  \aleph_0 = \aleph_1$, carrying the discrete topology. For $\alpha <
+  \omega_1$ let $C_\alpha \coloneqq \{y_\alpha\} \cup \{x_{\alpha,n} :
+  n\in\mathbf{N}\}$. Then
+  \[
+    D = \{p,q\} \sqcup \bigsqcup_{\alpha<\omega_1} C_\alpha
+  \]
+  is a partition of $D$. For $t \in [0,1]$, $\alpha < \omega_1$,
+  $n \in \mathbf{N}$, set
+  \[
+    s_n(\alpha,t) \coloneqq \min\left(1,\ \lvert t-a_\alpha\rvert +
+    \dfrac{1}{n+1}\right)
+    \in (0,1].
+  \]
+  Define $d_t \colon D\times D\to[0,2]$ by
+  \[
+    d_t(u,v)=
+    \begin{cases}
+      0, & u=v,\\
+      1+t, & \{u,v\}=\{p,q\},\\
+      s_n(\alpha,t), & \{u,v\}=\{y_\alpha,x_{\alpha,n}\},\\
+      s_n(\alpha,t)+s_m(\alpha,t),
+      & \{u,v\}=\{x_{\alpha,n},x_{\alpha,m}\},\ n\ne m,\\
+      1, & \text{otherwise}.
+    \end{cases}
+  \]
+  The range of $d_t$ lies in $[0,2]$ since $0 < s_n \le 1$ and $0\le t\le 1$.
 
-\begin{center}
-\begin{tabular}{ll}
-  \toprule
-  Distinct pair $\{u,v\}$ & $d_t(u,v)$ \\
-  \midrule
-  $\{p,q\}$ & $1+t$ \\
-  $\{y_\alpha, x_{\alpha,n}\}$ & $s_n(\alpha,t)$ \\
-  $\{x_{\alpha,n},x_{\alpha,m}\}$, $n\ne m$ &
-    $s_n(\alpha,t)+s_m(\alpha,t)$ \\
-  Any other pair & $1$ \\
-  \bottomrule
-\end{tabular}
-\end{center}
+  \medskip\noindent\textbf{Claim (C1).} $d_t$ is a metric, for every $t \in [0,1]$.
+  Definiteness and symmetry are immediate. For the triangle inequality
+  $d_t(u,w)\le d_t(u,v)+d_t(v,w)$, the case where two of $u,v,w$ coincide is
+  trivial, so assume $u,v,w$ are pairwise distinct, and abbreviate $s_n \coloneqq
+  s_n(\alpha,t)$ once $\alpha$ is fixed. We use two facts: every distance is
+  at most $2$, and two points in distinct parts of the partition are at distance
+  exactly $1$. Split on how $\{u,v,w\}$ meets the partition.
 
-The table assigns values to unordered pairs, so $d_t$ is symmetric; the
-final row covers exactly the pairs whose two points lie in distinct
-parts of the partition. The range of $d_t$ lies in $[0,2]$ since
-$0 < s_n \le 1$ and $0\le t\le 1$.
+  \begin{itemize}
+  \item \emph{All three in one part.} Since $\{p,q\}$ has only two
+    elements, the part is some $C_\alpha$. If the three points are
+    $y_\alpha$, $x_{\alpha,n}$, $x_{\alpha,m}$ ($n \ne m$), the required
+    inequalities are $s_n+s_m \le s_n + s_m$ (through $y_\alpha$) and
+    $s_n \le (s_n+s_m) + s_m$ (through $x_{\alpha,m}$). If the three points
+    are $x_{\alpha,n},x_{\alpha,m},x_{\alpha,k}$ (distinct indices), then
+    $s_n+s_m \le (s_n+s_k) + (s_k+s_m)$.
+  \item \emph{Exactly two in one part $E$, one point $z$ outside $E$.} Then
+    $d_t(u,z)=d_t(v,z)=1$ for the two points $u,v \in E$, so
+    $d_t(u,v)\le 2 = d_t(u,z)+d_t(z,v)$ and $d_t(u,z)=1\le d_t(u,v)+1 =
+    d_t(u,v)+d_t(v,z)$.
+  \item \emph{Three distinct parts.} All three pairwise distances equal
+    $1$, and $1\le 1+1$.
+  \end{itemize}
+  These cases exhaust all possible configurations of three points with respect
+  to the partition. Hence $d_t$ satisfies the triangle inequality and is a metric.
 
-\paragraph{(C1) $d_t$ is a metric, for every $t \in [0,1]$.} Definiteness
-and symmetry are immediate; every table entry is strictly positive, so
-$d_t(u,v)=0$ iff $u=v$. For the triangle inequality
-$d_t(u,w)\le d_t(u,v)+d_t(v,w)$, the case where two of $u,v,w$ coincide is
-trivial, so assume $u,v,w$ are pairwise distinct, and abbreviate $s_n :=
-s_n(\alpha,t)$ once $\alpha$ is fixed. We use two facts read off the
-table: every distance is at most $2$, and two points in distinct parts of
-the partition are at distance exactly $1$. Split on how $\{u,v,w\}$ meets
-the partition.
+  \medskip\noindent\textbf{Claim (C2).} $t \in A^\complement$ implies $d_t \in \Met(D)$.
+  A metric induces the discrete topology on $D$ exactly when every point is
+  isolated, i.e. $\delta(u) \coloneqq \inf_{v\ne u} d_t(u,v) > 0$ for every $u \in
+  D$. Fix $t \in A^\complement$.
+  \begin{itemize}
+  \item $\delta(p)=\delta(q)=1$: the distance from $p$ (resp.\ $q$) to any
+    point other than $q$ (resp.\ $p$) is $1$, and $d_t(p,q)=1+t\ge 1$.
+  \item For $x_{\alpha,n}$: its distances are $s_n(\alpha,t)$
+    (to $y_\alpha$), $s_n(\alpha,t)+s_m(\alpha,t) \ge s_n(\alpha,t)$ (to
+    $x_{\alpha,m}$, $m \ne n$), and $1$ (outside $C_\alpha$); since $s_n
+    \le 1$, $\delta(x_{\alpha,n}) = s_n(\alpha,t) \ge 1/(n+1)>0$.
+  \item For $y_\alpha$: its distances are $s_n(\alpha,t)$
+    ($n\in\mathbf{N}$), and $1$ outside $C_\alpha$.
+    Since $r\mapsto\min(1,r)$ is continuous and nondecreasing and
+    $\lvert t-a_\alpha\rvert+1/(n+1) \downarrow \lvert t-a_\alpha\rvert$ as
+    $n\to\infty$, $\inf_n s_n(\alpha,t) = \min(1,\lvert t-a_\alpha\rvert)$,
+    so $\delta(y_\alpha)=\min(1,\lvert t-a_\alpha\rvert)$. As $t \in
+    A^\complement$ and $a_\alpha \in A$, $t \ne a_\alpha$, so
+    $\delta(y_\alpha)>0$.
+  \end{itemize}
+  Every point is isolated, so $d_t$ induces the discrete topology; with
+  (C1), $d_t \in \Met(D)$.
 
-\begin{itemize}
-\item \emph{All three in one part.} Since $\{p,q\}$ has only two
-  elements, the part is some $C_\alpha$. If the three points are
-  $y_\alpha$, $x_{\alpha,n}$, $x_{\alpha,m}$ ($n \ne m$), the required
-  inequalities are $s_n+s_m \le s_n + s_m$ (through $y_\alpha$) and
-  $s_n \le (s_n+s_m) + s_m$ (through $x_{\alpha,m}$); the remaining
-  orderings are symmetric copies of these two. If the three points are
-  $x_{\alpha,n},x_{\alpha,m},x_{\alpha,k}$ (distinct indices), then
-  $s_n+s_m \le (s_n+s_k) + (s_k+s_m)$.
-\item \emph{Exactly two in one part $E$, one point $z$ outside $E$.} Then
-  $d_t(u,z)=d_t(v,z)=1$ for the two points $u,v \in E$, so
-  $d_t(u,v)\le 2 = d_t(u,z)+d_t(z,v)$ and $d_t(u,z)=1\le d_t(u,v)+1 =
-  d_t(u,v)+d_t(v,z)$.
-\item \emph{Three distinct parts.} All three pairwise distances equal
-  $1$, and $1\le 1+1$.
-\end{itemize}
-These cases exhaust the possible distributions of three points over the
-partition, so $d_t$ satisfies the triangle inequality and is a metric.
+  \medskip\noindent\textbf{Claim (C3).} $t \in A$ implies $d_t \notin \Met(D)$.
+  Let $t=a_\alpha\in A$. By (C1), $d_t$ is a metric on $D$. Since
+  \[
+    d_t(y_\alpha,x_{\alpha,n})=\frac{1}{n+1}\to 0
+    \qquad \text{(as $n\to\infty$)},
+  \]
+  the point $y_\alpha$ is not isolated. Hence $d_t\notin\Met(D)$.
 
-\paragraph{(C2) $t \in A^\complement \implies d_t \in \Met(D)$.} A metric
-induces the discrete topology on $D$ exactly when every point is
-isolated, i.e. $\delta(u) := \inf_{v\ne u} d_t(u,v) > 0$ for every $u \in
-D$. Fix $t \in A^\complement$.
-\begin{itemize}
-\item $\delta(p)=\delta(q)=1$: the distance from $p$ (resp.\ $q$) to any
-  point other than $q$ (resp.\ $p$) is $1$, and $d_t(p,q)=1+t\ge 1$.
-\item For $x_{\alpha,n}$: its distances are $s_n(\alpha,t)$
-  (to $y_\alpha$), $s_n(\alpha,t)+s_m(\alpha,t) \ge s_n(\alpha,t)$ (to
-  $x_{\alpha,m}$, $m \ne n$), and $1$ (outside $C_\alpha$); since $s_n
-  \le 1$, $\delta(x_{\alpha,n}) = s_n(\alpha,t) \ge 1/(n+1)>0$.
-\item For $y_\alpha$: its distances are $s_n(\alpha,t)$
-  ($n\in\mathbb{N}$), and $1$ outside $C_\alpha$.
-  Since $r\mapsto\min(1,r)$ is continuous and nondecreasing and
-  $\lvert t-a_\alpha\rvert+1/(n+1) \downarrow \lvert t-a_\alpha\rvert$ as
-  $n\to\infty$, $\inf_n s_n(\alpha,t) = \min(1,\lvert t-a_\alpha\rvert)$,
-  so $\delta(y_\alpha)=\min(1,\lvert t-a_\alpha\rvert)$. As $t \in
-  A^\complement$ and $a_\alpha \in A$, $t \ne a_\alpha$, so
-  $\delta(y_\alpha)>0$.
-\end{itemize}
-Every point is isolated, so $d_t$ induces the discrete topology; with
-(C1), $d_t \in \Met(D)$.
+  Claims (C2) and (C3) prove Lemma~\ref{lem:star-metric}.
+\end{proof}
 
-\paragraph{(C3) $t \in A \implies d_t \notin \Met(D)$.} Let $t=a_\beta \in
-A$. By (C1), $d_t$ is still a metric. But $s_n(\beta,a_\beta) =
-\min(1,1/(n+1))=1/(n+1) \to 0$ as $n\to\infty$, so
-$d_t(y_\beta,x_{\beta,n}) = 1/(n+1)$: every ball around $y_\beta$ of
-radius $\varepsilon>0$ contains some $x_{\beta,n}\ne y_\beta$ once
-$1/(n+1)<\varepsilon$. So $\{y_\beta\}$ is not open, and $d_t$ does not
-induce the discrete topology, i.e.\ $d_t \notin \Met(D)$.
-
-Combining (C2) and (C3): for $t \in [0,1]$, $d_t \in \Met(D)$ if and only
-if $t \in A^\complement$. This proves Lemma~\ref{lem:star-metric}.
-
-\begin{remark}
-  \label{rem:star-name}
-  By the equality case in (C1), the distance between two points
-  $x_{\alpha,n}$ and $x_{\alpha,m}$ of a common $C_\alpha$ is realised by
-  the path through $y_\alpha$, so each $(C_\alpha, d_t)$ is isometric to
-  a metric star. This geometric feature is not used in the sequel.
-\end{remark}
+% \begin{remark}
+%   \label{rem:star-name}
+%   By the equality case in (C1), the distance between two points
+%   $x_{\alpha,n}$ and $x_{\alpha,m}$ of a common $C_\alpha$ is realised by
+%   the path through $y_\alpha$, so each $(C_\alpha, d_t)$ is isometric to
+%   a metric star. This geometric feature is not used in the sequel.
+% \end{remark}
 
 \section{Proof of the Main Theorem}
 \label{sec:closed-image}
 
 We continue to use the $A$, $D$, and $(d_t)_{t\in[0,1]}$ fixed in
 Section~\ref{subsec:star}. Give $A^\complement$ the subspace topology
-from $[0,1]$ (equivalently, the metric $\lvert t-s\rvert$).
+from $[0,1]$.
 
 \begin{lemma}
   \label{lem:closed-image}
-  The map $\varphi : A^\complement \to \Met(D)$, $\varphi(t) := d_t$, is a
-  bi-Lipschitz embedding, and its image $\varphi(A^\complement)$ is
+  The map $\varphi \colon A^\complement \to \Met(D)$, $\varphi(t) \coloneqq d_t$, is a
+  bi-Lipschitz embedding, and its image $\varphi[A^\complement]$ is
   closed in $\Met(D)$.
 \end{lemma}
 
-\paragraph{(C4) Bi-Lipschitz estimate.} For all $s,t\in[0,1]$,
-\[
-  \lvert t-s\rvert \ \le\ \rho(d_t,d_s) \ \le\ 2\lvert t-s\rvert .
-\]
-\emph{Lower bound.} Comparing values on the pair $\{p,q\}$,
-$\lvert d_t(p,q)-d_s(p,q)\rvert = \lvert(1+t)-(1+s)\rvert = \lvert
-t-s\rvert$, and $\rho(d_t,d_s)$ is at least this one value.
+\begin{proof}
+  \noindent\textbf{Claim (C4) (Bi-Lipschitz estimate).} For all $s,t\in[0,1]$,
+  \[
+    \lvert t-s\rvert \le \rho(d_t,d_s) \le  2\lvert t-s\rvert .
+  \]
+  \emph{Lower bound.} Comparing values on the pair $\{p,q\}$,
+  $\lvert d_t(p,q)-d_s(p,q)\rvert = \lvert(1+t)-(1+s)\rvert = \lvert
+  t-s\rvert$, and $\rho(d_t,d_s)$ is at least this one value.
 
-\emph{Upper bound.} It suffices to bound $\lvert d_t(u,v)-d_s(u,v)\rvert
-\le 2\lvert t-s\rvert$ for every pair $\{u,v\}$ and take the supremum. On
-$\{p,q\}$ the difference is $\lvert t-s\rvert$. The map $r
-\mapsto \min(1,r)$ is $1$-Lipschitz, and $r \mapsto \lvert r-a_\alpha\rvert
-+ 1/(n+1)$ is $1$-Lipschitz by the reverse triangle inequality, so their
-composite $r \mapsto s_n(\alpha,r)$ is $1$-Lipschitz: $\lvert
-s_n(\alpha,t)-s_n(\alpha,s)\rvert \le \lvert t-s\rvert$. Hence for a
-pair $\{y_\alpha, x_{\alpha,n}\}$ the difference is at most $\lvert
-t-s\rvert \le 2\lvert t-s\rvert$, and for a pair
-$\{x_{\alpha,n},x_{\alpha,m}\}$ it is at most $2\lvert t-s\rvert$ by the
-triangle inequality on two such terms. For pairs meeting two distinct
-parts of the partition the value is constantly $1$, so the difference is
-$0$. This proves the upper bound, hence (C4).
+  \emph{Upper bound.} It suffices to bound $\lvert d_t(u,v)-d_s(u,v)\rvert
+  \le 2\lvert t-s\rvert$ for every pair $\{u,v\}$ and take the supremum. On
+  $\{p,q\}$ the difference is $\lvert t-s\rvert$. The map $r
+  \mapsto \min(1,r)$ is $1$-Lipschitz, and $r \mapsto \lvert r-a_\alpha\rvert
+  + 1/(n+1)$ is $1$-Lipschitz by the reverse triangle inequality, so their
+  composite $r \mapsto s_n(\alpha,r)$ is $1$-Lipschitz: $\lvert
+  s_n(\alpha,t)-s_n(\alpha,s)\rvert \le \lvert t-s\rvert$. Hence for a
+  pair $\{y_\alpha, x_{\alpha,n}\}$ the difference is at most $\lvert
+  t-s\rvert \le 2\lvert t-s\rvert$, and for a pair
+  $\{x_{\alpha,n},x_{\alpha,m}\}$ it is at most $2\lvert t-s\rvert$ by the
+  triangle inequality on two such terms. For pairs meeting two distinct
+  parts of the partition the value is constantly $1$, so the difference is
+  $0$. This proves the upper bound, hence (C4).
 
-Since $\varphi$ is injective by the lower bound and both Lipschitz
-estimates hold, $\varphi$ is a bi-Lipschitz bijection from
-$A^\complement$ onto $\varphi(A^\complement)$ (with the subspace topology
-from $\Met(D)$), in particular a homeomorphism onto its image.
+  Since $\varphi$ is injective by the lower bound and both Lipschitz
+  estimates hold, $\varphi$ is a bi-Lipschitz bijection from
+  $A^\complement$ onto $\varphi[A^\complement]$ (with the subspace topology
+  from $\Met(D)$), in particular a homeomorphism onto its image.
 
-\paragraph{(C5) The image is closed.} The topology of $\Met(D)$ is given
-by the finite metric $\min(\rho,1)$, so closure points are sequential
-limits. Let $e \in \Met(D)$ be a limit point of
-$\varphi(A^\complement)$, and choose $t_k \in A^\complement$ with
-$\rho(d_{t_k},e)\to 0$; we show $e \in \varphi(A^\complement)$.
+  \medskip\noindent\textbf{Claim (C5) (The image is closed).} The topology of $\Met(D)$ is given
+  by the finite metric $\min(\rho,1)$, so closure points are sequential
+  limits. Let $d' \in \Met(D)$ be a limit point of
+  $\varphi[A^\complement]$, and choose $t_k \in A^\complement$ with
+  $\rho(d_{t_k},d')\to 0$. We show $d' \in \varphi[A^\complement]$.
 
-\emph{Recovering the parameter.} $\lvert d_{t_k}(p,q)-e(p,q)\rvert \le
-\rho(d_{t_k},e)\to 0$ gives $1+t_k \to e(p,q)$, i.e.\ $t_k \to t$ for $t :=
-e(p,q)-1$. Each $t_k \in [0,1]$ and $[0,1]$ is closed in $\mathbb{R}$, so
-$t \in [0,1]$, and by (C1) $d_t$ is a well-defined metric on $D$ (not yet
-known to lie in $\Met(D)$).
+  \emph{Recovering the parameter.} $\lvert d_{t_k}(p,q)-d'(p,q)\rvert \le
+  \rho(d_{t_k},d')\to 0$ gives $1+t_k \to d'(p,q)$, i.e.\ $t_k \to t$ for $t \coloneqq
+  d'(p,q)-1$. Each $t_k \in [0,1]$ and $[0,1]$ is closed in $\mathbf{R}$, so
+  $t \in [0,1]$, and by (C1) $d_t$ is a well-defined metric on $D$.
 
-\emph{Identifying the limit.} Fix $u,v \in D$. By (C4),
-$\rho(d_{t_k},d_t) \le 2\lvert t_k-t\rvert \to 0$, so
-\[
-  \lvert e(u,v)-d_t(u,v)\rvert \le \rho(e,d_{t_k}) +
-  \rho(d_{t_k},d_t) \longrightarrow 0 \quad (k \to \infty),
-\]
-while the left side does not depend on $k$; hence $e(u,v)=d_t(u,v)$ for
-all $u,v$, i.e.\ $e = d_t$.
+  \emph{Identifying the limit.} Fix $u,v \in D$. By (C4),
+  $\rho(d_{t_k},d_t) \le 2\lvert t_k-t\rvert \to 0$, so
+  \[
+    \lvert d'(u,v)-d_t(u,v)\rvert \le \rho(d',d_{t_k}) +
+    \rho(d_{t_k},d_t) \longrightarrow 0 \quad (k \to \infty),
+  \]
+  while the left side does not depend on $k$; hence $d'(u,v)=d_t(u,v)$ for
+  all $u,v$, i.e.\ $d' = d_t$.
 
-\emph{Excluding the boundary case.} By hypothesis $e \in \Met(D)$, so
-$d_t = e \in \Met(D)$. If $t \in A$, (C3) gives $d_t \notin \Met(D)$, a
-contradiction; so $t \notin A$, i.e.\ $t \in A^\complement$, and $e = d_t
-= \varphi(t) \in \varphi(A^\complement)$.
+  \emph{Excluding the boundary case.}
+  Since $d'=d_t$ and $d'\in\Met(D)$, we have $d_t\in\Met(D)$.
+  If $t\in A$, however, (C3) gives $d_t\notin\Met(D)$, a contradiction.
+  Hence $t \notin A$, i.e.\ $t \in A^\complement$, and $d' = d_t
+  = \varphi(t) \in \varphi[A^\complement]$.
 
-Thus $\varphi(A^\complement)$ contains all its closure points and is
-closed in $\Met(D)$. This proves Lemma~\ref{lem:closed-image}. Excluding
-the case $t \in A$ — where $d_t$ remains a metric but no longer induces
-the discrete topology — is the substance of the closedness, and is
-exactly what (C3) provides.
+  Thus $\varphi[A^\complement]$ is closed in $\Met(D)$, proving
+  Lemma~\ref{lem:closed-image}. The essential point is to exclude
+  the case $t\in A$, where $d_t$ is a metric but does not induce
+  the discrete topology. This is precisely what (C3) rules out.
+\end{proof}
 
 \begin{theorem}[Ishiki's Conjecture~5.1]
   \label{thm:conj51}
@@ -481,68 +439,38 @@ exactly what (C3) provides.
 \end{theorem}
 
 \begin{proof}
-  By Section~\ref{subsec:star}, $\Met(D)$ up to isometric isomorphism
-  depends only on $\lvert D\rvert$, so it suffices to treat the concrete
-  $D$ of Section~\ref{subsec:star}.
-  \begin{enumerate}
-  \item By Lemma~\ref{lem:A-exists}, fix $A\subseteq[0,1]$ with $\lvert
-    A\rvert=\aleph_1$ that is not $\Fsigma$.
-  \item Since $A$ is not $\Fsigma$ in $[0,1]$, its complement
-    $A^\complement$ is not $\Gdelta$ in $[0,1]$, by the termwise duality
-    of the two classes under complementation.
-  \item $[0,1]$ is metrizable, so the contrapositive of
-    Theorem~\ref{thm:background-gdelta} applies: $A^\complement$ is not
-    completely metrizable as a subspace of $[0,1]$.
-  \item By Lemma~\ref{lem:star-metric} and Lemma~\ref{lem:closed-image},
-    $\varphi : A^\complement \to \Met(D)$ is a homeomorphism onto its
-    image $\varphi(A^\complement)$, which is closed in $\Met(D)$.
-  \item Suppose, for contradiction, that $\Met(D)$ is completely
-    metrizable. By Theorem~\ref{thm:background-closed}, the closed subset
-    $\varphi(A^\complement)$ is then also completely metrizable. Complete
-    metrizability is a topological invariant, so the homeomorphism of
-    step 4 transports it back to $A^\complement$: $A^\complement$ would
-    be completely metrizable, contradicting step 3.
-  \item Hence $\Met(D)$ is not completely metrizable. \qedhere
-  \end{enumerate}
+  By the relabelling observation in the proof of
+  Lemma~\ref{lem:star-metric}, the isometry type of $\Met(D)$ depends only
+  on $\lvert D\rvert$. Hence it suffices to treat the concrete $D$
+  constructed there.
+  By Lemma~\ref{lem:A-exists}, choose $A\subseteq[0,1]$ with
+  $|A|=\aleph_1$ that is not $\Fsigma$. Then $A^\complement$ is not
+  $\Gdelta$ in $[0,1]$, and hence is not completely metrizable by
+  Fact~\ref{thm:background-gdelta}.
+  By Lemmas~\ref{lem:star-metric} and \ref{lem:closed-image},
+  $A^\complement$ is homeomorphic to the closed subspace
+  $\varphi[A^\complement]$ of $\Met(D)$. If $\Met(D)$ were completely
+  metrizable, then so would be $\varphi[A^\complement]$, and consequently
+  $A^\complement$, a contradiction.
 \end{proof}
-
-\section{Related Work}
-\label{sec:related}
-
-Koshino's characterisation for bounded admissible metrics
-\cite{Koshino2024}, together with the $\Met(X)$ formulation recalled
-from \cite{Ishiki2024} in the introduction, provides the separable
-baseline from which Conjecture~5.1 departs; Theorem~\ref{thm:conj51}
-settles its least uncountable discrete case. Beyond the
-characterisation itself, \cite{Koshino2024} shows that the space of
-bounded admissible metrics on a metrizable space fails to be completely
-metrizable whenever the space contains a closed copy of the irrationals,
-by constructing a closed embedding of a rational parameter subspace
-$Q' \subseteq [0,1]$ into that space through a one-parameter family of
-metrics. Both arguments parameterise metrics by a non-completely-%
-metrizable subspace of a compact interval and force the offending
-boundary parameters outside the space of admissible metrics;
-Section~\ref{sec:closed-image} plays this role with the parameter set
-$A^\complement$. A different
-result of Koshino concerns recognising the topology of $\Met(X)$ from
-data about the topology of uniform convergence \cite{Koshino2022}.
-Ishiki \cite{Ishiki2024Baire} proves that $\Met(X)$ is comeagre in
-$\mathrm{CPM}(X)$, the space of continuous pseudometrics on $X$; this
-result is used in \cite{Ishiki2024}'s proof of its own Theorem~1.1, but
-plays no role in the proof given here.
 
 \section{Concluding Remarks}
 \label{sec:concluding}
 
-Theorem~\ref{thm:conj51} is a theorem of ZFC: no set-theoretic hypothesis
-beyond ZFC is assumed anywhere in the proof. The case split on
-$\mathsf{CH}$ inside the proof of Lemma~\ref{lem:A-exists}
-(Section~\ref{subsec:A}) is a proof technique — both branches are proved
-outright, and exactly one of them applies in any given model of ZFC — not
-an additional hypothesis on $D$ or on the ambient set theory.
+Koshino \cite{Koshino2024} proved that, for a separable metrizable space
+$X$, the space of bounded admissible metrics on $X$, equipped with the
+supremum metric, is completely metrizable if and only if $X$ is
+$\sigma$-compact. Ishiki \cite{Ishiki2024} stated the corresponding
+characterisation for $\Met(X)$ and formulated Conjecture~5.1 for a
+discrete space of cardinality $\aleph_1$. Koshino's proof also uses a
+one-parameter family of metrics to embed a rational subspace
+$Q'\subseteq[0,1]$ as a closed subspace of the space of bounded
+admissible metrics. Our construction has a similar form, with
+$A^\complement$ in place of $Q'$.
 
-The argument has also been formalised and machine-checked in the Lean~4
-proof assistant against the Mathlib library.
+No additional set-theoretic assumption, such as the continuum
+hypothesis, is required in the proof of Theorem~\ref{thm:conj51}. The
+proof has also been formalised in Lean~4 using Mathlib.
 
 % ------------------------------------------------------------------
 \section*{Acknowledgements}

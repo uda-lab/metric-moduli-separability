@@ -1,6 +1,7 @@
 # arXiv v1 Submission — Metadata Draft and Owner Checklist
 
-Issue #38. Manuscript frozen in #36 (merge `36635b9`). The arXiv sources are
+Issue #38. Manuscript frozen in #36 and revised/refrozen by the owner's
+rework in #42 (the current `paper/main.tex` on `main`). The arXiv sources are
 `main.tex` and the pre-generated `main.bbl`; supplying the latter means that
 arXiv's TeX system does not need to process `references.bib`, which is
 deliberately excluded. **Agent-side preparation is complete**; the owner
@@ -13,12 +14,12 @@ final submit click.
 
 | Field | Value |
 |-------|-------|
-| Title | On Ishiki's Conjecture 5.1: Failure of Complete Metrizability of $\mathrm{Met}(D)$ for $\lvert D\rvert = \aleph_1$ |
+| Title | On Ishiki's Conjecture: $\mathrm{Met}(D)$ Is Not Completely Metrizable for $\lvert D\rvert=\aleph_1$ |
 | Authors | Tomoki Uda (Nanzan University) |
 | Primary category | math.GN (General Topology) |
 | Cross-list (optional) | math.LO — the proof is ZFC-sensitive (CH case split, cardinal arithmetic); owner's call, not required |
 | MSC 2020 (optional) | 54E35 (Primary) 54E50, 54H05 (Secondary) |
-| Comments | 11 pages. The argument is machine-checked in the Lean 4 proof assistant. |
+| Comments | 8 pages. The argument is machine-checked in the Lean 4 proof assistant. |
 | ORCID | 0000-0002-6073-1572 — confirm it is linked to the submitting arXiv account (arXiv account settings), matching the manuscript footnote |
 | Journal-ref / DOI | **leave empty** (do not invent) |
 | Repository link | **intentionally omitted** (owner decision, 2026-08-10): v1 does not mention the repository anywhere, including metadata |
@@ -76,9 +77,10 @@ submitting.**
    `tar -czf arxiv-v1.tar.gz main.tex main.bbl`.
 2. Let arXiv compile; inspect the compilation log for errors/warnings.
 3. Inspect the arXiv-generated PDF **page by page** against the local
-   `paper/main.pdf` at `36635b9`: title, author footnote (affiliation,
-   e-mail, ORCID link), abstract, all theorem/lemma statements, the
-   construction table, references, hyperlinks.
+   `paper/main.pdf` built from `main` after the #42 refreeze merge: title,
+   author footnote (affiliation, e-mail, ORCID link), abstract, all
+   theorem/lemma statements, the construction display, references,
+   hyperlinks.
 4. If anything differs or fails, report on issue #38 — fixes go through a
    normal PR, then rebuild the source files or archive and repeat.
 5. The arXiv-generated PDF is the authoritative compatibility check.
