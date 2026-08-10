@@ -19,7 +19,8 @@
 | Proof-candidate label | ✅ lifted (owner decision, PR #29 comment, 2026-08-09) |
 | E9 cross-artifact consistency (paper ↔ report ↔ Lean) | ✅ done (Issue #26, 2026-08-09; recorded in `notes/proof-audit.md`) |
 | E10 submission readiness audit | ✅ **go** (Issue #27, 2026-08-09; see `notes/proof-audit.md`) |
-| arXiv v1 manuscript freeze (Issue #36) | 🔄 in progress (2026-08-10; owner review gate before merge) |
+| arXiv v1 manuscript freeze (Issue #36) | ✅ frozen (owner-approved PR #39, merge `36635b9`, 2026-08-10) |
+| arXiv v1 submission prep (Issue #38) | 🔄 agent-side prep done (PR #40); owner actions remain — see `notes/arxiv-submission.md` |
 | Provisional journal target | *Topology and its Applications* (alternative: *Fundamenta Mathematicae*) — recorded per Issue #36 §6; no journal-specific formatting before arXiv v1 |
 
 ## The proof

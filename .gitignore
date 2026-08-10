@@ -8,4 +8,5 @@ paper/*.log
 paper/*.out
 paper/*.pdf
 paper/*.synctex.gz
+paper/arxiv-v1.tar.gz
 report/*.pdf
