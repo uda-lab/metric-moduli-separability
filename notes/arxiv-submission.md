@@ -3,9 +3,11 @@
 Issue #38. Manuscript frozen in #36 (merge `36635b9`). The bundle is produced
 by `paper/make-arxiv-bundle.sh` (main.tex + main.bbl only; the pre-generated
 `main.bbl` is supplied so arXiv's TeX system does not need to process
-`references.bib`, which is deliberately excluded). Everything below is
-prepared so that **the only remaining action is the owner's deliberate final
-submit click**.
+`references.bib`, which is deliberately excluded). **Agent-side preparation
+is complete**; the owner actions below remain — endorsement (Track A),
+acknowledgement consent, license choice (Track D), metadata entry (Track C),
+the upload/compile/inspect dry run (Track E) — ending with the deliberate
+final submit click.
 
 ## Track C — metadata (copy into the arXiv submission form)
 
