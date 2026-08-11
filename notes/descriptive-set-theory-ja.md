@@ -153,25 +153,28 @@ neither analytic nor coanalytic ⇒ non-Borel
 
 ことをいう．
 
-Polish space の解析集合および余解析的集合は完全集合性を持つ．共同原稿は Kechris の perfect set theorems をこの形で用いている．
+Polish space の解析集合（`Σ¹₁`）は完全集合性を持つ．これは Suslin の定理であり（Kechris, *Classical Descriptive Set Theory*, Theorem 29.1），ZFC で証明可能である．
+
+一方，余解析的集合（`Π¹₁`）の完全集合性は ZFC からは証明できない．Mansfield–Solovay の定理により，「すべての `Π¹₁` 集合が完全集合性を持つ」は「任意の実数 `x` に対し `ω₁` が `L[x]` で inaccessible である」と同値であり，特に `V=L` のもとでは反例となる非可算 `Π¹₁` 集合（完全部分集合を持たない thin `Π¹₁` 集合）が存在する．共同原稿が Kechris の perfect set theorems をどちらの意味で（追加の仮定なしか，`ω₁` の inaccessibility に相当する仮定つきか）用いているかは，§12 の引用箇所を含め Issue #46 で確認する必要がある．
 
 ### 4.3 今回必要な濃度論的帰結
 
-`A` が Polish space の非可算な解析集合または余解析的集合なら，`A` は空でない完全集合を含む．したがって
+`A` が Polish space の非可算な解析集合なら，`A` は空でない完全集合を含み，したがって
 
 ```text
 |A| = 𝔠.
 ```
 
-この帰結が Proposition 2.1 / 2.2 の `¬CH` case の核心である．
+は ZFC の定理として成り立つ（§4.2，Σ¹₁-PSP）．`A` が非可算な余解析的集合の場合に同じ結論が成り立つのは，§4.2 の追加の仮定のもとでのみである．
 
-特に `ℵ₁ < 𝔠` のとき，
+**濃度論的帰結の非対称性:** `|S| = ℵ₁ < 𝔠` である部分集合 `S` について，
 
-```text
-|A| = ℵ₁
-```
+- 「`S` は解析集合でない」は濃度だけから ZFC で従う（非可算な解析集合は濃度 `𝔠` を持つ）．
+- 「`S` は余解析的集合でない」は Π¹₁-PSP に依存し，ZFC からは独立である．
 
-である部分集合は，解析集合にも余解析的集合にもなれない．
+CH case（ベルンシュタイン集合，§5）はこの非対称性の影響を受けない．そこでの論法は「`S` が余解析的 ⇒ 補集合が解析的かつ非可算 ⇒ 補集合が空でない完全集合を含む ⇒ ベルンシュタイン集合の定義に矛盾」であり，使うのは Σ¹₁-PSP（ZFC 定理）のみだからである．
+
+**`¬CH` case への影響（`notes/ishiki-extension-audit.md` の独立監査で確定）:** `ω₁^L = ω₁ ∧ ¬CH` を満たすモデルでは，最大の thin `Π¹₁` 集合 `C₁`（`|C₁| = |ω₁^L|`，稠密）が存在し，可算稠密集合を `ℵ₁` に拡大して得る `S` がこの `C₁` と一致しうるため，`S` が余解析的になり得る．したがって，共同原稿 Proposition 2.1 の `¬CH` case は，現状の論法（濃度のみによる「解析集合にも余解析的集合にもなれない」という主張）では**不成立**である．反例の構成の詳細は本ノートでは繰り返さず，`notes/ishiki-extension-audit.md` を参照する．
 
 ---
 
@@ -311,8 +314,10 @@ Borel ⇒ analytic.
 Borel ⇒ coanalytic.
 analytic ∩ coanalytic = Borel.          [Polish ambient]
 
-analytic / coanalytic ⇒ perfect set property.
-uncountable analytic / coanalytic ⇒ cardinality 𝔠.
+analytic ⇒ perfect set property.                      [ZFC, Kechris Thm 29.1]
+uncountable analytic ⇒ cardinality 𝔠.                  [ZFC]
+
+coanalytic ⇒ perfect set property は ZFC からは独立．    [Mansfield–Solovay; V=L で失敗; notes/ishiki-extension-audit.md]
 
 Bernstein set:
   every nonempty perfect set meets both B and its complement.
@@ -336,7 +341,7 @@ Borel isomorphism does NOT in general preserve density.
 
 ### 数学的基準文献
 
-- A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995. 共同原稿では analytic/coanalytic perfect set theorem に Theorems 29.1, 32.2 を引用している．
+- A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995. `Σ¹₁` の完全集合性（Suslin の定理）は Theorem 29.1．共同原稿は `Π¹₁` 側について Theorem 32.2 も引用しているが，この箇所が実際に何を主張しているか（`Π¹₁`-PSP を無条件に述べているのか，追加の仮定つきか）は本ノート作成時点で確認できておらず，Issue #46 で Kechris 本文と対照して確認する．
 - K. Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Analysis and Geometry in Metric Spaces 12 (2024), Article 20240014. https://doi.org/10.1515/agms-2024-0014
 
 ### 日本語用語の確認に使った資料
