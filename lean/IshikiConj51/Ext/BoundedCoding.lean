@@ -4,10 +4,16 @@
 -- bounded star-metric coding on a discrete carrier, and the exact pullback
 -- identity that carries the descriptive-set obstruction.
 --
--- Mathematical source of truth: the audited draft as recorded in
--- `notes/ishiki-extension-audit.md` §4 (Lemma 3.1, verdict PASS) and §5
--- (Lemma 3.2, verdict PASS), together with the corresponding Issue #46
--- comment.  Nothing here uses an analytic/coanalytic pointclass: the pullback
+-- Mathematical source of truth for this track: the audited Ishiki-extension
+-- draft, recorded in the Issue #46 audit comments (Lemma 3.1 and Lemma 3.2,
+-- both verdict PASS) and written up as `notes/ishiki-extension-audit.md` §4
+-- and §5, which lands separately in PR #50 (branch `audit/ishiki-extension`).
+-- `report/report-ja.md` is *not* the source of truth here: it stays frozen as
+-- the Conjecture 5.1 archival report by the Issue #46 decision, and carries
+-- no extension claim.  Section references below ("audit §4", "audit §5") are
+-- to that note.
+--
+-- Nothing here uses an analytic/coanalytic pointclass: the pullback
 -- statement below is a plain equality of sets, which is exactly why it is
 -- provable while the ambient pointclass convention of audit §1 is still open.
 --

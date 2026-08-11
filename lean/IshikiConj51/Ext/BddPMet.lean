@@ -5,10 +5,16 @@
 --
 --     ρ(d, e) = sup_{u,v} |d(u,v) − e(u,v)|.
 --
--- Mathematical source of truth: the audited draft as recorded in
--- `notes/ishiki-extension-audit.md` §4–§5 (Issue #46), which writes `BCPM(D)`
--- for the bounded *continuous* pseudometrics on `D` and `BMet(D)` for the
--- bounded metrics compatible with the topology of `D`.
+-- Mathematical source of truth for this track: the audited Ishiki-extension
+-- draft, recorded in the Issue #46 audit comments and written up as
+-- `notes/ishiki-extension-audit.md` §4–§5, which lands separately in PR #50
+-- (branch `audit/ishiki-extension`).  `report/report-ja.md` is *not* the
+-- source of truth here: it stays frozen as the Conjecture 5.1 archival
+-- report by the Issue #46 decision, and carries no extension claim.
+--
+-- The draft writes `BCPM(D)` for the bounded *continuous* pseudometrics on
+-- `D` and `BMet(D)` for the bounded metrics compatible with the topology
+-- of `D`.
 --
 -- Naming note (this is a mathematical identification, not a convention): the
 -- carrier `D` of Layer 1 is a discrete set, and every function on a discrete

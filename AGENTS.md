@@ -12,6 +12,7 @@
 <!-- Managed section: update with apply input, or omit/pass [] to remove. -->
 - Goal: resolve Ishiki Conjecture 5.1 (arXiv:2407.03030): for discrete D with |D| = ℵ₁, Met(D) (metrics **compatible with the discrete topology**, sup-metric topology) is not completely metrizable. Gates A–C passed and the owner lifted the proof-candidate label on 2026-08-09 (PR #29 comment); the result may be stated declaratively, but avoid wording that implies external peer validation — verification so far is the project's internal audit + Lean.
 - Source of truth: mathematical claims = `report/report-ja.md` + Lean theorem statements (must agree); English wording = `paper/main.tex`; progress = GitHub Issues + `STATUS.md`. The Google Docs plan ("Conjecture 5.1 論文化・形式化プロジェクト計画書") is planning-only, never mathematical SoT.
+- The Ishiki-extension track (#46/#47, Lean namespace `IshikiExt`) is separate: `report/report-ja.md` is frozen as the Conjecture 5.1 archival report and carries no extension claim, so that track's SoT is `notes/ishiki-extension-audit.md` + the `IshikiExt` theorem statements, and its claims must not be added to the frozen report.
 - Stable claim IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` are shared across report, Lean, and paper; never change a claim in one place only — reopen dependent issues on any change.
 
 ## Commands
