@@ -282,3 +282,52 @@ No independent defect has been found in the discrete metric construction: §§4�
 7. Koshino consequence.
 
 Theorem-level Lean work (#47) remains blocked until the convention in §1 is fixed and the `ℵ₁<𝔠` branch of §2 is decided.  The Archimedean coding of §§4–5 is confirmed and is a safe formalisation target in the meantime.
+
+---
+
+## 8. Mathlib inventory (Lean 4.32.2, mathlib4 tag `v4.32.2`)
+
+Deliverable of #46/#47.  Every declaration below was confirmed to exist by grep in `lean/.lake/packages/mathlib`; every gap is the absence of any such declaration, not a naming guess.
+
+### 8.1 Available
+
+| need | declaration | ambient hypotheses |
+| --- | --- | --- |
+| analytic set | `MeasureTheory.AnalyticSet` (`MeasureTheory/Constructions/Polish/Basic.lean`) | `[TopologicalSpace α]`; defined as `s = ∅ ∨ s` is a continuous image of `ℕ → ℕ` |
+| usual characterisation | `MeasureTheory.analyticSet_iff_exists_polishSpace_range` | — |
+| closed ⇒ analytic | `IsClosed.analyticSet` | `[PolishSpace α]` |
+| Borel ⇒ analytic | `MeasurableSet.analyticSet`, `MeasurableSet.analyticSet_image` | `[PolishSpace α] [BorelSpace α]` |
+| countable unions / intersections | `MeasureTheory.AnalyticSet.iUnion`, `.iInter` | `[Countable ι]`; `iInter` also `[Nonempty ι] [T2Space α]` |
+| continuous images | `MeasureTheory.AnalyticSet.image_of_continuous`, `.image_of_continuousOn` | — |
+| **continuous preimages** | `MeasureTheory.AnalyticSet.preimage` | `[PolishSpace X] [T2Space Y]` |
+| Suslin's theorem | `MeasureTheory.AnalyticSet.measurableSet_of_compl` | `[T2Space α] [OpensMeasurableSpace α]` |
+| Lusin–Souslin | `MeasureTheory.measurableSet_range_of_continuous_injective`, `MeasurableSet.image_of_continuousOn_injOn`, `MeasurableSet.image_of_measurable_injOn` | Polish / standard Borel |
+| perfect sets | `Perfect`, `Preperfect`, `PerfectSpace` (`Topology/Perfect.lean`) | — |
+| PSP for **closed** sets | `exists_perfect_nonempty_of_isClosed_of_not_countable` | `[SecondCountableTopology α]` |
+| Cantor–Bendixson | `exists_countable_union_perfect_of_isClosed` | `[SecondCountableTopology α]` |
+| perfect ⇒ cardinality `𝔠` | `Perfect.exists_nat_bool_injection`, `IsClosed.exists_nat_bool_injection_of_not_countable` | `[CompleteSpace α]` / `[PolishSpace α]` |
+| Cantor space and schemes | `CantorScheme.inducedMap`, `.VanishingDiam`, `.ClosureAntitone`, `CantorScheme.Disjoint.map_injective`, `ClosureAntitone.map_of_vanishingDiam`; `PiNat.cylinder`, `PiNat.res`, `PiNat.firstDiff` | — |
+| cardinal arithmetic | `Cardinal.mk_real : #ℝ = 𝔠`, `Cardinal.aleph_one_le_continuum` | — |
+| completeness, closed subspaces | `IsClosed.isComplete`, `IsClosed.completeSpace_coe`, `IsComplete.isClosed`, `IsClosed.isCompletelyMetrizableSpace` | `[CompleteSpace α]` where applicable |
+| ultrametric | `IsUltrametricDist` (`Topology/MetricSpace/Ultra/Basic.lean`) | class on `[Dist X]` |
+| bounded pseudometrics, sup distance | repo-side `IshikiExt.BddPMet` (#51 / PR #52) — no Mathlib equivalent | `IsMetricOn`, `IsCompatible`, `BMet` reused from `Conj51/MetD.lean` |
+
+Two observations worth carrying into Layer 2.
+
+`AnalyticSet` is precisely the classical convention that §1 rejects: a continuous image of a Polish space, hence always separable.  Formalising Theorem 3.3 against it would reproduce the vacuity of §1 inside Lean.
+
+`AnalyticSet.preimage` is nevertheless the exact closure property §1 asks for, and its Mathlib proof — the equaliser `{x : f x.1 = g x.2}` is closed, then project — is the same argument §1 uses to show the classical convention *does* have that closure.  So the closure principle is not what is missing; a non-vacuous pointclass is.
+
+### 8.2 Gaps, with impact
+
+| gap | status | impact |
+| --- | --- | --- |
+| PSP for analytic sets (Kechris 29.1) | absent; only the closed-set version exists | §2 depends on it in both branches.  A from-scratch proof (Souslin scheme representation, then the closed-set machinery) is an independent and substantial sub-issue — it should not be bundled into a Theorem 3.3 issue |
+| coanalytic pointclass | absent as a named class | defining it as a complement is trivial, but no `Π¹₁`-specific lemma exists to build on |
+| Souslin `𝒜`-operation | absent as an operation | `CantorScheme` already supplies the indexing infrastructure — schemes `List β → Set α`, `PiNat.res`, and intersection along a branch in `CantorScheme.inducedMap` — so the §1 Souslin-`F` convention is a definition plus its closure lemmas, not a theory from scratch |
+| Bernstein set | absent (`Bernstein` in Mathlib is the approximation polynomial) | the CH branch of §2 needs a transfinite-recursion construction written from scratch |
+| thin `Π¹₁` sets, `C₁`, Mansfield–Solovay, `L[a]` | absent; the constructible hierarchy is not in Mathlib at all | `(★)` and the whole `ℵ₁<𝔠` analysis of §2 are out of formalisation reach for now; Layer 2 must treat the existence of a bad set as a hypothesis, not a lemma |
+| cardinal invariants (`non(𝒩)`, `non(ℳ)`) | absent | the elementary `(★)` route of §2 is likewise not formalisable today |
+| descriptive set theory in nonseparable spaces | absent | there is no ambient theory to instantiate §1 against; the pointclass must be axiomatised as a hypothesis |
+
+The practical consequence for #47 Layer 2 is the shape the Layer 1 handoff already anticipated: assume the pointclass closure principle as an explicit named hypothesis rather than a custom axiom, feed it `preimage_BMet_phiFull`, and keep the existence of the bad parameter set as a further hypothesis until §2 is resolved.
