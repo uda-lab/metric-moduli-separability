@@ -2,7 +2,8 @@
 
 > **Status:** in progress.  
 > **Scope:** theorem-by-theorem mathematical audit for Issue #46.  
-> **Policy:** a manuscript statement is not accepted merely because it appears in the draft.  Definitions, ambient conventions, and load-bearing external results are checked before Lean work begins.
+> **Policy:** a manuscript statement is not accepted merely because it appears in the draft.  Definitions, ambient conventions, and load-bearing external results are checked before Lean work begins.  
+> **Re-audit:** §§1–6 were re-derived from scratch in an independent context on 2026-08-12; the verdicts below are that pass's, and superseded verdicts are noted in place.
 
 ## 0. Verdict legend
 
@@ -27,7 +28,11 @@ Met(X) is analytic or coanalytic in CPM(X)
 
 for general metrizable `D,X`, where the pseudometric ambient need not be separable or Polish.
 
-This is not a harmless omission.  Outside Polish spaces, several generalisations of `analytic` occur in the literature.  In particular, the classical continuous-image-of-Polish definition produces only separable analytic spaces and is therefore not suitable as an unqualified nonseparable ambient convention.
+This is not a harmless omission.  Outside Polish spaces, several generalisations of `analytic` occur in the literature.
+
+The obstruction is *not* a failure of closure under continuous inverse images: the classical definition has that closure.  For continuous `f : [0,1] → Y` and `A = g(P)` with `P` Polish and `g` continuous, `f⁻¹(A)` is the projection to `[0,1]` of `{(x,p) ∈ [0,1]×P : f(x)=g(p)}`, which is closed because `Y` is metrizable; hence `f⁻¹(A)` is `Σ¹₁`.
+
+The obstruction is that the classical definition admits only separable analytic sets, and `BMet(D)` is nonseparable, so Theorem 3.3 would hold for trivial reasons.  Explicitly, fix three distinct points `u,v,y₀ ∈ D` and let `A` range over the subsets of `D\{u,v,y₀}`.  Set `d_A(x,y)=2` when `x≠y` and `|{x,y}∩A|=1`, and `d_A(x,y)=1` for the other pairs `x≠y`.  Any symmetric off-diagonal function with values in `[1,2]` satisfies the triangle inequality, so each `d_A` is a bounded metric compatible with the discrete topology.  For `A≠A'` pick `z ∈ A△A'`, say `z ∈ A\A'`: then `|{z,y₀}∩A| = 1` while `|{z,y₀}∩A'| = 0`, so `D_sup(d_A,d_{A'})=1`.  (The reserved point `y₀` is needed: without it `A` and `D\A` give the same metric.)  Hence `BMet(D)` has density `2^{|D|}`.  Composing with the two-point identification `π : D → D\{v}`, `π(v)=u`, the pullbacks `π^*d_A` are bounded pseudometrics that are *not* compatible — they do not separate `u,v` — and they stay `1`-separated, because `π` fixes both `z` and `y₀`.  So the complement is nonseparable too.  Under the classical reading neither `BMet(D)` nor its complement could ever be analytic, and both halves of the theorem would be vacuous.
 
 ### Candidate repair
 
@@ -35,8 +40,8 @@ For an arbitrary metrizable ambient space `Y`, explicitly define a subset `A ⊆
 
 Advantages for the present proof:
 
-1. in a Polish ambient this agrees with the classical analytic (`Σ¹₁`) notion;
-2. continuous inverse images are immediate, because inverse images preserve closed sets and commute with the Souslin operation;
+1. in a Polish ambient this agrees with the classical analytic (`Σ¹₁`) notion — every `Σ¹₁` set is the `A`-operation applied to a regular Souslin scheme of closed sets (Kechris, *Classical Descriptive Set Theory*, 25.7, §25.C);
+2. continuous inverse images are immediate, because inverse images preserve closed sets and commute with the Souslin operation; they also commute with complementation, so the coanalytic half transfers at the same time;
 3. the whole-parameter metric coding then gives a direct pullback contradiction from `[0,1]` or `2^ℕ`, where the classical perfect-set theorems apply;
 4. no descriptive-set-theoretic regularity theorem is required for the nonseparable ambient itself.
 
@@ -44,43 +49,64 @@ Terminology varies between sources (`analytic`, `Souslin`, `absolute analytic`, 
 
 ### Sources consulted
 
-- *Encyclopedia of Mathematics*, “Analytic set” and “Descriptive set theory”: the classical notion is explicitly distinguished from general metric/topological extensions, and the nonseparable metric case is discussed in terms of `A`-sets / Souslin operation.
-- General-topology literature on absolute/Souslin-F analyticity confirms that terminology is not uniform.
+- R. W. Hansell, *On the nonseparable theory of Borel and Souslin sets*, Bull. Amer. Math. Soc. **78** (1972), and the companion Trans. AMS paper (1974): the standard development of Souslin-`F` and `κ`-Souslin sets in nonseparable metric spaces.
+- C. A. Rogers and J. E. Jayne, *Analytic Sets* (1980): survey treatment of analytic sets beyond the Polish setting.
+- Kechris, *Classical Descriptive Set Theory*, 25.7 / §25.C for the Polish-ambient agreement.
+- *Encyclopedia of Mathematics*, “Analytic set” and “Descriptive set theory”: the classical notion is explicitly distinguished from general metric/topological extensions.
 
-A stronger primary/reference citation should be chosen before manuscript wording is recommended to the authors.
+The manuscript should also record that Theorem 3.3 needs **only** the two closure properties above.  It needs no separation theorem and no regularity theory for the nonseparable class — which matters, because the nonseparable Souslin-`F` separation results carry completeness and weight hypotheses.
 
 ---
 
 ## 2. Proposition 2.1 — dense bad parameter set in `[0,1]`
 
-### Verdict: **PASS**
+### Verdict: **FIX under CH — BLOCKED for `ℵ₁<𝔠`** (the first pass recorded PASS)
 
 Claim: there is a dense `S ⊆ [0,1]` with `|S|=ℵ₁` that is neither analytic nor coanalytic.
 
-### CH case
+Both branches of the first-pass proof used the perfect-set property for **coanalytic** sets.  That is not a theorem of ZFC: under `V=L` there are uncountable thin (perfect-subset-free) `Π¹₁` sets.  Only the analytic perfect-set theorem (Souslin; Kechris 29.1) is available.
 
-Take a Bernstein set `S ⊆ [0,1]` of cardinality `𝔠=ℵ₁`.
+### CH case — corrected proof
+
+Take a Bernstein set `S ⊆ [0,1]`, so `|S| = 𝔠 = ℵ₁`.
 
 - `S` is dense because every nonempty relatively open interval contains a nonempty perfect subset, which must meet `S`.
-- `S` contains no nonempty perfect subset: if `K ⊆ S` were perfect, the Bernstein condition would require `K\S ≠ ∅`.
-- likewise the complement contains no nonempty perfect subset.
-- since `S` is uncountable, the perfect-set theorem for analytic and coanalytic subsets of a Polish space rules out both pointclasses.
+- `S` is not analytic: it is uncountable, so Kechris 29.1 would give a nonempty perfect subset `K ⊆ S`, whereas the Bernstein condition forces `K\S ≠ ∅`.
+- `S` is not coanalytic: otherwise `[0,1]\S` is analytic, and it is uncountable because it too meets every perfect set; Kechris 29.1 then puts a nonempty perfect subset inside `[0,1]\S`, again contradicting the Bernstein condition.
 
-### non-CH case
+Only the analytic perfect-set theorem is used, so this branch is ZFC-safe.
 
-Here `ℵ₁<𝔠`.  Choose a countable dense `Q ⊆ [0,1]` and extend it to a set `S` with `|S|=ℵ₁`.
+### non-CH case — refuted; cardinality alone does not repair it
 
-If `S` were analytic or coanalytic, the perfect-set property would give a nonempty perfect subset, hence cardinality `𝔠`, contradicting `|S|=ℵ₁<𝔠`.
+Here `ℵ₁<𝔠`, and the first-pass recipe was: choose a countable dense `Q ⊆ [0,1]` and extend it arbitrarily to `S` with `|S|=ℵ₁`.
 
-### Remaining citation task
+**Half of the argument survives.**  `|S|=ℵ₁<𝔠` makes `S` thin, so by Kechris 29.1 an analytic `S` would be countable.  *`S` is not analytic — in ZFC, for every such `S`.*
 
-Verify the exact Kechris theorem numbers for:
+**The coanalytic half is false as stated.**  There is a largest thin `Π¹₁` set `C₁` (Kechris 1975; independently Guaspari 1973 and Sacks 1976), and in ZFC `|C₁| = |ω₁^L|`.  Every hyperarithmetic real lies in `C₁`, so `C₁` is dense in `[0,1]`.  Hence in any model of `¬CH` with `ω₁^L = ω₁` — `L` extended by `ℵ₂` Cohen reals, or any ccc extension of `L` forcing `MA_{ℵ₁} + 𝔠 = ℵ₂` — the set `S := C₁` is a legitimate output of the recipe (dense, `|C₁| = ℵ₁`, and `Q` may be taken inside it) and **is** coanalytic.  The recipe has counterexamples.
 
-- perfect-set theorem for analytic sets;
-- perfect-set theorem for coanalytic sets;
-- the cited Bernstein construction/cardinality claim.
+**What a repair must supply.**  Analytic and coanalytic are meant boldface here, so excluding the lightface `C₁` is not enough: `S` must escape `C₁(a)` for every real parameter `a`.  The economical route is the Mansfield–Solovay theorem — a `Σ¹₂(a)` set either is contained in `L[a]` or contains a nonempty perfect subset — which disposes of `Σ¹₁` and `Π¹₁` simultaneously, both being `Σ¹₂`.  Since `|S| = ℵ₁ < 𝔠` already makes `S` thin, the requirement collapses to
 
-The proof itself passes independently of theorem-number polishing.
+```text
+(★)  S ⊄ L[a]  for every real a.
+```
+
+`(★)` is not free:
+
+- **`cf(𝔠) = ℵ₁` suffices (ZFC).**  Suppose `(★)` fails, so every `S ∈ [ℝ]^{ℵ₁}` lies in some `ℝ ∩ L[a]`.  That family is `⊆`-directed (`L[a],L[b] ⊆ L[a⊕b]`), hence `ω₁`-directed: `ω₁` many members have union of size `ℵ₁`, so a member contains it.  Let `λ` be its cofinality.  A cofinal subfamily covers `ℝ` with sets of size `≤ ℵ₁`, so `λ = 𝔠`.  And `cf(λ) ≥ ℵ₂`: splitting a minimal cofinal `D` into an increasing `ω₁`-chain of non-cofinal pieces `D_i`, pick `z_i` bounded by no member of `D_i`, take an upper bound `w` of `{z_i}`, and any `d ∈ D` above `w` lies in some `D_i`, contradicting the choice of `z_i`.  Hence `cf(𝔠) ≥ ℵ₂`.
+- **`non(𝒩) = ℵ₁` or `non(ℳ) = ℵ₁` suffices, without mentioning `C₁`.**  `Σ¹₁` and `Π¹₁` sets are Lebesgue measurable and have the Baire property, and a measurable set of size `ℵ₁ < 𝔠` must be null, since positive measure yields a perfect subset.  So a non-null (resp. non-meagre) set of size `ℵ₁` is neither analytic nor coanalytic.  `MA_{ℵ₁}` pushes both invariants above `ℵ₁`, which already closes this route.
+- In the standard models (Cohen, random, `MA`) `(★)` holds by mutual genericity, but those arguments are model-specific.
+
+Each bullet produces a set of size `ℵ₁`, not yet a dense one; adjoining a countable dense `Q ⊆ [0,1]` fixes that without cost.  The size stays `ℵ₁`, and `(★)`, non-nullity and non-meagreness are all inherited by supersets, so the exclusion argument applies verbatim to `S ∪ Q`.
+
+**No ZFC proof of `(★)` in general was obtained; treat it as open until settled.**  Until it is, the proposition should either carry an explicit hypothesis in the `ℵ₁<𝔠` branch, or Theorem 3.3 should be stated in the asymmetric ZFC-safe form recorded in §6.
+
+### Citations settled by this pass
+
+- perfect-set theorem for analytic sets: Kechris, *Classical Descriptive Set Theory*, **29.1**;
+- largest thin `Π¹₁` set, and `|C₁| = |ω₁^L|` in ZFC: Kechris, *The theory of countable analytical sets*, Trans. Amer. Math. Soc. **202** (1975); Guaspari (1973); Sacks (1976);
+- Mansfield–Solovay: a `Σ¹₂(a)` set is contained in `L[a]` or contains a perfect subset.
+
+Still to be checked against primary sources: textbook numbers for the Bernstein construction, for measurability and the Baire property of `Σ¹₁`/`Π¹₁`, for Mansfield–Solovay, and for `C₁`.  There is no perfect-set theorem for coanalytic sets to cite.
 
 ---
 
@@ -90,25 +116,20 @@ The proof itself passes independently of theorem-number polishing.
 
 The current proof says the result follows from Proposition 2.1 because `[0,1]` and `2^ℕ` are Borel isomorphic.  This does not preserve the required **density**: a Borel isomorphism preserves the Borel structure, not the topology.
 
-### Corrected proof
+### Corrected proof — transfer along the binary expansion
 
-Work directly in Cantor space `2^ℕ`.
+Repeating the Bernstein construction inside `2^ℕ` would work under CH but would duplicate the `ℵ₁<𝔠` defect of §2 in a second place.  Transfer instead.
 
-#### CH
+Let `φ : 2^ℕ → [0,1]`, `φ(x) = Σ_n x_n 2^{-(n+1)}`.  It is continuous, surjective and at most `2`-to-`1`, and the image of a nonempty basic clopen set `[s]` is a nondegenerate dyadic interval.  For `S` as in Proposition 2.1 put `T := φ⁻¹(S)`.
 
-Take a Bernstein subset `S ⊆ 2^ℕ` of cardinality `𝔠=ℵ₁`.
-
-Each nonempty basic open set in `2^ℕ` is homeomorphic to `2^ℕ`, hence contains a nonempty perfect subset.  Therefore a Bernstein set meets every nonempty basic open set and is dense.  As in Proposition 2.1, `S` is neither analytic nor coanalytic.
-
-#### non-CH
-
-Choose a countable dense subset `Q ⊆ 2^ℕ` and extend it to `S` with `Q⊆S` and `|S|=ℵ₁`.
-
-Then `S` is dense.  Since `ℵ₁<𝔠`, the perfect-set property of analytic and coanalytic subsets of the Polish space `2^ℕ` rules out either classification.
+- `T` is dense: `φ([s])` has nonempty interior, which meets the dense set `S`.
+- `|T| = ℵ₁`, because `φ` is surjective and at most `2`-to-`1`.
+- `T` is not analytic: otherwise `φ(T) = S` would be analytic.
+- `T` is not coanalytic: otherwise `2^ℕ\T = φ⁻¹([0,1]\S)` is analytic, hence so is its image `[0,1]\S`, making `S` coanalytic.
 
 ### Outcome
 
-The proposition statement survives unchanged.  Only the proof should be replaced.
+The proposition statement survives unchanged; only the proof is replaced.  The transfer keeps Proposition 2.2 a genuine corollary of Proposition 2.1, so the pair has a single point of repair — which matters while the `ℵ₁<𝔠` branch of §2 is unresolved.  Under CH the corollary is ZFC-safe; for `ℵ₁<𝔠` it inherits exactly the status of Proposition 2.1.
 
 ---
 
@@ -132,7 +153,9 @@ For `t,w_α∈[0,1]`,
 0 < l_n(α,t) ≤ 2.
 ```
 
-Hence every star has diameter at most `4`.  The restriction to a star is the tree metric with centre `b_α` and edge lengths `l_n`.  Distinct blocks are placed at distance `4`, so all mixed triangle inequalities are immediate.  The anchor block has diameter at most `2`.
+Hence every star has diameter at most `4`.  The restriction to a star is the tree metric with centre `b_α` and edge lengths `l_n`.  The anchor block has diameter at most `2`.
+
+Distinct blocks are placed at distance `4`.  For a mixed triple the only nontrivial instance is `x,y` in one block and `z` in another, where `d_t(x,y) ≤ d_t(x,z)+d_t(z,y) = 8` is what has to hold: the condition is `diam(block) ≤ 2·4`, and the bound `diam ≤ 4` gives it with room to spare.
 
 Thus every `d_t` is a metric and `d_t(X²)⊆[0,4]`.
 
@@ -160,6 +183,8 @@ Therefore
 ```text
 d_t ∈ BMet(X)  ⇔  t ∈ [0,1]\S.
 ```
+
+Note that for `t = w_β ∈ S` the function `d_t` is still a genuine metric — all its off-diagonal values are positive — and only compatibility fails.  This is what makes the whole-parameter map of §5 well defined on all of `[0,1]`.
 
 ---
 
@@ -195,7 +220,7 @@ If `d_{t_k}→d∈BMet(X)`, evaluation at the anchor yields
 t_k → t := d(p,q)-1 ∈ [0,1].
 ```
 
-The upper Lipschitz estimate gives `d_{t_k}→d_t`, so uniqueness of limits yields `d=d_t`.  Since `d` is compatible with the discrete topology, Lemma 3.1 forces `t∉S`.  Thus the image is closed in `BMet(X)`.
+The limit parameter lies in `[0,1]` because `[0,1]` is closed.  The upper Lipschitz estimate gives `d_{t_k}→d_t`, so uniqueness of limits yields `d=d_t`.  Since `d` is compatible with the discrete topology, Lemma 3.1 forces `t∉S`.  Thus the image is closed in `BMet(X)` — closedness relative to `BMet(X)`, which is what the argument establishes and all that Theorem 3.3 uses.
 
 ### Recommended stronger formulation
 
@@ -217,7 +242,7 @@ This pullback identity should be the load-bearing descriptive-set-theoretic stat
 
 ## 6. Theorem 3.3 — discrete descriptive obstruction
 
-### Verdict: **BLOCKED only by the ambient convention**
+### Verdict: **BLOCKED — by the ambient convention (§1), and for `ℵ₁<𝔠` also by Proposition 2.1 (§2)** (the first pass recorded "blocked only by the ambient convention")
 
 Once §1 is repaired with a pointclass on arbitrary metrizable ambients that is preserved by continuous inverse images and agrees with classical `Σ¹₁/Π¹₁` on `[0,1]`, the theorem follows immediately from
 
@@ -229,17 +254,31 @@ Indeed `[0,1]\S` is neither analytic nor coanalytic because `S` has neither prop
 
 This pullback proof is preferable to the draft's relatively-closed-copy argument because it exposes exactly which pointclass closure property is used and avoids ambient-dependent interpretation of a homeomorphic copy.
 
-No independent defect has been found in the discrete metric construction.
+### What survives in ZFC
+
+The pullback splits the conclusion into two halves that need different inputs:
+
+```text
+BMet(X) analytic    ⇒  [0,1]\S analytic    ⇒  S coanalytic
+BMet(X) coanalytic  ⇒  [0,1]\S coanalytic  ⇒  S analytic
+```
+
+Under CH both halves hold in ZFC, via the corrected Bernstein argument of §2.
+
+Under `ℵ₁<𝔠` the two halves separate.  `S` is not analytic for cardinality reasons alone, so **`BMet(X)` is not coanalytic** in ZFC, for any dense `S` of size `ℵ₁`.  The other half — `BMet(X)` is not analytic — is exactly what `(★)` of §2 would buy.  If `(★)` stays unresolved, this asymmetric statement is the strongest unconditional form of the theorem.
+
+No independent defect has been found in the discrete metric construction: §§4–5 were re-derived from scratch and confirmed.
 
 ---
 
 ## 7. Next audit targets
 
 1. Fix/reference the nonseparable ambient pointclass convention.
-2. Theorem 3.4 — finite-sup-distance component construction.
-3. Theorem 3.5 / Corollary 3.6 — passage to a general nonseparable metrizable space via Ishiki's extensor.
-4. Complete-metric branch.
-5. Non-Archimedean branch.
-6. Koshino consequence.
+2. Settle `(★)` of §2, or decide which weaker form of Proposition 2.1 / Theorem 3.3 the manuscript should carry for `ℵ₁<𝔠`.  This is a question to put to the authors, not a citation gap.
+3. Theorem 3.4 — finite-sup-distance component construction.
+4. Theorem 3.5 / Corollary 3.6 — passage to a general nonseparable metrizable space via Ishiki's extensor.
+5. Complete-metric branch.
+6. Non-Archimedean branch.
+7. Koshino consequence.
 
-Lean work (#47) remains blocked until the theorem-level convention in §1 is fixed.
+Theorem-level Lean work (#47) remains blocked until the convention in §1 is fixed and the `ℵ₁<𝔠` branch of §2 is decided.  The Archimedean coding of §§4–5 is confirmed and is a safe formalisation target in the meantime.
