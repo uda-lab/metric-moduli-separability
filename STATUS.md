@@ -1,6 +1,6 @@
 # Project Status
 
-**Updated:** 2026-08-10
+**Updated:** 2026-08-12
 
 ## Overall
 
@@ -165,6 +165,41 @@ for the AM(X)-vs-Met(X) statement caveat. The paper compiles cleanly with `cd pa
 2026-08-09 decision lifting the proof-candidate label (Issue #31), the paper
 states the theorem and its proof in ordinary declarative form, while avoiding
 wording that would imply external peer validation.
+
+## Ishiki-extension track (joint work; #46–#48)
+
+Active verification track for Yoshito Ishiki's joint-work draft
+"Analyticity or coanalyticity of moduli spaces of metrics implies
+separability" (received 2026-08-11). This track's source of truth is
+the audit record — currently the Issue #46 audit comments, moving into
+`notes/ishiki-extension-audit.md` once draft PR #50 merges — plus the
+Lean `IshikiExt` theorem statements; the frozen `report/report-ja.md`
+carries no extension claims.
+
+| Item | Status |
+|------|--------|
+| Theorem-by-theorem audit (#46, PR #50) | 🔄 Props 2.1–2.2 / Lems 3.1–3.2 / Thm 3.3 first-pass done; Thm 3.4ff awaits the manuscript |
+| Independent re-audit of the audit note | ✅ done (2026-08-12, PR #50 comment); Lems 3.1–3.2 confirmed; Prop 2.1 verdicts corrected |
+| Lean Layer 1: bounded star-metric coding (#51, PR #52) | ✅ merged (`7e77f6b`, 2026-08-12); sorry-free, standard 3 axioms; includes the pullback identity and closed image |
+| Japanese terminology note (#48, PR #49) | 🔄 draft evolving; re-audit applied, Σ¹₁/Π¹₁ PSP distinction corrected |
+
+Key mathematical state after the re-audit (details in the Issue #46
+comments and PR #50's `notes/ishiki-extension-audit.md`):
+
+- The Archimedean coding (draft Lems 3.1–3.2) is confirmed, and its
+  Layer 1 content is machine-checked in `lean/IshikiConj51/Ext/`
+  (namespace `IshikiExt`): metricity, boundedness, compatibility ⇔ t ∉ S,
+  the 2-Lipschitz full-parameter map with the bi-Lipschitz lower bound,
+  the exact pullback identity, and closedness of the image.
+- Draft Prop 2.1's CH branch is repaired (Bernstein set, Σ¹₁-PSP only);
+  the ¬CH branch as stated is refuted (S = the largest thin Π¹₁ set is a
+  counterexample under ω₁^L = ω₁ ∧ ¬CH) and now carries an explicit open
+  repair condition (★) that is an **authors' decision point**: assume it
+  explicitly, retreat to the ZFC-safe asymmetric statement ("BMet not
+  coanalytic"), or settle (★) set-theoretically.
+- The analytic/coanalytic ambient convention for nonseparable spaces
+  remains the blocking definition fix (Souslin-F is the recommended
+  candidate); Lean Layers 2–4 stay blocked on #46 accordingly.
 
 ## GitHub Issue work queue
 
