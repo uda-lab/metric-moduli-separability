@@ -171,9 +171,10 @@ wording that would imply external peer validation.
 Active verification track for Yoshito Ishiki's joint-work draft
 "Analyticity or coanalyticity of moduli spaces of metrics implies
 separability" (received 2026-08-11). This track's source of truth is
-`notes/ishiki-extension-audit.md` (PR #50, in progress) plus the Lean
-`IshikiExt` theorem statements; the frozen `report/report-ja.md` carries
-no extension claims.
+the audit record — currently the Issue #46 audit comments, moving into
+`notes/ishiki-extension-audit.md` once draft PR #50 merges — plus the
+Lean `IshikiExt` theorem statements; the frozen `report/report-ja.md`
+carries no extension claims.
 
 | Item | Status |
 |------|--------|
@@ -182,8 +183,8 @@ no extension claims.
 | Lean Layer 1: bounded star-metric coding (#51, PR #52) | ✅ merged (`7e77f6b`, 2026-08-12); sorry-free, standard 3 axioms; includes the pullback identity and closed image |
 | Japanese terminology note (#48, PR #49) | 🔄 draft evolving; re-audit applied, Σ¹₁/Π¹₁ PSP distinction corrected |
 
-Key mathematical state after the re-audit (details in
-`notes/ishiki-extension-audit.md`):
+Key mathematical state after the re-audit (details in the Issue #46
+comments and PR #50's `notes/ishiki-extension-audit.md`):
 
 - The Archimedean coding (draft Lems 3.1–3.2) is confirmed, and its
   Layer 1 content is machine-checked in `lean/IshikiConj51/Ext/`
