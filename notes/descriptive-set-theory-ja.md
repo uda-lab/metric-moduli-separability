@@ -216,11 +216,11 @@ CH (`𝔠 = ℵ₁`) の場合，`[0,1]` または `2^ℕ` のベルンシュタ
 
 ### 6.2 Proposition 2.2 の修正点
 
-共同原稿の現版は，`[0,1]` と `2^ℕ` が Borel isomorphic であることから Proposition 2.2 を導いている．しかし，**ボレル同型は位相同型ではなく，一般には稠密性を保存しない**．したがって，「dense」という条件までそのまま移すことはできない．
+共同原稿の現版は，`[0,1]` と `2^ℕ` が Borel isomorphic であることから Proposition 2.2 を導いている．しかし，**ボレル同型は位相同型ではなく，一般には稠密性を保存しない**．したがって，稠密性という条件までそのまま移すことはできない．
 
 この proposition は `2^ℕ` 上で直接構成すればよい．
 
-- **CH の場合:** `2^ℕ` の Bernstein set `S` を取る．`|S|=𝔠=ℵ₁` であり，解析集合でも余解析的集合でもない．また，各非空基本開集合は perfect subset を含むので `S` は稠密である．
+- **CH の場合:** `2^ℕ` のベルンシュタイン集合 `S` を取る．`|S|=𝔠=ℵ₁` であり，解析集合でも余解析的集合でもない．また，各非空基本開集合は空でない完全集合を含むので `S` は稠密である．
 - **¬CH の場合:** 可算稠密集合 `Q ⊆ 2^ℕ` を取り，`Q ⊆ S ⊆ 2^ℕ` かつ `|S|=ℵ₁` となるように `S` を拡張する．すると `S` は稠密であり，`ℵ₁<𝔠` と完全集合性から，解析集合でも余解析的集合でもない．
 
 この修正は Issue #46 では `FIX` として扱う．
@@ -292,11 +292,13 @@ Issue #46 では，ここを最優先の definition audit とする．確定す�
 
 ## 10. Koshino の absolute Borel との関係
 
-Koshino の論文 *On the Borel complexity and the complete metrizability of spaces of metrics* は，bounded admissible metrics の空間 `AM(X)` を扱い，absolute Borel class を明示的に用いる．同論文の Corollary 1.2 は separable metrizable `X` に対する complete metrizability と `σ`-compactness の同値を与える．
+Koshino の論文 *On the Borel complexity and the complete metrizability of spaces of metrics*（Anal. Geom. Metr. Spaces 12 (2024), art. 20240014; DOI [10.1515/agms-2024-0014](https://doi.org/10.1515/agms-2024-0014)）は，bounded admissible metrics の空間 `AM(X)` の Borel complexity と complete metrizability を扱う．同論文の主定理・系は原文では無番号（"Theorem."／"Corollary." とのみ表記）であり，その Corollary の主張は「separable metrizable `X` について，`X` が `σ`-compact であることと `AM(X)` が completely metrizable であることは同値」というものである（`notes/literature.md` で arXiv v2 本文と DOI の Crossref レコードに対し検証済み．「Corollary 1.2」のような番号付き引用は原文と一致しないため用いない）．
 
-今回の共同研究の一つの目標は，非可分の場合に metric moduli space の descriptive complexity から separability を強制し，この separability hypothesis を結果として取り除くことである．
+**注意:** `AM(X)`（bounded admissible metrics の空間）と，本 project 全体で扱う `Met(D)`（離散位相と両立する距離の空間，`notes/terminology.md`）は同じ空間ではない．Ishiki の原稿（arXiv:2407.03030 §5）は Koshino の結果を `Met(X)` の形で引用しているが，これは Ishiki 自身による言い換えであり，Koshino の論文自体は `AM(X)` について述べている．両者を安易に同一視しない（`notes/literature.md` の記載どおり）．
 
-ただし，`absolute Borel` と今回の `analytic/coanalytic in CPM(X)` は同じ概念ではない．この関係は Issue #46 で正確に整理した後，本節を更新する．
+今回の共同研究の一つの目標は，非可分の場合に metric moduli space の descriptive complexity（今回の `analytic/coanalytic in CPM(X)` の議論）から separability を強制し，Koshino の結果の separability hypothesis を結果として取り除くことである．
+
+Koshino の論文における `absolute Borel class` の具体的な定義・使用箇所は，本ノート作成時点で一次資料から直接確認できていない．`absolute Borel` と今回の `analytic/coanalytic in CPM(X)` が同じ概念かどうかも含め，この関係は Issue #46 で一次資料を確認した上で正確に整理し，本節を更新する．
 
 ---
 
