@@ -340,7 +340,7 @@ The practical consequence for #47 Layer 2 is the shape the Layer 1 handoff alrea
 
 The construction and the pullback identity are unconditional.  The descriptive-set-theoretic conclusion inherits both global conditions of §6: it needs the §1 ambient convention, and only its "not coanalytic" half is ZFC-safe (the "not analytic" half needs CH or `(★)`).
 
-**Method note for §§9–12.** The joint manuscript was not available to this pass.  Each statement below was identified from the item specification of Issue #46 and then proved from scratch; the constructions are this audit's own and need not match the manuscript's.  A PASS-INDEPENDENT verdict therefore certifies *the theorem*, not the manuscript's proof text: comparing the two proofs is a separate editorial task once the draft is in hand.
+**Method note for §§9–12.** The joint manuscript was not available to this pass.  Each statement below was identified from the item specification of Issue #46 and then proved from scratch; the constructions are this audit's own and need not match the manuscript's.  A PASS-INDEPENDENT verdict therefore certifies *the theorem*, not the manuscript's proof text.  What remains once the draft is in hand is statement-level reconciliation: confirming that each verdict is about the manuscript's actual claim, under its definitions and conventions, and recording any gap where the manuscript's argument and the derivation below disagree.  Revising the manuscript's text is not this project's role (#46: mathematical cross-checking and Lean verification).
 
 Throughout, `D` is discrete with `|D| = ℵ₁`.  Every function on `D²` is continuous, so `CPM(D)` is the set of all pseudometrics on `D`, and `BCPM(D)` the bounded ones.  Following Ishiki §2.2, `d ∼ e` iff `D_D(d,e) < ∞`, `M_{<∞}(D) = Met(D)/∼`, and each class `C(ρ)` is a clopen path-connected component of `Met(D)`.
 
@@ -514,6 +514,8 @@ As in §§9–10, the pointclass conclusions are conditional on §1 and, in thei
 
 Let `t ∉ S`.  In `d_t` (§4) distinct blocks are `4` apart, and inside the block `T_α` every two distinct points are at distance at least `|t-w_α| > 0` (`d_t(b_α,c_{α,n}) = |t-w_α| + 2^{-n}`, `d_t(c_{α,n},c_{α,m}) ≥ 2|t-w_α|`).  A `d_t`-Cauchy sequence therefore lies eventually in a single block and, that block being uniformly discrete, is eventually constant.  So `d_t` is complete.  Note the gaps `|t-w_α|` are not uniform over `α` — `S` accumulates at `t` whenever `S` is dense — and completeness does not need them to be: the block decomposition localises every Cauchy sequence first.
 
+`d_t` is in fact complete for **every** `t ∈ [0,1]`, not only off `S`.  For `t = w_β ∈ S` the block `T_β` is no longer uniformly discrete, but the sequence `(c_{β,n})` that witnesses this converges — `d_t(b_β,c_{β,n}) = 2^{-n} → 0` — so nothing escapes: a Cauchy sequence in `T_β` is eventually constant or converges to `b_β`, and the other blocks are unchanged.  Completeness therefore does not detect `S` at all; compatibility does.  This matches the non-Archimedean track, where the coding is likewise complete at every parameter and no separate complete construction is needed.
+
 Since `d_t ∉ Met(D)` for `t ∈ S`,
 
 ```text
@@ -524,7 +526,7 @@ so **Theorem 3.7 for `Comp(D)` follows from the same coding, with no new constru
 
 ### 11.2 One-point amalgamation preserves completeness
 
-In §9.2 take `ρ ∈ Comp(D)`.  Cross-distances in `m_t` are `≥ ε > 0` (9.3), so an `m_t`-Cauchy sequence is eventually inside `D₀` or inside `D₁`.  There it is `ρ`-Cauchy or `d_t`-Cauchy; `D₀` is closed in the discrete space `D` so `ρ|_{D₀}` is complete, and `d_t` is complete by 11.1.  Hence `m_t ∈ Comp(D)` for `t ∉ S`, and
+In §9.2 take `ρ ∈ Comp(D)`.  The Archimedean amalgamation is additive through the basepoint, `m_t(x,y) = ρ(x,o) + d_t(o,y)`; it restricts to `ρ` and to `d_t` isometrically, which is what the argument needs (the non-Archimedean track's `max` amalgamation plays the same role there).  Cross-distances in `m_t` are `≥ ε > 0` (9.3), so an `m_t`-Cauchy sequence is eventually inside `D₀` or inside `D₁`.  There it is `ρ`-Cauchy or `d_t`-Cauchy; `D₀` is closed in the discrete space `D` so `ρ|_{D₀}` is complete, and `d_t` is complete by 11.1.  Hence `m_t` is complete for every `t ∈ [0,1]`, so `m_t ∈ Comp(D)` exactly when it is compatible, i.e. for `t ∉ S`, and
 
 ```text
 Ψ⁻¹({d ∈ Comp(D) : D_D(d,ρ) < ∞}) = [0,1]\S     for every ρ ∈ Comp(D).
@@ -621,7 +623,7 @@ Two verifications these byproducts need and 12.3 does not.  First, the ambient m
 ### 12.6 Residual checks
 
 - `[7, Proposition 3]` (Koshino 2022, Bull. Pol. Acad. Sci. Math. **70**) — the "σ-compact ⇒ `AM(X)` is `G_δ` in `C(X²)`" direction — was not re-derived in this pass; it is quoted from Koshino's own summary of it.  It is the only ingredient of the final corollary that this audit takes on trust.
-- The identification `A₁` = σ-locally compact metrizable, and `M₁` = completely metrizable, is quoted from Koshino's introduction; both are standard, but the manuscript should cite them rather than assume them.
+- The identifications `A₁` = σ-locally compact metrizable and `M₁` = completely metrizable are quoted from Koshino's introduction, not re-derived here.  They are load-bearing for the corollary: `A₁` is where the removed separability hypothesis was doing its work.
 
 ---
 
@@ -630,5 +632,5 @@ Two verifications these byproducts need and 12.3 does not.  First, the ambient m
 1. §1 (ambient convention) still gates the pointclass statements of §§9–11.  It does **not** gate §12.3 route 1.
 2. `(★)` of §2 still gates the "not analytic" half of Theorems 3.3/3.4/3.5/3.8.  It gates nothing in §12.
 3. Ishiki Theorem 1.1(4) must be quoted as `(4′)` with the completely-metrizable hypothesis (§11.3); the authors should be told, since the defect is in the published preprint.
-4. Items 4–6 and 8 above were derived without the manuscript.  Once the draft is available, what remains is editorial: check that the manuscript's own constructions and proof texts match (or are corrected to) the arguments above, in particular whether its Theorem 3.4 uses the same one-point amalgamation, whether its Theorem 3.8 carries the completeness hypothesis, and whether Appendix A's closed-image argument is retained as exposition or replaced by the pullback.
+4. Items 4–6 and 8 above were derived without the manuscript.  Once the draft is available, what remains is statement-level reconciliation — does each verdict above answer the manuscript's actual statement, under its definitions and conventions, and where do the two arguments disagree?  The specific points to reconcile: what ambient and pointclass its Theorem 3.4 quantifies over and whether its component statement is the one proved in §9; whether its Theorem 3.8 carries the completely-metrizable hypothesis that §11.5 shows to be necessary; which clauses of Ishiki Theorem 1.1 it invokes, given §11.3; and whether its Appendix A argument establishes the ambient-level transfer that §10.7 identifies as the missing step.
 5. §7 items 3, 4 and 5 (Theorems 3.4, 3.5/3.6, 3.7/3.8) and item 7 (Koshino) are answered in §§9–12; item 6 (non-Archimedean) is still open and is being derived separately.
