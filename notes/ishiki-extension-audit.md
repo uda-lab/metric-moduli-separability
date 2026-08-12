@@ -418,7 +418,7 @@ Under the §1 convention, a pointclass closed under continuous preimages therefo
 
 - `BMet(D)` is *one* component: two bounded metrics are automatically at finite sup-distance.  So Theorem 3.3 is the case `ρ` bounded of Theorem 3.4, and no separate argument is needed for it.
 - The same map gives `Ψ⁻¹(Met(D)) = [0,1]\S`, so the unbounded space `Met(D)` is covered by the identical pullback — Theorem 3.4 subsumes both the bounded and the global discrete statement.
-- **Density of `S` is not used** anywhere in §§4–5 or §9.  The coding needs only an injective `ℵ₁`-enumeration `{w_α}` of `S`.  Density is a property of the parameter set that the descriptive-set-theoretic argument never consumes; if the manuscript carries it into Theorems 3.3/3.4 it is decorative there (it may still be needed elsewhere, e.g. in the non-Archimedean track, which this pass did not examine).
+- **Density of `S` is not used** anywhere in §§4–5 or §9.  The coding needs only an injective `ℵ₁`-enumeration `{w_α}` of `S`.  Density is a property of the parameter set that the descriptive-set-theoretic argument never consumes; if the manuscript carries it into Theorems 3.3/3.4 it is decorative there.  §13.2 reaches the same conclusion for the non-Archimedean coding, so density is unused on both tracks — which makes it a question about the statement of Proposition 2.1/2.2 rather than about these proofs (§14 item 8).
 
 ---
 
@@ -627,10 +627,305 @@ Two verifications these byproducts need and 12.3 does not.  First, the ambient m
 
 ---
 
-## 13. Standing gaps after §§9–12
+## 13. Non-Archimedean track (draft Lemmas 3.9–3.10, Theorems 3.11–3.16)
 
-1. §1 (ambient convention) still gates the pointclass statements of §§9–11.  It does **not** gate §12.3 route 1.
-2. `(★)` of §2 still gates the "not analytic" half of Theorems 3.3/3.4/3.5/3.8.  It gates nothing in §12.
-3. Ishiki Theorem 1.1(4) must be quoted as `(4′)` with the completely-metrizable hypothesis (§11.3); the authors should be told, since the defect is in the published preprint.
-4. Items 4–6 and 8 above were derived without the manuscript.  Once the draft is available, what remains is statement-level reconciliation — does each verdict above answer the manuscript's actual statement, under its definitions and conventions, and where do the two arguments disagree?  The specific points to reconcile: what ambient and pointclass its Theorem 3.4 quantifies over and whether its component statement is the one proved in §9; whether its Theorem 3.8 carries the completely-metrizable hypothesis that §11.5 shows to be necessary; which clauses of Ishiki Theorem 1.1 it invokes, given §11.3; and whether its Appendix A argument establishes the ambient-level transfer that §10.7 identifies as the missing step.
-5. §7 items 3, 4 and 5 (Theorems 3.4, 3.5/3.6, 3.7/3.8) and item 7 (Koshino) are answered in §§9–12; item 6 (non-Archimedean) is still open and is being derived separately.
+> Derived independently of the joint draft, from the checkpoint list of Issue #46 item 7.  The mapping onto the draft's numbering is provisional: the results below are labelled `NA-1`…`NA-9` and matched to the checkpoints, not to draft statements.  Sources for the ambient conventions are Ishiki, *An embedding, an extension, and an interpolation of ultrametrics* (arXiv:2008.10209 = [20] of arXiv:2407.03030) and *A factorization of metric spaces* (arXiv:2212.13409 = [22]).
+
+### 13.0 Verdict summary
+
+| # | statement | verdict |
+| --- | --- | --- |
+| NA-1 | conventions: `UD^R_X`, range set, countable coinitiality | **PASS** — fixed against [20, §1] and [22, §2]; the draft must name which of `UD^R_X` / `D_X` it uses |
+| NA-2 | dense bad `S ⊆ 2^ℕ` by direct Bernstein construction | **PASS under CH**; **BLOCKED for `ℵ₁<𝔠`** — inherits `(★)` of §2, but removes the §3 Borel-isomorphism defect |
+| NA-3 | `R`-valued ultrametric coding on discrete `D`, `\|D\|=ℵ₁` | **PASS** — construction below; simpler than §4 (no diameter budget) |
+| NA-4 | exact `UD` estimate `UD^R_X(d_σ,d_τ) = ρ_R(σ,τ)` | **PASS** — an exact isometry, strictly stronger than the bi-Lipschitz §5 estimate |
+| NA-5 | countable coinitiality of `R` | **PASS, and necessary** — without it the ambient is uniformly discrete and every theorem in the track is false |
+| NA-6 | ultrametric one-point amalgamation, component branch | **PASS** — amalgamation is correct and `UD`-isometric; it coincides with ball refinement.  **FIX**: the `UD`-component decomposition is trivial when `R` has a maximum |
+| NA-7 | complete-ultrametric branch | **PASS** — the coding ultrametrics are complete for *every* parameter, so no separate construction is needed |
+| NA-8 | transfer to general spaces via the ultrametric extensor | **FIX (load-bearing)** — [22, Thm 4.7] has neither a pseudo-ultrametric clause nor a closed-image clause; both are derivable from [22, Thm 3.1] but must be stated and proved, not cited |
+| NA-9 | ambient pointclass | **BLOCKED** — §1 propagates verbatim; the non-Archimedean ambient is nonseparable with nonseparable complement |
+
+---
+
+### 13.1 Conventions (NA-1)
+
+Fixed against the primary sources, since the draft's `UD` notation is inherited from them.
+
+A **range set** `R` is a subset of `[0,∞)` with `0 ∈ R`; `R₊ = R\{0}` ([20, §1]).  `R` is **characteristic** ([22, §2]) — equivalently has **countable coinitiality** ([20, §1]) — if `inf R₊ = 0`, i.e. there is a strictly decreasing sequence in `R₊` tending to `0`.  `UMet(X;R)` is the set of `R`-valued ultrametrics on `X` compatible with the topology of `X`.  The **non-Archimedean supremum metric** is ([20, §1])
+
+```text
+UD^R_X(d,e) = inf{ ε ∈ R ⊔ {∞} : ∀x,y   d(x,y) ≤ e(x,y) ∨ ε   and   e(x,y) ≤ d(x,y) ∨ ε }.
+```
+
+Two reformulations are used constantly below and should be recorded in the draft:
+
+```text
+(U1)  the defining condition on ε is equivalent to:  ∀x,y  ( d(x,y) ≠ e(x,y)  ⟹  d(x,y) ∨ e(x,y) ≤ ε )
+(U2)  writing  raw(d,e) = sup{ d(x,y) ∨ e(x,y) : d(x,y) ≠ e(x,y) }  (sup ∅ = 0),
+      one has  raw(d,e) ≤ UD^R_X(d,e) = inf{ ε ∈ R ⊔ {∞} : ε ≥ raw(d,e) },
+      so UD^R_X is the R-rounding of raw, and { UD ≤ r } = { raw ≤ r } for every r ∈ R.
+```
+
+`(U1)` is [20, Remark 1.8] stated for all `ε` rather than for `r ∈ R₊`; `(U2)` is immediate from `(U1)`.  The infimum in `(U2)` need not be attained — this is why [20, §1] records the value range as `CL(R) ⊔ {∞}` rather than `R ⊔ {∞}` — but it is attained, and the rounding is the identity, whenever `raw(d,e) ∈ R`, which is the case at every use below.  Notation: `UMet(X;R)` and `UD^R_X` are the symbols of arXiv:2407.03030 §1.1; [20] writes `UM(X,S)` and `UD^S_X` for the same objects, and defines `UD^S_X` only on `UM(X,S)`.  Extending it to pseudo-ultrametrics, as the ambient below requires, is this audit's step, not the source's.  `UD^R_X` is an ultrametric with values in `CL(R) ⊔ {∞}`, and `D_X ≤ UD^R_X` ([20, Lemma 6.2]) — so the `UD`-topology is finer than the sup-metric topology, in general strictly.
+
+**Ambient.**  Take `UCPM(X;R)` = continuous `R`-valued pseudo-ultrametrics on `X`, with `UD^R_X`.  This is the non-Archimedean counterpart of `CPM(X)` and is the right target for a pullback formulation.  It is complete: `(C(X²,R), U^R_{X²})` is a complete ultrametric space ([20, Lemma 7.5]), the evaluations `f ↦ f(a,b)` are continuous into `(R,d_E)` ([20, Lemmas 7.2, 7.4]), so symmetry, vanishing on the diagonal and the strong triangle inequality all cut out a closed subset; and by `(U2)` the uniformities of `UD^R_X` and `U^R_{X²}` agree on `UCPM(X;R)` (they have the same entourages `{raw ≤ r}`, `r ∈ R₊`).
+
+### 13.2 Cantor parameter set, directly (NA-2)
+
+The non-Archimedean coding needs a bad set in `2^ℕ`, not in `[0,1]`, so §3's transfer is not on the critical path here — the construction can be done in `2^ℕ` from the start, and should be.
+
+`2^ℕ` is a perfect Polish space, so the Bernstein recursion of §2 runs verbatim: enumerate the `𝔠` many nonempty perfect subsets of `2^ℕ` and pick two distinct points from each.  The resulting `S ⊆ 2^ℕ` meets every nonempty perfect set and omits a point of each, so under CH it has `|S| = 𝔠 = ℵ₁`, is dense (every nonempty cylinder `[s]` contains a perfect set), and is neither analytic nor coanalytic by the analytic perfect-set theorem alone (Kechris 29.1), exactly as in §2.  For `ℵ₁ < 𝔠` the Bernstein set itself is the wrong object — the recursion delivers `|S| = 𝔠 > ℵ₁`, not the `ℵ₁`-enumeration `{σ_α : α < ω₁}` that the coding of `NA-3` consumes.  There, as in §2, one takes an `ℵ₁`-sized subset of it instead: `|S| = ℵ₁` makes `S` thin, hence not analytic in ZFC, while "not coanalytic" needs `(★)`.
+
+Two consequences for the manuscript:
+
+- Proposition 2.2 should be proved *directly* in `2^ℕ` and, if a `[0,1]` version is still wanted, obtained by transfer in the other direction.  This removes §3's defect (a Borel isomorphism does not preserve density) at its source rather than repairing it downstream.
+- **Density is not used by the coding below.**  The construction `NA-3` uses only `|S| = ℵ₁` and the failure of both pointclass memberships.  What density buys is that `UMet(D;R)` is not closed in the ambient — and for that it is the density of `2^ℕ\S`, not of `S`, that is used, since `d_σ` for `σ ∈ S` is a limit of compatible `d_τ` exactly when `σ ∈ cl(2^ℕ\S)`; both constructions above supply both densities.  This is a separate, weaker statement, and it is what the older relatively-closed-copy argument needed.  Under the pullback formulation demanded by Issue #46 point C it is dead weight, and in particular the `ℵ₁<𝔠` branch of §2 need not adjoin a countable dense `Q`.  §9.6 reaches the same conclusion independently on the Archimedean side: §§4–5 and §9 consume only the injective `ℵ₁`-enumeration.  Note what this does and does not license: it is a change to the *statement* of Proposition 2.1/2.2, which still asserts density, not merely a simplification of their proofs, so it is a question for the authors (§13.10 item 5) rather than a repair this audit can make unilaterally.
+
+### 13.3 The `R`-valued coding (NA-3; draft Lemma 3.9 analogue)
+
+Let `R` be a characteristic range set and fix a strictly decreasing `(r_n)_{n≥0}` in `R₊` with `r_n → 0`.  Put `T = {0} ∪ {r_n : n ∈ ℕ} ⊆ R`.  Give `2^ℕ` the `T`-valued ultrametric
+
+```text
+ρ_R(σ,τ) = r_{2Δ(σ,τ)}   (σ ≠ τ),      ρ_R(σ,σ) = 0,
+Δ(σ,τ) = min{ n : σ(n) ≠ τ(n) }.
+```
+
+`ρ_R` is an ultrametric because `Δ(σ,υ) ≥ min(Δ(σ,τ),Δ(τ,υ))` and `n ↦ r_{2n}` is decreasing; its balls are the cylinders, so it induces the product topology and `(2^ℕ,ρ_R)` is compact.
+
+Let `S = {σ_α : α < ω₁} ⊆ 2^ℕ` be the parameter set of `NA-2`.  Carrier:
+
+```text
+X = A ⊔ ⨆_{α<ω₁} B_α ,      A = { u_n, v_n : n ∈ ℕ } ,      B_α = { b_α } ∪ { c_{α,n} : n ∈ ℕ },
+```
+
+a discrete space with `|X| = ℵ₁`.  For `σ ∈ 2^ℕ` define `d_σ : X² → T` by
+
+```text
+anchor      d_σ(u_n,v_n) = r_{2n}   if σ(n)=0,        r_{2n+1}  if σ(n)=1;
+            d_σ(x,y)     = r_0      for all other distinct x,y ∈ A;
+star        ℓ_n(α,σ) = ρ_R(σ,σ_α) ∨ r_n,
+            d_σ(b_α,c_{α,n}) = ℓ_n(α,σ),   d_σ(c_{α,n},c_{α,m}) = ℓ_n(α,σ) ∨ ℓ_m(α,σ)  (n≠m);
+cross       d_σ(x,y) = r_0   whenever x,y lie in distinct members of { A } ∪ { B_α }.
+```
+
+**`d_σ` is a `T`-valued ultrametric, for every `σ ∈ 2^ℕ`.**  All off-diagonal values lie in `T₊` (each is `≥ r_n` for some `n`), so positivity holds even at bad parameters — as in §4, this is what makes the whole-parameter map of `NA-4` total.  Strong triangle inequality, by block:
+
+- *Anchor.*  The designated pairs `{u_n,v_n}` are pairwise disjoint, so any three distinct points contain at most one designated pair; with all remaining distances equal to `r_0 ≥ r_{2n}, r_{2n+1}`, every triple is isosceles with the two larger sides equal to `r_0`.
+- *Star.*  For any `ℓ : ℕ → (0,∞)`, setting `d(b,c_n) = ℓ_n` and `d(c_n,c_m) = ℓ_n ∨ ℓ_m` gives an ultrametric: `ℓ_n ∨ ℓ_m ≤ (ℓ_n ∨ ℓ_k) ∨ (ℓ_k ∨ ℓ_m)` and `ℓ_n ≤ ℓ_m ∨ (ℓ_n ∨ ℓ_m)`.
+- *Cross.*  All intra-block values are `≤ r_0`, and every cross pair has value exactly `r_0`.  For a triple meeting two blocks, at least two of the three sides are cross pairs, both of value `r_0`, and the third is `≤ r_0`.
+
+Note the contrast with §4: no diameter budget is needed.  Taking the cross distance equal to the largest intra-block value `r_0` already works, because `∨` replaces `+`.  In particular every `d_σ` is bounded by `r_0`, so if `R` is bounded the bounded/unbounded distinction collapses and `UMet = UBMet`.
+
+**Compatibility iff `σ ∉ S`.**
+
+```text
+inf_{v ≠ c_{α,n}} d_σ(c_{α,n},v)  ≥ ℓ_n(α,σ) ≥ r_n > 0        (spokes always isolated)
+inf_{n}          d_σ(b_α,c_{α,n}) = inf_n ( ρ_R(σ,σ_α) ∨ r_n ) = ρ_R(σ,σ_α)
+```
+
+using `r_n → 0`.  Anchor points and cross-block pairs are `r_{2n+1}`- resp. `r_0`-isolated.  Hence `b_α` is isolated iff `σ ≠ σ_α`, and
+
+```text
+d_σ ∈ UMet(X;R)   ⇔   σ ∈ 2^ℕ \ S.
+```
+
+This is sharper than §4's version: `ρ_R(σ,σ_α)` *is* the isolation radius of `b_α`, not merely a lower bound for it.
+
+**Completeness (used in `NA-7`).**  Every `d_σ` is a complete ultrametric on `X`, for every `σ`.  A sequence of distinct points that is Cauchy must eventually stay in one block; in `A` the values are bounded below by `r_{2n+1}` along any fixed pair, so no such sequence exists; in `B_α`, `d_σ(c_{α,n},c_{α,m}) = ρ_R(σ,σ_α) ∨ r_{min(n,m)}`, which is `> 0` and constant `= ρ_R(σ,σ_α)` for large `n,m` unless `σ = σ_α`, in which case `c_{α,n} → b_α`.
+
+### 13.4 Exact `UD` estimate and the pullback identity (NA-4; draft Lemma 3.10 analogue)
+
+**Claim.**  For all `σ,τ ∈ 2^ℕ`,
+
+```text
+UD^R_X(d_σ, d_τ) = ρ_R(σ,τ).
+```
+
+*Lower bound.*  Let `Δ = Δ(σ,τ)`.  At the anchor pair `(u_Δ,v_Δ)` the two values are the distinct elements `r_{2Δ}, r_{2Δ+1}`, whose maximum is `r_{2Δ}`; by `(U1)` any admissible `ε` satisfies `ε ≥ r_{2Δ}`.
+
+*Upper bound.*  Check `(U1)` with `ε = r_{2Δ}` pair by pair.  Cross-block pairs and non-designated anchor pairs carry the value `r_0` under both, so they never disagree.  A designated anchor pair `(u_n,v_n)` disagrees only if `σ(n) ≠ τ(n)`, forcing `n ≥ Δ`, and then the maximum is `r_{2n} ≤ r_{2Δ}`.  For a star pair, write `ρ_σ = ρ_R(σ,σ_α)`, `ρ_τ = ρ_R(τ,σ_α)`.  If `ℓ_n(α,σ) ≠ ℓ_n(α,τ)`, i.e. `ρ_σ ∨ r_n ≠ ρ_τ ∨ r_n`, then `ρ_σ ≠ ρ_τ` and `ρ_σ ∨ ρ_τ > r_n`, so
+
+```text
+ℓ_n(α,σ) ∨ ℓ_n(α,τ) = ρ_σ ∨ ρ_τ = ρ_R(σ,τ) = r_{2Δ},
+```
+
+the middle equality being the isosceles property of the ultrametric `ρ_R` (if `ρ(σ,a) ≠ ρ(τ,a)` then `ρ(σ,τ)` equals their maximum).  Spoke–spoke pairs reduce to the same computation via `ℓ_n ∨ ℓ_m = ρ ∨ r_{min(n,m)}`.  Since `r_{2Δ} ∈ R`, `(U2)` gives `UD^R_X(d_σ,d_τ) = r_{2Δ}` exactly. ∎
+
+So the whole-parameter map
+
+```text
+Φ_full : (2^ℕ, ρ_R) → (UCPM(X;R), UD^R_X),   σ ↦ d_σ
+```
+
+is an **isometric embedding**, with
+
+```text
+Φ_full⁻¹( UMet(X;R) ) = 2^ℕ \ S.
+```
+
+Three points where this is better-behaved than §5, and which the manuscript should exploit rather than merely mirror:
+
+1. The estimate is an equality; there is no analogue of §5's `|s-t| ≤ D ≤ 2|s-t|` slack.  The `∨` operation does not accumulate the way `+` does, and the isosceles property replaces the two-sided Lipschitz bound.
+2. `Φ_full` is continuous into `(UCPM(X;R), D_X)` as well, since `D_X ≤ UD^R_X`, and the same pullback identity holds there.  The obstruction therefore holds for **both** candidate topologies on the ambient, which insulates the theorem from the ambiguity raised in 13.10(1).
+3. `Φ_full(2^ℕ)` is **compact**, hence closed in any Hausdorff ambient.  §5's closed-image argument (evaluate at the anchor, take limits, invoke closedness of `[0,1]`) has no counterpart to prove here — closedness is free.  Consequently `Φ_full(2^ℕ\S) = Φ_full(2^ℕ) ∩ UMet(X;R)` is relatively closed in `UMet(X;R)` without further work.
+
+Combining with a pointclass on nonseparable metrizable ambients that is closed under continuous preimages and agrees with `Σ¹₁/Π¹₁` on the Polish space `2^ℕ` (§1), the discrete obstruction follows exactly as in §6, with the same ZFC bookkeeping:
+
+```text
+UMet(D;R) analytic    ⇒  2^ℕ\S analytic    ⇒  S coanalytic
+UMet(D;R) coanalytic  ⇒  2^ℕ\S coanalytic  ⇒  S analytic
+```
+
+Under CH both halves hold in ZFC; under `ℵ₁<𝔠` only "**`UMet(D;R)` is not coanalytic**" is unconditional, the other half being exactly `(★)`.
+
+### 13.5 Countable coinitiality: where it is used, and that it is necessary (NA-5)
+
+Three distinct uses, which the draft should separate:
+
+1. **Isolation.**  `inf_n (ρ ∨ r_n) = ρ` in `NA-3` needs `r_n → 0`; this is the entire compatibility mechanism.
+2. **Reduction to a model value set.**  Everything above is built inside `T = {0} ∪ {r_n}`.  For an arbitrary characteristic `R` one may either work with `(r_n)` directly (as done here) or transport from `A = {0} ∪ {2^{-n}}` along an increasing amenable `ψ` with `ψ(A) = T` ([20, Lemma 2.2, Lemma 2.12, Prop. 2.14]); `d ↦ ψ∘d` is a bijection `UMet(X;A) → UMet(X;T)` and preserves the `(U1)` relation "agree above scale", so it is a homeomorphism for `UD`.  Either route is fine; the direct one avoids a lemma.
+3. **Existence of `v`.**  The extensor of `NA-8` needs `v ∈ UMet(X/F;R) ≠ ∅`, which by [22, Prop. 2.3] requires `R` characteristic.
+
+**Necessity.**  If `R` is not characteristic, there is `r > 0` with `R ∩ (0,r) = ∅`.  For distinct `f,g ∈ UCPM(D;R)` some pair carries distinct values, at least one of which is `≥ r`, so `raw(f,g) ≥ r` and by `(U2)` `UD^R_D(f,g) ≥ r`.  The ambient is uniformly `r`-discrete, every subset is clopen, and `UMet(D;R)` is closed — hence analytic *and* coanalytic under any convention.  Every statement in the track that is formulated with `UD^R_X` as the ambient metric is therefore false without countable coinitiality, and the hypothesis must appear in each of them, not only where it is convenient.  The argument is specific to `UD`: it uses `(U2)`, so it says nothing about a `D_sup`-formulated ambient, where non-characteristic `R` need not force uniform discreteness.  Which formulation the draft intends is 13.10(1), and the necessity claim should be attached to whichever it is.  (Compare [20, Lemma 2.13]: without countable coinitiality every `R`-valued ultrametric space is *discrete and complete*; its proof exhibits a single radius `r` with `[0,r) ∩ R = {0}`, so the discreteness it gives is in fact uniform, which is what the argument above uses.  By [20, Proposition 2.14] the same `r` forces `UMet(Y;R) = ∅` for every non-discrete `Y`, so the failure is not confined to the discrete carrier.)
+
+### 13.6 One-point amalgamation and the component branch (NA-6; draft Theorem 3.12 analogue)
+
+**Amalgamation lemma.**  Let `(Y,d)`, `(Z,e)` be `R`-valued (pseudo-)ultrametric spaces with `Y ∩ Z = {*}`.  Define on `Y ∪ Z`
+
+```text
+m(x,y) = d(x,y)  (x,y ∈ Y);   m(x,y) = e(x,y)  (x,y ∈ Z);
+m(x,z) = d(x,*) ∨ e(*,z)      (x ∈ Y\Z, z ∈ Z\Y).
+```
+
+Then `m` is an `R`-valued (pseudo-)ultrametric.  No closure hypothesis on `R` is needed, since `∨` of two members of `R` is a member of `R`.  This is the counterpart of §9.2, where the Archimedean amalgamation is additive through the basepoint, `m(x,z) = d(x,*) + e(*,z)`; `∨` in place of `+` is exactly what removes the diameter bookkeeping there.  The nontrivial triples:
+
+```text
+x,y ∈ Y, z ∈ Z\Y :  m(x,y) = d(x,y) ≤ d(x,*) ∨ d(*,y) ≤ m(x,z) ∨ m(z,y)
+                    m(x,z) = d(x,*) ∨ e(*,z) ≤ (d(x,y) ∨ d(y,*)) ∨ e(*,z) = m(x,y) ∨ m(y,z)
+x ∈ Y\Z, y,z ∈ Z\Y: m(x,y) = d(x,*) ∨ e(*,y) ≤ d(x,*) ∨ e(*,z) ∨ e(z,y) = m(x,z) ∨ m(z,y)
+```
+
+`m` induces the wedge topology (for `x ∈ Y\{*}` and `s < d(x,*)` the `m`-ball `B(x,s)` lies in `Y`; `B(*,s) = B_d(*,s) ∪ B_e(*,s)`), so `m ∈ UMet(Y∨Z;R)` iff `d ∈ UMet(Y;R)` and `e ∈ UMet(Z;R)`.
+
+**Completeness is preserved** — for genuine ultrametrics; in the pseudo-ultrametric case `Y` and `Z` need not be closed in the wedge (a point of `Z\{*}` may lie at distance `0` from `*`), and the argument below does not apply without passing to the metric quotient.  (§11.2 is the Archimedean counterpart; there the pieces are `ε`-separated, so the case below in which the sequence meets both sides infinitely often cannot arise.)  Let `(x_i)` be `m`-Cauchy.  If it has infinitely many terms in each of `Y\{*}`, `Z\{*}`, then cross distances `d(x_i,*) ∨ e(*,x_j) < ε` eventually, so both subsequences converge to `*` and so does the sequence.  Otherwise it is eventually inside the closed subspace `Y` or `Z` and converges there.  The converse holds since `Y`, `Z` are closed.
+
+**`UD`-isometry in the varying factor.**  With `(Z,e)` fixed, `d ↦ m_d` satisfies `UD^R_{Y∨Z}(m_d,m_{d'}) = UD^R_Y(d,d')`.  `≥` is restriction to `Y²`; for `≤`, if `m_d(x,z) ≠ m_{d'}(x,z)` on a cross pair then `d(x,*) ≠ d'(x,*)` and their maximum exceeds `e(*,z)`, so `m_d(x,z) ∨ m_{d'}(x,z) = d(x,*) ∨ d'(x,*)`, and `(U1)` transfers.
+
+**Component branch.**  Fix `ν ∈ UMet(D;R)`, `|D| = ℵ₁`, and `x₀ ∈ D`.  Every subset of `ℝ` has countable cofinality (a strictly increasing `ω₁`-sequence of reals is impossible), so choosing `s_k ∈ R₊` increasing with `s_k → sup R` gives `D = ⋃_k B_ν(x₀,s_k)`; hence some closed ball `W := B_ν(x₀,ε)`, `ε ∈ R₊`, has `|W| = ℵ₁`.  This is the ultrametric form of the "uncountable bounded ball" step, and it needs no hypothesis beyond `R ⊆ [0,∞)`.
+
+Now identify `W` with the carrier `X` of `NA-3`, choosing the coding sequence inside `(0,ε]` so that `r_0 = ε`, and set
+
+```text
+Ψ(σ)(x,y) = d_σ(x,y)   for x,y ∈ W,        Ψ(σ)(x,y) = ν(x,y)   otherwise.
+```
+
+`Ψ(σ)` is an ultrametric: for `x,y ∈ W` and `z ∉ W` the isosceles property of `ν` gives `ν(x,z) = ν(y,z) > ε ≥ Ψ(σ)(x,y)`, so all mixed triples are isosceles with the two large sides equal.  Taking `* = x₀` and `Z = (D\W) ∪ {x₀}`, this "ball refinement" *is* the one-point amalgamation of the lemma above — the two formulations coincide because `W` is a ball, which is why the amalgamation route works here without the `+`-bookkeeping the Archimedean version needs.  One reads off
+
+```text
+UD^R_D(Ψ(σ), ν) ≤ ε,      D_sup(Ψ(σ),ν) ≤ ε,
+UD^R_D(Ψ(σ), Ψ(τ)) = ρ_R(σ,τ),
+Ψ⁻¹( UMet(D;R) ) = 2^ℕ \ S,
+```
+
+the last because points of `D\W` retain their `ν`-isolation and points of `W` are isolated exactly when they are isolated in the coding.  So every `UD`-component, and equally every `D_sup`-component, of `UMet(D;R)` carries the obstruction.
+
+**FIX — the component statement is trivial for bounded `R`.**  Under `UD^R_X`, `d ~ e` iff `d` and `e` agree above some scale `ε ∈ R₊`.  If `sup R` is attained — equivalently `R` has a maximum, which covers every finite `R` — then `UD^R_X ≤ max R < ∞` always and there is exactly **one** component, so the componentwise theorem says nothing beyond the global one.  Attainment, not unboundedness, is the right dividing line: if `R` is bounded with `sup R ∉ R`, two pseudo-ultrametrics with `raw = sup R` admit no `ε ∈ R` above it, so `UD^R_X = ∞` and the decomposition is again non-trivial.  Note also that `UD`-equivalence is far more rigid than finite sup distance: members of one `UD`-component share all their values above `ε` and all their `ε'`-ball partitions for `ε' > ε`, so range coherence, not just finiteness, is part of the equivalence.  The refinement construction respects this automatically (it alters only values `≤ ε`), which is the reason it, rather than a general perturbation, is the right tool.  The draft should state which decomposition it means — `UD`-components of `UMet(X;R)` or `D_sup`-components — since only the latter is a faithful analogue of Theorem 3.4.
+
+### 13.7 Complete-ultrametric branch (NA-7; draft Theorems 3.15–3.16 analogue)
+
+No new construction is required.  By `NA-3`, `d_σ` is a complete ultrametric for **every** `σ ∈ 2^ℕ`, and completeness is preserved by the refinement/amalgamation of `NA-6` (a Cauchy sequence is eventually inside or outside the clopen ball `W`) — provided the ambient `ν` being refined is itself complete, which the component form of the complete branch must therefore assume, exactly as §11.2 assumes `ρ ∈ Comp(D)`.  Writing `UComp(X;R) = Comp(X) ∩ UMet(X;R)`, we get directly
+
+```text
+Φ_full⁻¹( UComp(X;R) ) = Φ_full⁻¹( UMet(X;R) ) = 2^ℕ \ S,
+```
+
+since for `σ ∈ S` the ultrametric `d_σ` is complete but not compatible, hence outside `UComp`.  The complete branch therefore costs one sentence, not a second coding.  There is no asymmetry with the Archimedean side after all: §11.1 records that `d_t` is likewise complete at every parameter, the sequence witnessing incompatibility at `t = w_β` being convergent rather than divergent.  On both tracks completeness fails to detect the parameter set and compatibility is what does the work, so neither branch needs a second coding — worth checking whether the draft duplicates work on either side.
+
+### 13.8 Transfer to general ultrametrizable spaces — the extensor (NA-8)
+
+This is the one place in the non-Archimedean track where the draft's citation base is insufficient as published.
+
+**Where the ultrametric extensor lives.**  It is *not* in arXiv:2407.03030.  That paper states its non-Archimedean counterpart only in the introduction, as a pointer: "for an ultrametrizable space `X` and a closed subset `A`, the author constructed an isometric extensor from `(UMet(A;R), UD^R_X)` into `(UMet(X;R), UD^R_X)` (see [22, Theorem 4.7])", and calls its own Theorem 1.1 "an Archimedean analogue of [22, Theorem 4.7]".  The reference is Ishiki, *A factorization of metric spaces*, Colloq. Math. **174** (2023), 101–119 (arXiv:2212.13409).  It must be treated as an **external theorem with an explicit hypothesis**, exactly as the Layer-2 plan of §8 prescribes.
+
+**What [22, Theorem 4.7] actually says.**  `X` ultrametrizable, `F ⊆ X` nonempty closed, `S` a characteristic subset of `[0,∞)`, `v ∈ UMet(X/F;S)`, and `Φ : X → F × X/F` the embedding of [22, Theorem 3.1]; then `Σ : Met(F) → Met(X)`, `Σ(d) = Φ*(d ×_∞ v)`, satisfies `Σ(d)|_{F²} = d`, `UD^S_X(Σd,Σe) = UD^S_F(d,e)`, monotonicity, `Σ(d ∨ e) = Σ(d) ∨ Σ(e)`, and `Σ(UMet(F;S)) ⊆ UMet(X;S)`; with (N1) `Σ(UCM(F;S)) ⊆ UCM(X;S)` when `X` is completely metrizable.
+
+**Two clauses the draft needs and Theorem 4.7 does not have.**
+
+- *No pseudo-ultrametric extension.*  `Σ` is defined on `Met(F)` — metrics **compatible with the topology of `F`**.  The coding ultrametrics `d_σ` for `σ ∈ S` are not compatible, so they are outside the domain.  The Archimedean paper solved precisely this by adding the clause `Ẽ : CPM(A) → CPM(X)` with `E(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)`; Theorem 4.7 has no such clause.  §10.3–10.4 record why this is not a technicality: restriction runs the wrong way, so the pseudometric extensor is the only available ambient-level map.
+- *No closed-image statement.*  Again the Archimedean Theorem 1.1 states it; Theorem 4.7 does not.
+
+**The repair, from the construction rather than the statement.**  Both clauses follow from [22, Theorem 3.1], where `Φ = (r,π)` with `r : X → F` the Engelking-type retraction of [22, Theorem 2.11] and `π : X → X/F` the (1-Lipschitz) quotient map, and `Φ(a) = (a,ω_F)` for `a ∈ F`.  Since `Σ(d)(x,y) = d(r(x),r(y)) ∨ v(π(x),π(y))`, define by the *same formula*
+
+```text
+Σ̃ : UCPM(F;R) → UCPM(X;R),     Σ̃(d)(x,y) = d(r(x),r(y)) ∨ v(π(x),π(y)).
+```
+
+Then, with `F` closed in `X` and `dim_T(X\F) = 0` (automatic for ultrametrizable `X`):
+
+1. `Σ̃(d)` is a continuous `R`-valued pseudo-ultrametric — a pointwise maximum of the pullbacks `d∘(r×r)` and `v∘(π×π)`, both continuous pseudo-ultrametrics.  If `d` is a genuine ultrametric on the set `F` then so is `Σ̃(d)`, because `Φ` is injective.
+2. `Σ̃(d)|_{F²} = d`, from `Φ(a) = (a,ω_F)`.
+3. `Σ̃|_{UMet(F;R)} = Σ`, and `UD^R_X(Σ̃d, Σ̃e) = UD^R_F(d,e)`.  For `≥`, restrict to `F²`.  For `≤`: if `Σ̃(d)(x,y) ≠ Σ̃(e)(x,y)` then `d(rx,ry) ≠ e(rx,ry)` and the common `v`-term is dominated, so `Σ̃(d)(x,y) ∨ Σ̃(e)(x,y) = d(rx,ry) ∨ e(rx,ry)`, and `(U1)` transfers.
+4. **`Σ̃⁻¹( UMet(X;R) ) = UMet(F;R)`.**  `⊇` is Theorem 4.7(5).  `⊆`: if `Σ̃(d)` is compatible on `X`, its restriction to the subspace `F` is `d`, hence `d` is compatible on `F`.
+5. `Σ̃` is an isometric embedding of the **complete** space `UCPM(F;R)` (13.1), so `Σ̃(UCPM(F;R))` is complete, hence closed in `UCPM(X;R)`; therefore `Σ(UMet(F;R)) = Σ̃(UCPM(F;R)) ∩ UMet(X;R)` is relatively closed in `UMet(X;R)`.  This is the missing closed-image clause, and it comes out of the ambient's completeness rather than a limit argument.
+6. Under (N1), `Σ̃⁻¹(UComp(X;R)) = UComp(F;R)`: `⊇` is (N1); `⊆` because `F` is closed in `(X, Σ̃(d))` when `Σ̃(d)` is compatible.  This is §11.4 verbatim with `∨` for `+`, and (N1)'s hypothesis that `X` be completely metrizable is the same hypothesis that §11.3 shows the Archimedean Theorem 1.1(4) to be missing — so on this point [22, Theorem 4.7] is the more careful of the two statements.
+
+**Consequent transfer theorem.**  Let `X` be a non-separable ultrametrizable space and `R` a characteristic range set.  A non-separable metrizable space contains an uncountable `ε`-separated set, which is closed and discrete; take `D ⊆ X` closed discrete with `|D| = ℵ₁`.  Then `Σ̃ ∘ Φ_full : 2^ℕ → UCPM(X;R)` is continuous with
+
+```text
+(Σ̃ ∘ Φ_full)⁻¹( UMet(X;R) ) = 2^ℕ \ S,
+```
+
+and likewise for `UComp(X;R)` when `X` is completely metrizable.  So `UMet(X;R)` — and its complete part — is neither analytic nor coanalytic, on the same pointclass hypothesis as §6.
+
+**FIX — hypothesis on `X`.**  The conclusion "`UMet(X;R)` analytic or coanalytic ⟹ `X` separable" is **false for general metrizable `X`**: if `dim_T(X) ≠ 0` then `UMet(X;R) = ∅` ([22, Prop. 2.3]), which is closed, while `X` may be non-separable.  Every statement in the non-Archimedean track must read "ultrametrizable `X`" (equivalently metrizable with `dim_T(X) = 0`), and the corresponding corollary is strictly narrower in scope than its Archimedean counterpart.  Check whether the draft says "metrizable" anywhere in Theorems 3.13–3.16.
+
+### 13.9 Propagation of §1 and of `(★)` (NA-9)
+
+**§1 propagates verbatim.**  The non-Archimedean ambient is nonseparable with nonseparable complement, so the classical (separable) reading of "analytic" makes the theorems vacuous here too; the witness below is the ultrametric form of the one in §1.  Explicitly: fix `r_1 < r_0` in `R₊` and, for `A ⊆ D\{u,v,y₀}`, let `d_A` be the ultrametric whose two `r_1`-balls are `A` and `D\A`, with cross distance `r_0`.  For `A ≠ A'` and `z ∈ A\A'` one has `d_A(z,y₀) = r_0 ≠ r_1 = d_{A'}(z,y₀)`, so `UD^R_D(d_A,d_{A'}) = r_0`: a `r_0`-separated family of size `2^{ℵ₁}` in `UMet(D;R)`.  Identifying `u` with `v` by pullback along `π` gives an equally separated family of non-compatible pseudo-ultrametrics.  The §1 repair (Souslin-`F` / relative analytic, closed under continuous preimages and complementation, agreeing with `Σ¹₁` on `2^ℕ`) is exactly what `NA-4` and `NA-8` consume, and nothing more.
+
+**`(★)` propagates with the same asymmetry.**  Under CH the track carries no set-theoretic hypothesis beyond ZFC, via the direct Bernstein set of `NA-2` — set-theoretically safe, that is; the §1 ambient convention still gates every pointclass statement here, and CH does nothing about it.  Under `ℵ₁ < 𝔠`, `|S| = ℵ₁` makes `S` thin, so `S` is not analytic in ZFC and therefore
+
+```text
+UMet(D;R), UComp(D;R), each of their components, and UMet(X;R) for
+non-separable ultrametrizable X  are not coanalytic — unconditionally.
+```
+
+The dual half is exactly `(★)` of §2 and no more; the non-Archimedean track adds no new set-theoretic obligation.  If `(★)` stays open, the asymmetric ZFC-safe form of §6 is the right shape for Theorems 3.11–3.16 as well — as it is for §§9.5, 10.5 and 11.5 on the Archimedean side.  The scope matters: "not coanalytic in ZFC for any `S` of size `ℵ₁`" is available under `ℵ₁ < 𝔠`, where thinness does the work; under CH it holds for the Bernstein `S` of §2 and `NA-2`, not for an arbitrary `S` of that size.
+
+**Lean note (for #47).**  The non-Archimedean coding is a better Layer-1 target than the Archimedean one: the estimate of `NA-4` is an exact equality, the carrier arithmetic is `max` rather than `+` (so no diameter budget and no `2`-Lipschitz constants), `IsUltrametricDist` exists in Mathlib v4.32.2, and completeness (`NA-7`) is free.  The descriptive layer is unchanged and remains blocked by §1 and §8.2 in the same way.
+
+### 13.10 Points to put to the authors
+
+1. **Which metric does `UMet(X;R)` carry?**  `UD^R_X` or the Archimedean `D_X`?  They need not induce the same topology: `D_X ≤ UD^R_X` gives continuity of the identity `(UMet,UD) → (UMet,D)` and nothing in the reverse direction ([20, Lemma 6.2]), though for particular `R` the two may still coincide.  The obstruction above holds for both, but the theorem statement means different things.
+2. **Which ambient?**  `UCPM(X;R)` (continuous `R`-valued pseudo-ultrametrics), `C(X²,R)` with `U^R_{X²}` ([20, Remark 7.1]), or the full `CPM(X)` of the Archimedean sections?  "Analytic in `CPM(X)`" and "analytic in `UCPM(X;R)`" are different assertions; §1's pointclass convention must be fixed for whichever is chosen.
+3. **Is `R` assumed characteristic** (countable coinitiality)?  It is necessary, not merely convenient — see `NA-5`.  Is it stated in every theorem, or only where used?
+4. **Is `R` assumed bounded?**  If `sup R` is attained, `UD^R_X` is bounded and the `UD`-component decomposition is trivial (`NA-6`), so a componentwise theorem stated for `UD` is vacuous.  Confirm whether the intended components are `D_sup`-components.
+5. **Is density of the parameter set used anywhere in the non-Archimedean track?**  It is not needed for the pullback route (`NA-2`).  If it is retained, please say which statement consumes it — otherwise Proposition 2.1/2.2 can drop it, which also simplifies the `ℵ₁<𝔠` branch.
+6. **Provenance of the ultrametric extensor clauses.**  [22, Theorem 4.7] as published has no pseudo-ultrametric extension `Σ̃` and no closed-image statement.  Does the draft's Appendix A prove them?  If so, they should be stated as a lemma derived from [22, Theorem 3.1] and the explicit formula `Σ(d) = d∘(r×r) ∨ v∘(π×π)` (see `NA-8`), not cited from Theorem 4.7.
+7. **Hypothesis on `X` in the general-space non-Archimedean theorems.**  Must be *ultrametrizable*, not metrizable, or the statement is false for `dim_T(X) ≠ 0` (`NA-8`, FIX).
+8. **Is the complete branch given a separate coding?**  It need not be: the coding ultrametrics of `NA-3` are complete for every parameter (`NA-7`).
+9. **`UBMet` vs `UMet`.**  If `R` is bounded these coincide; if the draft states both, confirm `R` is intended unbounded there.
+10. **Draft numbering.**  Please confirm the correspondence Lemma 3.9 ↔ `NA-3`, Lemma 3.10 ↔ `NA-4`, Theorem 3.11 ↔ discrete obstruction, 3.12 ↔ components, 3.13/3.14 ↔ general space, 3.15/3.16 ↔ complete branch, so the audit verdicts can be attached to the manuscript's own labels.
+
+---
+
+### 13.11 Provenance and residual checks
+
+- The joint draft was not available; every statement above was derived from the Issue #46 checkpoint list and verified against the primary literature ([20], [22], arXiv:2407.03030).  A different construction in the manuscript does not invalidate these verdicts, but the *statements* should be compared clause by clause, in particular the exact `UD` estimate (`NA-4`) and the extensor clauses (`NA-8`).
+- `NA-8` item 5 (closed image via completeness of the ambient) and `NA-5` (necessity of countable coinitiality) are new relative to what the sources state; both have short proofs given above and should be independently re-checked before they are relied on.
+- Citation numbers for [20] and [22] are those of arXiv:2407.03030's bibliography; the arXiv identifiers are 2008.10209 and 2212.13409 respectively, and the `UD^S_X` definition used here is [20, §1] with [20, Remark 1.8].
+- Provenance at integration.  The [20] citations above — `§1`, Remark 1.8, Lemmas 2.2/2.12/2.13, Proposition 2.14, Lemmas 6.2, 7.2, 7.4, 7.5, Remark 7.1 — were re-checked against the arXiv:2008.10209 full text when this section was merged, and two wordings were corrected then: `(U2)` is an infimum rather than a minimum, and Lemma 2.13 states "discrete and complete", its uniform radius coming from the proof.  [22] (arXiv:2212.13409) was **not** available at integration time, so the content attributed to its Theorems 3.1 and 4.7 — including the clause list of `NA-8` and the (N1) numbering — is carried over from the item-7 pass unverified here, and is the one external dependency of this section that a second reader should re-check against the paper.
+
+---
+
+## 14. Standing gaps after §§9–13
+
+1. §1 (ambient convention) still gates the pointclass statements of §§9–11 and of §13 alike.  It does **not** gate §12.3 route 1.
+2. `(★)` of §2 still gates the "not analytic" half of Theorems 3.3/3.4/3.5/3.8 and of the non-Archimedean Theorems 3.11–3.16.  It gates nothing in §12.  Neither track adds a set-theoretic obligation beyond `(★)`.
+3. Ishiki Theorem 1.1(4) must be quoted as `(4′)` with the completely-metrizable hypothesis (§11.3); the authors should be told, since the defect is in the published preprint.  Its non-Archimedean counterpart, [22, Theorem 4.7](N1), already carries that hypothesis (§13.8 item 6).
+4. **[22, Theorem 4.7] cannot be cited for what the non-Archimedean transfer needs** (§13.8, `NA-8`, FIX): as published it has neither a pseudo-ultrametric extension clause nor a closed-image clause, and `Σ` is defined only on compatible metrics, so the coding ultrametrics at bad parameters lie outside its domain.  Both clauses are derivable from [22, Theorem 3.1] and the explicit formula `Σ(d) = d∘(r×r) ∨ v∘(π×π)`, but they must be stated and proved rather than attributed.  This is load-bearing: without them the non-Archimedean general-space theorems have no ambient-level map.
+5. Two hypotheses that the non-Archimedean statements must carry everywhere, not only where convenient: `R` characteristic (countable coinitiality), without which the `UD` ambient is uniformly discrete and every `UD`-formulated theorem in the track is false (§13.5; the argument is specific to `UD` and leaves a `D_sup` formulation undecided); and `X` **ultrametrizable**, not merely metrizable, without which `UMet(X;R) = ∅` and the general-space statement is refuted by a triviality (§13.8) — the exact analogue of the `Comp(X) = ∅` failure in §11.5.
+6. [22] (arXiv:2212.13409) was not available when §13 was integrated, so its Theorem 3.1 / 4.7 content there is unverified at this repository (§13's provenance note).  It is the one external dependency of §13 that should be re-checked against the paper.
+7. Items 4–8 above were derived without the manuscript.  Once the draft is available, what remains is statement-level reconciliation — does each verdict above answer the manuscript's actual statement, under its definitions and conventions, and where do the two arguments disagree?  The specific points to reconcile: what ambient and pointclass its Theorem 3.4 quantifies over and whether its component statement is the one proved in §9; whether its Theorem 3.8 carries the completely-metrizable hypothesis that §11.5 shows to be necessary; which clauses of Ishiki Theorem 1.1 it invokes, given §11.3; whether its Appendix A argument establishes the ambient-level transfer that §10.7 identifies as the missing step; and the ten non-Archimedean questions of §13.10, of which the extensor provenance (item 6), the hypothesis on `X` (item 7) and which metric `UMet(X;R)` carries (item 1) are the ones that change what the theorems assert.
+8. Whether the density of the parameter set survives in Proposition 2.1/2.2 is now a question for the authors rather than a proof detail: neither track consumes it (§9.6, §13.2), and dropping it would also remove the need to adjoin a countable dense `Q` in the `ℵ₁<𝔠` branch of §2.  It is a change to those statements, not to their proofs.
+9. §7's audit targets are now all answered: items 3, 4, 5 in §§9–11, item 7 in §12, item 6 in §13.  Items 1 and 2 of that list — the ambient convention and `(★)` — remain the two open questions, and they are the same two that gate everything else.
