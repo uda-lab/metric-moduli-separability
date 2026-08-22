@@ -34,19 +34,31 @@
 | 3.6 | `cor:metric-space-complete-separability` | `Met(X)` completely metrizable ⇒ separable | A | **PASS + EXTERNAL** (Alexandrov) |
 | 3.7 | `cor:bounded-metric-complete-sigma-compact` | `BMet(X)` compl. metrizable ⟺ `X` σ-compact | A | **FIX + EXTERNAL** (Koshino; Thm 1.1(3)) |
 | 3.8 | `thm:complete-metric-nonborel` | `𝔠 ∩ Comp(Z)` and `Comp(Z)` non-Borel | A | **FIX** (complete base metric) |
-| 3.9 | `cor:complete-metric-borel-separability` | `Comp(X)` Borel ⇒ separable (`X` compl. metr.) | A | **PASS + EXTERNAL** (Thm 1.1(4)) |
+| 3.9 | `cor:complete-metric-borel-separability` | `Comp(X)` Borel ⇒ separable (`X` compl. metr.) | A | **PASS + EXTERNAL** (Thm 1.1(4); assumes 3.8 repair) |
 | 3.10 | `lem:ultrametric-coding` | ultrametric star coding, compatibility iff `t ∉ S` | NA | **PASS** |
 | 3.11 | `lem:closed-ultrametric-parameter-embedding` | `Φ` isometric, closed image | NA | **PASS** |
 | 3.12 | `thm:discrete-ultrametric-nonborel` | `UMet(Z;R)` non-Borel in `UCPM(Z;R)` | NA | **PASS** |
 | 3.13 | `thm:ultrametric-component-nonborel` | every `R`-component non-Borel | NA | **PASS** |
 | 3.14 | `thm:ultrametric-borel-separability` | `UMet(Y;R)` Borel ⇒ `Y` separable | NA | **FIX + EXTERNAL** (Thm 4.7) |
-| 3.15 | `cor:ultrametric-space-complete-separability` | `UMet(Y;R)` compl. metrizable ⇒ separable | NA | **PASS** (inherits 3.14) |
+| 3.15 | `cor:ultrametric-space-complete-separability` | `UMet(Y;R)` compl. metrizable ⇒ separable | NA | **PASS** (assumes 3.14 repair) |
 | 3.16 | `thm:complete-ultrametric-nonborel` | `𝔠^R ∩ UComp(Z;R)` non-Borel | NA | **PASS** |
 | 3.17 | `cor:complete-ultrametric-borel-separability` | `UComp(Y;R)` Borel ⇒ separable | NA | **FIX + EXTERNAL** (Thm 4.7(N1)) |
 
-A = Archimedean, NA = non-Archimedean. Every FIX has a concrete repair in §2;
-none threatens the truth of the stated result. The FIXes in 3.14/3.17 share a
-single cause (§2.14). No BLOCKED-level defect was found: **the Borel
+A = Archimedean, NA = non-Archimedean. Every FIX has a concrete repair,
+*checked in this audit*, recorded in §2; none threatens the truth of the
+stated result. The FIXes in 3.14/3.17 share a single cause (§2.14).
+
+**Verdict semantics (propagation).** Verdicts are *local*: each statement's
+verdict assumes the statements it cites (per the graph in §4) hold **as
+repaired**. Concretely: 3.10–3.13 and 3.16 consume only the *statement* of
+2.2 (whose proof is FIX but whose repair is verified in §2.2); 3.9 consumes
+3.8-as-repaired; 3.15 and 3.17 consume 3.14-as-repaired. A PASS on a
+downstream item therefore means "no *new* gap introduced here", not
+"unconditional"; any gate (in particular the Lean issues #56/#57) that
+consumes a statement whose ancestors carry FIX must treat the recorded
+repairs as part of the statement being gated. With the four repairs of
+§§2.2, 2.10, 2.11, 2.14 admitted, every statement of the preprint has a
+complete verified proof route; no BLOCKED-level defect remains — **the Borel
 reformulation removes both fatal defects of the superseded draft** (§5).
 
 ---
@@ -111,8 +123,14 @@ Relabelling convention: Theorems 3.3, 3.4, 3.8, 3.12, 3.13, 3.16 are stated
 for an *arbitrary* discrete space `Z` with `|Z| = ℵ₁` while the proofs use the
 specific coded carrier fixed before Lemma 3.1 (resp. 3.10). A bijection of
 discrete spaces induces an isometry of `CPM`/`UCPM` preserving
-`Met/BMet/Comp/UMet/UComp` and components, so this is sound; the preprint
-leaves it implicit (the repo states it once in `Conj51/Relabel.lean`).
+`Met/BMet/Comp/UMet/UComp` and components (elementary: relabel both
+arguments; every defining property is invariant), so this is sound; the
+preprint leaves it implicit. Lean status: `Conj51/Relabel.lean` formalises
+this reduction **only** for `MetD` (the space `Met(D)` with its extended sup
+distance — `relabelIsometry : MetD E ≃ᵢ MetD D`); the corresponding
+`BddPMet`/`CPM`/`UCPM` relabelling isometries and their
+subset/component-preservation lemmas are **not yet formalised** and are a
+listed obligation of the arbitrary-carrier forms in §7.
 
 ---
 
@@ -443,23 +461,50 @@ ambient** (`Ẽ : CPM(Z) → CPM(X)`); E2 has **no `UCPM`-level extensor** — i
 domain is `Met(Z)` — so the isometry `E` cannot transport the ambient Borel
 σ-algebra, and "Borel in `UCPM(Y;R)`" is not an intrinsic property of the
 subspace `E(𝔠^R)` (any space is closed in itself).
-*Repair (stays inside the paper's toolkit).* Work with the compact witness
-instead of the component: `F := E(Ψ(2^ω∖S))` is closed in `UMet(Y;R)` (image
-of the closed set of 3.13 under the homeomorphism-onto-closed-image `E`) and
-`ι := E ∘ Ψ : (2^ω∖S, h) → F` is an isometry. `UCPM(Y;R)` is
-`𝒰𝒟^R`-complete (a `𝒰𝒟^R`-Cauchy sequence is uniformly Cauchy, and its
-pointwise values stabilise below any `ε ∈ R`, so the limit is an `R`-valued
-continuous pseudo-ultrametric). Extend `ι` by uniform continuity to an
-isometry `ῑ : P → UCPM(Y;R)`, where `P := cl_{2^ω}(2^ω∖S)`; `K := ῑ(P)` is
-compact and `K ∩ UMet(Y;R) = F` (a point `ῑ(t)`, `t ∈ S∩P`, in `UMet(Y;R)`
-would be a limit of `F` inside `UMet(Y;R)`, forcing `ῑ(t) ∈ F` and, by
-injectivity, `t ∉ S`). If `UMet(Y;R)` were Borel, `F = K ∩ UMet(Y;R)` would
-be Borel in the Polish space `K ≅ P`, making `P∖S` Borel in `P` — and since
-`P` is closed in `2^ω`, `P∖S = (2^ω∖S)` would be Borel in `2^ω`,
-contradicting 2.2. (No co-density of `S` is assumed; `P` handles that.)
-Alternatively, cite absolute-Borelness of separable metrizable spaces
-(Lavrentiev) for `F ≅ 2^ω∖S`. Statement true; the transfer argument must be
-added.
+*Repair (stays inside the paper's toolkit; each step proved here).* Work
+with the compact witness instead of the component. `F := E(Ψ(2^ω∖S))` is
+closed in `UMet(Y;R)` (image of the closed set of 3.13 under the
+homeomorphism-onto-closed-image `E`), and `ι := E ∘ Ψ : (2^ω∖S, h) → F` is
+an isometry (3.13 isometry composed with E2(2)).
+
+*Sub-lemma (completeness of `UCPM(Y;R)`, every characteristic `R`).*
+(i) `𝒰𝒟^R(d,e) ≤ ε` implies `|d(x,y) − e(x,y)| ≤ ε` for every pair: from
+`d(x,y) ≤ e(x,y) ∨ ε`, either `d ≤ e` or `d ≤ ε`; in both cases
+`d − e ≤ ε`, and symmetrically. So a `𝒰𝒟^R`-Cauchy sequence `(d_k)` is
+uniformly Cauchy and has a uniform limit `d_∞`, which is a continuous
+pseudometric satisfying the strong triangle inequality (pointwise limit of
+max-inequalities). (ii) `d_∞` is `R`-valued: fix a pair `(x,y)` and set
+`v_k := d_k(x,y) ∈ R`, `v := lim v_k`. If `v = 0` then `v ∈ R`. If `v > 0`,
+pick `ε ∈ R∖{0}` with `ε < v` (`R` characteristic); for large `j,k` the
+defining inequalities give `v_k ≤ v_j ∨ ε` and `v_j ≤ v_k ∨ ε` while
+`v_j, v_k > ε`, forcing `v_j = v_k` — the values are eventually constant, so
+`v ∈ R`. (iii) `𝒰𝒟^R(d_j, d_∞) → 0`: given `ε ∈ R∖{0}`, for large `j` and
+all `k ≥ j`, `d_j ≤ d_k ∨ ε` and `d_k ≤ d_j ∨ ε` pointwise; let `k → ∞` to
+get `d_j ≤ d_∞ ∨ ε` and `d_∞ ≤ d_j ∨ ε`, i.e. `𝒰𝒟^R(d_j,d_∞) ≤ ε`. ∎
+
+Now extend: `ι` is an isometry from `2^ω∖S`, dense in the compact
+`P := cl_{2^ω}(2^ω∖S)`, into the complete space `UCPM(Y;R)`, hence extends
+uniquely to an isometry `ῑ : (P,h) → UCPM(Y;R)` (uniform continuity +
+completeness; the extension is isometric and in particular injective, by
+continuity of the two distance functions). `K := ῑ(P)` is compact and
+`ῑ : P → K` is a homeomorphism.
+
+*Claim: `K ∩ UMet(Y;R) = F`.* `⊇` by construction (`ῑ = ι` on `2^ω∖S`). For
+`⊆`: take `t ∈ P` with `ῑ(t) ∈ UMet(Y;R)`; choose `t_k ∈ 2^ω∖S`, `t_k → t`;
+then `ι(t_k) → ῑ(t)` *inside* `UMet(Y;R)`, and `F` is closed in
+`UMet(Y;R)`, so `ῑ(t) ∈ F = ι(2^ω∖S)`; injectivity of `ῑ` gives
+`t ∈ 2^ω∖S`. ∎
+
+Conclusion: if `UMet(Y;R)` were Borel in `UCPM(Y;R)`, then
+`F = K ∩ UMet(Y;R)` would be Borel in the compact metric (hence Polish)
+space `K ≅ P` (trace, §1), so `ῑ⁻¹(F) = P∖S` would be Borel in `P`; `P` is
+closed in `2^ω`, so `P∖S = 2^ω∖S` would be Borel in `2^ω` — contradicting
+2.2. (No co-density of `S` is assumed; passing to `P` handles that.)
+Alternatively one may cite absolute-Borelness of separable metrizable
+spaces (Lavrentiev) for `F ≅ 2^ω∖S` in place of the explicit extension.
+Statement true; the transfer argument above must be added to the paper, and
+a Lean formalisation of 3.14 must formalise it (it is not extractable from
+the paper's text).
 
 **Corollary 3.15 (`cor:ultrametric-space-complete-separability`) — PASS.**
 From 3.14 via Alexandrov (`UMet(Y;R)` completely metrizable ⇒ `G_δ` in the
@@ -543,10 +588,17 @@ a number — add one, e.g. the Borel isomorphism theorem, Kechris 15.6);
 space is `G_δ` (Kechris, Theorem 3.11 — already number-verified in
 `notes/literature.md`; used implicitly by 3.6, 3.15, and 3.17's second
 sentence — the preprint never cites it; add).
-The (a)/(b) theorem numbers were not re-verified against the printed book in
-this audit; the repo's transcription-based verification procedure
-(`notes/literature.md`) covers 3.11 and §6 but not 13.6/8.24 — spot-check
-before submission.
+Number verification status: (b) was checked in this audit against the
+repo's numbering-preserving transcription (`notes/literature.md` procedure):
+Example 8.24 exists and is the Bernstein construction, but its numbered
+statement reads "There exists a subset `A ⊆ ℝ` not having the BP" — the
+Bernstein set (for `ℝ`, not `[0,1]`) is the construction inside it, so the
+preprint's "(for the existence, see [Example 8.24])" is defensible but
+slightly indirect (a `[0,1]`-Bernstein set is obtained by intersecting, or
+by running the same recursion in `[0,1]`). The transcription does not cover
+chapters 13/15, so (a) Theorem 13.6 and (c) remain memory-level
+identifications (both widely corroborated in citing literature) —
+spot-check against the printed book before submission.
 
 **Standard non-DST facts used silently (all re-derived here, no citation
 needed for experts):** nonseparable metric space contains an `ε`-separated
@@ -560,20 +612,34 @@ subspace is complete (3.9, 3.17); regularity of `ℵ₁` (3.4, 3.13).
 
 ## 4. Dependency graph
 
+**Route W — the preprint's written proofs** (what §2 audited):
+
 ```
-2.1 ──────────────┬────────────→ 3.1 → 3.2 → 3.3 ──────────→ [3.7 repair]
- │                │                     └──→ 3.4 → 3.5 → 3.6 → 3.7 (+E3)
- │ (Borel isom.)  │  (coding)                (+E1)   (+E4d)     (+E1(3))
- ↓                └────────────→ [3.4 amalgam] → 3.8 → 3.9 (+E1(4))
-2.2 ─→ 3.10 → 3.11 → 3.12
-              └──→ 3.13 → 3.14 (+E2) → 3.15 (+E4d)
-                     └──→ 3.16 → 3.17 (+E2(N1), +E4d)
+2.1 → 3.1 → 3.2 → 3.3 ─────────────────────────→ [3.7 repair, §2.10]
+             └──→ 3.4 ──(+E1)──→ 3.5 ──(+E4d)──→ 3.6 ──(+E3)──→ 3.7
+             └──→ [3.4 amalgam] → 3.8 ──(+E1(4))──→ 3.9
+2.2 → 3.10 → 3.11 → 3.12
+             └──→ 3.13 ──(+E2, §2.14 transfer)──→ 3.14 ──(+E4d)──→ 3.15
+                    └──→ 3.16 ──(+E2(N1), §2.14 transfer, +E4d)──→ 3.17
 ```
 
-Minimal chain for the headline results: 2.1 → 3.1 → 3.2 → (3.3/Met-version)
-→ 3.5 → 3.6; the component theorems 3.4/3.13 are independent refinements not
-needed for 3.5/3.14 (§2.8), though the preprint's written proofs route
-through them.
+**Route M — minimal verified chain for the headline results** (§2.6, §2.8;
+this is the executable contract for the Lean issues, not what the paper
+prints):
+
+```
+2.1 → 3.1 → 3.2 → [Met(Z)/BMet(Z) pullback versions of 3.3, §2.6]
+        ──(+E1: Ẽ on CPM, extension, isometry, Met-preservation)──→ 3.5
+        ──(+E4d)──→ 3.6;   3.7 additionally needs E1(3) + E3 (§2.10)
+```
+
+Route M consumes: the `Met(Z)`-version of 3.3 (stated only in the
+abstract/introduction of the preprint — §2.6), the ambient (`CPM`-level)
+pullback of §1, and, for the arbitrary-carrier statement forms, the
+relabelling isometries of §1. It does **not** consume 3.4/3.8/3.13/3.16,
+which are finer independent results. The two routes are both sound; §2's
+verdicts audit Route W, while §7 scopes #56/#57 along Route M and lists each
+Route M obligation explicitly.
 
 ---
 
@@ -625,7 +691,7 @@ coding, which is unchanged).
 
 | preprint | Lean declaration | match |
 |---|---|---|
-| carrier `Z = {p,q} ⊔ ⊔_α C_α` | `ExtIndex S = Bool ⊕ (↥S × Option ℕ)` | literal up to relabelling: stars indexed by `S` itself instead of an enumeration `α ↦ w_α` (`Conj51/Relabel.lean` states the reduction); `p,q ↦ inl true/false`, `b_α ↦ inr (a, none)`, `c_{α,n} ↦ inr (a, some n)` |
+| carrier `Z = {p,q} ⊔ ⊔_α C_α` | `ExtIndex S = Bool ⊕ (↥S × Option ℕ)` | literal up to relabelling: stars indexed by `S` itself instead of an enumeration `α ↦ w_α`; `p,q ↦ inl true/false`, `b_α ↦ inr (a, none)`, `c_{α,n} ↦ inr (a, some n)`. (`Conj51/Relabel.lean` formalises relabelling for `MetD` only — see §1; the `BddPMet`-level relabelling is a §7 obligation, not existing support) |
 | `card(Z) = ℵ₁` | `card_extIndex : #S = ℵ₁ → #(ExtIndex S) = ℵ₁` | literal |
 | `l_n(α,t) = \|t−w_α\| + 2^{−n}` | `spokeLen n a t = \|t − a\| + (1/2)^n` | literal |
 | ambient `BCPM(Z)`, sup metric | `BddPMet D` with `supDist`, `MetricSpace` instance | literal for the *bounded* ambient; the preprint's stated ambient `CPM(Z)` (unbounded, `[0,∞]`-valued `𝒟`) has **no Ext-side Lean type yet** (`Conj51/MetD.lean` has the `EMetricSpace` pattern for `Met(D)` only) |
@@ -693,14 +759,25 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    non-Borel in `CPM(D)`, and the `Met(D)` version (§2.6) via
    `phiFull⁻¹(Met D) = Icc∖S` in the `CPM` ambient. This discharges the
    preprint's literal 3.3 statement and the abstract's `Met(Z)` claim.
-4. *Optional, not gating #57:* Theorem 3.4 (components; needs one-point
+4. **Arbitrary-carrier form (relabelling)** — for the statements "for every
+   discrete `D` with `#D = ℵ₁`": `BddPMet`- and `CPM`-level relabelling
+   isometries induced by a bijection `D ≃ E`, preserving `BMet`/`Met`
+   (mirror of `relabelIsometry` in `Conj51/Relabel.lean`, which covers
+   `MetD` only — §1). Cheap; without it the #56 theorems are stated for the
+   concrete `ExtIndex S` carrier, which is acceptable for the gate but not
+   for the literal preprint statement.
+5. *Optional, not gating #57:* Theorem 3.4 (components; needs one-point
    amalgamation + regular-cardinal ball argument) and Theorem 3.8 (with the
    §2.11 repair baked in: complete base `d + 1`). Defer unless the owner
    wants the finer statements formalised.
 
 ### #57 — general-space transfer (Theorem 3.5)
 
-Statement shape (component-free route, §2.8):
+Statement shape (Route M of §4, the component-free route of §2.8). Consumed
+from #56: the `Met(D)`-version pullback theorem (item 3) and, if the
+arbitrary-carrier phrasing is wanted, the relabelling layer (item 4) —
+these are gating prerequisites and must exist before #57's final theorem is
+stated:
 
 * Hypothesis bundle `IsIsometricExtensor` for a metrizable `X` (as a
   Lean-side structure): maps `Ẽ : CPM(Z) → CPM(X)` and its restriction
