@@ -12,8 +12,8 @@
 > every proof was re-derived. Verdicts: **PASS** (statement and proof check
 > out), **FIX** (statement believed true; the written proof has a concrete,
 > repairable gap, described in place), **EXTERNAL** (correct modulo an external
-> published theorem, quoted exactly in §3). A statement can be
-> PASS/FIX *and* EXTERNAL.
+> theorem — published or arXiv, per-source status in §3 — quoted exactly
+> there). A statement can be PASS/FIX *and* EXTERNAL.
 > **Supersedes:** the 11 Aug analytic/coanalytic audit
 > (`notes/ishiki-extension-audit.md` on branch `audit/ishiki-extension`),
 > kept only as a historical record; see §5 for what must not be resurrected.
@@ -500,8 +500,9 @@ Conclusion: if `UMet(Y;R)` were Borel in `UCPM(Y;R)`, then
 space `K ≅ P` (trace, §1), so `ῑ⁻¹(F) = P∖S` would be Borel in `P`; `P` is
 closed in `2^ω`, so `P∖S = 2^ω∖S` would be Borel in `2^ω` — contradicting
 2.2. (No co-density of `S` is assumed; passing to `P` handles that.)
-Alternatively one may cite absolute-Borelness of separable metrizable
-spaces (Lavrentiev) for `F ≅ 2^ω∖S` in place of the explicit extension.
+This explicit extension argument is the *sole* verified repair; there is no
+shortcut via "separable metrizable spaces are absolutely Borel" — that is
+false, and `F ≅ 2^ω∖S` is itself a counterexample (non-Borel in `2^ω`).
 Statement true; the transfer argument above must be added to the paper, and
 a Lean formalisation of 3.14 must formalise it (it is not extractable from
 the paper's text).
@@ -753,12 +754,18 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    relative-closure argument and needs no new topology.
 3. **Ambient faithfulness layer** — a `CPM D` type (unbounded continuous —
    i.e. arbitrary, `D` discrete — pseudometrics with `EMetricSpace` sup
-   distance, mirroring `Conj51/MetD.lean`), the subspace-trace lemma
+   distance, mirroring `Conj51/MetD.lean`), plus the **bridge lemma**
+   identifying the `BddPMet D` metric topology with the subspace topology
+   induced from `CPM D` (the real-valued `supDist` and the `ENNReal`-valued
+   sup distance agree on bounded pairs; hence the Borel σ-algebra of
+   `BddPMet D` is the trace σ-algebra), the subspace-trace lemma
    ("`MeasurableSet` in the larger ambient ⇒ `MeasurableSet` of the
    intersection in the subspace"), and the two corollaries: `BMet(D)`
    non-Borel in `CPM(D)`, and the `Met(D)` version (§2.6) via
-   `phiFull⁻¹(Met D) = Icc∖S` in the `CPM` ambient. This discharges the
-   preprint's literal 3.3 statement and the abstract's `Met(Z)` claim.
+   `phiFull⁻¹(Met D) = Icc∖S` in the `CPM` ambient. Until this layer
+   exists, item 2 is a bounded-ambient surrogate only; with it, the
+   preprint's literal 3.3 statement and the abstract's `Met(Z)` claim are
+   both discharged.
 4. **Arbitrary-carrier form (relabelling)** — for the statements "for every
    discrete `D` with `#D = ℵ₁`": `BddPMet`- and `CPM`-level relabelling
    isometries induced by a bijection `D ≃ E`, preserving `BMet`/`Met`
@@ -785,7 +792,13 @@ stated:
   `EMetricSpace` level), Met-preservation `E '' Met(Z) ⊆ Met(X)`; the
   identity `Ẽ(Met(Z)) = Ẽ(CPM(Z)) ∩ Met(X)` should be **derived** from (1) +
   restriction-preserves-compatibility, not hypothesised. Clauses (3)/(4) are
-  needed only for the 3.7-repair / 3.9 extensions and can be optional fields.
+  needed only for the 3.7-repair / 3.9 extensions and can be optional fields;
+  (4) must carry the "`X` completely metrizable" hypothesis per the E1
+  caveat (§3).
+* Conditionality is by design: the #57 Lean theorem takes the E1 bundle as
+  an explicit hypothesis and does **not** formalise E1's proof, so Lean
+  discharges the preprint's 3.5 only modulo that hypothesis — matching the
+  EXTERNAL verdict semantics, not silently strengthening them.
 * Supporting lemmas: nonseparable metric space has a closed discrete
   `ε`-separated subset of cardinality `ℵ₁` (Zorn on separated sets — check
   Mathlib for maximal-separated-set API; likely new); completeness of
