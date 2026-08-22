@@ -57,9 +57,10 @@ adding `ℵ₂` Cohen reals), the largest thin `Π¹₁` set `C₁` (Kechris 197
 Sacks) is a coanalytic dense set of cardinality `ℵ₁`, a legitimate output of the
 recipe — so no ZFC proof of the "not coanalytic" half can exist for that recipe. By
 Mansfield–Solovay, a ZFC-safe repair would need `S ⊄ L[a]` for every real `a`, which
-the recipe does not supply. Only the asymmetric "not analytic" half (from
-`ℵ₁ < 𝔠` and Souslin's perfect set theorem) survives in ZFC. See
-`notes/borel-preprint-audit.md` §5 for the full account. The repair this raised was
+the recipe does not supply. Only the asymmetric "not analytic" half survives in ZFC,
+by Souslin's perfect set theorem: under ¬CH from `ℵ₁ < 𝔠` directly, and under CH by
+choosing `S` as a Bernstein set. See `notes/borel-preprint-audit.md` §5 for the full
+account. The repair this raised was
 an author-level decision point in the superseded draft; the published joint preprint
 replaces the whole package. Valid pointclass-free metric coding from that work
 survives separately in PR #52.
