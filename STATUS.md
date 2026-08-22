@@ -51,13 +51,17 @@ from PR #52:
 
 - `lean/IshikiConj51/Ext/BddPMet.lean` defines the bounded pseudometric ambient;
 - `lean/IshikiConj51/Ext/BoundedCoding.lean` formalises the bounded star-metric
-  family and its metricity, compatibility criterion, Lipschitz estimates,
-  exact pullback identity, closed image, and ℵ₁ carrier cardinality.
+  family and its metricity, compatibility criterion, Lipschitz estimates, the
+  exact pullback identity, and — closed within the subspace `BMet D`, not yet
+  the preprint's `Met`/`CPM` ambient — the closed image of the parameter
+  embedding and the carrier cardinality `#S = ℵ₁ → #(ExtIndex S) = ℵ₁`.
 
-This layer formalises coding only. It does not yet prove a non-Borelness
-statement or the general-space transfer; those are the
-targets of #56 and #57. The merged development is sorry-free and its audit
-uses only the standard Lean axioms reported by `#print axioms`.
+This layer formalises coding only, relative to the bounded ambient
+`BddPMet D`. It does not yet prove a non-Borelness statement, close the image
+in the preprint's `Met`/`CPM` ambient, or carry out the general-space
+transfer; those are the targets of #56 (the ambient-faithfulness bridge is
+item 3 of its statement gate) and #57. The merged development is sorry-free
+and its audit uses only the standard Lean axioms reported by `#print axioms`.
 
 External mathematical results used by the Borel track will enter Lean as
 explicit hypotheses or separately formalised results. In particular, the
