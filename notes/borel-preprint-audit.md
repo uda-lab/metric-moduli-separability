@@ -733,18 +733,29 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
 
 1. **`exists_aleph1_nonBorel`** — `∃ S ⊆ Icc (0:ℝ) 1, #S = ℵ₁ ∧
    ¬ MeasurableSet S` (Borel σ-algebra of `ℝ` or of `Icc 0 1`; equivalent by
-   trace). Proof = 2.1 without density. Sub-obligations, both believed
-   **absent from Mathlib v4.32.2** (the #46 inventory found PSP for *closed*
-   sets only — `IsClosed.exists_nat_bool_injection_of_not_countable`; verify
-   by grep before estimating):
-   * perfect set theorem for **Borel** sets (E4a), enough in the form
-     "`B` Borel in a Polish space, uncountable ⇒ `𝔠 ≤ #B`";
-   * **Bernstein set** existence in `ℝ` (E4b; transfinite recursion over the
-     `𝔠`-many closed uncountable sets — CH branch only).
-   The CH-dichotomy skeleton of `lem_A_exists` is reusable; note its CH
-   branch (`[0,1]∖ℚ`, Baire) does **not** adapt — `[0,1]∖ℚ` is Borel — the
-   Bernstein branch is genuinely required. This item is the dominant new
-   mathematical content of #56.
+   trace). The *statement* is 2.1 without density; the Lean *proof route*
+   need not follow the preprint's Bernstein construction — a shorter
+   CH-dichotomy runs entirely on Mathlib v4.32.2 API (declarations
+   grep-verified against the pinned mathlib):
+   * E4a in the needed form "`B` Borel in a Polish space, uncountable ⇒
+     `#B = 𝔠`" is derivable: `MeasurableSet.standardBorel`
+     (`Mathlib/MeasureTheory/Constructions/Polish/Basic.lean`) makes `B` a
+     standard Borel space, and
+     `PolishSpace.measurableEquivNatBoolOfNotCountable` (ibid.) gives
+     `B ≃ᵐ (ℕ → Bool)`, hence `#B = 𝔠`.
+   * *¬CH branch:* any `S ⊆ Icc 0 1` with `#S = ℵ₁ < 𝔠`; Borel would force
+     `#S = 𝔠` by the above.
+   * *CH branch:* `MeasurableSpace.cardinal_measurableSet_le_continuum`
+     (`Mathlib/MeasureTheory/MeasurableSpace/Card.lean`) — the Borel
+     σ-algebra is countably generated, so there are at most `𝔠 < 2^𝔠`
+     Borel sets; hence some `S ⊆ Icc 0 1` is non-Borel. Countable sets are
+     Borel, so `S` is uncountable, and under CH `ℵ₁ ≤ #S ≤ 𝔠 = ℵ₁`.
+   Neither a Bernstein set (E4b) nor any perfect-set transfinite recursion
+   is needed in Lean; E4b remains a paper-side citation only. (The audit of
+   the preprint's own written proof stays as §2.1 — Route W and the Lean
+   route legitimately differ here, the gated statement is identical.) The
+   old `lem_A_exists` CH branch (`[0,1]∖ℚ`, Baire) still does not adapt —
+   `[0,1]∖ℚ` is Borel.
 2. **`bmet_not_borel`** (Theorem 3.3, bounded-ambient form) — for `S` as in
    (1): `¬ MeasurableSet (BMet (ExtIndex S))` in `BddPMet (ExtIndex S)`.
    Proof is nearly free from Layer 1: `phiFull` is continuous
