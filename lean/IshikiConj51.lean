@@ -14,3 +14,4 @@ import IshikiConj51.Conj51.MainTheorem
 import IshikiConj51.Ext.BddPMet
 import IshikiConj51.Ext.BoundedCoding
 import IshikiConj51.Ext.Borel
+import IshikiConj51.Ext.CPM
