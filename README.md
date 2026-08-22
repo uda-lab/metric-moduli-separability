@@ -50,10 +50,12 @@ issue explicitly requires a provenance-preserving change.
 
 Issues #46–#47 and draft PR #50 record the August 2026 attempt to prove a stronger
 analytic/coanalytic theorem package. That track is closed and must not be treated as
-the active source of truth. In particular, the audit found that the proposed ZFC
-existence of an `ℵ₁`-sized set of reals that is simultaneously non-analytic and
-non-coanalytic fails in the non-CH branch. Valid pointclass-free metric coding from
-that work survives separately in PR #52.
+the active source of truth. In particular, the proposed ZFC existence of a dense
+`ℵ₁`-sized set of reals that is simultaneously non-analytic and non-coanalytic is
+repaired under CH, but the `ℵ₁ < 𝔠` branch's argument is refuted by a specific
+countermodel (a thin `Π¹₁` set under `ω₁^L = ω₁ ∧ ¬CH`) and left with an open,
+author-level repair condition rather than a wholesale failure. Valid pointclass-free
+metric coding from that work survives separately in PR #52.
 
 ## Repository layout
 
