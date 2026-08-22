@@ -5,10 +5,9 @@
 --
 --     ρ(d, e) = sup_{u,v} |d(u,v) − e(u,v)|.
 --
--- Mathematical source of truth for this track: the audited Ishiki-extension
--- draft, recorded in the Issue #46 audit comments and written up as
--- `notes/ishiki-extension-audit.md` §4–§5, which lands separately in PR #50
--- (branch `audit/ishiki-extension`).  `report/report-ja.md` is *not* the
+-- Mathematical source of truth for this track: `notes/borel-preprint-audit.md`
+-- §7 items 1–2 (Issue #56), which gates the Borel-preprint extension track.
+-- `report/report-ja.md` is *not* the
 -- source of truth here: it stays frozen as the Conjecture 5.1 archival
 -- report by the Issue #46 decision, and carries no extension claim.
 --
