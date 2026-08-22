@@ -589,17 +589,26 @@ a number — add one, e.g. the Borel isomorphism theorem, Kechris 15.6);
 space is `G_δ` (Kechris, Theorem 3.11 — already number-verified in
 `notes/literature.md`; used implicitly by 3.6, 3.15, and 3.17's second
 sentence — the preprint never cites it; add).
-Number verification status: (b) was checked in this audit against the
-repo's numbering-preserving transcription (`notes/literature.md` procedure):
-Example 8.24 exists and is the Bernstein construction, but its numbered
-statement reads "There exists a subset `A ⊆ ℝ` not having the BP" — the
-Bernstein set (for `ℝ`, not `[0,1]`) is the construction inside it, so the
-preprint's "(for the existence, see [Example 8.24])" is defensible but
-slightly indirect (a `[0,1]`-Bernstein set is obtained by intersecting, or
-by running the same recursion in `[0,1]`). The transcription does not cover
-chapters 13/15, so (a) Theorem 13.6 and (c) remain memory-level
-identifications (both widely corroborated in citing literature) —
-spot-check against the printed book before submission.
+Number verification status: **all four numbers verified against the printed
+text of GTM 156** (2026-08-23, full-text copy).
+(a) Theorem 13.6 is literally "(The Perfect Set Theorem for Borel Sets)
+(Alexandrov, Hausdorff) Let `X` be Polish and `A ⊆ X` be Borel. Then either
+`A` is countable or else it contains a Cantor set. In particular, every
+uncountable standard Borel space has cardinality `2^{ℵ₀}`" — exactly the
+form used in 2.1. ✓
+(b) Example 8.24's numbered statement reads "There is a subset `A ⊆ ℝ` not
+having the BP" — the Bernstein set (for `ℝ`, not `[0,1]`) is the transfinite
+construction inside its proof, so the preprint's "(for the existence, see
+[Example 8.24])" is defensible but slightly indirect (a `[0,1]`-Bernstein
+set is obtained by intersecting, or by running the same recursion in
+`[0,1]`). ✓
+(c) Theorem 15.6 is "(The Isomorphism Theorem) Let `X`, `Y` be standard
+Borel spaces. Then `X`, `Y` are Borel isomorphic iff `card(X) = card(Y)`" —
+gives `2^ω ≅_B [0,1]` as the uncountable case; the right number to add in
+2.2. ✓
+(d) Theorem 3.11 is the two-sided completely-metrizable/`G_δ`
+characterization, first assertion for arbitrary metrizable `X` —
+re-confirming the `notes/literature.md` record. ✓
 
 **Standard non-DST facts used silently (all re-derived here, no citation
 needed for experts):** nonseparable metric space contains an `ε`-separated
