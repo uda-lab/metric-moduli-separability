@@ -9,3 +9,7 @@ import IshikiConj51.Conj51.GDeltaComplete
 import IshikiConj51.Conj51.MetricConstruction
 import IshikiConj51.Conj51.ClosedEmbedding
 import IshikiConj51.Conj51.MainTheorem
+
+-- Ishiki-extension package (Issue #47).  Layer 1: bounded star-metric coding.
+import IshikiConj51.Ext.BddPMet
+import IshikiConj51.Ext.BoundedCoding
