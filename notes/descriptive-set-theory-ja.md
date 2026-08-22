@@ -1,372 +1,399 @@
-# 記述集合論用語・学習ノート
+# 記述集合論用語・Borel-first 学習ノート
 
-> **Status:** evolving with Issue #46.  
-> **Purpose:** 伊敷–宇田共同研究で新たに必要となる記述集合論の用語と，証明で実際に使う事実を日本語で整理する．  
-> **重要:** `report/report-ja.md` は Conjecture 5.1 の v1 証明記録として保存し，本ノートで置き換えない．
+> **Status:** Issue #48 の現行 Borel-first ノート．
+> **Purpose:** 伊敷–宇田，*Borelness of Moduli Spaces of Metrics Implies Separability*，arXiv:2608.19618 の記述集合論的な道具と証明の流れを日本語で整理する．
+> **数学的な source of truth:** `notes/borel-preprint-audit.md`（Issue #55）．本文の「Prop. 2.1」「Lemma 3.1」などは同監査の番号を指す．
+> **範囲:** 11 Aug の analytic/coanalytic 版ではなく，20 Aug 2026 v1 の Borel 版を扱う．`report/report-ja.md` は Conjecture 5.1 の archival track であり，本ノートでは変更しない．
 
 ## 0. このノートの読み方
 
-本ノートでは，次の三つを区別する．
+このノートでは，次の順に現行の議論を読む．
 
-1. **用語**：本 project で採用する日本語訳．日本語の専門的使用例をできるだけ確認する．
-2. **一般論**：記述集合論の標準的事実．主に Kechris の教科書を基準とする．
-3. **今回の適用**：Issue #46 で監査する共同研究の証明で，その一般論をどこに使うか．
+1. 任意の位相空間に対する Borel σ-代数の基本性質を確認する．特に，非可分な周囲空間でも使える制限（trace）と引き戻し（pullback）の性質を分けて述べる．
+2. `[0,1]` に濃度 `ℵ₁` の稠密な非 Borel 集合 `S` を取る（Prop. 2.1）．
+3. `S` を距離の族 `d_t` に符号化し，
+   `Φ⁻¹(Met(Z)) = Φ⁻¹(BMet(Z)) = [0,1] \ S`
+   という厳密な引き戻しの等式を得る（Lemmas 3.1–3.2）．
+4. この等式と，Borel 集合の連続写像による逆像が Borel であるという性質から，距離のモジュライ空間の Borel 性から可分性を導く（Thm. 3.3，Thm. 3.5，Cor. 3.6）．
+5. 最後に，Koshino の定理との関係と，旧 analytic/coanalytic 版がなぜ現行の検証対象ではないかを述べる．
 
-特に `analytic` / `coanalytic` は，**どの ambient space で考えるか**によって定義上の注意が必要である．共同原稿ではまず Polish ambient に対して定義した後，一般の `CPM(X)` に対して同じ語を使っているため，この部分は Issue #46 で監査中である．定義が確定するまで，このノートでも一般の `CPM(X)` に対する用法を勝手に補わない．
-
----
+ここで「`M` で Borel」とは，`M` の位相の開集合が生成する Borel σ-代数に属するという意味である．現行の中心的な議論では，`M` がポーランド空間であることを仮定しない．
 
 ## 1. Project 標準用語
 
-| English | 本 project の日本語 | 記号・備考 | 状態 |
+| English | 本 project の日本語 | 記号・備考 | このノートでの役割 |
 |---|---|---|---|
-| descriptive set theory | **記述集合論** |  | 固定 |
-| Polish space | **ポーランド空間** |  | 固定 |
-| Borel set | **ボレル集合** |  | 固定 |
-| Borel hierarchy | **ボレル階層** |  | 固定 |
-| projective hierarchy | **射影階層** |  | 固定 |
-| analytic set | **解析集合** | `Σ¹₁` | 固定 |
-| coanalytic set | **余解析的集合** | `Π¹₁` | 固定 |
-| perfect set | **完全集合** | 閉かつ孤立点を持たない集合 | 固定 |
-| perfect set theorem | **完全集合定理** |  | 固定 |
-| perfect set property | **完全集合性 (perfect set property; PSP)** | 日本語は必ず英語も初出で併記する | 暫定 project 標準 |
-| Bernstein set | **ベルンシュタイン集合** |  | 固定 |
-| Cantor space | **カントール空間** | `2^ℕ` または `2^ω` | 固定 |
-| Baire space | **ベール空間** | `ℕ^ℕ` または `ω^ω` | 固定 |
-| standard Borel space | **標準ボレル空間** |  | 固定 |
-| Borel isomorphism | **ボレル同型** | 位相同型とは異なる | 固定 |
-| absolute Borel class | **絶対ボレル類** | Koshino の用法を監査後に定義確定 | 暫定 |
+| descriptive set theory | **記述集合論** |  | 現行の一般論 |
+| Polish space | **ポーランド空間** |  | `[0,1]`，`2^ω` の周囲空間 |
+| Borel set | **ボレル集合** |  | 現行の中心概念 |
+| Borel σ-algebra | **Borel σ-代数** |  | 非可分な周囲空間にも定義する |
+| Borel hierarchy | **ボレル階層** |  | 背景用語 |
+| projective hierarchy | **射影階層** |  | 歴史・背景のみ |
+| analytic set | **解析集合** | `Σ¹₁` | 歴史・背景のみ，現行の主張では使わない |
+| coanalytic set | **余解析的集合** | `Π¹₁` | 歴史・背景のみ，現行の主張では使わない |
+| perfect set | **完全集合** | 閉かつ孤立点を持たない集合 |  |
+| perfect set theorem | **完全集合定理** | ここでは Borel 集合に対する定理を主に使う |  |
+| perfect set property | **完全集合性** (perfect set property, PSP) | 初出で英語と記号を併記する |  |
+| Bernstein set | **ベルンシュタイン集合** |  | Prop. 2.1 の CH 分岐と歴史節 |
+| Cantor space | **カントール空間** | `2^ω` または `2^ℕ` | Prop. 2.2 のパラメータ空間 |
+| Baire space | **ベール空間** | `ω^ω` または `ℕ^ℕ` | 背景用語 |
+| standard Borel space | **標準 Borel 空間** |  | Borel 同型の背景 |
+| Borel isomorphism | **Borel 同型** | 位相同型とは異なる |  |
+| homeomorphism | **位相同型** | 稠密性や収束を保存する |  |
+| completely metrizable | **完備距離化可能** | ポーランド空間はこれに可分性を加えたもの |  |
+| compatible metric | **両立する距離** |  | 固定 |
 
-### 1.1 `analytic` は「解析集合」とする
+### 1.1 ポーランド空間
 
-本 project では **analytic set = 解析集合** とする．「解析的集合」は用いない．
+位相空間 `P` が **ポーランド空間 (Polish space)** であるとは，`P` が可分であり，その位相と両立する完備距離が存在することをいう．特定の一つの距離が完備であることだけを意味しない．`[0,1]`，`ℝ`，`2^ω` はポーランド空間である．
 
-この訳語は，名古屋大学 2026 年度「数理論理学特論1」の記述集合論シラバスで，「ポーランド空間」「ボレル集合」「解析集合」「射影集合」として実際に使われている．また，藤田博司氏の愛媛大学での講演概要でも `Σ¹₁集合（解析集合）` と明記されている．
+### 1.2 analytic と coanalytic の日本語
 
-### 1.2 `coanalytic` は「余解析的集合」とする
+本 project では `analytic set` を **解析集合**，`coanalytic set` を **余解析的集合** とする．「解析的集合」は用いない．余解析的集合は，初出では `coanalytic set, Π¹₁` と併記する．
 
-本 project では **coanalytic set = 余解析的集合** とする．木原貴行氏の科研費研究課題のキーワードに「余解析的集合」という実例があるため，これを標準形とする．
+これらは記述集合論の標準用語として本ノートの歴史・背景節で使用するが，現行の arXiv:2608.19618 における Borel-first の定理を analytic/coanalytic の定理として読み替えてはならない．
 
-ただし，日本語文献では `coanalytic` を英語のまま置いたり，「解析集合の補集合」と説明したりする用法もある．したがって，初出では
+## 2. Borel σ-代数と Borel 集合
 
-> 余解析的集合 (coanalytic set, `Π¹₁`)
+### 2.1 定義
 
-と英語・記号を併記する．
+位相空間 `M` に対し，`M` の開集合全体を含む最小の σ-代数を `M` の **Borel σ-代数** といい，`ℬ(M)` と書く．`ℬ(M)` の元を **Borel 集合** という．この定義は `M` が可分であることもポーランド空間であることも要求しない．
 
-### 1.3 `perfect set property` は当面「完全集合性」
+本ノートの距離空間で用いる標準的な閉包性は次の通りである．
 
-`perfect set property` の日本語訳には，今回確認した範囲では `解析集合` ほど強い標準化の根拠を得られていない．本 project では便宜上 **完全集合性 (perfect set property; PSP)** と呼ぶが，初出では必ず英語を併記する．
+1. 閉集合は Borel 集合である．距離空間ではコンパクト集合も閉集合なので Borel 集合である．
+2. Borel 集合は補集合，可算和，可算共通部分で閉じている．したがって，有限個の Borel 集合の共通部分や和集合も Borel 集合である．
+3. **制限（trace）:** `B∈ℬ(M)` かつ `L⊆M` ならば，部分空間 `L` において `B∩L∈ℬ(L)` である．これは `M` の開集合の `L` への制限が `L` の開集合であることから，生成元について確認すればよい．
+4. **連続写像による引き戻し（pullback）:** `f:N→M` が連続で `B∈ℬ(M)` ならば，`f⁻¹(B)∈ℬ(N)` である．
+5. **位相同型による移送:** `h:N→M` が位相同型ならば，`h⁻¹` による Borel 集合の逆像は Borel 集合であり，Borel σ-代数は位相同型で不変である．Borel 同型ではなく位相同型または等長写像を用いる場合は，位相的な逆像と像をそのまま扱ってよい．
 
----
+4 は現行の議論を駆動する性質である．`Φ:P→M` が連続で `M` の部分集合 `A` が Borel ならば，`Φ⁻¹(A)` は `P` で Borel になる．したがって，`Φ⁻¹(A)` が既知の非 Borel 集合であることは，`A` が Borel でないことを示す．
 
-## 2. ポーランド空間
+### 2.2 非可分な周囲空間での Borel 性
 
-### 定義
+`CPM(X)` のように非可分な距離空間を周囲空間とする場合も，Borel 性はその距離位相の開集合が生成する σ-代数に関して定義する．現行の証明が使う操作は，上の 1–5 のみである．したがって，周囲空間にポーランド性を仮定する必要はない．
 
-位相空間 `X` が **ポーランド空間 (Polish space)** であるとは，`X` が可分であり，かつその位相を誘導する完備距離が存在することをいう．
+完全集合定理などの完全集合論的な入力は `[0,1]`，`2^ω`，またはそれらに位相同型なコンパクト空間の内部だけで使う．非可分な `CPM(X)` の内部で analytic/coanalytic の点クラスを定義したり，スースリン操作を導入したりする必要はない．
 
-ここで重要なのは，「現在書かれている特定の距離が完備」という意味ではなく，**位相として完全距離化可能で，しかも可分**ということである．
+この意味で，現行の Borel の定式化は，周囲空間のポーランド性に依存する旧定式化より直接的である．なお，距離空間上の Baire σ-代数や球体 σ-代数を Borel σ-代数より小さい σ-代数として採る流儀を考えても，`σ(open)` に属さないことを示す非 Borel 性は最も強い結論である．
 
-### 今回使う例
+## 3. 距離の空間と周囲空間の規約
 
-- `[0,1]`．
-- 実数直線 `ℝ`．
-- カントール空間 `2^ℕ`．
-- ベール空間 `ℕ^ℕ`．
+以下では `X` を位相空間とする．
 
-共同原稿の Proposition 2.1 では `[0,1]`，Proposition 2.2 と非 Archimedean 部分では `2^ℕ` を parameter space として使う．
+### 3.1 `CPM(X)`，`Met(X)`，`BMet(X)`，`Comp(X)`
 
----
+- `CPM(X)` は，連続な擬距離 `d:X×X→[0,∞)` 全体である．
+- `CPM(X)` 上の supremum distance を
+  `𝒟_X(d,e)=sup_{(x,y)∈X²}|d(x,y)-e(x,y)|`
+  とおく．各 `d,e` の値そのものは有限だが，`𝒟_X` は一般に `[0,∞]` に値を取る．その位相は，通常の距離 `min{𝒟_X,1}` が誘導する位相と同じである．
+- `BCPM(X)` は `CPM(X)` の有界な元全体である．
+- `Met(X)⊆CPM(X)` は，`X` の位相と両立する距離全体である．ここで「両立する」とは，距離が誘導する位相がもとの `X` の位相と一致することをいう．
+- `BMet(X)` は `Met(X)` の有界な元全体である．`Met(X)` 自体には有界性も一様離散性も仮定しない．
+- `Comp(X)` は `Met(X)` の完備な元全体である．
 
-## 3. ボレル集合，解析集合，余解析的集合
+### 3.2 有限 sup-distance による成分
 
-以下では，まず **ambient space `P` を Polish space とする**．これは共同原稿 §2.3 の設定と同じである．
+`Met(X)` 上で
 
-### 3.1 ボレル集合
+`d∼e  ⇔  𝒟_X(d,e)<∞`
 
-`P` の開集合から，可算和・可算共通部分・補集合を繰り返して得られる最小の `σ`-代数の元を **ボレル集合 (Borel set)** という．
+と定める．`Z` に対して，この同値関係の各同値類を `Met(Z)` の**成分**と呼び，`𝔠` で表す．すなわち
 
-今回の証明ではボレル階層そのものを詳しく計算する必要はない．重要なのは，ボレル集合が解析集合・余解析的集合の双方に含まれることである．
+`𝐌_{<∞}(Z)=Met(Z)/∼`．
 
-### 3.2 解析集合
+各成分 `𝔠` は `Met(Z)` で開かつ閉（clopen）であり，弧状連結である．開かつ閉であることは半径 `1` の球体から従い，弧状連結性は両立する距離どうしの凸結合を取ることで得られる．
 
-`A ⊆ P` が **解析集合 (analytic set, `Σ¹₁`)** であるとは，標準的には，ある Polish space からの連続写像の像として `A` を表せることをいう．同値な定義として，Polish space のボレル集合の射影として表す定義などがある．
+### 3.3 現行の Borel 証明でポーランド性が不要な理由
 
-直観的には，「ボレル集合より一段広いが，なお強い記述可能性を持つ集合」のクラスである．
+現行の周囲空間の規約では，次の四つを明示的に使う．
 
-### 3.3 余解析的集合
+1. `CPM(X)` の閉集合，およびコンパクト部分集合は Borel 集合である．
+2. Borel 集合と閉集合または Borel 集合との共通部分は Borel 集合である．
+3. `B` が `M` で Borel で `L⊆M` ならば，`B∩L` は `L` で Borel である．
+4. コンパクト空間または閉部分空間への位相同型，等長写像によって Borel 性を移送できる．
 
-`A ⊆ P` が **余解析的集合 (coanalytic set, `Π¹₁`)** であるとは，補集合 `P \ A` が解析集合であることをいう．
+完全集合定理が必要になるのはパラメータ空間の `[0,1]` と `2^ω` だけである．したがって，非可分な周囲空間の `CPM(X)` にポーランド構造を仮定することも，analytic/coanalytic の周囲空間の規約を選ぶことも必要ない．これが Borel-first の定式化の技術的な利点である．
 
-したがって，`analytic` と `coanalytic` は互いに単純な同義語ではない．
+原稿の Theorems 3.3，3.4，3.8 などは `|Z|=ℵ₁` の任意の離散空間 `Z` について述べられるが，符号化は一つの具体的な台集合で行う．二つの離散空間の間の全単射は，両方の引数を付け替える `CPM` の等長写像を誘導し，`Met`，`BMet`，`Comp`，および各成分を保つ．したがって具体的な台集合で得られた主張は，濃度が同じ任意の離散空間へ移る．
 
-### 3.4 最低限覚える関係
+## 4. `ℵ₁` と Borel 集合の完全集合定理
 
-Polish ambient space では，次の関係を使う．
+### 4.1 濃度の記号
 
-```text
-Borel  ──⇒  analytic
-   │
-   └────⇒  coanalytic
+`ℵ₁` は最初の非可算濃度，`ω₁` は最初の非可算順序数，`𝔠` は連続体濃度 `2^{ℵ₀}` とする．
 
-analytic かつ coanalytic  ──⇒  Borel
-```
+ポーランド空間の非可算 Borel 集合に対しては，次の ZFC の定理を使う．
 
-最後の含意は Souslin の定理であり，結局
+> **Borel 集合の完全集合定理**（Kechris, Theorem 13.6）．非可算な Borel 集合は空でない完全集合を含み，したがって濃度 `𝔠` を持つ．
 
-```text
-Borel = analytic ∩ coanalytic
-```
+ここには CH も `Π¹₁`-PSP も仮定されていない．この ZFC 定理が Prop. 2.1 の基礎である．
 
-となる．
+### 4.2 ベルンシュタイン集合
 
-**注意:**
+空でない完全ポーランド空間 `P` の部分集合 `B` が **ベルンシュタイン集合** であるとは，任意の空でない完全集合 `K⊆P` に対して
 
-```text
-non-Borel ⇒ neither analytic nor coanalytic
-```
+`K∩B≠∅` かつ `K\B≠∅`
 
-は誤りである．非 Borel な解析集合は存在する．正しいのは，
+が成り立つことをいう．したがって `B` も `P\B` も，空でない完全集合を丸ごと含まない．ベルンシュタイン集合は Kechris, Example 8.24 の構成で得られる．
 
-```text
-neither analytic nor coanalytic ⇒ non-Borel
-```
+### 4.3 Proposition 2.1
 
-である．この向きの取り違えは共同研究の議論で致命的になり得るので，明示的に区別する．
+> **Prop. 2.1**（`prop:dense-aleph1-nonborel-interval`，監査 §2.1）．
+> `[0,1]` の稠密な部分集合 `S` で，`Card(S)=ℵ₁` かつ `[0,1]` で Borel でないものが存在する．この命題は ZFC で成り立つ．
 
----
+証明は CH による場合分けである．
 
-## 4. 完全集合と完全集合性
+- **CH の場合:** `[0,1]` のベルンシュタイン集合を `S` とする．各非空相対開区間は空でない完全集合を含むので `S` は稠密である．また，`S` は `𝔠` 個の互いに素な完全集合と交わるので `|S|=𝔠=ℵ₁` である．もし `S` が Borel なら，非可算 Borel 集合の完全集合定理により，ある空でない完全集合 `K⊆S` を含む．これは `K\S≠∅` に矛盾する．
+- **¬CH の場合:** `[0,1]` の可算稠密集合 `Q` を固定し，`Q⊆S⊆[0,1]` かつ `|S|=ℵ₁` となる `S` を取る．`S` は稠密である．また `ℵ₁<𝔠` であるため，`S` が Borel なら非可算 Borel 集合の完全集合定理から `|S|=𝔠` となり，矛盾する．
 
-### 4.1 完全集合
+各分岐で使ったのは ZFC の定理だけである．なお，このアルキメデス的な鎖で使うのは `|S|=ℵ₁` と非 Borel 性であり，`S` の稠密性は非アルキメデス的な側の Lemma 3.11 で使われる．
 
-距離化可能空間の部分集合 `K` が **完全集合 (perfect set)** であるとは，通常，`K` が閉であり，孤立点を持たないことをいう．
+## 5. カントール空間，Borel 同型，Proposition 2.2
 
-実数直線やカントール空間では，空でない完全集合は連続体濃度 `𝔠` を持つ．
+### 5.1 カントール空間
 
-### 4.2 完全集合性 (PSP)
+`2={0,1}` を離散空間とし，
 
-部分集合 `A` が **完全集合性 (perfect set property; PSP)** を持つとは，
+`2^ω={t:ω→{0,1}}`
 
-- `A` が可算であるか，
-- `A` が空でない完全集合を含む
+に積位相を入れたものを **カントール空間** と呼ぶ．`2^ω` はコンパクトなポーランド空間であり，空でない完全空間である．その標準的な非アルキメデス的距離は，非アルキメデス的な符号化のパラメータ空間として使われる．
 
-ことをいう．
+### 5.2 Borel 同型は位相同型ではない
 
-Polish space の解析集合（`Σ¹₁`）は完全集合性を持つ．これは Suslin の定理であり（Kechris, *Classical Descriptive Set Theory*, Theorem 29.1），ZFC で証明可能である．
+標準 Borel 空間 `X,Y` の全単射 `f:X→Y` が **Borel 同型** であるとは，`f` と `f⁻¹` がともに Borel 可測であることをいう．Borel 同型は Borel 構造を保存するが，開集合，閉集合，稠密性，収束のような位相的性質を一般には保存しない．それらを保存するのは位相同型である．
 
-一方，余解析的集合（`Π¹₁`）の完全集合性は ZFC からは証明できない．Mansfield–Solovay の定理により，「すべての `Π¹₁` 集合が完全集合性を持つ」は「任意の実数 `x` に対し `ω₁` が `L[x]` で inaccessible である」と同値であり，特に `V=L` のもとでは反例となる非可算 `Π¹₁` 集合（完全部分集合を持たない thin `Π¹₁` 集合）が存在する．共同原稿が Kechris の perfect set theorems をどちらの意味で（追加の仮定なしか，`ω₁` の inaccessibility に相当する仮定つきか）用いているかは，§12 の引用箇所を含め Issue #46 で確認する必要がある．
+### 5.3 Proposition 2.2 と稠密性の移送の修正
 
-### 4.3 今回必要な濃度論的帰結
+> **Prop. 2.2**（`prop:dense-aleph1-nonborel-cantor`，監査 §2.2）．
+> `2^ω` の稠密な部分集合 `S` で，`Card(S)=ℵ₁` かつ `2^ω` で Borel でないものが存在する．
 
-`A` が Polish space の非可算な解析集合なら，`A` は空でない完全集合を含み，したがって
+`[0,1]` と `2^ω` の Borel 同型（Kechris, Theorem 15.6）から非 Borel 性と濃度は移せるが，稠密性は移せない．したがって，Borel 同型だけで Prop. 2.2 を導く議論は不十分である．
 
-```text
-|A| = 𝔠.
-```
+修正は次の通りである．Prop. 2.1 の集合を Borel 同型で `2^ω` に移して，非 Borel 集合 `T`，`|T|=ℵ₁` を得る．`2^ω` の可算稠密集合 `Q₀` を取り，`S=T∪Q₀` とする．すると `S` は稠密で `|S|=ℵ₁` である．もし `S` が Borel なら，`Q₀\T` は可算 Borel 集合なので
 
-は ZFC の定理として成り立つ（§4.2，Σ¹₁-PSP）．`A` が非可算な余解析的集合の場合に同じ結論が成り立つのは，§4.2 の追加の仮定のもとでのみである．
+`T=S\(Q₀\T)`
 
-**濃度論的帰結の非対称性:** `|S| = ℵ₁ < 𝔠` である部分集合 `S` について，
+も Borel となり，`T` の非 Borel 性に矛盾する．これで Prop. 2.2 が得られる．別の方法として，`2^ω` 自体で Prop. 2.1 の CH/¬CH 分岐を実行してもよい．
 
-- 「`S` は解析集合でない」は濃度だけから ZFC で従う（非可算な解析集合は濃度 `𝔠` を持つ）．
-- 「`S` は余解析的集合でない」は Π¹₁-PSP に依存し，ZFC からは独立である．
+## 6. 距離の符号化と厳密な引き戻し
 
-CH case（ベルンシュタイン集合，§5）はこの非対称性の影響を受けない．そこでの論法は「`S` が余解析的 ⇒ 補集合が解析的かつ非可算 ⇒ 補集合が空でない完全集合を含む ⇒ ベルンシュタイン集合の定義に矛盾」であり，使うのは Σ¹₁-PSP（ZFC 定理）のみだからである．
+ここからは Prop. 2.1 の集合 `S` を一つ固定する．その単射な列挙を
 
-**`¬CH` case への影響（`notes/ishiki-extension-audit.md` の独立監査で確定）:** `ω₁^L = ω₁ ∧ ¬CH` を満たすモデルでは，最大の thin `Π¹₁` 集合 `C₁`（`|C₁| = |ω₁^L|`，稠密）が存在し，可算稠密集合を `ℵ₁` に拡大して得る `S` がこの `C₁` と一致しうるため，`S` が余解析的になり得る．したがって，共同原稿 Proposition 2.1 の `¬CH` case は，現状の論法（濃度のみによる「解析集合にも余解析的集合にもなれない」という主張）では**不成立**である．反例の構成の詳細は本ノートでは繰り返さず，`notes/ishiki-extension-audit.md` を参照する．
+`S={w_α:α<ω₁}`
 
----
+とし，離散空間
 
-## 5. ベルンシュタイン集合
+`Z={p,q}⊔{b_α:α<ω₁}⊔{c_{α,n}:α<ω₁,n∈ℤ_{≥0}}`
 
-### 定義
+を考える．`C_α={b_α}⊔{c_{α,n}:n∈ℤ_{≥0}}` とおく．`|Z|=ℵ₁` である．
 
-`P` を空でない perfect Polish space とする．`B ⊆ P` が **ベルンシュタイン集合 (Bernstein set)** であるとは，すべての空でない完全集合 `K ⊆ P` に対して
+### 6.1 Lemma 3.1
 
-```text
-K ∩ B ≠ ∅,
-K \ B ≠ ∅
-```
+`t∈[0,1]` に対し，
 
-が成り立つことをいう．
+`l_n(α,t)=|t-w_α|+2^{-n}`
 
-したがって，`B` もその補集合も，空でない完全集合を丸ごと含むことができない．
+と定める．`d_t` を対称に定め，異なる点について
 
-### 今回の役割
+`d_t(p,q)=1+t`，
 
-CH (`𝔠 = ℵ₁`) の場合，`[0,1]` または `2^ℕ` のベルンシュタイン集合を取ることで，濃度 `ℵ₁` で解析集合でも余解析的集合でもない集合を得る．
+`d_t(b_α,c_{α,n})=l_n(α,t)`，
 
-共同原稿 Proposition 2.1 はこの方法を `[0,1]` で用いている．
+`d_t(c_{α,n},c_{α,m})=l_n(α,t)+l_m(α,t)`（`n≠m`），
 
----
+分割 `{p,q}∪{C_α:α<ω₁}` の異なる二つの部分に属する二点について
 
-## 6. カントール空間 `2^ℕ`
+`d_t(u,v)=4`
 
-### 6.1 定義
+とする．対角上では `d_t(u,u)=0` とする．
 
-`2 = {0,1}` を離散空間とし，
+> **Lemma 3.1**（`lem:metric-coding`，監査 §2.4）．
+> 任意の `t∈[0,1]` に対し，`d_t` は `Z` を台集合とする有界距離であり，
+> `d_t∈Met(Z)  ⇔  t∈[0,1]\S`
+> が成り立つ．
 
-```text
-2^ℕ = { x : ℕ → {0,1} }
-```
+`d_t` の各値は `[0,4]` に入る．`t=w_β∈S` のときも `d_t` は距離であるが，`d_t(b_β,c_{β,n})=2^{-n}→0` なので `b_β` が孤立しない．反対に `t∉S` なら，`p,q` と各 `c_{α,n}` には正の孤立半径があり，`b_α` では
 
-に積位相を入れたものを **カントール空間 (Cantor space)** という．
+`inf_n l_n(α,t)=|t-w_α|>0`
 
-カントール空間は compact Polish space であり，孤立点を持たない．非 Archimedean な自然な距離を持つため，共同原稿の ultrametric coding の parameter space として適している．
+である．したがって `d_t` が誘導する位相は `Z` の離散位相と両立する．
 
-「カントール空間」という表記は RIMS 講究録の題名「カントール空間上の非空実効的閉集合の次数構造」など，日本語の数理論理学文献で実例がある．
+### 6.2 Lemma 3.2 と引き戻しの等式
 
-### 6.2 Proposition 2.2 の修正点
+`Φ:[0,1]→CPM(Z)` を `Φ(t)=d_t` で定める．
 
-共同原稿の現版は，`[0,1]` と `2^ℕ` が Borel isomorphic であることから Proposition 2.2 を導いている．しかし，**ボレル同型は位相同型ではなく，一般には稠密性を保存しない**．したがって，稠密性という条件までそのまま移すことはできない．
+> **Lemma 3.2**（`lem:closed-parameter-embedding`，監査 §2.5）．
+> `Φ` は双 Lipschitz な埋め込みであり，`Φ([0,1]\S)` は `Met(Z)` で閉集合である．具体的に，
+> `|s-t| ≤ 𝒟_Z(d_s,d_t) ≤ 2|s-t|`
+> が成り立つ．
 
-この proposition は `2^ℕ` 上で直接構成すればよい．
+下側の評価は `(p,q)` での値から得られ，上側の評価は `d_t` の定義に現れる各値の `t` に関する Lipschitz 性から得られる．閉集合であることは，`d_{t_k}→d∈Met(Z)` ならば `(p,q)` での値から `t_k→t=d(p,q)-1` が分かり，極限が `d_t` であることと Lemma 3.1 から `t∉S` が従うことによる．
 
-- **CH の場合:** `2^ℕ` のベルンシュタイン集合 `S` を取る．`|S|=𝔠=ℵ₁` であり，解析集合でも余解析的集合でもない．また，各非空基本開集合は空でない完全集合を含むので `S` は稠密である．
-- **¬CH の場合:** 可算稠密集合 `Q ⊆ 2^ℕ` を取り，`Q ⊆ S ⊆ 2^ℕ` かつ `|S|=ℵ₁` となるように `S` を拡張する．すると `S` は稠密であり，`ℵ₁<𝔠` と完全集合性から，解析集合でも余解析的集合でもない．
+`L=Φ([0,1])` とおくと，`L` はコンパクトであり，したがって `CPM(Z)` で閉かつ Borel である．Lemma 3.1 の意味は，次の厳密な引き戻しの等式にまとめられる．
 
-この修正は Issue #46 では `FIX` として扱う．
+`Φ⁻¹(Met(Z)) = Φ⁻¹(BMet(Z)) = [0,1]\S`．
 
----
+同値に，
 
-## 7. ボレル同型と位相同型
+`L∩Met(Z) = L∩BMet(Z) = Φ([0,1]\S)`
 
-### ボレル同型
+である．この等式が，距離のモジュライ空間の Borel 性をパラメータ空間上の Borel 性に引き戻す．
 
-標準ボレル空間 `X,Y` の間の全単射 `f : X → Y` が **ボレル同型 (Borel isomorphism)** であるとは，`f` と `f⁻¹` がともに Borel measurable であることをいう．
+## 7. Borel 性から可分性へ
 
-これは Borel structure を保存する概念であり，位相そのものを保存する概念ではない．
+### 7.1 Theorem 3.3
 
-### 位相同型との違い
+> **Theorem 3.3**（`thm:bounded-discrete-nonborel`，監査 §2.6）．
+> `Z` が離散空間で `|Z|=ℵ₁` ならば，`BMet(Z)` は `CPM(Z)` で Borel ではない．
 
-位相同型ならば，開集合・閉集合・稠密性・収束などの位相的性質を保存する．一方，Borel isomorphism からそれらは一般には従わない．
+実際，`BMet(Z)` が `CPM(Z)` で Borel だと仮定すると，`Φ` の連続性と §2 の「連続写像による逆像は Borel」という性質により
 
-したがって，今回の Proposition 2.2 のように **density が結論に含まれる場合，Borel isomorphism の存在だけでは不十分**である．
+`Φ⁻¹(BMet(Z))=[0,1]\S`
 
----
+が `[0,1]` で Borel になる．補集合を取れば `S` も Borel となり，Prop. 2.1 に矛盾する．ここでは `CPM(Z)` がポーランド空間であることを使っていない．`L` への制限と `L≅[0,1]` による移送を使う証明も同じ議論であり，§2.2–§3.3 の周囲空間の規約の具体例である．
 
-## 8. 今回の証明で使う pullback の考え方
+**Met と BMet の表示上の注意:** 原稿の要旨と序論はこの結果を，時に `Met(Z)` is not Borel と述べるが，本文の Theorem 3.3 は `BMet(Z)` の形で書かれている．同じ厳密な引き戻しの等式から `Met(Z)` 版も成り立つ．この二つを同一の主張として扱うのではなく，本文の BMet 版と，要旨・序論の Met 版を区別して読む．
 
-共同原稿の metric coding では，parameter space 全体から
+### 7.2 外部定理 E1（距離の拡張作用素）
 
-```text
-Φ : [0,1] → BCPM(D)
-```
+Theorem 3.5 では，Ishiki による距離の拡張作用素（extensor）の定理を，証明の明示的な外部入力として使う．
 
-という連続写像を考え，
+> **E1**（Ishiki，*An isometric extensor of metrics*，arXiv:2407.03030 v4，Theorem 1.1）．`X` が距離化可能な空間，`A` が `X` の閉部分集合ならば，写像 `E:Met(A)→Met(X)` で次を満たすものが存在する．
+>
+> (1) `E(d)|_{A²}=d` for every `d∈Met(A)`．
+>
+> (2) `E` は等長埋め込みであり，`𝒟_A(d,e)=𝒟_X(E(d),E(e))`．
+>
+> (3) `E(BMet(A))⊆BMet(X)`．
+>
+> (4) `E(Comp(A))⊆Comp(X)`．
+>
+> さらに，擬距離に対する拡張作用素 `Ẽ:CPM(A)→CPM(X)` が存在し，`Ẽ|_{Met(A)}=E`，`Ẽ(Met(A))=Ẽ(CPM(A))∩Met(X)` であり，`E(Met(A))` は `Met(X)` で閉集合である．
 
-```text
-Φ⁻¹(BMet(D)) = [0,1] \ S
-```
+ここで項目 (4) は，`X` が完備距離化可能である場合に使う．E1 の原論文の項目 (4) は無条件の形で書かれているが，その証明と現行の使用箇所では `X` の完備距離化可能性が必要である．Theorem 3.5 では項目 (1)，(2) と擬距離レベルの拡張作用素を使う．
 
-という exact pullback identity を示すのが安全である．
+### 7.3 Theorem 3.5
 
-この形にすると，analytic / coanalytic class が連続逆像で閉じていることを直接使える．「閉部分空間として homeomorphic copy が入っている」という議論より，ambient-space convention に依存する箇所を明示しやすい．
+> **Theorem 3.5**（`thm:borel-separability`，監査 §2.8）．
+> `X` が距離化可能で，`Met(X)` が `CPM(X)` で Borel ならば，`X` は可分である．
 
-同じ方針を finite-distance component，complete metrics，ultrametrics にも適用できるかを Issue #46 で監査する．
+証明の構造は対偶である．`X` が非可分ならば，`X` は `|Z|=ℵ₁` の ε-分離な閉離散部分空間 `Z` を含む．E1 の `Ẽ:CPM(Z)→CPM(X)` は等長写像で，その像は `CPM(X)` で閉じている．また
 
----
+`E(Met(Z)) = Ẽ(CPM(Z)) ∩ Met(X)`
 
-## 9. `analytic/coanalytic in CPM(X)` の ambient-space 問題
+が成り立つ．したがって，`Met(X)` の Borel 性を閉じた像へ制限し，`Ẽ` の像の上の位相同型で引き戻せば，`Met(Z)` の Borel 性，または各成分 `𝔠` の Borel 性が得られる．これは Theorem 3.3 の `Met(Z)` 版，または Theorem 3.4 の成分版に矛盾する．
 
-### 現在の状態: **監査中**
+この証明で使う記述集合論的な操作は，閉集合，制限，位相同型による移送だけである．`CPM(X)` のポーランド性は不要である．なお，成分を経由しない `Met(Z)` 版の引き戻しを使えば Theorem 3.5 の最小の証明の連鎖が得られ，Theorem 3.4 は独立に再利用できるより精密な結果として残る．
 
-共同原稿 §2.3 は，`P` が Polish space である場合に analytic / coanalytic subset を定義している．一方，主定理では一般の metrizable `X` に対して
+### 7.4 Alexandrov–Lavrentiev と Corollary 3.6
 
-```text
-Met(X) is analytic or coanalytic in CPM(X)
-```
+次の Alexandrov–Lavrentiev の `G_δ` による特徴づけを使う．
 
-という表現を使う．しかし，一般の `CPM(X)` が Polish であるとは限らない．
+> `X` が距離化可能で `Y⊆X` が完備距離化可能ならば，`Y` は `X` で `G_δ` である．
 
-したがって，ここでは以下を混同してはいけない．
+これは周囲空間 `X` の可分性を要求しない（Kechris, Theorem 3.11）．逆向きの「`G_δ` なら完備距離化可能」はここでは使わない．
 
-1. Polish ambient space の部分集合としての classical analytic / coanalytic set．
-2. 位相空間それ自体を「analytic space」と呼ぶ intrinsic な用法．
-3. 非可分・非 Polish ambient に拡張された `Souslin` / absolute pointclass 型の定義．
-4. 何らかの Polish coding space に埋め込んだ上での定義．
+> **Corollary 3.6**（`cor:metric-space-complete-separability`，監査 §2.9）．
+> `X` が距離化可能で，`Met(X)` が完備距離化可能ならば，`X` は可分である．
 
-一般の非可分 metrizable spaces における analytic set には複数の拡張概念が文献上存在する．したがって，**共同原稿の主定理の意味を確定する前に，どの定義を採るかを明記する必要がある**．
+`Met(X)` は `CPM(X)` の距離化可能な部分空間なので，Alexandrov–Lavrentiev により `CPM(X)` で `G_δ`，したがって Borel である．Theorem 3.5 を適用すれば結論を得る．この Corollary 3.6 が，Conjecture 5.1 を強化された Borel の形で決着させる系である．
 
-Issue #46 では，ここを最優先の definition audit とする．確定するまでは，本ノートでも `Met(X) is analytic/coanalytic in CPM(X)` の日本語訳を theorem-level の確定語として扱わない．
+## 8. Koshino の定理との関係
 
----
+### 8.1 Corollary 3.7
 
-## 10. Koshino の absolute Borel との関係
+> **Corollary 3.7**（`cor:bounded-metric-complete-sigma-compact`，監査 §2.10）．
+> `X` が距離化可能ならば，
+> `BMet(X)` が完備距離化可能であることと，`X` が σ-コンパクトであることは同値である．
 
-Koshino の論文 *On the Borel complexity and the complete metrizability of spaces of metrics*（Anal. Geom. Metr. Spaces 12 (2024), art. 20240014; DOI [10.1515/agms-2024-0014](https://doi.org/10.1515/agms-2024-0014)）は，bounded admissible metrics の空間 `AM(X)` の Borel complexity と complete metrizability を扱う．同論文の主定理・系は原文では無番号（"Theorem."／"Corollary." とのみ表記）であり，その Corollary の主張は「separable metrizable `X` について，`X` が `σ`-compact であることと `AM(X)` が completely metrizable であることは同値」というものである（`notes/literature.md` で arXiv v2 本文と DOI の Crossref レコードに対し検証済み．「Corollary 1.2」のような番号付き引用は原文と一致しないため用いない）．
+Koshino の結果を適用するには `X` の可分性が必要である．Corollary 3.6 は `Met(X)` の完備距離化可能性から可分性を出すが，`BMet(X)` の完備距離化可能性は直接扱わない．したがって，`BMet` について Theorem 3.5 と同じ拡張作用素による引き戻しを一度行う．すなわち，非可分な `X` から得た閉離散集合 `Z` に対し，E1 の項目 (3) により `E(BMet(Z))⊆BMet(X)` となる．`BMet(X)` が完備距離化可能なら Alexandrov–Lavrentiev により Borel であり，この引き戻しは Theorem 3.3 に矛盾する．よって `BMet(X)` が完備距離化可能なら `X` は可分である．
 
-**注意:** `AM(X)`（bounded admissible metrics の空間）と，本 project 全体で扱う `Met(D)`（離散位相と両立する距離の空間，`notes/terminology.md`）は同じ空間ではない．Ishiki の原稿（arXiv:2407.03030 §5）は Koshino の結果を `Met(X)` の形で引用しているが，これは Ishiki 自身による言い換えであり，Koshino の論文自体は `AM(X)` について述べている．両者を安易に同一視しない（`notes/literature.md` の記載どおり）．
+ここで使う Koshino の外部定理は次である．
 
-今回の共同研究の一つの目標は，非可分の場合に metric moduli space の descriptive complexity（今回の `analytic/coanalytic in CPM(X)` の議論）から separability を強制し，Koshino の結果の separability hypothesis を結果として取り除くことである．
+> **E3**（Koshino，*On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024)）．
+> `X` が可分距離化可能ならば，`X` が σ-コンパクトであることと，`AM(X)=BMet(X)` が完備距離化可能であることは同値である．
 
-Koshino の論文における `absolute Borel class` の具体的な定義・使用箇所は，本ノート作成時点で一次資料から直接確認できていない．`absolute Borel` と今回の `analytic/coanalytic in CPM(X)` が同じ概念かどうかも含め，この関係は Issue #46 で一次資料を確認した上で正確に整理し，本節を更新する．
+σ-コンパクトな距離化可能空間ならば E3 により `BMet(X)` は完備距離化可能である．逆に，`BMet(X)` が完備距離化可能ならば，上の `BMet` 版の引き戻し，Alexandrov–Lavrentiev，Theorem 3.3 によりまず `X` の可分性を得てから E3 を適用する．
 
----
+### 8.2 `AM(X)` と `Met(X)` の注意
 
-## 11. この project で当面暗記してよい最小セット
+Koshino の `AM(X)` は有界な許容距離（admissible metric）全体の空間であり，現行の記号では `BMet(X)` と同一視する．これは `Met(X)` と同じものではない．`Met(X)` は有界とは限らない両立する距離も含み，`BMet(X)` はその有界な部分空間である．したがって，Koshino の定理を `Met(X)` の定理として記憶してはならない．
 
-```text
-Polish = separable + completely metrizable.
+原稿の引用には Koshino の `Corollary 1.2` という番号が現れるが，確認された出版版の本文では主定理と系は無番号である．最終的な引用では出版版の番号と書誌情報を照合する．
 
-Borel ⇒ analytic.
-Borel ⇒ coanalytic.
-analytic ∩ coanalytic = Borel.          [Polish ambient]
+## 9. 「Borel ⇒ 可分性」の全体像
 
-analytic ⇒ perfect set property.                      [ZFC, Kechris Thm 29.1]
-uncountable analytic ⇒ cardinality 𝔠.                  [ZFC]
+現行の中心的な結果は次の流れである．
 
-coanalytic ⇒ perfect set property は ZFC からは独立．    [Mansfield–Solovay; V=L で失敗; notes/ishiki-extension-audit.md]
+~~~text
+Prop. 2.1
+  ↓  S ⊆ [0,1]，|S|=ℵ₁，S は稠密かつ非 Borel
+Lemmas 3.1–3.2
+  ↓  t ↦ d_t，Φ⁻¹(Met(Z)) = Φ⁻¹(BMet(Z)) = [0,1]\S
+Theorem 3.3
+  ↓  |Z|=ℵ₁ の離散 Z では BMet(Z) は CPM(Z) で非 Borel
+E1（拡張作用素）+ 閉離散部分空間 + 周囲空間での引き戻し
+  ↓
+Theorem 3.5
+  ↓  Met(X) が CPM(X) で Borel なら X は可分
+Alexandrov–Lavrentiev の Gδ による特徴づけ
+  ↓
+Corollary 3.6
+  ↓  Met(X) が完備距離化可能なら X は可分
+~~~
 
-Bernstein set:
-  every nonempty perfect set meets both B and its complement.
-  ⇒ neither side contains a nonempty perfect set.
+非可分な距離化可能空間 `X` は濃度 `ℵ₁` の閉離散部分空間 `Z` を含む．E1 は `Z` 上の擬距離と距離を `X` 上へ等長的に移す．そのため，もし `Met(X)` が Borel なら，`Z` 上の距離のモジュライ空間も Borel になってしまう．しかし Lemmas 3.1–3.2 が与える具体的な非 Borel 集合 `[0,1]\S` はそれを禁じる．したがって，距離のモジュライ空間の Borel 性は可分性の必要条件である．
 
-Borel isomorphism ≠ homeomorphism.
-Borel isomorphism does NOT in general preserve density.
-```
+この議論の本質は，非 Borel なパラメータ集合を連続写像によって Borel 集合の逆像として得ることにある．Borel σ-代数の定義域である周囲空間が非可分でも，制限と連続写像による引き戻しはそのまま成立する．これが旧 analytic/coanalytic の定式化を Borel-first の定式化に置き換える理由である．
 
-そして今回最も重要な注意は，
+## 10. 歴史・背景：解析集合・余解析的集合版で残ることと残らないこと
 
-```text
-"analytic/coanalytic in CPM(X)" の意味は，general X ではまだ監査中．
-```
+この節の内容は記述集合論の背景であり，arXiv:2608.19618 の現行の検証対象ではない．
 
-である．
+### 10.1 古典的な点クラスの関係
 
----
+ポーランド空間である周囲空間 `P` では，解析集合 `Σ¹₁` はポーランド空間からの連続写像の像として表される集合，余解析的集合 `Π¹₁` は補集合が解析集合である集合である．Borel 集合は解析集合かつ余解析的集合であり，Souslin の定理により
 
-## 12. 参考文献・用語ソース
+`analytic ∩ coanalytic = Borel`
 
-### 数学的基準文献
+が成り立つ．したがって
 
-- A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995. `Σ¹₁` の完全集合性（Suslin の定理）は Theorem 29.1．共同原稿は `Π¹₁` 側について Theorem 32.2 も引用しているが，この箇所が実際に何を主張しているか（`Π¹₁`-PSP を無条件に述べているのか，追加の仮定つきか）は本ノート作成時点で確認できておらず，Issue #46 で Kechris 本文と対照して確認する．
-- K. Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Analysis and Geometry in Metric Spaces 12 (2024), Article 20240014. https://doi.org/10.1515/agms-2024-0014
+`neither analytic nor coanalytic ⇒ non-Borel`
 
-### 日本語用語の確認に使った資料
+であるが，`non-Borel ⇒ neither analytic nor coanalytic` ではない．
 
-- 名古屋大学 2026 年度シラバス「数理論理学特論1」．「記述集合論」「ポーランド空間」「ベール空間」「ボレル集合」「解析集合」「射影集合」の用例．  
-  https://syllabus.adm.nagoya-u.ac.jp/data/2026/25_2026_Y010602510017.html
-- 愛媛大学 松山 TGSA セミナー，第12回 藤田博司「On subgroups of Polish Abelian group generated by Borel sets」．`Σ¹₁集合（解析集合）` の用例．  
-  https://www.math.sci.ehime-u.ac.jp/MTGSA.ja.html
-- 木原貴行，科研費「計算可能性理論，記述集合論，位相空間論における階層の究極的解析」．キーワード「余解析的集合」の用例．  
-  https://kaken.nii.ac.jp/grant/KAKENHI-PROJECT-19K03602/
-- 京都大学数理解析研究所 RIMS 講究録 No.1729．樋口幸治郎「カントール空間上の非空実効的閉集合の次数構造」．「カントール空間」の用例．  
-  https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/1729.html
-- 東京大学大学院数理科学研究科のセミナーテキスト案内．「標準ボレル空間」の用例．  
-  https://www.ms.u-tokyo.ac.jp/~kida/seminartext.html
+### 10.2 旧レシピの「解析集合でない」は何が残るか
 
-### 用語上の保留
+Prop. 2.1 の CH 分岐で選ぶベルンシュタイン集合は非可算で完全集合を含まないので，解析集合の完全集合性から解析集合ではない．¬CH 分岐では `|S|=ℵ₁<𝔠` であるため，解析集合の完全集合定理から解析集合ではない．したがって，旧 CH/¬CH のレシピから得られる「`S` は解析集合でない」という半分は ZFC で保たれる．
 
-- `perfect set property` → 「完全集合性」は本 project の暫定標準．日本語の専門文献における用例を引き続き探索する．
-- `absolute Borel class` → 「絶対ボレル類」は暫定．Koshino の定義と日本語既存用法を Issue #46 で確認後に固定する．
-- general `CPM(X)` における `analytic/coanalytic` → **定義自体が監査中**．訳語以前に数学的 convention を確定する．
+### 10.3 「余解析的集合でない」は ZFC の定理ではない
 
----
+一方，旧 draft が主張した「密な `S⊆[0,1]`，`|S|=ℵ₁` は余解析的集合でもない」という半分は ZFC の定理ではない．
+
+ZFC + ¬CH のモデルとして，`ω₁^L=ω₁` を保つ `L` の ccc な強制拡大，例えば `L` に `ℵ₂` 個の Cohen 実数を加えたモデルを考える．そのようなモデルでは，最大の thin `Π¹₁` 集合 `C₁` が存在し，`C₁` は濃度 `ℵ₁` の稠密な余解析的集合である（Kechris 1975，Guaspari 1973，Sacks 1976）．旧 CH/¬CH のレシピは，可算稠密集合 `Q` を固定して `Q⊆S` かつ `|S|=ℵ₁` となる稠密な `S` を選ぶ手続きであり，`Q` は `C₁` の中に取れる．したがって `C₁` はこのレシピが許す正当な出力の一つであり，その出力は余解析的集合になる．
+
+ここで重要なのは，証明可能性 (provability) と相対無矛盾性 (relative consistency) を区別することである．一つの ZFC + ¬CH モデルでこの主張が失敗することを示せば，「この主張は ZFC の定理である」という主張を反証できる．これは，否定命題の相対無矛盾性を一般に確立することとは異なる，より弱く容易な事実である．CH が成り立つモデルで旧レシピがどう振る舞うかを決めることも，この ZFC における証明可能性の反証には必要ない．
+
+ZFC で安全な修正には Mansfield–Solovay の定理が関係する．この定理は，`Σ¹₂(a)` 集合が `L[a]` に含まれるか，または完全部分集合を含むことを述べる．したがって，`S` が余解析的集合でないことをこの方向から保証するには，すべての実数 `a` に対して `S⊄L[a]` となる構成が必要になる．旧レシピはこの条件を ZFC で供給しない．
+
+### 10.4 なぜ Borel-first で十分か
+
+古典的な analytic/coanalytic の関係はポーランドな周囲空間で有効であるが，非可分な `CPM(X)` にそのまま適用するには点クラスの規約が必要になる．旧 draft ではこの周囲空間の問題のため，非可分な周囲空間に対する analytic/coanalytic の主張が定義に依存し，`BMet(D)` やその補集合の稠密性のため古典的な点クラスの読み方では定理が空虚になる場合があった．
+
+現行の Borel-first の定式化では，Borel σ-代数を周囲空間の位相から直接定義する．Borel 集合に対する完全集合定理は ZFC の定理であり，thin な Borel 集合の問題は生じない．また，非可分な周囲空間にポーランド性を仮定せず，スースリン操作や analytic/coanalytic の点クラスの規約も導入しない．このため，Prop. 2.1 と Lemmas 3.1–3.2 の厳密な引き戻しが，Theorem 3.3 から Theorem 3.5，Corollary 3.6 へ直接つながる．
+
+## 11. 参考文献
+
+- Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics Implies Separability*, arXiv:2608.19618 v1, 20 Aug 2026．
+- Y. Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 v4，Theorem 1.1．
+- A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995．特に Theorem 3.11，Theorem 13.6，Example 8.24，Theorem 15.6，Theorem 29.1．
+- K. Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024)．
+- A. S. Kechris, *The theory of countable analytical sets*, Trans. Amer. Math. Soc. 202 (1975)．最大の thin `Π¹₁` 集合 `C₁` の存在について．Guaspari (1973)，Sacks (1976) も独立に同じ事実を示している．§10.3 を参照．
 
 ## Issues
 
-- #46 — joint extension の数学的監査．
-- #47 — #46 で確定した定理の Lean 形式化．
-- #48 — 本ノートの整備．
+- #48 — 本ノートの Borel-first 整備．
+- #55 — `notes/borel-preprint-audit.md` による現行の原稿の定理ごとの監査．
+- #56 — Borel σ-代数を用いた discrete core（監査 §7）の Lean 形式化．
+- #57 — 拡張作用素を用いた general-space transfer（監査 §7）と Theorem 3.5 の Lean 形式化．
