@@ -9,37 +9,32 @@
 
 ## Project Overview
 
-<!-- Managed section: update with apply input, or omit/pass [] to remove. -->
-- Goal: resolve Ishiki Conjecture 5.1 (arXiv:2407.03030): for discrete D with |D| = ℵ₁, Met(D) (metrics **compatible with the discrete topology**, sup-metric topology) is not completely metrizable. Gates A–C passed and the owner lifted the proof-candidate label on 2026-08-09 (PR #29 comment); the result may be stated declaratively, but avoid wording that implies external peer validation — verification so far is the project's internal audit + Lean.
-- Source of truth: mathematical claims = `report/report-ja.md` + Lean theorem statements (must agree); English wording = `paper/main.tex`; progress = GitHub Issues + `STATUS.md`. The Google Docs plan ("Conjecture 5.1 論文化・形式化プロジェクト計画書") is planning-only, never mathematical SoT.
-- The Ishiki-extension track (#46/#47, Lean namespace `IshikiExt`) is separate: `report/report-ja.md` is frozen as the Conjecture 5.1 archival report and carries no extension claim, so that track's SoT is `notes/ishiki-extension-audit.md` + the `IshikiExt` theorem statements, and its claims must not be added to the frozen report.
-- Stable claim IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` are shared across report, Lean, and paper; never change a claim in one place only — reopen dependent issues on any change.
+- Active goal: Lean-assisted verification of Ishiki–Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618. Issue #55 is the statement gate; do not accept top-level theorem statements until they are checked against the public preprint.
+- Active work queue: #55 theorem map → #56 discrete Borel core → #57 general-space transfer; #48/PR #49 is the Borel-first Japanese terminology note; #58 handles repo metadata/rename.
+- The original Conjecture 5.1 proof is an archival verified core: `report/report-ja.md` + `lean/IshikiConj51/Conj51/`. Stable IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` belong to that archival track.
+- The old analytic/coanalytic track (#46/#47, PR #50) is superseded. Do not resurrect its ZFC theorem package. Merged PR #52 (`IshikiExt`) is reusable only for the pointclass-free coding statements it actually proves.
 
 ## Commands
 
-<!-- Managed section: update with apply input, or omit/pass [] to remove. -->
 ~~~sh
 cd lean && lake exe cache get   # mathlib oleans; NEVER cold-build mathlib here
-flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2GiB free (free -h)
+flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2GiB free
 ~~~
 
 ## Code Conventions
 
-<!-- Managed section: update with apply input, or omit/pass [] to remove. -->
-- Fσ has no Mathlib predicate (v4.32.2): use the local `IsFSigma` in `Conj51/Cardinality.lean`; `IsSigmaCompact` is NOT a valid proxy.
-- A claim ID may be attached to a Lean declaration only when the statement faithfully matches the report; do not silently weaken (e.g. to bounded or uniformly discrete metrics). Final result must be sorry-free with an explained `#print axioms` audit.
-- Japanese report follows `notes/terminology.md` (完備距離化可能 = completely metrizable); use wabun-math-style / math-claim-integrity skills for report edits. Report exposition assumes analysis/general-topology experts: apply exposition-flow for concise, readable, self-contained proofs; do not expand routine standard facts beyond what verification needs.
-- Record failed proof attempts in `notes/proof-audit.md`, never in the report or paper.
+- Preserve the published `Met`/`BMet`/`CPM` hypotheses exactly; never replace them by bounded, uniformly discrete, separable or other proxies unless #55 shows the source theorem has that hypothesis.
+- If an external extensor/descriptive-set theorem is absent from Mathlib, expose it as an explicit hypothesis or formalise it separately; never hide it behind a custom axiom.
+- Accepted Lean results must be sorry-free with an explained `#print axioms` audit. Record failed proof attempts in audit notes, not reader-facing reports.
+- Japanese mathematical prose uses comma/period punctuation; `notes/descriptive-set-theory-ja.md` (pending #48) will be the terminology reference for the public-preprint track once it lands.
 
 ## Architecture
 
-<!-- Managed section: update with apply input, or omit/pass [] to remove. -->
-- Issue-driven: all work ships as issue → PR → independent codex review (`python3 "$REVIEW_ACQUIRE_SCRIPT" uda-lab/ishiki-conjecture <PR> codex`) → merge, per github-driven-workflow skill; no direct pushes to main.
-- `lean/IshikiConj51/Conj51/{Cardinality,MetricConstruction,ClosedEmbedding,MainTheorem}.lean` map 1:1 to the four claim IDs; `Met(D)` type must be constructed before the last three get Lean statements.
+- Issue-driven: statement audit → focused PR → independent review → merge; no direct pushes to main.
+- `Conj51/` is archival provenance. New public-preprint formalisation belongs under a separate extension/publication namespace, reusing `IshikiExt` infrastructure only where statement fidelity is clear.
 
 ## Maintenance Notes
 
-<!-- This section is permanent. Do not delete. -->
 - Delete stale or inferable guidance.
 - Update commands and architecture when workflows change.
 - Keep durable rules here; move detail to dedicated docs.
