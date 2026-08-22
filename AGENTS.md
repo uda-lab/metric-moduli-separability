@@ -26,7 +26,7 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 - Preserve the published `Met`/`BMet`/`CPM` hypotheses exactly; never replace them by bounded, uniformly discrete, separable or other proxies unless #55 shows the source theorem has that hypothesis.
 - If an external extensor/descriptive-set theorem is absent from Mathlib, expose it as an explicit hypothesis or formalise it separately; never hide it behind a custom axiom.
 - Accepted Lean results must be sorry-free with an explained `#print axioms` audit. Record failed proof attempts in audit notes, not reader-facing reports.
-- Japanese mathematical prose uses comma/period punctuation; `notes/descriptive-set-theory-ja.md` (pending #48) will be the terminology reference for the public-preprint track once it lands.
+- Japanese mathematical prose uses comma/period punctuation; `notes/descriptive-set-theory-ja.md` (#48, merged in PR #49) is the terminology reference for the public-preprint track.
 
 ## Architecture
 
