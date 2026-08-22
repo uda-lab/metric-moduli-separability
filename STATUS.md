@@ -13,7 +13,7 @@ v1 (20 Aug 2026).
 | Theorem-by-theorem audit of arXiv:2608.19618 (#55) | ✅ complete; merged in PR #60 at `b8ef88a` |
 | Discrete Borel obstruction (#56) | 🔄 open; Lean implementation in progress |
 | General-space Borel/separability transfer (#57) | ⏸ open; waiting on #56's ambient-faithfulness and relabelling layers |
-| Japanese Borel/descriptive-set-theory note (#48 / PR #49) | 🔄 open; draft evolving |
+| Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; reusable for #56 |
 
@@ -113,8 +113,8 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
 2. **#56** — formalise the discrete Borel obstruction: **open**, in progress.
 3. **#57** — formalise the general-space Borel/separability transfer:
    **open**, waiting on #56 items 3–4.
-4. **#48** — Japanese Borel/descriptive-set-theory study note: **open**;
-   **PR #49** is open and evolving.
+4. **#48** — Japanese Borel/descriptive-set-theory study note: **closed**;
+   merged through **PR #49** at `2b8acf4`.
 5. **#58** — repository metadata cleanup and rename to
    `metric-moduli-separability`: **open**. **PR #59** reset `README.md` and
    `AGENTS.md` and is merged; the repository rename itself remains an owner

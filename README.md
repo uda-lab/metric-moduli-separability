@@ -50,14 +50,20 @@ issue explicitly requires a provenance-preserving change.
 
 Issues #46–#47 and draft PR #50 record the August 2026 attempt to prove a stronger
 analytic/coanalytic theorem package. That track is closed and must not be treated as
-the active source of truth. In particular, the proposed existence of an `ℵ₁`-sized
-set of reals that is simultaneously non-analytic and non-coanalytic is not a ZFC
-theorem: there are models of ZFC + ¬CH in which every `ℵ₁`-sized set of reals is
-coanalytic (Lusin Proposition I, via the Martin–Solovay analysis), so no ZFC proof
-of the non-CH branch can exist. The repair this raised was an author-level decision
-point in the superseded draft; the published joint preprint replaces the whole
-package. Valid pointclass-free metric coding from that work survives separately in
-PR #52.
+the active source of truth. In particular, the draft's recipe-based claim that a
+dense `ℵ₁`-sized set of reals is simultaneously non-analytic and non-coanalytic is
+not a ZFC theorem: in any ccc forcing extension of `L` keeping `ω₁^L = ω₁` (e.g.
+adding `ℵ₂` Cohen reals), the largest thin `Π¹₁` set `C₁` (Kechris 1975; Guaspari;
+Sacks) is a coanalytic dense set of cardinality `ℵ₁`, a legitimate output of the
+recipe — so no ZFC proof of the "not coanalytic" half can exist for that recipe. By
+Mansfield–Solovay, a ZFC-safe repair would need `S ⊄ L[a]` for every real `a`, which
+the recipe does not supply. Only the asymmetric "not analytic" half survives in ZFC,
+by Souslin's perfect set theorem: under ¬CH from `ℵ₁ < 𝔠` directly, and under CH by
+choosing `S` as a Bernstein set. See `notes/borel-preprint-audit.md` §5 for the full
+account. The repair this raised was
+an author-level decision point in the superseded draft; the published joint preprint
+replaces the whole package. Valid pointclass-free metric coding from that work
+survives separately in PR #52.
 
 ## Repository layout
 
