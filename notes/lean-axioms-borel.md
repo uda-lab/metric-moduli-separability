@@ -27,3 +27,31 @@ as every other top-level result in this repository (`Conj51/MainTheorem.lean`,
 Item 4 (relabelling to arbitrary discrete carriers) is not included: it was
 not completed in this issue and carries no theorems (see the PR body and
 the item-4 follow-up issue for scope).
+
+# Axiom audit — Issue #57 (general-space transfer, partial)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51`
+library (toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked
+`.lean` file (`import IshikiConj51` plus the `#print axioms` lines), never
+committed.
+
+| declaration | file | axioms |
+|---|---|---|
+| `IshikiExt.exists_aleph1_closed_discrete_separated` | `Ext/GeneralSpace.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isClosed_range_of_isometry_complete` | `Ext/GeneralSpace.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.MetOn` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.mem_CPM_MetOn` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor.image_met_eq_range_inter` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+
+No `sorryAx` and no custom axioms in the closure of any declaration above —
+only the three standard Lean/Mathlib axioms. `grep -rn sorry` on both files
+turns up only the word inside a status comment, not a `sorry` term.
+
+This audit covers everything that landed in #57: the ℵ₁-sized closed
+discrete separated set lemma, the closed-isometric-image lemma, the
+topology-aware metric locus `CPM.MetOn`, the `IsIsometricExtensor` E1
+hypothesis bundle, and the derived `Met`-image identity. The capstone
+theorem (`Met(X)` Borel → `SeparableSpace X`) did **not** land in this issue
+and is not included above; see the PR body and the follow-up issue for its
+exact statement and remaining prerequisites.

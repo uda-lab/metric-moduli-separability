@@ -15,3 +15,5 @@ import IshikiConj51.Ext.BddPMet
 import IshikiConj51.Ext.BoundedCoding
 import IshikiConj51.Ext.Borel
 import IshikiConj51.Ext.CPM
+import IshikiConj51.Ext.GeneralSpace
+import IshikiConj51.Ext.GeneralSeparability
