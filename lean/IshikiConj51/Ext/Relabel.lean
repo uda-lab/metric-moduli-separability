@@ -281,9 +281,12 @@ theorem exists_equiv_extIndex_of_card {D : Type*} (hD : #D = aleph 1) :
   rw [hD, card_extIndex hScard]
   simp
 
-/-- **Theorem 3.3, arbitrary-carrier bounded-ambient form.**  For *every*
-discrete `D` with `|D| = ℵ₁`, the compatible bounded metrics `BMet(D)` are not
-Borel in the bounded pseudometric ambient `BCPM(D)`. -/
+/-- **Arbitrary-carrier form of the bounded-ambient obstruction** (audit §7
+item 2).  For *every* discrete `D` with `|D| = ℵ₁`, the compatible bounded
+metrics `BMet(D)` are not Borel in the bounded pseudometric ambient
+`BCPM(D)`.  This is not Theorem 3.3 itself — the preprint states the
+obstruction in the unbounded ambient `CPM(D)`; that is
+`bmet_not_borel_cpm_of_card` below. -/
 theorem bmet_not_borel_of_card (D : Type*) (hD : #D = aleph 1) :
     ¬ MeasurableSet (BMet D) := by
   intro hBMet
@@ -293,9 +296,10 @@ theorem bmet_not_borel_of_card (D : Type*) (hD : #D = aleph 1) :
   rw [preimage_BMet_comap σ] at hpre
   exact bmet_not_borel hSsub hScard hSnonmeas hpre
 
-/-- **Theorem 3.3, arbitrary-carrier form in the unbounded ambient.**  For
-*every* discrete `D` with `|D| = ℵ₁`, the bounded compatible-metric locus is
-not Borel in `CPM(D)`. -/
+/-- **Theorem 3.3, in its literal arbitrary-carrier form.**  The preprint's
+Theorem 3.3 states exactly this (audit §2.6): for a discrete `Z` with
+`|Z| = ℵ₁`, `BMet(Z)` is not Borel in `CPM(Z)`.  Here for *every* discrete
+`D` with `|D| = ℵ₁`. -/
 theorem bmet_not_borel_cpm_of_card (D : Type*) (hD : #D = aleph 1) :
     ¬ MeasurableSet (CPM.BMet D) := by
   intro hBMet
@@ -305,10 +309,14 @@ theorem bmet_not_borel_cpm_of_card (D : Type*) (hD : #D = aleph 1) :
   rw [CPM.preimage_BMet_comap σ] at hpre
   exact bmet_not_borel_cpm hSsub hScard hSnonmeas hpre
 
-/-- **Theorem 3.3 / the abstract's `Met(Z)` claim, in its literal
-arbitrary-carrier form.**  For *every* discrete `D` with `|D| = ℵ₁`, the
-metrics on `D` compatible with the discrete topology form a non-Borel subset
-of the space of continuous pseudometrics on `D` with the supremum distance.
+/-- **The abstract's and introduction's `Met(Z)` claim, in its literal
+arbitrary-carrier form.**  The preprint announces "`Met(Z)` is not Borel" in
+its abstract and introduction, while the body's Theorem 3.3 states the
+`BMet(Z)` version; audit §2.6 records that gap and §7 item 3 asks for both to
+be formalised from the single pullback identity.  This is the `Met` one: for
+*every* discrete `D` with `|D| = ℵ₁`, the metrics on `D` compatible with the
+discrete topology form a non-Borel subset of the space of continuous
+pseudometrics on `D` with the supremum distance.
 
 No hypothesis on a parameter set is left in the statement: the non-Borel
 `S ⊆ [0,1]` of cardinality `ℵ₁` is produced internally by

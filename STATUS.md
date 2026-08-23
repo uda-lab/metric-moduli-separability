@@ -41,11 +41,13 @@ Issue #56 (discrete core), items 1–3 are done:
 
 Item 4 (#63) relabels those results onto an arbitrary discrete carrier of
 cardinality ℵ₁, which is what the preprint's theorems quantify over. The
-repository therefore now states Theorem 3.3 and the abstract's `Met(Z)`
-claim in their universal form: for *every* `D` with `|D| = ℵ₁`,
-`met_not_borel_of_card` says `Met(D)` is not Borel in `CPM(D)`, with no
-residual hypothesis on a parameter set and with the hypothesis `|D| = ℵ₁`
-shown satisfiable (`exists_carrier_aleph_one`).
+repository therefore now states, for *every* `D` with `|D| = ℵ₁` and with no
+residual hypothesis on a parameter set, both the body's Theorem 3.3
+(`bmet_not_borel_cpm_of_card`: `BMet(D)` is not Borel in `CPM(D)`) and the
+abstract's and introduction's `Met(Z)` claim (`met_not_borel_of_card`). The
+split follows audit §2.6, which records that the `Met` phrasing appears only
+in the abstract and introduction. The hypothesis `|D| = ℵ₁` is shown
+satisfiable (`exists_carrier_aleph_one`), so neither statement is vacuous.
 
 Issue #57 (Theorem 3.5, the transfer from the discrete obstruction to a
 general metrizable space) has its supporting lemmas done: the

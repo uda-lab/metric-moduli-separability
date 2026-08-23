@@ -81,7 +81,16 @@ No `sorryAx` and no custom axioms in the closure of any declaration above —
 only the three standard Lean/Mathlib axioms. `grep -rn sorry
 lean/IshikiConj51/` turns up only the word inside status comments.
 
-With `met_not_borel_of_card` the repository states the preprint's Theorem 3.3
-and its abstract's `Met(Z)` claim in the universal form: for every `D` with
-`#D = ℵ₁`, `Met(D)` is not Borel in `CPM(D)`. The hypothesis is satisfiable
-(`exists_carrier_aleph_one`), so the statement is not vacuous.
+Attribution, following audit §2.6 (which records that the preprint's body
+states Theorem 3.3 for `BMet(Z)` while the `Met(Z)` phrasing appears only in
+the abstract and introduction):
+
+* `bmet_not_borel_cpm_of_card` is **Theorem 3.3** in universal form — for
+  every `D` with `#D = ℵ₁`, `BMet(D)` is not Borel in `CPM(D)`;
+* `met_not_borel_of_card` is the **abstract/introduction `Met(Z)` claim** in
+  universal form — `Met(D)` is not Borel in `CPM(D)`;
+* `bmet_not_borel_of_card` is the bounded-ambient statement of §7 item 2,
+  which the preprint does not state in that ambient.
+
+The hypothesis `#D = ℵ₁` is satisfiable (`exists_carrier_aleph_one`), so none
+of the three is vacuous.
