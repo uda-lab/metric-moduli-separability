@@ -35,12 +35,14 @@ Issue #56 (discrete core), items 1–3 are done:
   star-metric coding (`bmet_not_borel`);
 - the bridge from the bounded ambient to the preprint's unbounded `CPM`
   ambient, and the literal, unbounded `Met(D)` non-Borelness statement
-  (`bmet_not_borel_cpm`, `met_not_borel`) — this discharges the preprint's
-  literal Theorem 3.3 and the abstract's `Met(Z)` claim.
+  (`bmet_not_borel_cpm`, `met_not_borel`) — this matches the content of
+  Theorem 3.3 and the abstract's `Met(Z)` claim on the concrete carrier the
+  construction produces.
 
 Item 4 — relabelling the above to an arbitrary discrete carrier of
-cardinality ℵ₁, rather than the concrete carrier the construction produces —
-is open, tracked as #63.
+cardinality ℵ₁, which the preprint's theorems are universally quantified
+over — is open, tracked as #63; until it lands, the results above hold only
+for that concrete carrier, not yet the fully general statement.
 
 Issue #57 (Theorem 3.5, the transfer from the discrete obstruction to a
 general metrizable space) has its supporting lemmas done: the
@@ -49,11 +51,13 @@ lemma, the topology-aware `CPM.MetOn` locus, and the `IsIsometricExtensor`
 hypothesis bundle for the external extensor theorem (E1), including the
 `Met`-image identity derived from it rather than assumed. The capstone
 theorem itself (`Met(X)` Borel ⇒ `SeparableSpace X`) is open, tracked as
-#66, along with two concrete prerequisites found during review: `CPM.MetOn`
-needs a continuity-restricted ambient for non-discrete `X` (it currently
-reuses #56's bare-discrete `CPM`, which has no continuity constraint), and
-the closed-isometric-image lemma needs an `EMetricSpace` generalisation to
-apply to `CPM`'s extended-valued sup distance.
+#66, along with three concrete prerequisites found during review:
+`CPM.MetOn` needs a continuity-restricted ambient for non-discrete `X` (it
+currently reuses #56's bare-discrete `CPM`, which has no continuity
+constraint); the closed-isometric-image lemma needs an `EMetricSpace`
+generalisation to apply to `CPM`'s extended-valued sup distance; and a
+`CompleteSpace (CPM D)` instance, needed by that same closed-image argument,
+does not yet exist in the repository.
 
 The non-Archimedean analogues and the finer component and complete-metric
 statements are recorded in the audit for later work. They are not part of the
