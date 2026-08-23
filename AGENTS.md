@@ -11,7 +11,7 @@
 
 - Active goal: Lean-assisted verification of Ishiki–Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618. Mathematical SoT for this track: `notes/borel-preprint-audit.md`; do not accept top-level theorem statements until they are checked against it and the public preprint.
 - The original Conjecture 5.1 proof is an archival verified core: `report/report-ja.md` + `lean/IshikiConj51/Conj51/`. Stable IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` belong to that archival track.
-- The analytic/coanalytic track of issues #46/#47 is superseded: do not resurrect its ZFC theorem package. The `IshikiExt` namespace it left behind is reusable only for the pointclass-free coding statements it actually proves.
+- The analytic/coanalytic track is superseded; `notes/borel-preprint-audit.md` §5 lists the claims that must not be resurrected. The `IshikiExt` namespace it left behind is reusable only for the pointclass-free coding statements it actually proves.
 
 ## Commands
 

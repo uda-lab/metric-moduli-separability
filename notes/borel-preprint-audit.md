@@ -781,9 +781,9 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    (1): `¬ MeasurableSet (BMet (ExtIndex S))` in `BddPMet (ExtIndex S)`.
    Layer 1 supplies both inputs: `phiFull` is continuous
    (`lipschitzWith_phiFull`), hence Borel-measurable, and
-   `preimage_BMet_phiFull` gives `Φ_full⁻¹(BMet) = Icc∖S`. What remains is
-   that measurability of `BMet` would then make `{t : UnitParam \| ↑t ∉ S}`
-   measurable, contradicting (1). This *pullback route* replaces the paper's
+   `image_preimage_BMet_phiFull` gives `Subtype.val '' Φ_full⁻¹(BMet) =
+   Icc∖S`. What remains is that measurability of `BMet` would then make
+   `Icc∖S`, hence `S`, measurable, contradicting (1). This *pullback route* replaces the paper's
    relative-closure argument and needs no new topology. *Delivered by #56*
    (`Ext/Borel.lean`, `bmet_not_borel`).
 3. **Transfer to the `CPM D` ambient** — a `CPM D` type (unbounded
