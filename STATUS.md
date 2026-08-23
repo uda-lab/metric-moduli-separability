@@ -12,7 +12,7 @@ v1 (20 Aug 2026).
 |------|--------|
 | Theorem-by-theorem audit of arXiv:2608.19618 (#55) | ✅ complete; merged in PR #60 at `b8ef88a` |
 | Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
-| Discrete Borel obstruction, item 4 — relabelling (#56) | ⏸ open; deferred to #63 |
+| Discrete Borel obstruction, item 4 — relabelling (#63) | ✅ complete |
 | General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
 | General-space transfer, capstone theorem (#57) | ⏸ open; deferred to #66 |
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
@@ -39,10 +39,15 @@ Issue #56 (discrete core), items 1–3 are done:
   Theorem 3.3 and the abstract's `Met(Z)` claim on the concrete carrier the
   construction produces.
 
-Item 4 — relabelling the above to an arbitrary discrete carrier of
-cardinality ℵ₁, which the preprint's theorems are universally quantified
-over — is open, tracked as #63; until it lands, the results above hold only
-for that concrete carrier, not yet the fully general statement.
+Item 4 (#63) relabels those results onto an arbitrary discrete carrier of
+cardinality ℵ₁, which is what the preprint's theorems quantify over. The
+repository therefore now states, for *every* `D` with `|D| = ℵ₁` and with no
+residual hypothesis on a parameter set, both the body's Theorem 3.3
+(`bmet_not_borel_cpm_of_card`: `BMet(D)` is not Borel in `CPM(D)`) and the
+abstract's and introduction's `Met(Z)` claim (`met_not_borel_of_card`). The
+split follows audit §2.6, which records that the `Met` phrasing appears only
+in the abstract and introduction. The hypothesis `|D| = ℵ₁` is shown
+satisfiable (`exists_carrier_aleph_one`), so neither statement is vacuous.
 
 Issue #57 (Theorem 3.5, the transfer from the discrete obstruction to a
 general metrizable space) has its supporting lemmas done: the
@@ -80,13 +85,17 @@ namespace:
   `CPM D`, the bridge lemma identifying its extended sup distance with
   `BddPMet`'s real-valued one on bounded pairs, and `bmet_not_borel_cpm`,
   `met_not_borel` (the literal, unbounded `Met(D)` non-Borelness statement).
+- `Relabel.lean` (#63, #56 item 4) — relabelling of both ambients along a
+  bijection of the carrier (`BddPMet.relabelIsometry`, `CPM.relabelIsometry`)
+  with the `BMet`/`Met` preimage identities, and the arbitrary-carrier
+  theorems `bmet_not_borel_of_card`, `bmet_not_borel_cpm_of_card`,
+  `met_not_borel_of_card`.
 - `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
   lemmas) — the nonseparable-space closed-discrete-subset lemma, the
   closed-isometric-image lemma, `CPM.MetOn`, and the `IsIsometricExtensor`
   hypothesis bundle with its derived `Met`-image identity.
 
-Not yet done: relabelling `#56`'s theorems to an arbitrary discrete carrier
-(#63), and #57's capstone theorem together with the continuity-ambient and
+Not yet done: #57's capstone theorem together with the continuity-ambient and
 `EMetricSpace` prerequisites found on review (#66).
 
 Every declaration above is sorry-free; `#print axioms` shows only the
@@ -137,9 +146,9 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
 
 1. **#55** — theorem-by-theorem audit of arXiv:2608.19618: **closed**;
    merged through **PR #60**.
-2. **#56** — formalise the discrete Borel obstruction: **open**; items 1–3
-   merged through **PR #64** at `8868eaa`, item 4 (relabelling) deferred to
-   **#63**.
+2. **#56** — formalise the discrete Borel obstruction: all four items
+   delivered; items 1–3 merged through **PR #64** at `8868eaa`, item 4
+   (relabelling) through **#63**.
 3. **#57** — formalise the general-space Borel/separability transfer:
    **open**; supporting lemmas merged through **PR #67** at `a27d7f1`, the
    capstone theorem deferred to **#66**.

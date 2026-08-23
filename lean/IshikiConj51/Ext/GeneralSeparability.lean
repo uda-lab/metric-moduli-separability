@@ -134,10 +134,9 @@ theorem IsIsometricExtensor.image_met_eq_range_inter
   The remaining proof must use `met_not_borel hS hSnonmeas`, completeness of
   `CPM (ExtIndex S)`, the closed range of `hE.toCPM`, and the derived image
   identity above.  It is deferred to a follow-up issue: a `CompleteSpace
-  (CPM D)` instance is not yet available, and the CPM-level relabelling layer
-  needed for the arbitrary-carrier form is also absent, so this is
-  intentionally the concrete-carrier scope rather than the arbitrary-carrier
-  theorem.
+  (CPM D)` instance is not yet available.  The CPM-level relabelling layer
+  needed to restate it for an arbitrary carrier landed with Issue #63
+  (`Ext/Relabel.lean`), so only the completeness prerequisite remains.
 -/
 
 end
