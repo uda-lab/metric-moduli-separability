@@ -9,8 +9,10 @@ The active external source is the joint preprint by Yoshito Ishiki and Tomoki Ud
 
 The repository has been realigned to that public preprint after an earlier, stronger
 analytic/coanalytic draft was abandoned. The theorem-by-theorem audit and the Lean
-formalisation of the discrete Borel obstruction and the general-space separability
-transfer are complete (`notes/borel-preprint-audit.md`, `STATUS.md`).
+formalisation of the discrete Borel obstruction are complete; the general-space
+separability transfer is complete conditional on the transported
+`IsIsometricExtensor` bundle, with the bridge to the published extensor theorem
+open as #72 (`notes/borel-preprint-audit.md`, `STATUS.md`).
 
 Open work:
 

@@ -14,9 +14,10 @@ v1 (20 Aug 2026).
 | Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
 | Discrete Borel obstruction, item 4 — relabelling (#63) | ✅ complete |
 | General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
-| General-space transfer, capstone theorem (#66) | ✅ complete |
+| General-space transfer, capstone theorem (#66) | ✅ bundle-conditional capstone complete; E1 bridge (#72) open |
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
+| E1 bridge: bundle → published extensor theorem (#72) | 🔄 open |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
 ## Active Borel track
@@ -172,13 +173,19 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    (relabelling) through **#63**.
 3. **#57** — formalise the general-space Borel/separability transfer:
    supporting lemmas merged through **PR #67** at `a27d7f1`; the capstone
-   theorem was deferred to **#66** and is delivered there.
+   theorem was deferred to **#66**. #57's acceptance criterion is the exact
+   published theorem/interface, which the bundle-conditional form delivered
+   by #66 does not yet meet (see #72); **#57 stays open until #72 lands**.
 4. **#66** — the Route M capstone (continuity-aware ambient `CPMOn`,
    `CompleteSpace (CPM D)`, the `EMetricSpace` closed-range generalisation,
-   and the two transfer theorems): **delivered**.
+   and the two transfer theorems): **delivered, conditional on the
+   `IsIsometricExtensor` bundle** (not on E1 verbatim — see #72).
 5. **#48** — Japanese Borel/descriptive-set-theory study note: **closed**;
    merged through **PR #49** at `2b8acf4`.
 6. **#58** — repository metadata cleanup and rename to
    `metric-moduli-separability`: **open**. **PR #59** reset `README.md` and
    `AGENTS.md` and is merged; the repository rename itself remains an owner
    action.
+7. **#72** — bridge the transported `IsIsometricExtensor` bundle to the
+   published E1 theorem (audit §7 item 4's CPMOn-level relabelling
+   obligation): **open**. Closes #57.
