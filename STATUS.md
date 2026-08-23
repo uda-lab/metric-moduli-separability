@@ -188,4 +188,4 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    action.
 7. **#72** — bridge the transported `IsIsometricExtensor` bundle to the
    published E1 theorem (audit §7 item 4's CPMOn-level relabelling
-   obligation): **open**. Closes #57.
+   obligation): **open**.
