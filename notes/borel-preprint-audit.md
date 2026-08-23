@@ -716,13 +716,14 @@ coding, which is unchanged).
 | `L = Φ([0,1])` compact/closed | `isClosed_range_phiFull` | literal (in the `BddPMet` ambient) |
 
 This table predates #56/#57/#63/#66; see §7 for the current, maintained
-delivery status. Superseded by delivery: Propositions 2.1/2.2 (the
-non-**Borel** parameter set is now `exists_aleph1_nonBorel`, §7 item 1;
+delivery status. Superseded by delivery: Proposition 2.1 (the non-**Borel**
+`[0,1]` parameter set is now `exists_aleph1_nonBorel`, §7 item 1;
 `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` remains the separate,
 strictly weaker archival-track result) and Theorem 3.3 (`bmet_not_borel_cpm`,
 `met_not_borel`, §7 item 3), plus Theorem 3.5 conditionally
 (`IsIsometricExtensor.not_measurableSet_CPM_MetOn`, §7 "#66"). Still no
-existing Lean declaration for: Theorems 3.4/3.6–3.9 conclusions,
+existing Lean declaration for: Proposition 2.2 (the `2^ω` analogue, needed
+only by the non-Archimedean track), Theorems 3.4/3.6–3.9 conclusions,
 components/amalgamation (3.4, 3.8), extensor E2, or anything
 non-Archimedean (3.10–3.17) — none of these gate #56/#57/#66 (§7 item 5).
 
