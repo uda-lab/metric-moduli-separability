@@ -7,16 +7,14 @@ Research repository for Lean-assisted verification of results on spaces of compa
 The active external source is the joint preprint by Yoshito Ishiki and Tomoki Uda,
 **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618 (2026).
 
-The repository is being realigned to that public preprint after an earlier, stronger
-analytic/coanalytic draft was abandoned. The exact public theorem package is being
-re-audited in **Issue #55** before new top-level Lean statements are accepted.
+The repository has been realigned to that public preprint after an earlier, stronger
+analytic/coanalytic draft was abandoned. The theorem-by-theorem audit and the Lean
+formalisation of the discrete Borel obstruction and the general-space separability
+transfer are complete (`notes/borel-preprint-audit.md`, `STATUS.md`).
 
-Current work queue:
+Open work:
 
-- **#55** — theorem-by-theorem audit of arXiv:2608.19618 and Lean target map;
-- **#56** — formalise the published discrete Borel obstruction;
-- **#57** — formalise the general-space Borel/separability transfer;
-- **#48 / PR #49** — Borel-first Japanese descriptive-set-theory study note;
+- **#72** — bridge the general-space capstone's extensor hypothesis to the published E1 theorem;
 - **#58** — repository metadata cleanup and proposed rename to `metric-moduli-separability`.
 
 The merged `IshikiExt` Layer 1 development (PR #52) remains reusable: it proves the
@@ -73,7 +71,7 @@ survives separately in PR #52.
 | `lean/IshikiConj51/Ext/` | reusable coding infrastructure for the joint-work track |
 | `report/report-ja.md` | archival Japanese Conjecture 5.1 proof |
 | `notes/` | literature, audit and terminology records |
-| `STATUS.md` | project status; being reset under #58 after #55 fixes the theorem map |
+| `STATUS.md` | project status |
 | `paper/` | archival earlier manuscript workspace |
 
 ## Workflow
