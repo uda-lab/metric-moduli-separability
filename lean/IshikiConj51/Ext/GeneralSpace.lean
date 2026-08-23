@@ -123,9 +123,15 @@ theorem exists_aleph1_closed_discrete_separated
 /- `#print axioms exists_aleph1_closed_discrete_separated`:
    `[propext, Classical.choice, Quot.sound]`. -/
 
-/-- The range of an isometric map from a complete metric space is closed. -/
+/-- The range of an isometric map from a complete extended-metric space is
+closed.
+
+The extended-metric level is what the general-space transfer needs: the
+supremum distance on `CPM` takes the value `∞`, so its isometries are not
+`MetricSpace` isometries.  A `MetricSpace` instance supplies an
+`EMetricSpace` instance, so ordinary metric spaces are still covered. -/
 theorem isClosed_range_of_isometry_complete
-    {Z Y : Type*} [MetricSpace Z] [CompleteSpace Z] [MetricSpace Y]
+    {Z Y : Type*} [EMetricSpace Z] [CompleteSpace Z] [EMetricSpace Y]
     (f : Z → Y) (hf : Isometry f) : IsClosed (Set.range f) :=
   hf.isClosedEmbedding.isClosed_range
 

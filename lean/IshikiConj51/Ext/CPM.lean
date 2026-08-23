@@ -6,7 +6,14 @@
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §7 item 3.
 -- Since the carrier is discrete, continuity is vacuous; `CPM` records the
--- pseudometric content without adding a misleading continuity field.
+-- pseudometric content without adding a misleading continuity field.  For a
+-- general topological space the preprint's ambient is strictly smaller, and
+-- `CPM X` must not be substituted for it: see `CPMOn` in
+-- `Ext/GeneralSeparability.lean`.
+--
+-- This file also carries the completeness of the ambient (audit §2.8, the
+-- "uniform limits of pseudometrics" step), which the general-space transfer
+-- needs in order to conclude that an isometric image of `CPM D` is closed.
 --
 -- Status: sorry-free; no custom axioms.
 
@@ -88,6 +95,81 @@ noncomputable instance : PseudoEMetricSpace (CPM D) where
 
 noncomputable instance : EMetricSpace (CPM D) where
   eq_of_edist_eq_zero := eq_of_edist_eq_zero
+
+/-! ### Pointwise control by the extended supremum distance -/
+
+/-- Evaluation at a single pair is dominated by the supremum distance. -/
+theorem ofReal_abs_sub_le_edist (d e : CPM D) (x y : D) :
+    ENNReal.ofReal |d.1 x y - e.1 x y| ≤ edist d e :=
+  le_iSup (fun p : D × D => ENNReal.ofReal |d.1 p.1 p.2 - e.1 p.1 p.2|) (x, y)
+
+theorem abs_sub_lt_of_edist_lt {d e : CPM D} {c : ℝ} (hc : 0 < c)
+    (h : edist d e < ENNReal.ofReal c) (x y : D) : |d.1 x y - e.1 x y| < c :=
+  (ENNReal.ofReal_lt_ofReal_iff hc).mp
+    (lt_of_le_of_lt (ofReal_abs_sub_le_edist d e x y) h)
+
+theorem edist_le_ofReal {d e : CPM D} {c : ℝ}
+    (h : ∀ x y : D, |d.1 x y - e.1 x y| ≤ c) : edist d e ≤ ENNReal.ofReal c :=
+  iSup_le fun p => ENNReal.ofReal_le_ofReal (h p.1 p.2)
+
+/-! ### Completeness
+
+The supremum distance is a uniform distance, so a Cauchy sequence of
+pseudometrics converges pointwise and its pointwise limit is again a
+pseudometric.  This is the "uniform limits of pseudometrics" step of
+`notes/borel-preprint-audit.md` §2.8, which the general-space transfer needs in
+order to conclude that an isometric image of `CPM D` is closed. -/
+
+noncomputable instance instCompleteSpace : CompleteSpace (CPM D) := by
+  refine EMetric.complete_of_cauchySeq_tendsto ?_
+  intro u hu
+  -- Each pair of points gives a Cauchy sequence of reals.
+  have hptCauchy : ∀ x y : D, CauchySeq fun n => (u n).1 x y := by
+    intro x y
+    rw [Metric.cauchySeq_iff]
+    intro ε hε
+    obtain ⟨N, hN⟩ :=
+      EMetric.cauchySeq_iff.mp hu (ENNReal.ofReal ε) (ENNReal.ofReal_pos.mpr hε)
+    refine ⟨N, fun m hm n hn => ?_⟩
+    simpa [Real.dist_eq] using abs_sub_lt_of_edist_lt hε (hN m hm n hn) x y
+  choose dinf hdinf using fun x y : D =>
+    cauchySeq_tendsto_of_complete (hptCauchy x y)
+  -- The pointwise limit is again a pseudometric.
+  have hpm : IsPMetricOn dinf := by
+    refine ⟨fun x => ?_, fun x y => ?_, fun x y z => ?_⟩
+    · refine tendsto_nhds_unique (hdinf x x) ?_
+      have hconst : (fun n => (u n).1 x x) = fun _ : ℕ => (0 : ℝ) :=
+        funext fun n => (u n).2.dist_self x
+      rw [hconst]
+      exact tendsto_const_nhds
+    · refine tendsto_nhds_unique (hdinf x y) ?_
+      have hswap : (fun n => (u n).1 x y) = fun n => (u n).1 y x :=
+        funext fun n => (u n).2.dist_comm x y
+      rw [hswap]
+      exact hdinf y x
+    · exact le_of_tendsto_of_tendsto' (hdinf x z) ((hdinf x y).add (hdinf y z))
+        fun n => (u n).2.dist_triangle x y z
+  refine ⟨⟨dinf, hpm⟩, ?_⟩
+  -- Uniform convergence: let the second index of the Cauchy modulus tend to `∞`.
+  rw [EMetric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨r, hr0, hrε⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp hε
+  have hrpos : (0 : ℝ) < (r : ℝ) := by
+    have hr : (0 : NNReal) < r := ENNReal.coe_pos.mp hr0
+    exact_mod_cast hr
+  have hhalf : (0 : ℝ) < (r : ℝ) / 2 := by linarith
+  obtain ⟨N, hN⟩ := EMetric.cauchySeq_iff.mp hu (ENNReal.ofReal ((r : ℝ) / 2))
+    (ENNReal.ofReal_pos.mpr hhalf)
+  refine ⟨N, fun n hn => ?_⟩
+  have hbound : ∀ x y : D, |(u n).1 x y - dinf x y| ≤ (r : ℝ) / 2 := by
+    intro x y
+    refine le_of_tendsto
+      ((tendsto_const_nhds.sub (hdinf x y)).abs) (Filter.eventually_atTop.mpr ⟨N, ?_⟩)
+    intro m hm
+    exact le_of_lt (abs_sub_lt_of_edist_lt hhalf (hN n hn m hm) x y)
+  refine lt_of_le_of_lt (edist_le_ofReal hbound) (lt_of_lt_of_le ?_ (le_of_lt hrε))
+  rw [← ENNReal.ofReal_coe_nnreal]
+  exact (ENNReal.ofReal_lt_ofReal_iff hrpos).mpr (by linarith)
 
 end CPM
 
