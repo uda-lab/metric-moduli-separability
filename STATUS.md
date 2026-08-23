@@ -11,34 +11,49 @@ v1 (20 Aug 2026).
 | Item | Status |
 |------|--------|
 | Theorem-by-theorem audit of arXiv:2608.19618 (#55) | ✅ complete; merged in PR #60 at `b8ef88a` |
-| Discrete Borel obstruction (#56) | 🔄 open; Lean implementation in progress |
-| General-space Borel/separability transfer (#57) | ⏸ open; waiting on #56's ambient-faithfulness and relabelling layers |
+| Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
+| Discrete Borel obstruction, item 4 — relabelling (#56) | ⏸ open; deferred to #63 |
+| General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
+| General-space transfer, capstone theorem (#57) | ⏸ open; deferred to #66 |
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
-| `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; reusable for #56 |
+| `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
 statement gate for #56 and #57. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs that must be
-carried into formalisation. The Lean work is following the audit's minimal
-Archimedean route for the headline Borel obstruction and separability result.
+carried into formalisation. The Lean work follows the audit's minimal
+Archimedean route (Route M) for the headline Borel obstruction and
+separability result.
 
-Issue #56 covers the discrete core:
+Issue #56 (discrete core), items 1–3 are done:
 
-- existence of an ℵ₁-sized non-Borel subset of `[0,1]`;
-- the non-Borelness of `BMet` in the bounded pseudometric ambient, using the
-  star-metric coding;
-- the bridge from the bounded Lean ambient to the preprint's `CPM` ambient;
-- relabelling isometries needed for the statement on an arbitrary discrete
-  carrier of cardinality ℵ₁.
+- existence of an ℵ₁-sized non-Borel subset of `[0,1]` (`exists_aleph1_nonBorel`);
+- non-Borelness of `BMet` in the bounded pseudometric ambient, using the
+  star-metric coding (`bmet_not_borel`);
+- the bridge from the bounded ambient to the preprint's unbounded `CPM`
+  ambient, and the literal, unbounded `Met(D)` non-Borelness statement
+  (`bmet_not_borel_cpm`, `met_not_borel`) — this discharges the preprint's
+  literal Theorem 3.3 and the abstract's `Met(Z)` claim.
 
-Issue #57 covers Theorem 3.5, the transfer from the discrete obstruction to a
-general metrizable space. Its Lean statement takes an `IsIsometricExtensor`
-hypothesis bundle for the external extensor theorem as an explicit
-hypothesis, not a custom axiom. The issue depends on the
-ambient-faithfulness and relabelling work in #56.
+Item 4 — relabelling the above to an arbitrary discrete carrier of
+cardinality ℵ₁, rather than the concrete carrier the construction produces —
+is open, tracked as #63.
+
+Issue #57 (Theorem 3.5, the transfer from the discrete obstruction to a
+general metrizable space) has its supporting lemmas done: the
+nonseparable-space closed-discrete-subset lemma, the closed-isometric-image
+lemma, the topology-aware `CPM.MetOn` locus, and the `IsIsometricExtensor`
+hypothesis bundle for the external extensor theorem (E1), including the
+`Met`-image identity derived from it rather than assumed. The capstone
+theorem itself (`Met(X)` Borel ⇒ `SeparableSpace X`) is open, tracked as
+#66, along with two concrete prerequisites found during review: `CPM.MetOn`
+needs a continuity-restricted ambient for non-discrete `X` (it currently
+reuses #56's bare-discrete `CPM`, which has no continuity constraint), and
+the closed-isometric-image lemma needs an `EMetricSpace` generalisation to
+apply to `CPM`'s extended-valued sup distance.
 
 The non-Archimedean analogues and the finer component and complete-metric
 statements are recorded in the audit for later work. They are not part of the
@@ -46,27 +61,35 @@ current #56/#57 delivery.
 
 ## Lean
 
-The only Borel-track theorem development merged so far is `IshikiExt` Layer 1
-from PR #52:
+Borel-track theorem development, `lean/IshikiConj51/Ext/`, `IshikiExt`
+namespace:
 
-- `lean/IshikiConj51/Ext/BddPMet.lean` defines the bounded pseudometric ambient;
-- `lean/IshikiConj51/Ext/BoundedCoding.lean` formalises the bounded star-metric
-  family and its metricity, compatibility criterion, Lipschitz estimates, the
-  exact pullback identity, and — closed within the subspace `BMet D`, not yet
-  the preprint's `Met`/`CPM` ambient — the closed image of the parameter
-  embedding and the carrier cardinality `#S = ℵ₁ → #(ExtIndex S) = ℵ₁`.
+- `BddPMet.lean` (PR #52) — the bounded pseudometric ambient `BddPMet D`.
+- `BoundedCoding.lean` (PR #52) — the bounded star-metric family, its
+  metricity, compatibility criterion, Lipschitz estimates, and the exact
+  pullback identity `Φ⁻¹(BMet) = [0,1] \ S`.
+- `Borel.lean` (PR #64, #56 items 1–2) — `exists_aleph1_nonBorel` (ZFC, via
+  the Borel Isomorphism Theorem, no Bernstein sets or perfect-set-theorem
+  argument needed) and `bmet_not_borel` (non-Borelness of `BMet` in the
+  bounded ambient).
+- `CPM.lean` (PR #64, #56 item 3) — the unbounded pseudometric ambient
+  `CPM D`, the bridge lemma identifying its extended sup distance with
+  `BddPMet`'s real-valued one on bounded pairs, and `bmet_not_borel_cpm`,
+  `met_not_borel` (the literal, unbounded `Met(D)` non-Borelness statement).
+- `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
+  lemmas) — the nonseparable-space closed-discrete-subset lemma, the
+  closed-isometric-image lemma, `CPM.MetOn`, and the `IsIsometricExtensor`
+  hypothesis bundle with its derived `Met`-image identity.
 
-This layer formalises coding only, relative to the bounded ambient
-`BddPMet D`. It does not yet prove a non-Borelness statement, close the image
-in the preprint's `Met`/`CPM` ambient, or carry out the general-space
-transfer; those are the targets of #56 (the ambient-faithfulness bridge is
-item 3 of its statement gate) and #57. The merged development is sorry-free
-and its audit uses only the standard Lean axioms reported by `#print axioms`.
+Not yet done: relabelling `#56`'s theorems to an arbitrary discrete carrier
+(#63), and #57's capstone theorem together with the continuity-ambient and
+`EMetricSpace` prerequisites found on review (#66).
 
-External mathematical results used by the Borel track will enter Lean as
-explicit hypotheses or separately formalised results. In particular, the
-published `Met`/`BMet`/`CPM` distinctions and their ambient topologies remain
-part of the statements.
+Every declaration above is sorry-free; `#print axioms` shows only the
+standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
+in `notes/lean-axioms-borel.md`. External mathematical results (the E1
+isometric extensor) enter Lean only as an explicit hypothesis bundle
+(`IsIsometricExtensor`), never as a custom axiom.
 
 ## Archival verified core: Ishiki Conjecture 5.1
 
@@ -110,9 +133,12 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
 
 1. **#55** — theorem-by-theorem audit of arXiv:2608.19618: **closed**;
    merged through **PR #60**.
-2. **#56** — formalise the discrete Borel obstruction: **open**, in progress.
+2. **#56** — formalise the discrete Borel obstruction: **open**; items 1–3
+   merged through **PR #64** at `8868eaa`, item 4 (relabelling) deferred to
+   **#63**.
 3. **#57** — formalise the general-space Borel/separability transfer:
-   **open**, waiting on #56 items 3–4.
+   **open**; supporting lemmas merged through **PR #67** at `a27d7f1`, the
+   capstone theorem deferred to **#66**.
 4. **#48** — Japanese Borel/descriptive-set-theory study note: **closed**;
    merged through **PR #49** at `2b8acf4`.
 5. **#58** — repository metadata cleanup and rename to
