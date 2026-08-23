@@ -792,7 +792,15 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    (mirror of `relabelIsometry` in `Conj51/Relabel.lean`, which covers
    `MetD` only — §1). Cheap; without it the #56 theorems are stated for the
    concrete `ExtIndex S` carrier, which is acceptable for the gate but not
-   for the literal preprint statement.
+   for the literal preprint statement. *Delivered by #63*
+   (`Ext/Relabel.lean`): the transported statements are
+   `met_not_borel_of_card`, `bmet_not_borel_cpm_of_card` and
+   `bmet_not_borel_of_card`, each quantified over an arbitrary `D` with
+   `#D = ℵ₁` and carrying no residual hypothesis on the parameter set. One
+   deviation from the `MetD` mirror: `BddPMet.supDist` is a real conditional
+   supremum, so the reindexing step cannot use `Equiv.iSup_comp` (no
+   `ciSup` analogue exists in the pinned mathlib) and is proved by
+   antisymmetry from `le_supDist`/`supDist_le`.
 5. *Optional, not gating #57:* Theorem 3.4 (components; needs one-point
    amalgamation + regular-cardinal ball argument) and Theorem 3.8 (with the
    §2.11 repair baked in: complete base `d + 1`). Defer unless the owner

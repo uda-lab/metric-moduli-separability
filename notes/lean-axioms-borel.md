@@ -24,9 +24,8 @@ the four theorems — only the three standard Lean/Mathlib axioms
 as every other top-level result in this repository (`Conj51/MainTheorem.lean`,
 `Ext/BoundedCoding.lean`).
 
-Item 4 (relabelling to arbitrary discrete carriers) is not included: it was
-not completed in this issue and carries no theorems (see the PR body and
-the item-4 follow-up issue for scope).
+Item 4 (relabelling to arbitrary discrete carriers) is not included here: it
+was not completed in this issue. It is audited separately below.
 
 # Axiom audit — Issue #57 (general-space transfer, partial)
 
@@ -55,3 +54,34 @@ hypothesis bundle, and the derived `Met`-image identity. The capstone
 theorem (`Met(X)` Borel → `SeparableSpace X`) did **not** land in this issue
 and is not included above; see the PR body and the follow-up issue for its
 exact statement and remaining prerequisites.
+
+# Axiom audit — Issue #63 (#56 item 4, relabelling to arbitrary carriers)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51`
+library (toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked
+`.lean` file (`import IshikiConj51` plus the `#print axioms` lines), never
+committed.
+
+| declaration | file | axioms |
+|---|---|---|
+| `IshikiExt.BddPMet.supDist_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.BddPMet.relabelIsometry` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.preimage_BMet_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.edist_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.relabelIsometry` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.preimage_Met_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.preimage_BMet_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.exists_carrier_aleph_one` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.exists_equiv_extIndex_of_card` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.bmet_not_borel_of_card` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.bmet_not_borel_cpm_of_card` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.met_not_borel_of_card` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+
+No `sorryAx` and no custom axioms in the closure of any declaration above —
+only the three standard Lean/Mathlib axioms. `grep -rn sorry
+lean/IshikiConj51/` turns up only the word inside status comments.
+
+With `met_not_borel_of_card` the repository states the preprint's Theorem 3.3
+and its abstract's `Met(Z)` claim in the universal form: for every `D` with
+`#D = ℵ₁`, `Met(D)` is not Borel in `CPM(D)`. The hypothesis is satisfiable
+(`exists_carrier_aleph_one`), so the statement is not vacuous.
