@@ -301,7 +301,7 @@ the preprint; it is the two-line §1 argument.
 `Met(Z)` itself in place of the component `𝔠` (using `E(Met(Z))` closed and
 the `Met(Z)` version of 3.3 noted in §2.6), so the minimal verified chain for
 3.5 does **not** need Theorem 3.4. Theorem 3.4 stands as a finer independent
-result. This materially shrinks the #57 Lean package (§7).
+result, and is not a prerequisite of the #57 Lean package (§7).
 
 ### 2.9 Corollary 3.6 (`cor:metric-space-complete-separability`) — PASS + EXTERNAL
 
@@ -779,20 +779,21 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    `exists_aleph1_nonBorel`).
 2. **`bmet_not_borel`** (Theorem 3.3, bounded-ambient form) — for `S` as in
    (1): `¬ MeasurableSet (BMet (ExtIndex S))` in `BddPMet (ExtIndex S)`.
-   Proof is nearly free from Layer 1: `phiFull` is continuous
-   (`lipschitzWith_phiFull`), hence Borel-measurable; if `BMet` were
-   measurable, `preimage_BMet_phiFull` would make `{t : UnitParam \| ↑t ∉ S}`
-   measurable, contradicting (1). This *pullback route* replaces the paper's
-   relative-closure argument and needs no new topology. *Delivered by #56*
+   Layer 1 supplies both inputs: `phiFull` is continuous
+   (`lipschitzWith_phiFull`), hence Borel-measurable, and
+   `image_preimage_BMet_phiFull` gives `Subtype.val '' Φ_full⁻¹(BMet) =
+   Icc∖S`. What remains is that measurability of `BMet` would then make
+   `Icc∖S`, hence `S`, measurable, contradicting (1). This *pullback route*
+   replaces the paper's relative-closure argument and needs no new topology. *Delivered by #56*
    (`Ext/Borel.lean`, `bmet_not_borel`).
-3. **Ambient faithfulness layer** — a `CPM D` type (unbounded continuous —
-   i.e. arbitrary, `D` discrete — pseudometrics with `EMetricSpace` sup
-   distance, mirroring `Conj51/MetD.lean`), plus the **bridge lemma**
-   identifying the `BddPMet D` metric topology with the subspace topology
-   induced from `CPM D` (the real-valued `supDist` and the `ENNReal`-valued
-   sup distance agree on bounded pairs; hence the Borel σ-algebra of
-   `BddPMet D` is the trace σ-algebra), the subspace-trace lemma
-   ("`MeasurableSet` in the larger ambient ⇒ `MeasurableSet` of the
+3. **Transfer to the `CPM D` ambient** — a `CPM D` type (unbounded
+   continuous — i.e. arbitrary, `D` discrete — pseudometrics with
+   `EMetricSpace` sup distance, mirroring `Conj51/MetD.lean`), plus the
+   **bridge lemma** identifying the `BddPMet D` metric topology with the
+   subspace topology induced from `CPM D` (the real-valued `supDist` and the
+   `ENNReal`-valued sup distance agree on bounded pairs; hence the Borel
+   σ-algebra of `BddPMet D` is the trace σ-algebra), the subspace-trace
+   lemma ("`MeasurableSet` in the larger ambient ⇒ `MeasurableSet` of the
    intersection in the subspace"), and the two corollaries: `BMet(D)`
    non-Borel in `CPM(D)`, and the `Met(D)` version (§2.6) via
    `phiFull⁻¹(Met D) = Icc∖S` in the `CPM` ambient. With this layer, the
@@ -803,9 +804,9 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    discrete `D` with `#D = ℵ₁`": `BddPMet`- and `CPM`-level relabelling
    isometries induced by a bijection `D ≃ E`, preserving `BMet`/`Met`
    (mirror of `relabelIsometry` in `Conj51/Relabel.lean`, which covers
-   `MetD` only — §1). Cheap; without it the #56 theorems are stated for the
-   concrete `ExtIndex S` carrier, which is acceptable for the gate but not
-   for the literal preprint statement. *Delivered by #63*
+   `MetD` only — §1). Adds no new mathematics; without it the #56 theorems
+   are stated for the concrete `ExtIndex S` carrier, which is acceptable for
+   the gate but not for the literal preprint statement. *Delivered by #63*
    (`Ext/Relabel.lean`): `bmet_not_borel_cpm_of_card` is Theorem 3.3 as
    stated in the body, `met_not_borel_of_card` the abstract/introduction
    `Met(Z)` claim (§2.6), and `bmet_not_borel_of_card` item 2's

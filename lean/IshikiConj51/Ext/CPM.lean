@@ -1,8 +1,8 @@
 -- Ext.CPM
 --
--- Issue #56, item 3: the ambient-faithfulness layer for the Ishiki
--- extension. `CPM D` is the unbounded pseudometric ambient corresponding to
--- the preprint's continuous-pseudometric space on a discrete carrier.
+-- Issue #56, item 3: transfer to the `CPM D` ambient. `CPM D` is the
+-- unbounded pseudometric ambient corresponding to the preprint's
+-- continuous-pseudometric space on a discrete carrier.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §7 item 3.
 -- Since the carrier is discrete, continuity is vacuous; `CPM` records the
