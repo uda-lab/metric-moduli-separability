@@ -878,18 +878,22 @@ Delivered statements (all in `Ext/GeneralSeparability.lean`):
 
 * `IsIsometricExtensor.not_measurableSet_CPM_MetOn` — the core content of
   Theorem 3.5: an isometric extensor out of the coded `ℵ₁`-sized discrete
-  carrier forbids `MeasurableSet (CPM.MetOn X)`. Conditional on E1 by design
-  (E1 is the `IsIsometricExtensor` hypothesis, never an axiom), matching the
-  EXTERNAL verdict of §2.8.
-* `separable_of_measurableSet_CPM_MetOn_of_extensors` — Theorem 3.5 in its
-  separability form, with E1 hypothesised as "*every* closed discrete copy of
-  the coded carrier inside `X` admits an isometric extensor". That is how §2.8
-  uses E1: the closed discrete subspace is produced by the separated-set
-  argument only *after* nonseparability is assumed, so the extensor cannot be
-  fixed in advance. This is the variant in which
+  carrier forbids `MeasurableSet (CPM.MetOn X)`. Conditional on the
+  `IsIsometricExtensor` bundle, which is a *transported* form of E1 and not E1
+  itself (see "Conditionality" below); the bundle is a hypothesis, never an
+  axiom, so nothing here strengthens the EXTERNAL verdict of §2.8.
+* `separable_of_measurableSet_CPM_MetOn_of_extensors` — the conclusion of
+  Theorem 3.5 in its separability form, with the extensor input hypothesised as
+  "*every* closed discrete copy of the coded carrier inside `X` admits an
+  `IsIsometricExtensor` bundle". Quantifying rather than fixing the extensor is
+  what §2.8's argument needs: the closed discrete subspace is produced by the
+  separated-set argument only *after* nonseparability is assumed, so the
+  extensor cannot be fixed in advance. This is the variant in which
   `exists_aleph1_closed_discrete_separated` is actually consumed, and no
-  CPM-level relabelling (§7 item 4) is needed — the bijection between the
-  coded carrier and the separated set is absorbed into the embedding.
+  CPM-level relabelling (§7 item 4) is needed *inside the proof* — the
+  bijection between the coded carrier and the separated set is absorbed into
+  the embedding. Relabelling is still what stands between the hypothesis and
+  E1 itself, below.
 * `separable_of_measurableSet_CPM_MetOn` — the literal statement of Issue #66,
   recorded as a corollary and flagged as such: its hypotheses are jointly
   inconsistent. `IsIsometricExtensor.not_separableSpace` proves that a fixed
