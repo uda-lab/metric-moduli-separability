@@ -840,6 +840,87 @@ stated:
   `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace`-adjacent API —
   check for the Gδ direction, else it is a known small gap).
 
+### #66 — the Route M capstone (delivered)
+
+Three prerequisites raised on review of #57 and #63 were resolved first.
+
+* **Continuity-aware ambient.** `CPM X` (`Ext/CPM.lean`) is the space of *all*
+  finite-valued pseudometrics on a bare carrier — the preprint's `CPM(X)` only
+  when `X` is discrete, which is the case it was written for. §1 fixes the
+  preprint's ambient as the *continuous* pseudometrics, and trace monotonicity
+  runs only from the larger ambient to the smaller, so "Borel in `CPM X`" is a
+  strictly stronger hypothesis than Theorem 3.5's and may not be substituted
+  for it. `Ext/GeneralSeparability.lean` therefore introduces
+  `CPMOn X = {d : CPM X // Continuous (Function.uncurry d.1)}` carrying the
+  subtype extended-metric structure — literally the restriction of `𝒟_X`,
+  since `Subtype.edist_eq` is `rfl` — and re-points `CPM.MetOn X` to
+  `Set (CPMOn X)` and the extensor's codomain to `CPMOn X`. The extensor's
+  **domain** stays the bare `CPM A`: E1 is applied to a closed *discrete* `A`,
+  where the preprint's `CPM(A)` is the set of all pseudometrics on `A`. As a
+  consequence `met_not_borel` is consumed verbatim and no discrete-carrier
+  transfer isometry is needed anywhere in the proof. The identification itself
+  is nevertheless recorded, as the checked justification of the design:
+  `CPMOn.equivCPM (D) [DiscreteTopology D] : CPMOn D ≃ᵢ CPM D` together with
+  `CPMOn.preimage_equivCPM_met`, identifying the two metric loci. It is an
+  isometric equivalence, not a definitional identity.
+* **`CompleteSpace (CPM D)`** (`Ext/CPM.lean`, `CPM.instCompleteSpace`) — the
+  §2.8 "uniform limits of pseudometrics" step, proved directly from
+  `EMetric.complete_of_cauchySeq_tendsto`: a Cauchy sequence for the supremum
+  distance is pointwise Cauchy, the pointwise limit is again a pseudometric,
+  and the Cauchy modulus survives passage to the limit in the second index.
+* **`isClosed_range_of_isometry_complete`** generalised from `MetricSpace` to
+  `EMetricSpace` hypotheses (`Ext/GeneralSpace.lean`); the proof term is
+  unchanged, because Mathlib's `Isometry.isClosedEmbedding` is already stated
+  at the extended-metric level. `CPM`'s supremum distance is genuinely
+  `[0,∞]`-valued (§1), so the `MetricSpace` form could not be applied to it.
+
+Delivered statements (all in `Ext/GeneralSeparability.lean`):
+
+* `IsIsometricExtensor.not_measurableSet_CPM_MetOn` — the core content of
+  Theorem 3.5: an isometric extensor out of the coded `ℵ₁`-sized discrete
+  carrier forbids `MeasurableSet (CPM.MetOn X)`. Conditional on the
+  `IsIsometricExtensor` bundle, which is a *transported* form of E1 and not E1
+  itself (see "Conditionality" below); the bundle is a hypothesis, never an
+  axiom, so nothing here strengthens the EXTERNAL verdict of §2.8.
+* `separable_of_measurableSet_CPM_MetOn_of_extensors` — the conclusion of
+  Theorem 3.5 in its separability form, with the extensor input hypothesised as
+  "*every* closed discrete copy of the coded carrier inside `X` admits an
+  `IsIsometricExtensor` bundle". Quantifying rather than fixing the extensor is
+  what §2.8's argument needs: the closed discrete subspace is produced by the
+  separated-set argument only *after* nonseparability is assumed, so the
+  extensor cannot be fixed in advance. This is the variant in which
+  `exists_aleph1_closed_discrete_separated` is actually consumed, and no
+  CPM-level relabelling (§7 item 4) is needed *inside the proof* — the
+  bijection between the coded carrier and the separated set is absorbed into
+  the embedding. Relabelling is still what stands between the hypothesis and
+  E1 itself, below.
+* `separable_of_measurableSet_CPM_MetOn` — the literal statement of Issue #66,
+  recorded as a corollary and flagged as such: its hypotheses are jointly
+  inconsistent. `IsIsometricExtensor.not_separableSpace` proves that a fixed
+  extensor bundle already refutes separability with no Borel hypothesis at
+  all, so the corollary's proof runs through `False.elim`. It is not the
+  result; the two statements above are.
+
+**Conditionality, stated exactly.** Both theorems are conditional on the Lean
+`IsIsometricExtensor` bundle, which is *not* E1 verbatim. E1 quantifies over an
+arbitrary closed subset `A ⊆ X` and supplies `Ẽ` on the *continuous*
+pseudometrics of `A`; the bundle fixes an abstract carrier plus a closed
+embedding `ι` and takes the extensor already transported along `ι`, with a bare
+`CPM A` domain. For closed *discrete* `A` the two agree, and the
+continuity half of that bridge is proved (`CPMOn.equivCPM`,
+`CPMOn.preimage_equivCPM_met`); the relabelling half — moving the domain from
+`↥A` to the abstract carrier along `ι` — is the CPMOn-level instance of item 4
+above and is **not** formalised. E1 therefore implies the Lean hypothesis, so
+the Lean theorems are at least as strong as the E1-conditional statement, but
+Lean has not checked that implication. "Lean discharges Theorem 3.5 modulo E1"
+would overstate what is proved; "modulo the bundle" is accurate.
+
+Not delivered here, and still open from this section: the E1 bridge just
+described (CPMOn-level relabelling, a generic extensor bundle over closed
+subsets, and the derivation), Corollary 3.6 (completely metrizable ⇒ Borel, via
+Alexandrov–Lavrentiev, E4d), and the `BMet`/`Comp` variants of the transfer
+needed for §2.10 and §2.12.
+
 ### Non-Archimedean track (3.10–3.17)
 
 Fully audited above (§2.13–2.15) but **follow-up scope**, not part of
