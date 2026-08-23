@@ -291,7 +291,9 @@ theorem preimage_CPM_Met_phiFull {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) 
     (t : ℝ) ∉ S
   simpa [IsCompatible] using dExt_isCompatible_iff S hS t
 
-/-- The literal unbounded `Met(D)` locus is non-Borel in `CPM(D)`. -/
+/-- The literal unbounded `Met(ExtIndex S)` locus is non-Borel in
+`CPM(ExtIndex S)`, for the coded carrier of the parameter set `S`. The
+arbitrary-carrier form is `met_not_borel_of_card` (`Ext/Relabel.lean`). -/
 theorem met_not_borel {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1)
     (hSnonmeas : ¬ MeasurableSet S) :
     ¬ MeasurableSet (CPM.Met (ExtIndex S)) := by

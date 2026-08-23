@@ -10,7 +10,7 @@
 ## Project Overview
 
 - Active goal: Lean-assisted verification of Ishiki–Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618. Mathematical SoT for this track: `notes/borel-preprint-audit.md` (the #55 statement gate); do not accept top-level theorem statements until they are checked against it and the public preprint.
-- Active work queue: #72 bridges the general-space capstone's extensor hypothesis to the published E1 theorem; #58 handles repo metadata/rename. #55 theorem map, #56 discrete Borel core, #57/#66 general-space transfer, and #48/PR #49 terminology note are complete (`STATUS.md`).
+- Active work queue: #72 bridges the general-space capstone's extensor hypothesis to the published E1 theorem, and closes #57 when it lands; #58 handles repo metadata/rename. #55 theorem map, #56 discrete Borel core, #66 general-space capstone (bundle-conditional), and #48/PR #49 terminology note are complete (`STATUS.md`).
 - The original Conjecture 5.1 proof is an archival verified core: `report/report-ja.md` + `lean/IshikiConj51/Conj51/`. Stable IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` belong to that archival track.
 - The old analytic/coanalytic track (#46/#47, PR #50) is superseded. Do not resurrect its ZFC theorem package. Merged PR #52 (`IshikiExt`) is reusable only for the pointclass-free coding statements it actually proves.
 
