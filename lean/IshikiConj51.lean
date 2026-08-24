@@ -13,3 +13,8 @@ import IshikiConj51.Conj51.MainTheorem
 -- Ishiki-extension package (Issue #47).  Layer 1: bounded star-metric coding.
 import IshikiConj51.Ext.BddPMet
 import IshikiConj51.Ext.BoundedCoding
+import IshikiConj51.Ext.Borel
+import IshikiConj51.Ext.CPM
+import IshikiConj51.Ext.Relabel
+import IshikiConj51.Ext.GeneralSpace
+import IshikiConj51.Ext.GeneralSeparability

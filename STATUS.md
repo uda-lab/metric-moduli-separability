@@ -1,220 +1,190 @@
 # Project Status
 
-**Updated:** 2026-08-12
+**Updated:** 2026-08-23
 
 ## Overall
 
+The active project is the Lean-assisted verification of Y. Ishiki and T. Uda,
+*Borelness of Moduli Spaces of Metrics Implies Separability*, arXiv:2608.19618
+v1 (20 Aug 2026).
+
 | Item | Status |
 |------|--------|
-| Conjecture statement verified (arXiv:2407.03030) | ✅ done |
-| LEM-A-EXISTS audited | ✅ done |
-| Gδ / complete-metrizability implication audited | ✅ done |
-| Star-metric construction written | ✅ done |
-| Closed-embedding argument audited | ✅ done |
-| Japanese report complete | ✅ done |
-| Met(D) type defined in Lean | ✅ done |
-| Lean formalisation complete | ✅ done (sorry-free, 2026-08-09) |
-| English paper drafted | ✅ done (Issue #11, 2026-08-09) |
-| Independent end-to-end review | ✅ done (Gate B passed, Issue #10, 2026-08-09) |
-| Proof-candidate label | ✅ lifted (owner decision, PR #29 comment, 2026-08-09) |
-| E9 cross-artifact consistency (paper ↔ report ↔ Lean) | ✅ done (Issue #26, 2026-08-09; recorded in `notes/proof-audit.md`) |
-| E10 submission readiness audit | ✅ **go** (Issue #27, 2026-08-09; see `notes/proof-audit.md`) |
-| arXiv v1 manuscript freeze (Issue #36) | ✅ frozen (owner-approved PR #39, merge `36635b9`, 2026-08-10); revised and refrozen via owner rework, Issue #42 (2026-08-10) |
-| arXiv v1 submission prep (Issue #38) | 🔄 metadata/checklist prepared; owner actions remain — see `notes/arxiv-submission.md` |
-| arXiv source build/upload workflow (Issue #41) | ✅ simplified (project-local PDFLaTeX config; ordinary source upload) |
-| Provisional journal target | *Topology and its Applications* (alternative: *Fundamenta Mathematicae*) — recorded per Issue #36 §6; no journal-specific formatting before arXiv v1 |
+| Theorem-by-theorem audit of arXiv:2608.19618 (#55) | ✅ complete; merged in PR #60 at `b8ef88a` |
+| Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
+| Discrete Borel obstruction, item 4 — relabelling (#63) | ✅ complete |
+| General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
+| General-space transfer, main theorem (#66) | ✅ bundle-conditional theorem complete; E1 bridge (#72) open |
+| Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
+| Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
+| E1 bridge: bundle → published extensor theorem (#72) | 🔄 open |
+| `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
-## The proof
+## Active Borel track
 
-The argument for THM-CONJ51 proceeds through six steps:
+`notes/borel-preprint-audit.md` is the mathematical source of truth and the
+statement gate for #56, #57 and #66. It audits every theorem in the preprint,
+records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
+formalisation. The Lean work follows the audit's minimal route (Route M) for
+the Borel obstruction and separability result.
 
-1. **LEM-A-EXISTS** — ZFC existence of A ⊆ [0,1] with |A| = ℵ₁ and A not Fσ.
-2. A^∁ = [0,1] \ A is not Gδ in [0,1] (Fσ/Gδ complement duality), hence not
-   completely metrizable (Alexandrov–Lavrentiev forward direction, applied
-   to the ambient space [0,1] only).
-3. A parameterised star-type family of compatible metrics on D
-   (**LEM-STAR-METRIC**) — explicitly: a pair {p,q} at distance
-   1+t, plus one set C_α per element of A with distances
-   d_t(y_α, x_{α,n}) = s_n(α,t) = min(1, |t−a_α| + 1/(n+1)), n ∈ ℕ.
-4. A bi-Lipschitz embedding A^∁ → Met(D): |t−s| ≤ ρ(d_t,d_s) ≤ 2|t−s|.
-5. The image is closed in Met(D) (**LEM-CLOSED-IMAGE**) — the pair {p,q}
-   recovers the limit parameter t, and d_t ceasing to be compatible for
-   t ∈ A rules out the boundary case.
-6. A closed subspace of a completely metrizable space is completely
-   metrizable — proved directly (no separability needed, since Met(D) is
-   not separable) — contradiction (**THM-CONJ51**).
+Issue #56 (discrete core), items 1–3 are done:
 
-**Note on Met(D):** Met(D) denotes metrics on D *compatible with the discrete
-topology*, not all metrics on the underlying set. Met(D) is not separable;
-see `notes/literature.md` and `notes/proof-audit.md` (Issue #4) for why this
-matters for step 6.
+- existence of an ℵ₁-sized non-Borel subset of `[0,1]` (`exists_aleph1_nonBorel`);
+- non-Borelness of `BMet` in the bounded pseudometric ambient, using the
+  star-metric coding (`bmet_not_borel`);
+- the bridge from the bounded ambient to the preprint's unbounded `CPM`
+  ambient, and the literal, unbounded `Met(D)` non-Borelness statement
+  (`bmet_not_borel_cpm`, `met_not_borel`) — this matches the content of
+  Theorem 3.3 and the abstract's `Met(Z)` claim on the concrete carrier the
+  construction produces.
 
-All six steps are now written out in full in `report/report-ja.md`
-(2026-08-09); no mathematically unwritten step remains. Steps 1–2 and 6
-(LEM-A-EXISTS; the Gδ / complete-metrizability implication; closed-subspace
-inheritance) additionally completed an internal audit (Issues #3, #4).
+Item 4 (#63) relabels those results onto an arbitrary discrete carrier of
+cardinality ℵ₁, which is what the preprint's theorems quantify over. The
+repository therefore now states, for *every* `D` with `|D| = ℵ₁` and with no
+residual hypothesis on a parameter set, both the body's Theorem 3.3
+(`bmet_not_borel_cpm_of_card`: `BMet(D)` is not Borel in `CPM(D)`) and the
+abstract's and introduction's `Met(Z)` claim (`met_not_borel_of_card`). The
+split follows audit §2.6, which records that the `Met` phrasing appears only
+in the abstract and introduction. The hypothesis `|D| = ℵ₁` is shown
+satisfiable (`exists_carrier_aleph_one`), so neither statement is vacuous.
 
-The Lean formalisation of all six steps is complete and sorry-free
-(Issues #6–#9, #23; 2026-08-09).
+Issue #57 (Theorem 3.5, the transfer from the discrete obstruction to a
+general metrizable space) delivered the supporting lemmas: the
+nonseparable-space closed-discrete-subset lemma, the closed-isometric-image
+lemma, the topology-aware `CPM.MetOn` locus, and the `IsIsometricExtensor`
+hypothesis bundle for the external extensor theorem (E1), including the
+`Met`-image identity derived from it rather than assumed.
 
-**Gates A, B and C are all passed.** In the submission-audit naming
-(Issue #27): Gate A — the report is a self-contained natural-language proof —
-and Gate B — independent end-to-end mathematical review — were both decided
-**PASS** by the Issue #10 review (2026-08-09; verdict table in
-`notes/proof-audit.md`, Issue #10 entry). Gate C — Lean sorry-free with an
-explained `#print axioms` audit — is **PASS** via Issues #6–#9/#23 (zero
-`sorry`, every declaration depending only on `[propext, Classical.choice,
-Quot.sound]`; per-claim table in `notes/proof-audit.md`), independently
-re-run by the Issue #10 reviewer on a from-scratch rebuild. An independent
-end-to-end review, carried out by an agent uninvolved in Issues #2–#9 working
-only from the arXiv source and the repository's primary documents, found **no
-mathematical gap**: all six steps were reconstructed from scratch, nine
-adversarial attacks (ambient ℝ vs [0,1], non-separability, extended-valued
-sup metric, uniform discreteness, the boundary case t ∈ A, cardinal arithmetic
-without CH, consistency with Koshino's separable theorem, and two Lean-vs-report
-mismatches) all failed to break the argument, and the four claim IDs were
-confirmed to be formalised faithfully rather than by a weakened proxy. Evidence
-is recorded in `notes/proof-audit.md` (Issue #10 entry).
+Issue #66 closes that transfer. Three prerequisites found on review were
+resolved first: a continuity-restricted ambient `CPMOn X` (the preprint's
+`CPM(X)` — `CPM.MetOn` previously reused #56's bare-discrete `CPM`, which has
+no continuity constraint and so encodes a strictly stronger, non-published
+hypothesis for non-discrete `X`); an `EMetricSpace` generalisation of the
+closed-isometric-image lemma, needed because `CPM`'s sup distance is
+extended-valued; and a `CompleteSpace (CPM D)` instance, the audit's §2.8
+"uniform limits of pseudometrics" step. The delivered theorem is
+`IsIsometricExtensor.not_measurableSet_CPM_MetOn`: an isometric extensor out
+of the coded ℵ₁-sized discrete carrier forbids Borelness of `Met(X)` in
+`CPM(X)`. Its separability form,
+`separable_of_measurableSet_CPM_MetOn_of_extensors`, quantifies the extensor
+over closed discrete copies of the carrier, which is how the audit's §2.8
+uses E1 and the only form in which the ℵ₁-separated-set lemma is consumed.
+Both are conditional on the `IsIsometricExtensor` hypothesis bundle, which
+enters as an explicit hypothesis and never as an axiom. That bundle is E1
+transported onto a fixed carrier; the transport itself (CPMOn-level
+relabelling, audit §7 item 4) is not yet formalised, so the checked claim is
+"Theorem 3.5 modulo the bundle", not "modulo E1". The literal statement of the issue text is recorded
+as a corollary and marked as having jointly inconsistent hypotheses —
+`IsIsometricExtensor.not_separableSpace` proves that a fixed extensor already
+refutes separability — so it is not presented as the result.
 
-**The proof-candidate label has been lifted by owner decision** (comment by
-t-uda on PR #29, 2026-08-09), on the basis of the Gate A–C verdicts above.
-The result may be stated in ordinary declarative theorem language. Wording
-that implies *external* peer validation is still to be avoided: verification
-to date consists of the project's internal independent audit (Issue #10) and
-the machine-checked Lean formalisation, not review by an outside party or a
-journal.
-
-## Open obligations
-
-None remain (E10 submission readiness audit, Issue #27, 2026-08-09):
-the obligations table in `notes/proof-audit.md` is fully resolved, the Lean
-sorry count is 0, and the superseded PR #30 was closed. The E10 entry in
-`notes/proof-audit.md` records the go/no-go judgment (**go**, with
-owner-side submission-time notes: fill `\author{}`/date and keep the
-no-external-review framing; the load-bearing Kechris citations are verified
-at full-statement level and cited number-precisely).
+The non-Archimedean analogues and the finer component and complete-metric
+statements are recorded in the audit for later work. They are not part of the
+current #56/#57/#66 delivery.
 
 ## Lean
 
-Lean project initialised (Mathlib v4.32.2, `lean/lakefile.toml`).
-`lem_A_exists` (LEM-A-EXISTS) is now **sorry-free** (Issue #8, 2026-08-09;
-`#print axioms` shows only `[propext, Classical.choice, Quot.sound]`). `Met(D)`
-is now constructed as `MetD` (`IshikiConj51/Conj51/MetD.lean`; relocated there
-from `MainTheorem.lean` in Issue #7 so the claim modules can import it), with a
-sorry-free `EMetricSpace` instance matching the source's (extended) supremum
-distance, unblocking Lean statements for the remaining claim IDs. `THM-CONJ51`
-itself is now both stated and proved (`thm_conj51`, sorry-free as of Issue #9).
-LEM-STAR-METRIC is now stated and **sorry-free** (`lem_star_metric`,
-`IshikiConj51/Conj51/MetricConstruction.lean`, Issue #7, 2026-08-09);
-LEM-CLOSED-IMAGE is now stated and **sorry-free** (`lem_closed_image`,
-`IshikiConj51/Conj51/ClosedEmbedding.lean`, Issue #9, 2026-08-09), together
-with a supporting new module `IshikiConj51/Conj51/Relabel.lean` (`Met(D)`
-transports along any bijection of the index set, so the concrete
-`StarIndex A` construction reaches an arbitrary `D` of the same cardinality).
+Borel-track theorem development, `lean/IshikiConj51/Ext/`, `IshikiExt`
+namespace:
 
-**Every claim ID now has a Lean statement and a sorry-free proof; the
-repository contains zero `sorry` and zero custom axioms.** The whole of report
-§4 is assembled and proved in `thm_conj51_of_lavrentiev` (Issue #9), which
-differs from `thm_conj51` only by carrying the Alexandrov–Lavrentiev direction
-as an explicit hypothesis about subsets of ℝ. That hypothesis is discharged by
-`isGδ_of_isCompletelyMetrizableSpace` (Issue #23,
-`IshikiConj51/Conj51/GDeltaComplete.lean`, merged in PR #25) instantiated at
-the ambient space `X := ℝ`, making `thm_conj51` a one-line application.
+- `BddPMet.lean` (PR #52) — the bounded pseudometric ambient `BddPMet D`.
+- `BoundedCoding.lean` (PR #52) — the bounded star-metric family, its
+  metricity, compatibility criterion, Lipschitz estimates, and the exact
+  pullback identity `Φ⁻¹(BMet) = [0,1] \ S`.
+- `Borel.lean` (PR #64, #56 items 1–2) — `exists_aleph1_nonBorel` (ZFC, via
+  the Borel Isomorphism Theorem, no Bernstein sets or perfect-set-theorem
+  argument needed) and `bmet_not_borel` (non-Borelness of `BMet` in the
+  bounded ambient).
+- `CPM.lean` (PR #64, #56 item 3; extended by #66) — the unbounded
+  pseudometric ambient `CPM D`, the bridge lemma identifying its extended sup
+  distance with `BddPMet`'s real-valued one on bounded pairs,
+  `bmet_not_borel_cpm`, `met_not_borel` (the literal, unbounded `Met(D)`
+  non-Borelness statement), and `CPM.instCompleteSpace` (audit §2.8).
+- `Relabel.lean` (#63, #56 item 4) — relabelling of both ambients along a
+  bijection of the carrier (`BddPMet.relabelIsometry`, `CPM.relabelIsometry`)
+  with the `BMet`/`Met` preimage identities, and the arbitrary-carrier
+  theorems `bmet_not_borel_of_card`, `bmet_not_borel_cpm_of_card`,
+  `met_not_borel_of_card`.
+- `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
+  lemmas; #66 package) — the nonseparable-space closed-discrete-subset
+  lemma, the closed-isometric-image lemma (now at `EMetricSpace` level), the
+  continuous-pseudometric ambient `CPMOn X`, `CPM.MetOn` inside it, the
+  `IsIsometricExtensor` hypothesis bundle with its derived `Met`-image
+  identity, and the transfer theorems
+  `IsIsometricExtensor.not_measurableSet_CPM_MetOn` and
+  `separable_of_measurableSet_CPM_MetOn_of_extensors`.
 
-`#print axioms thm_conj51` reports `[propext, Classical.choice, Quot.sound]` —
-the three standard Lean axioms only, with no `sorryAx`. The full per-claim
-axiom table is in `notes/proof-audit.md`.
+Not yet done on this track: Corollary 3.6 (completely metrizable ⇒ Borel via
+Alexandrov–Lavrentiev), the `BMet`/`Comp` variants of the transfer that
+audit §2.10 and §2.12 need, and the whole chain 3.10–3.17.
 
-The Lean chain is therefore complete, and Gate B (Issue #10) has re-run
-`#print axioms` independently on a from-scratch rebuild of the merged `main`
-and confirmed the three standard axioms with no `sorryAx`, as well as checking
-that the Lean statements render the source's notions faithfully (no bounded /
-uniformly discrete proxy; `#D = ℵ₁` exact; the `lavrentiev` hypothesis of
-`thm_conj51_of_lavrentiev` is discharged non-circularly).
+Every declaration above is sorry-free; `#print axioms` shows only the
+standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
+in `notes/lean-axioms-borel.md`. External mathematical results (the E1
+isometric extensor) enter Lean only as an explicit hypothesis bundle
+(`IsIsometricExtensor`), never as a custom axiom.
 
-A Mathlib v4.32.2 inventory for Issues #7–#9 is recorded in
-`notes/proof-audit.md`'s Mathlib library gaps table (Issue #19): the
-Alexandrov–Lavrentiev direction needed for the closed-subspace obstruction
-(a completely metrizable subspace is Gδ in its ambient space) is **confirmed
-absent** from Mathlib (re-confirmed in Issue #9) and must be proved from
-scratch — now tracked as its own Issue #23; the
-Cantor–Bendixson theorem, perfect-set cardinality-continuum fact, `ℵ₁ ≤ 𝔠`,
-and closed-subspace-of-complete-space are all confirmed **available** with
-exact declaration names recorded.
+## Archival verified core: Ishiki Conjecture 5.1
 
-## English paper
+The repository retains a completed formalisation of Conjecture 5.1 from
+Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030. For a discrete
+space `D` of cardinality ℵ₁, `Met(D)` with the supremum-metric topology is
+not completely metrizable.
 
-`paper/main.tex` (Issue #11, 2026-08-09) now carries the full proof of all
-four claim IDs, transcribed from the audited `report/report-ja.md` with no
-altered hypotheses or conclusions. This fixes the three documentation
-defects recorded as finding F1 of the Issue #10 audit
-(`notes/proof-audit.md`): the Polish-only "Alexandrov's theorem" misuse is
-replaced by the report's separable/non-separable split
-(Theorems 2.1–2.2); the LEM-STAR-METRIC statement now matches the report's
-claim instead of the placeholder "suitable bi-Lipschitz properties"
-wording; and the stale "all theorems are stubs (`sorry`)" appendix claim
-and `A \subset` notation are both corrected. `references.bib` gained
-entries for the four textbooks the transcribed proofs actually cite
-(Kechris, Engelking, Willard, Kelley) plus a short, source-verified
-related-work paragraph (Koshino 2022; Ishiki arXiv:2402.04565). Koshino's
-motivating paper, unverifiable in 2026-08-09 searches, was found published
-(Anal. Geom. Metr. Spaces 12 (2024), art. 20240014; arXiv:2403.07421) and
-is cited directly as of Issue #36 (2026-08-10) — see `notes/literature.md`
-for the AM(X)-vs-Met(X) statement caveat. The paper compiles cleanly with `cd paper && latexmk main.tex`
-(after adding `lmodern`/`booktabs` to the preamble). Following the owner's
-2026-08-09 decision lifting the proof-candidate label (Issue #31), the paper
-states the theorem and its proof in ordinary declarative form, while avoiding
-wording that would imply external peer validation.
+The result is fully proved and sorry-free. Gates A–C passed, and the
+proof-candidate label was lifted on 2026-08-09. The archival record is:
 
-## Ishiki-extension track (joint work; #46–#48)
+- `report/report-ja.md` — the self-contained Japanese proof report;
+- `lean/IshikiConj51/Conj51/` — the Lean formalisation;
+- `notes/proof-audit.md` — the proof and formalisation audit.
 
-Active verification track for Yoshito Ishiki's joint-work draft
-"Analyticity or coanalyticity of moduli spaces of metrics implies
-separability" (received 2026-08-11). This track's source of truth is
-the audit record — currently the Issue #46 audit comments, moving into
-`notes/ishiki-extension-audit.md` once draft PR #50 merges — plus the
-Lean `IshikiExt` theorem statements; the frozen `report/report-ja.md`
-carries no extension claims.
+This core is frozen for the Borel track. The earlier manuscript and arXiv
+submission records under `paper/` and `notes/arxiv-submission.md` are archival
+history, not active work.
 
-| Item | Status |
-|------|--------|
-| Theorem-by-theorem audit (#46, PR #50) | 🔄 Props 2.1–2.2 / Lems 3.1–3.2 / Thm 3.3 first-pass done; Thm 3.4ff awaits the manuscript |
-| Independent re-audit of the audit note | ✅ done (2026-08-12, PR #50 comment); Lems 3.1–3.2 confirmed; Prop 2.1 verdicts corrected |
-| Lean Layer 1: bounded star-metric coding (#51, PR #52) | ✅ merged (`7e77f6b`, 2026-08-12); sorry-free, standard 3 axioms; includes the pullback identity and closed image |
-| Japanese terminology note (#48, PR #49) | 🔄 draft evolving; re-audit applied, Σ¹₁/Π¹₁ PSP distinction corrected |
+## Superseded analytic/coanalytic track
 
-Key mathematical state after the re-audit (details in the Issue #46
-comments and PR #50's `notes/ishiki-extension-audit.md`):
+Issues #46–#47 and PR #50 concern an earlier analytic/coanalytic draft and are
+closed. Two findings from that work remain relevant to the project boundary:
 
-- The Archimedean coding (draft Lems 3.1–3.2) is confirmed, and its
-  Layer 1 content is machine-checked in `lean/IshikiConj51/Ext/`
-  (namespace `IshikiExt`): metricity, boundedness, compatibility ⇔ t ∉ S,
-  the 2-Lipschitz full-parameter map with the bi-Lipschitz lower bound,
-  the exact pullback identity, and closedness of the image.
-- Draft Prop 2.1's CH branch is repaired (Bernstein set, Σ¹₁-PSP only);
-  the ¬CH branch as stated is refuted (S = the largest thin Π¹₁ set is a
-  counterexample under ω₁^L = ω₁ ∧ ¬CH) and now carries an explicit open
-  repair condition (★) that is an **authors' decision point**: assume it
-  explicitly, retreat to the ZFC-safe asymmetric statement ("BMet not
-  coanalytic"), or settle (★) set-theoretically.
-- The analytic/coanalytic ambient convention for nonseparable spaces
-  remains the blocking definition fix (Souslin-F is the recommended
-  candidate); Lean Layers 2–4 stay blocked on #46 accordingly.
+1. The claim that an ℵ₁-sized set of reals is both non-analytic and
+   non-coanalytic is not a ZFC theorem. In the ¬CH branch, the thin
+   Π¹₁ coanalytic countermodel supplies a set of the prescribed size.
+2. Classical analytic/coanalytic pointclasses are the wrong framework for the
+   nonseparable ambient metric spaces in question; their usual separability
+   restrictions make the intended ambient statement vacuous or ill-posed.
+
+The published preprint replaces that package with Borel statements, whose
+ambient Borel σ-algebra does not require a Polish ambient space. The old
+pointclass package is not a verification target. The pointclass-free metric
+coding from PR #52 remains reusable infrastructure.
 
 ## GitHub Issue work queue
 
-1. #2 Verify Conjecture 5.1 statement and bibliography
-2. #3 Audit LEM-A-EXISTS in ZFC
-3. #4 Audit the Gδ / complete-metrizability step
-4. #5 Complete the self-contained Japanese proof report
-5. #6 Define Met(D) in Lean and state THM-CONJ51 faithfully
-6. #7 Implement LEM-STAR-METRIC in Lean
-7. #8 Formalise cardinality and descriptive-set prerequisites in Lean
-8. #9 Formalise LEM-CLOSED-IMAGE and the final obstruction
-9. #10 Perform independent end-to-end mathematical review
-10. #11 Draft the English paper after mathematical audit passes
-11. #19 Record Mathlib inventory findings for Lean formalisation prep (Issues #7–#9)
-12. #23 Formalise the Alexandrov–Lavrentiev direction (completely metrizable subspace ⟹ Gδ)
-13. #26 E9: Cross-check paper ↔ report ↔ Lean claim consistency
-14. #31 Lift proof-candidate status per owner decision (Gates A–C passed)
-15. #27 E10: Submission readiness audit
+The original Conjecture 5.1 queue (#2–#31) is closed; its outcome and
+evidence are summarised in `notes/proof-audit.md` and the archival files.
+
+1. **#55** — theorem-by-theorem audit of arXiv:2608.19618: **closed**;
+   merged through **PR #60**.
+2. **#56** — formalise the discrete Borel obstruction: all four items
+   delivered; items 1–3 merged through **PR #64** at `8868eaa`, item 4
+   (relabelling) through **#63**.
+3. **#57** — formalise the general-space Borel/separability transfer:
+   supporting lemmas merged through **PR #67** at `a27d7f1`; the main
+   theorem was deferred to **#66**. #57's acceptance criterion is the exact
+   published theorem/interface, which the bundle-conditional form delivered
+   by #66 does not yet meet (see #72); **#57 stays open until #72 lands**.
+4. **#66** — the Route M package (continuity-aware ambient `CPMOn`,
+   `CompleteSpace (CPM D)`, the `EMetricSpace` closed-range generalisation,
+   and the two transfer theorems): **delivered, conditional on the
+   `IsIsometricExtensor` bundle** (not on E1 verbatim — see #72).
+5. **#48** — Japanese Borel/descriptive-set-theory study note: **closed**;
+   merged through **PR #49** at `2b8acf4`.
+6. **#58** — repository metadata cleanup and rename to
+   `metric-moduli-separability`: **open**. **PR #59** reset `README.md` and
+   `AGENTS.md` and is merged; the repository rename itself remains an owner
+   action.
+7. **#72** — bridge the transported `IsIsometricExtensor` bundle to the
+   published E1 theorem (audit §7 item 4's CPMOn-level relabelling
+   obligation): **open**.

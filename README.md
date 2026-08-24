@@ -1,59 +1,85 @@
-# ishiki-conjecture
+# Metric moduli / separability project
 
-Research repository for **Conjecture 5.1** from Ishiki,
-*An isometric extensor of metrics*, arXiv:2407.03030 (2024).
+Research repository for Lean-assisted verification of results on spaces of compatible metrics.
 
-## Statement under investigation
+## Current project
 
-> For a discrete space D of cardinality ℵ₁, the space Met(D) — the set of
-> metrics on D **compatible with the discrete topology**, equipped with the
-> supremum-metric topology — is **not** completely metrizable.
+The active external source is the joint preprint by Yoshito Ishiki and Tomoki Uda,
+**Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618 (2026).
 
-**Note on Met(D):** A metric $d$ on $D$ is *compatible with the discrete topology*
-if the metric topology induced by $d$ equals the discrete topology.
-For an infinite set $D$ this is a non-trivial condition: not every metric on the
-underlying set $D$ is compatible with the discrete topology.
+The repository now follows that public preprint after an earlier, stronger
+analytic/coanalytic draft was abandoned. The theorem-by-theorem audit and the Lean
+formalisation of the discrete Borel obstruction are complete; the general-space
+separability transfer is complete conditional on the transported
+`IsIsometricExtensor` bundle, with the bridge to the published extensor theorem
+open as #72 (`notes/borel-preprint-audit.md`, `STATUS.md`).
 
-The argument has passed the project's internal verification gates: an
-independent end-to-end mathematical audit (Issue #10) and a sorry-free Lean 4
-formalisation whose `#print axioms` shows only the three standard axioms.
-On this basis the owner lifted the **proof candidate** label on 2026-08-09
-(PR #29 comment).  The result has not yet been reviewed by any outside party
-or journal.  See `STATUS.md` for the current state and
-`notes/proof-audit.md` for the audit records.
+Open work:
+
+- **#72** — bridge the general-space theorem's extensor hypothesis to the published E1 theorem;
+- **#58** — repository metadata cleanup and proposed rename to `metric-moduli-separability`.
+
+The merged `IshikiExt` Layer 1 development (PR #52) remains reusable: it proves the
+bounded star-metric coding, Lipschitz estimates and the exact pullback identity for
+an arbitrary parameter set, without assuming any analytic/coanalytic pointclass.
+
+## Archival verified core: Ishiki Conjecture 5.1
+
+This repository originally proved and formalised Conjecture 5.1 from Ishiki,
+*An isometric extensor of metrics*, arXiv:2407.03030:
+
+> For a discrete space `D` of cardinality `ℵ₁`, `Met(D)` — the metrics compatible
+> with the discrete topology, with the supremum-metric topology — is not completely
+> metrizable.
+
+That result passed the project's independent mathematical audit and has a sorry-free
+Lean 4 formalisation. It is retained as an archival verified core rather than the
+active research target.
+
+Archival artifacts:
+
+- `report/report-ja.md` — self-contained Japanese proof report;
+- `lean/IshikiConj51/Conj51/` — Lean formalisation of the Conjecture 5.1 proof;
+- `notes/proof-audit.md` — historical proof and formalisation audit record;
+- `paper/` — the earlier single-author manuscript workspace.
+
+Do not rewrite those artifacts to match the newer joint preprint unless a dedicated
+issue explicitly requires a provenance-preserving change.
+
+## Superseded analytic/coanalytic track
+
+Issues #46–#47 and draft PR #50 record the August 2026 attempt to prove a stronger
+analytic/coanalytic theorem package. That track is closed and must not be treated as
+the active source of truth. In particular, the draft's recipe-based claim that a
+dense `ℵ₁`-sized set of reals is simultaneously non-analytic and non-coanalytic is
+not a ZFC theorem: in any ccc forcing extension of `L` keeping `ω₁^L = ω₁` (e.g.
+adding `ℵ₂` Cohen reals), the largest thin `Π¹₁` set `C₁` (Kechris 1975; Guaspari;
+Sacks) is a coanalytic dense set of cardinality `ℵ₁`, a legitimate output of the
+recipe — so no ZFC proof of the "not coanalytic" half can exist for that recipe. By
+Mansfield–Solovay, a ZFC-safe repair would need `S ⊄ L[a]` for every real `a`, which
+the recipe does not supply. Only the asymmetric "not analytic" half remains in ZFC,
+by Souslin's perfect set theorem: under ¬CH from `ℵ₁ < 𝔠` directly, and under CH by
+choosing `S` as a Bernstein set. See `notes/borel-preprint-audit.md` §5 for the full
+account. The published joint preprint replaces the whole package. Valid
+pointclass-free metric coding from that work remains from PR #52.
 
 ## Repository layout
 
 | Path | Role |
-|------|------|
-| `report/report-ja.md` | Self-contained Japanese proof report — **mathematical source of truth** |
-| `lean/` | Lean 4 / Mathlib formalisation |
-| `paper/main.tex` | Submission-ready English paper (draft after audit passes) |
-| `notes/literature.md` | Verified references |
-| `notes/proof-audit.md` | Open proof obligations and failed attempts |
-| `notes/terminology.md` | Notation and terminology reference |
-| `STATUS.md` | Concise current project state |
-
-## Stable claim IDs
-
-| ID | Description |
-|----|-------------|
-| `LEM-A-EXISTS` | ∃ A ⊆ [0,1] with \|A\| = ℵ₁ and A not Fσ |
-| `LEM-STAR-METRIC` | Parameterised star-type family of compatible metrics on D |
-| `LEM-CLOSED-IMAGE` | The bi-Lipschitz embedding Y → Met(D) has closed image |
-| `THM-CONJ51` | Met(D) is not completely metrizable (for \|D\| = ℵ₁) |
-
-The same IDs are used in the report, Lean source, and paper.
+|---|---|
+| `lean/IshikiConj51/Conj51/` | archival Lean proof of Conjecture 5.1 |
+| `lean/IshikiConj51/Ext/` | reusable coding infrastructure for the joint-work track |
+| `report/report-ja.md` | archival Japanese Conjecture 5.1 proof |
+| `notes/` | literature, audit and terminology records |
+| `STATUS.md` | project status |
+| `paper/` | archival earlier manuscript workspace |
 
 ## Workflow
 
-* GitHub Issues are the work queue.
-* Commits should correspond to one issue or one coherent mathematical change.
-* Do not alter a claim without checking the report statement **and** any Lean
-  theorem already depending on it.
-* Record failed proof attempts in `notes/proof-audit.md`.
-* Do not introduce custom axioms; use `sorry` only during exploration and track
-  every instance explicitly.
+GitHub Issues are the work queue. Mathematical statement changes should be gated by
+the corresponding audit issue and then implemented through a focused PR. Do not
+introduce custom axioms; accepted Lean verification should be sorry-free and include
+an explained `#print axioms` check.
 
 ## Lean build
 
@@ -62,41 +88,7 @@ cd lean
 lake build
 ```
 
-No CI is configured.  Local / manual validation is sufficient at this stage.
-
-## Paper build and arXiv upload
-
-The project-local `paper/latexmkrc` selects direct PDFLaTeX output regardless
-of the user's global `latexmk` configuration. Build the paper with:
-
-```sh
-cd paper
-latexmk main.tex
-```
-
-After a successful build, the arXiv sources may optionally be packaged from
-`paper/` with:
-
-```sh
-tar -czf arxiv-v1.tar.gz main.tex main.bbl
-```
-
-The PDF generated by arXiv after upload is the authoritative compatibility
-check.
-
-## Building PDF / TeX Report
-
-To compile `report/report-ja.md` into PDF or TeX using Pandoc and LuaLaTeX:
-
-```sh
-cd report
-
-# Compile to PDF
-pandoc report-ja.md -o report-ja.pdf --pdf-engine=lualatex -V documentclass=bxjsarticle -V classoption=lualatex,ja=standard
-
-# Generate TeX file
-pandoc report-ja.md -o report-ja.tex -s --pdf-engine=lualatex -V documentclass=bxjsarticle -V classoption=lualatex,ja=standard
-```
+No CI is configured; validation is local/manual.
 
 ## License
 

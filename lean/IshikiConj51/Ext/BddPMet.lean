@@ -5,10 +5,9 @@
 --
 --     ρ(d, e) = sup_{u,v} |d(u,v) − e(u,v)|.
 --
--- Mathematical source of truth for this track: the audited Ishiki-extension
--- draft, recorded in the Issue #46 audit comments and written up as
--- `notes/ishiki-extension-audit.md` §4–§5, which lands separately in PR #50
--- (branch `audit/ishiki-extension`).  `report/report-ja.md` is *not* the
+-- Mathematical source of truth for this track: `notes/borel-preprint-audit.md`
+-- §7 items 1–2 (Issue #56), which gates the Borel-preprint extension track.
+-- `report/report-ja.md` is *not* the
 -- source of truth here: it stays frozen as the Conjecture 5.1 archival
 -- report by the Issue #46 decision, and carries no extension claim.
 --
@@ -24,11 +23,10 @@
 -- claiming a continuity condition that is not stated.
 --
 -- Unlike `Conj51/MetD.lean` — where `Met(D)` consists of arbitrary, possibly
--- unbounded metrics and the supremum distance is therefore genuinely
--- `ℝ≥0∞`-valued — every element here is bounded, so `ρ` is an honest real
--- number and `BddPMet D` is a `MetricSpace`.  That is the whole point of the
--- bounded coding: it lets the parameter map be Lipschitz into a real metric
--- space.
+-- unbounded metrics and the supremum distance is therefore `ℝ≥0∞`-valued
+-- — every element here is bounded, so `ρ` is a real number and
+-- `BddPMet D` is a `MetricSpace`.  That is what the bounded coding is
+-- for: it lets the parameter map be Lipschitz into a real metric space.
 --
 -- `IsMetricOn` and `IsMetricOn.topology` are reused verbatim from
 -- `Conj51/MetD.lean` so that "compatible with the discrete topology" has one
