@@ -724,11 +724,13 @@ declaration; `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` remains
 the separate, strictly weaker archival-track result) and Theorem 3.3
 (`bmet_not_borel_cpm`, `met_not_borel`, §7 item 3), plus Theorem 3.5
 conditionally (`IsIsometricExtensor.not_measurableSet_CPM_MetOn`, §7 "#66").
-Still no existing Lean declaration for: Proposition 2.1's density clause,
-Proposition 2.2 (the `2^ω` analogue, needed only by the non-Archimedean
-track), Theorems 3.4/3.6–3.9 conclusions, components/amalgamation (3.4,
-3.8), extensor E2, or anything non-Archimedean (3.10–3.17) — none of these
-gate #56/#57/#66 (§7 item 5).
+Theorem 3.4 and the one-point amalgamation it rests on are now
+`Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"). Still no existing
+Lean declaration for: Proposition 2.1's density clause, Proposition 2.2 (the
+`2^ω` analogue, needed only by the non-Archimedean track), Theorems 3.6–3.9
+conclusions, the complete-metric branch of the amalgamation (3.8), extensor
+E2, or anything non-Archimedean (3.10–3.17) — none of these gate
+#56/#57/#66 (§7 item 5).
 
 Archival mapping (unchanged by this audit): `Conj51/` +
 `report/report-ja.md` formalise the companion arXiv:2608.11023
@@ -818,10 +820,10 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    antisymmetry from `le_supDist`/`supDist_le`. The same item at `CPMOn` level
    — relabelling the continuous-pseudometric ambient along a *homeomorphism*,
    which is what the E1 bridge needs — is *delivered by #72*, below.
-5. *Optional, not gating #57:* Theorem 3.4 (components; needs one-point
-   amalgamation + regular-cardinal ball argument) and Theorem 3.8 (with the
-   §2.11 repair baked in: complete base `d + 1`). Defer unless the owner
-   wants the finer statements formalised.
+5. *Not gating #57:* Theorem 3.4 (components; one-point amalgamation plus
+   the uncountable-ball argument) is *delivered by #84*, below. Theorem 3.8
+   (with the §2.11 repair baked in: complete base `d + 1`) remains open and
+   consumes #84's amalgamation layer unchanged.
 
 ### #57 — general-space transfer (Theorem 3.5)
 
@@ -1035,6 +1037,63 @@ Delivered statements:
   statement rather than settled there.
 
 E1 and E3 both stay external and are discharged nowhere in the repository.
+
+### #84 — Theorem 3.4 (delivered)
+
+Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
+`Ext/Component.lean`, which is the theorem.
+
+* **One-point amalgamation.** `amalgam E z hz d e` glues a metric `e` on
+  `E ⊆ Z` to a metric `d` on `Z` along a common point `z ∈ E`, routing cross
+  pairs through `z`. `isMetricOn_amalgam` assumes nothing but the two metric
+  axioms. `amalgam_topology_eq_bot` adds compatibility of the two pieces and
+  a uniform gap `c > 0` between the sides at `z` — the hypothesis form of
+  §2.7's isolating radii — and `topology_eq_bot_of_amalgam` is its converse
+  on the `E` side, which is what turns a coding parameter in `S` into a
+  *failure* of compatibility. `abs_amalgam_sub_le` is §2.7 (i) with the
+  constant explicit: `|m − d| ≤ B + 2H` when `e ≤ B` and `E` lies in the
+  closed `d`-ball of radius `H` around `z`. `abs_amalgam_sub_amalgam_le`
+  records that the amalgam depends on `e` pointwise `1`-Lipschitzly, which is
+  what carries the coding's parameter estimate to the amalgamated family.
+  None of these mentions the star coding or any cardinality, so 3.8 consumes
+  them unchanged with the §2.11 repair applied to the base metric.
+* **The component locus.** `CPM.component d = {e ∈ Met(Z) : 𝒟_Z(d,e) < ∞}` is
+  the `∼`-class of §1, and `CPM.metSetoid` / `CPM.Components` /
+  `CPM.componentSet` carry the quotient `𝐌_{<∞}(Z)` itself, so that "every
+  component" can be quantified over the quotient rather than over
+  representatives.
+* **The `ℵ₁`-sized ball.** `exists_aleph1_ball`: the closed balls of integer
+  radius around any centre exhaust the carrier, so one of them is
+  uncountable, and it has cardinality at most that of the carrier. The radius
+  is returned `≥ 1`, which is the form the gap hypothesis needs. Regularity
+  of `ℵ₁` is not invoked; "a countable union of countable sets is countable"
+  is all the argument uses.
+* **The bundle.** `ComponentSetup Z` collects §2.7's data: a base metric with
+  its compatibility, a subset `E` with `E ⊆ B_d(z,H)` and `d(z,·) ≥ 1` off
+  `E`, and a relabelling `θ : ↥E ≃ ExtIndex S` carrying `z` to the coding's
+  anchor. `mem_Met_psi_iff` is §2.7 (ii), `edist_psi_base_le` is §2.7 (i) at
+  `4 + 2H`, and `preimage_component_psi` is the exact pullback identity
+  `Ψ⁻¹(𝔠) = [0,1] ∖ S`. The written proof's compact witness is recorded as
+  `isCompact_range_psi` and `range_inter_component`
+  (`L' ∩ 𝔠 = Ψ([0,1] ∖ S)`), while the obstruction itself runs on the
+  pullback identity, exactly as in item 2.
+* **The theorems.** `component_not_measurableSet` — for every `d ∈ Met(Z)`,
+  its component is not Borel in `CPM(Z)` — and `componentSet_not_measurableSet`,
+  the same statement quantified over `𝔠 ∈ 𝐌_{<∞}(Z)`. Both are stated for an
+  arbitrary carrier with `#Z = ℵ₁` and carry no residual hypothesis on a
+  parameter set. The relabelling consumed is the bijection of the ball with
+  the coded carrier (`isMetricOn_comap`, `topology_comap_eq_bot` of
+  `Ext/Relabel.lean`); the construction never leaves `Z`, so no `CPM`-level
+  transfer isometry enters.
+
+Vacuity: `exists_carrier_aleph_one` (#63) supplies a carrier of the required
+cardinality, and `CPM.nonempty_Met` / `CPM.nonempty_Components` supply a
+component to quantify over — the `0/1` metric is compatible with the discrete
+topology on any carrier. Neither theorem is vacuously true.
+
+The verdict on 3.4 is unchanged: PASS. Nothing in the written proof had to be
+repaired to formalise it; the two implicit steps of §2.7 are the two lemmas
+named above.
 
 ### Non-Archimedean track (3.10–3.17)
 
