@@ -15,7 +15,7 @@
 -- statement below is a plain equality of sets, which is exactly why it is
 -- provable while the ambient pointclass convention of audit §1 is still open.
 --
--- Setting.  A bad parameter set `S ⊆ [0,1]`, carrier
+-- Setting.  A parameter set `S ⊆ [0,1]`, carrier
 --
 --     D = {p,q} ⊔ ⨆_{a ∈ S} ( {b_a} ⊔ {c_{a,n} : n ∈ ℕ} ),
 --
@@ -324,7 +324,7 @@ theorem dExt_isBddPMetOn {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ
 
 /-! ## Compatibility with the discrete topology -/
 
-/-- **Compatibility, positive half** (audit §4).  For `t ∈ [0,1] \ S` every
+/-- **Compatibility, `t ∉ S`** (audit §4).  For `t ∈ [0,1] \ S` every
 point of `D` is isolated, so `d_t` induces the discrete topology.  The
 isolating radii are `1` at the anchors, `l_n(a,t)` at the `n`-th spoke of the
 star at `a`, and `|t − a|` at the centre of that star — the last positive
@@ -378,7 +378,7 @@ theorem dExt_topology_eq_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
           · rw [dExt, if_neg hab] at hlt
             linarith [abs_sub_le_one_of_mem_Icc ⟨ht0, ht1⟩ hmem]
 
-/-- **Compatibility, negative half** (audit §4).  At a parameter `t ∈ S` the
+/-- **Compatibility, `t ∈ S`** (audit §4).  At a parameter `t ∈ S` the
 function `d_t` is still a metric, but the centre of the star at `t` is no
 longer isolated: `d_t(b_t, c_{t,n}) = 2^{-n} → 0`. -/
 theorem dExt_topology_ne_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
@@ -536,7 +536,7 @@ theorem isClosed_range_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) :
     IsClosed (Set.range (phiFull S hS)) :=
   (isCompact_range (lipschitzWith_phiFull S hS).continuous).isClosed
 
-/-- The image of the good parameters is exactly the part of the range that is
+/-- The image of `[0,1] \ S` is exactly the part of the range that is
 compatible — a restatement of the pullback identity at the level of images. -/
 theorem image_compl_eq_range_inter (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) :
     phiFull S hS '' {t : UnitParam | (t : ℝ) ∉ S}
@@ -580,7 +580,7 @@ theorem card_extIndex {S : Set ℝ} (hS : #(↥S) = aleph 1) : #(ExtIndex S) = a
 
 /-- **The Layer 1 package** (audit §4–§5).
 
-Given a bad parameter set `S ⊆ [0,1]` with `|S| = ℵ₁`, the bounded star coding
+Given a parameter set `S ⊆ [0,1]` with `|S| = ℵ₁`, the bounded star coding
 produces a carrier `D = ExtIndex S` of cardinality `ℵ₁` and a family
 `(d_t)_{t ∈ [0,1]}` such that
 

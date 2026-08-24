@@ -1,7 +1,7 @@
 -- Ext.GeneralSeparability
 --
 -- Issue #57, phase 2 and Issue #66: the general-space transfer for the Borel
--- metric locus, and the Route M capstone.
+-- metric locus, and the Route M theorems.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions), §2.8 (Theorem 3.5), §3 (E1), §4 (Route M), and §7.  E1 is
@@ -91,7 +91,7 @@ def CPM.MetOn (X : Type*) [TopologicalSpace X] : Set (CPMOn X) :=
 /- `#print axioms IshikiExt.mem_CPM_MetOn`:
    `[propext, Classical.choice, Quot.sound]`. -/
 
-/-! ## Faithfulness on a discrete carrier
+/-! ## Discrete carriers: the two ambients agree
 
 The two results here justify keeping the extensor's *domain* at the bare
 `CPM A` rather than at `CPMOn A`: on a discrete carrier the continuity
@@ -101,7 +101,7 @@ is an isometric equivalence, not a definitional identity, which is why it is
 recorded rather than assumed.
 
 Neither result is consumed by the transfer theorems below — the transfer never
-has to cross between the ambients, which is the point of the design. -/
+has to cross between the ambients, which is by design. -/
 
 /-- On a discrete carrier the continuity constraint is vacuous: `CPMOn D` and
 the bare pseudometric ambient `CPM D` are isometrically equivalent. -/
@@ -224,15 +224,15 @@ theorem IsIsometricExtensor.image_met_eq_range_inter
 coded `ℵ₁`-sized discrete carrier into `X` forbids Borelness of the metric
 locus of `X`.
 
-This is the contrapositive form, and it is the mathematically load-bearing
-statement.  Its hypotheses are satisfiable: E1 produces such a bundle for any
-closed discrete copy of the coded carrier inside a metrizable `X`, so the
-conclusion is a genuine assertion — unlike the separability phrasing recorded
-below, whose hypotheses are contradictory.  That E1 produces one is external
-and is not formalised here (see `IsIsometricExtensor`).  The proof is the
+This is the contrapositive form, and it is the one with mathematical content.
+Its hypotheses are satisfiable: E1 produces such a bundle for any closed
+discrete copy of the coded carrier inside a metrizable `X`, so the conclusion
+is not vacuous — unlike the separability phrasing recorded below, whose
+hypotheses are contradictory.  That E1 produces one is external and is not
+formalised here (see `IsIsometricExtensor`).  The proof is the
 audit's §1 chain — complete domain, closed isometric image, closed sets are Borel,
 intersect with the hypothesis, pull back along the (continuous, injective)
-extensor — landing on `met_not_borel`, which is consumed verbatim because the
+extensor — ending at `met_not_borel`, which is consumed verbatim because the
 domain of the extensor is the bare `CPM (ExtIndex S)`.
 
 E1 is the hypothesis `hE`; the theorem is conditional on it by design, matching
@@ -288,7 +288,7 @@ theorem IsIsometricExtensor.not_separableSpace
     simpa using hab
   exact hSnonmeas (Set.countable_coe_iff.mp hinj.countable).measurableSet
 
-/-- **Ex falso; the literal statement of Issue #66, and not the capstone.**
+/-- **Ex falso; the literal statement of Issue #66.**
 
 Its hypotheses are jointly inconsistent, and
 `IsIsometricExtensor.not_separableSpace` above proves it —

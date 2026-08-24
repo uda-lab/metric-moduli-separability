@@ -4,7 +4,7 @@
 > output for every top-level theorem ... the expected set is the three
 > standard Lean axioms only."
 
-All four capstone theorems below were checked with `#print axioms <name>`
+All four theorems below were checked with `#print axioms <name>`
 against the built `IshikiConj51` library (toolchain
 `leanprover/lean4:v4.32.2`), independently of Codex's own build/axiom claims
 — each command was re-run by the shepherding agent in a throwaway,
@@ -50,10 +50,10 @@ turns up only the word inside a status comment, not a `sorry` term.
 This audit covers everything that landed in #57: the ℵ₁-sized closed
 discrete separated set lemma, the closed-isometric-image lemma, the
 topology-aware metric locus `CPM.MetOn`, the `IsIsometricExtensor` E1
-hypothesis bundle, and the derived `Met`-image identity. The capstone
-theorem (`Met(X)` Borel → `SeparableSpace X`) did **not** land in this issue
-and is not included above; see the PR body and the follow-up issue for its
-exact statement and remaining prerequisites.
+hypothesis bundle, and the derived `Met`-image identity. The main theorem
+(`Met(X)` Borel → `SeparableSpace X`) did **not** land in this issue and is
+not included above; see the PR body and the follow-up issue for its exact
+statement and remaining prerequisites.
 
 # Axiom audit — Issue #63 (#56 item 4, relabelling to arbitrary carriers)
 
@@ -95,7 +95,7 @@ the abstract and introduction):
 The hypothesis `#D = ℵ₁` is satisfiable (`exists_carrier_aleph_one`), so none
 of the three is vacuous.
 
-# Axiom audit — Issue #66 (Route M capstone)
+# Axiom audit — Issue #66 (Route M package)
 
 Checked with `#print axioms <name>` against the built `IshikiConj51` library
 (toolchain `leanprover/lean4:v4.32.2`), in a throwaway module inside the build
@@ -147,10 +147,9 @@ Attribution, following audit §2.6 and §2.8:
   Theorem 3.3; the preprint's body states 3.3 as the `BMet(Z)` claim on a
   discrete carrier, which is `Ext/Relabel.lean`'s
   `bmet_not_borel_cpm_of_card`.
-* **What the conditionality is, exactly.** Both are conditional on the
-  `IsIsometricExtensor` bundle (resp. on `hEx`, which quantifies that bundle
-  over closed embeddings of the coded carrier). That bundle is **not E1
-  verbatim**. E1 (Ishiki 2024, Theorem 1.1; audit §3) quantifies over an
+* **Conditionality.** Both are conditional on the `IsIsometricExtensor`
+  bundle (resp. on `hEx`, which quantifies that bundle over closed
+  embeddings of the coded carrier). That bundle is **not E1 verbatim**. E1 (Ishiki 2024, Theorem 1.1; audit §3) quantifies over an
   arbitrary closed subset `A ⊆ X` and supplies `Ẽ : CPM(A) → CPM(X)` on the
   continuous-pseudometric ambient of `A`; the Lean bundle fixes an abstract
   carrier with a closed embedding `ι` and takes the extensor already
