@@ -156,8 +156,8 @@ for Borel sets (Kechris, Theorem 13.6) it would contain a nonempty perfect
 `S` is uncountable with `|S| < 𝔠`; a Borel `S` would be uncountable Borel and
 hence of cardinality `𝔠` (Theorem 13.6). ✓
 Both branches are ZFC; this is exactly the dichotomy that the superseded
-analytic/coanalytic version could not run (§5). The one-line density
-justification in the CH case ("by the perfect set property") compresses the
+analytic/coanalytic version could not run (§5). The density justification in
+the CH case ("by the perfect set property") compresses the
 meets-every-perfect-set argument; no gap.
 
 **Note for Lean (§7):** density of `S` is used **only** in the
@@ -656,7 +656,7 @@ Route M obligation explicitly.
 
 ---
 
-## 5. Removed claims — must not be resurrected
+## 5. Removed claims — must not be reinstated
 
 The 11 Aug draft (Issue #46 track; audited in
 `notes/ishiki-extension-audit.md`, superseded) claimed, for a dense
