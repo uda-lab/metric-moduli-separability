@@ -107,7 +107,7 @@ namespace:
   theorems `bmet_not_borel_of_card`, `bmet_not_borel_cpm_of_card`,
   `met_not_borel_of_card`.
 - `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
-  lemmas; #66 theorem) — the nonseparable-space closed-discrete-subset
+  lemmas; #66 package) — the nonseparable-space closed-discrete-subset
   lemma, the closed-isometric-image lemma (now at `EMetricSpace` level), the
   continuous-pseudometric ambient `CPMOn X`, `CPM.MetOn` inside it, the
   `IsIsometricExtensor` hypothesis bundle with its derived `Met`-image

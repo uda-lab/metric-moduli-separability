@@ -59,7 +59,7 @@ consumes a statement whose ancestors carry FIX must treat the recorded
 repairs as part of the statement being gated. With the four repairs of
 §§2.2, 2.10, 2.11, 2.14 admitted, every statement of the preprint has a
 complete verified proof route; no BLOCKED-level defect remains — **the Borel
-reformulation removes both defects of the superseded draft** (§5).
+reformulation removes both blocking defects of the superseded draft** (§5).
 
 ---
 
@@ -945,8 +945,8 @@ Fully audited above (§2.13–2.15) but **future work**, not part of
 Koshino combination; the non-Archimedean results are labelled "analogues").
 If formalised later, note: 2.2 (with §2.2 repair), the `𝒰𝒟^R` ambient (a
 different, non-Archimedean sup-structure — new Lean type), density of `S`
-is used (3.11), and the 3.14 transfer repair (§2.14) must be formalised as
-stated here, since the paper's own proof is not
+becomes necessary (3.11), and the 3.14 transfer repair (§2.14) must be
+formalised as stated here, since the paper's own proof is not
 mechanizable as written.
 
 ---

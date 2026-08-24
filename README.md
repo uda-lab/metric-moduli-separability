@@ -61,7 +61,7 @@ the recipe does not supply. Only the asymmetric "not analytic" half remains in Z
 by Souslin's perfect set theorem: under ¬CH from `ℵ₁ < 𝔠` directly, and under CH by
 choosing `S` as a Bernstein set. See `notes/borel-preprint-audit.md` §5 for the full
 account. The published joint preprint replaces the whole package. Valid
-pointclass-free metric coding from that work remains in PR #52.
+pointclass-free metric coding from that work remains from PR #52.
 
 ## Repository layout
 
