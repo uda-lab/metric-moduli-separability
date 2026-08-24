@@ -70,6 +70,47 @@ theorem topology_comap_eq_bot (σ : D ≃ E) {d : E → E → ℝ} (h : IsMetric
   obtain ⟨ε, hε, hall⟩ := h.topology_eq_bot_iff.mp hbot (σ u)
   exact ⟨ε, hε, fun v hv => σ.injective (hall (σ v) hv)⟩
 
+/-- The topology of a relabelled metric is the topology `σ` induces from the
+topology of the original metric.
+
+`topology_comap_eq_bot` above is the case both carriers are discrete, and is
+proved directly from the isolating-radius criterion rather than from this
+identity, because `induced σ ⊥ = ⊥` needs its own injectivity argument.  The
+general form is what the `CPMOn`-level relabelling of
+`Ext/GeneralSeparability.lean` needs, where neither topology is `⊥`. -/
+theorem topology_comap (σ : D ≃ E) {d : E → E → ℝ} (h : IsMetricOn d) :
+    (isMetricOn_comap σ h).topology = TopologicalSpace.induced σ h.topology := by
+  let mD : MetricSpace D := MetricSpace.induced σ σ.injective h.toMetricSpace
+  have hmD : (isMetricOn_comap σ h).toMetricSpace = mD := by
+    apply MetricSpace.ext
+    ext x y
+    rfl
+  rw [(isMetricOn_comap σ h).topology_eq_metricSpace_topology, hmD]
+  rfl
+
+/-- Compatibility with the ambient topology is invariant under relabelling
+along a homeomorphism: `d` induces the topology of `E` exactly when its
+relabelling induces the topology of `D`.
+
+`exists_isMetricOn_comap_iff` below is the discrete-carrier analogue, where no
+topology on the carriers is involved and the condition transported is
+`.topology = ⊥` on both sides. -/
+theorem topology_comap_eq_iff {D E : Type*} [TopologicalSpace D]
+    [TopologicalSpace E] (σ : D ≃ₜ E) {d : E → E → ℝ} (h : IsMetricOn d) :
+    (isMetricOn_comap σ.toEquiv h).topology = (inferInstance : TopologicalSpace D)
+      ↔ h.topology = (inferInstance : TopologicalSpace E) := by
+  rw [topology_comap σ.toEquiv h, Homeomorph.coe_toEquiv]
+  constructor
+  · intro hind
+    have hsymm := congrArg
+      (TopologicalSpace.induced (σ.symm : E → D)) hind
+    rw [induced_compose, σ.self_comp_symm, induced_id (t := h.topology)] at hsymm
+    rw [hsymm]
+    exact σ.symm.induced_eq
+  · intro htop
+    rw [htop]
+    exact σ.induced_eq
+
 /-- The converse of `isMetricOn_comap`.  It is proved directly, by evaluating
 at `σ.symm`, rather than by relabelling twice along `σ` and `σ.symm`: the
 double relabelling is only *propositionally* the original function, and
