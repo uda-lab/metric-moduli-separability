@@ -162,7 +162,7 @@ meets-every-perfect-set argument; no gap.
 
 **Note for Lean (§7):** density of `S` is used **only** in the
 non-Archimedean track (Lemma 3.11's isometry lower bound); the entire
-Archimedean chain 3.1–3.9 uses only `|S| = ℵ₁` + non-Borel.
+chain 3.1–3.9 uses only `|S| = ℵ₁` + non-Borel.
 
 ### 2.2 Proposition 2.2 (`prop:dense-aleph1-nonborel-cantor`) — FIX
 
@@ -366,7 +366,7 @@ component of a compatible metric embedding a countable subset of `Z` as
 *not* complete for any `t`. As written, the claim "m_t … complete if `t ∉ S`"
 is false for such `𝔠`.
 
-**Repair (two lines; the non-Archimedean twin 3.16 already does exactly
+**Repair (two lines; the non-Archimedean analogue 3.16 already does exactly
 this).** Before running the 3.4 construction, replace the base point by a
 complete member of the same component: `d' := d + 1` off the diagonal is a
 compatible complete metric with `𝒟_Z(d,d') = 1 < ∞`, so `d' ∈ 𝔠`. With base
@@ -399,7 +399,7 @@ is part of 3.8's conclusion (non-Borel sets are nonempty). The corollary
 inherits the FIX of 3.8 but adds no gap of its own; the component-free
 variant (via `Comp(Z)` non-Borel) again suffices, cf. §2.8.
 
-### 2.13 Non-Archimedean coding: Lemma 3.10, Lemma 3.11 — PASS
+### 2.13 Coding by ultrametrics: Lemma 3.10, Lemma 3.11 — PASS
 
 Setup: characteristic `R`, strictly decreasing `r : ℕ → R∖{0}`, `r(n) → 0`
 (exists exactly because `R` is characteristic); `h(s,t) = r(min{n : s(n) ≠
@@ -940,7 +940,7 @@ needed for §2.10 and §2.12.
 ### Non-Archimedean track (3.10–3.17)
 
 Fully audited above (§2.13–2.15) but **follow-up scope**, not part of
-#56/#57: the preprint presents the Archimedean chain as the headline
+#56/#57: the preprint presents the chain 3.1–3.9 as the headline
 (abstract and introduction lead with `Met(Z)`, Borel ⇒ separability, and the
 Koshino combination; the non-Archimedean results are labelled "analogues").
 If formalised later, note: 2.2 (with §2.2 repair), the `𝒰𝒟^R` ambient (a
