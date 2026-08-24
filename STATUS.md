@@ -118,7 +118,7 @@ namespace:
 
 Not yet done on this track: Corollary 3.6 (completely metrizable ⇒ Borel via
 Alexandrov–Lavrentiev), the `BMet`/`Comp` variants of the transfer that
-audit §2.10 and §2.12 need, and the whole non-Archimedean chain.
+audit §2.10 and §2.12 need, and the whole chain 3.10–3.17.
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
