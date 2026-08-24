@@ -1,7 +1,8 @@
 -- Ext.GeneralSeparability
 --
--- Issue #57, phase 2 and Issue #66: the general-space transfer for the Borel
--- metric locus, and the Route M theorems.
+-- Issue #57, phase 2, Issue #66 and Issue #72: the general-space transfer for
+-- the Borel metric locus, the Route M theorems, and the bridge that makes them
+-- conditional on E1 as audited rather than on a transported bundle.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions), §2.8 (Theorem 3.5), §3 (E1), §4 (Route M), and §7.  E1 is
@@ -12,6 +13,7 @@
 
 import IshikiConj51.Ext.CPM
 import IshikiConj51.Ext.GeneralSpace
+import IshikiConj51.Ext.Relabel
 
 open Cardinal Set
 open scoped ENNReal
@@ -100,8 +102,10 @@ pseudometrics on `A`, and the two metric loci correspond.  The correspondence
 is an isometric equivalence, not a definitional identity, which is why it is
 recorded rather than assumed.
 
-Neither result is consumed by the transfer theorems below — the transfer never
-has to cross between the ambients, which is by design. -/
+Neither result is consumed by the transfer theorems themselves — the transfer
+never has to cross between the ambients, which is by design.  Both are consumed
+by the E1 bridge (`IsIsometricExtensorOn.toIsIsometricExtensor`), where crossing
+is exactly the point. -/
 
 /-- On a discrete carrier the continuity constraint is vacuous: `CPMOn D` and
 the bare pseudometric ambient `CPM D` are isometrically equivalent. -/
@@ -128,6 +132,86 @@ theorem CPMOn.preimage_equivCPM_met (D : Type*) [TopologicalSpace D]
   · rintro ⟨h, htop⟩
     exact ⟨h, htop.trans hbot⟩
 
+/-- The inverse of `CPMOn.equivCPM` forgets nothing: it re-attaches the
+continuity proof that a discrete carrier supplies for free. -/
+@[simp] theorem CPMOn.coe_equivCPM_symm {D : Type*} [TopologicalSpace D]
+    [DiscreteTopology D] (d : CPM D) : ((CPMOn.equivCPM D).symm d).1 = d :=
+  (CPMOn.equivCPM D).apply_symm_apply d
+
+/-! ## Relabelling the continuous-pseudometric ambient
+
+`Ext/Relabel.lean` transports `BddPMet` and `CPM` along a bijection of bare
+carriers.  `CPMOn` also carries a topology, so its transport needs a
+homeomorphism `σ : D ≃ₜ E`; the pseudometric content is `CPM.comap σ`, and the
+continuity field transports because `σ × σ` is continuous.  The supremum
+distance is the one `CPM` already has (`CPMOn.edist_eq`), so `CPM.edist_comap`
+supplies the isometry unchanged.
+
+The metric-locus identity is the one place where the extra topology does work.
+For bare carriers `Ext/Relabel.lean` only has to preserve "`d` induces the
+discrete topology", the same condition at both ends; here the condition is
+"`d` induces the topology of its carrier", and the two carriers have different
+topologies.  `topology_comap` is what crosses between them: a relabelled metric
+induces the relabelled topology, and `σ` being a homeomorphism identifies that
+with the topology of `D`. -/
+
+namespace CPMOn
+
+variable {D E : Type*} [TopologicalSpace D] [TopologicalSpace E]
+
+/-- Relabelling along a homeomorphism `σ : D ≃ₜ E` pulls a continuous
+pseudometric on `E` back to a continuous pseudometric on `D`. -/
+def comap (σ : D ≃ₜ E) (d : CPMOn E) : CPMOn D :=
+  ⟨CPM.comap σ.toEquiv d.1, by
+    have huncurry : Function.uncurry (CPM.comap σ.toEquiv d.1).1
+        = Function.uncurry d.1.1 ∘ Prod.map (σ : D → E) (σ : D → E) := rfl
+    rw [huncurry]
+    exact d.2.comp (σ.continuous.prodMap σ.continuous)⟩
+
+@[simp] theorem comap_coe (σ : D ≃ₜ E) (d : CPMOn E) :
+    (comap σ d).1 = CPM.comap σ.toEquiv d.1 := rfl
+
+theorem isometry_comap (σ : D ≃ₜ E) : Isometry (comap σ : CPMOn E → CPMOn D) :=
+  fun d e => CPM.edist_comap σ.toEquiv d.1 e.1
+
+/-- `CPM(E) ≃ CPM(D)` for any homeomorphism `σ : D ≃ₜ E`, in the preprint's
+continuous-pseudometric ambient. -/
+def relabelEquiv (σ : D ≃ₜ E) : CPMOn E ≃ CPMOn D where
+  toFun := comap σ
+  invFun := comap σ.symm
+  left_inv _ := Subtype.ext (Subtype.ext (by funext x y; simp))
+  right_inv _ := Subtype.ext (Subtype.ext (by funext x y; simp))
+
+@[simp] theorem relabelEquiv_apply (σ : D ≃ₜ E) (d : CPMOn E) :
+    relabelEquiv σ d = comap σ d := rfl
+
+/-- The relabelling bijection is an isometry of the supremum distance, hence a
+homeomorphism `CPM(E) ≃ₜ CPM(D)`. -/
+def relabelIsometry (σ : D ≃ₜ E) : CPMOn E ≃ᵢ CPMOn D where
+  toEquiv := relabelEquiv σ
+  isometry_toFun := isometry_comap σ
+
+end CPMOn
+
+/-- Relabelling preserves the topology-aware metric locus, in both directions.
+This is the `CPMOn` analogue of `CPM.preimage_Met_comap`: there the condition
+transported is "induces the discrete topology", here it is "induces the
+topology of the ambient", and `topology_comap_eq_iff` is what matches the two
+ambients' topologies across `σ`. -/
+theorem CPMOn.preimage_MetOn_comap {D E : Type*} [TopologicalSpace D]
+    [TopologicalSpace E] (σ : D ≃ₜ E) :
+    CPMOn.comap σ ⁻¹' CPM.MetOn D = CPM.MetOn E := by
+  ext d
+  show (∃ h : IsMetricOn fun x y => d.1.1 (σ.toEquiv x) (σ.toEquiv y),
+      h.topology = (inferInstance : TopologicalSpace D)) ↔
+    (∃ h : IsMetricOn d.1.1, h.topology = (inferInstance : TopologicalSpace E))
+  constructor
+  · rintro ⟨h, htop⟩
+    exact ⟨isMetricOn_of_comap σ.toEquiv h,
+      (topology_comap_eq_iff σ (isMetricOn_of_comap σ.toEquiv h)).mp htop⟩
+  · rintro ⟨h, htop⟩
+    exact ⟨isMetricOn_comap σ.toEquiv h, (topology_comap_eq_iff σ h).mpr htop⟩
+
 /-! ## The explicit E1 hypothesis bundle -/
 
 /-- An explicit isometric extensor from a closed discrete carrier into `X`.
@@ -139,16 +223,13 @@ preprint's `CPM(A)` is exactly `CPM A` (`CPMOn.equivCPM` above), which is why
 the domain of `toCPM` is not a `CPMOn`.  The last field is the only E1 clause
 used by the Borel transfer theorem beyond `extension` and `isometry_toCPM`.
 
-Scope, stated exactly.  This bundle is *not* E1 (audit §3).  E1 quantifies over
-an arbitrary closed subset `A ⊆ X` and supplies `Ẽ : CPM(A) → CPM(X)`; this
-bundle fixes an abstract carrier `A` together with a closed embedding `ι` and
-takes the extensor already transported along `ι`.  For a closed *discrete*
-`A ⊆ X`, E1 yields such a bundle: `CPMOn.equivCPM` removes the continuity
-constraint on the discrete domain, and relabelling along `ι` moves the domain
-from `↥A` to the abstract carrier.  That derivation is elementary but is **not**
-formalised here — the CPMOn-level relabelling layer is the outstanding
-obligation of audit §7 item 4 — so every theorem below is conditional on this
-bundle, not on E1 verbatim. -/
+Scope, stated exactly.  This bundle is *not* E1 (audit §3): E1 quantifies over
+an arbitrary closed subset `A ⊆ X` and supplies `Ẽ : CPM(A) → CPM(X)`, whereas
+this bundle fixes an abstract carrier `A` together with a closed embedding `ι`
+and takes the extensor already transported along `ι`.  E1 itself is
+`IsIsometricExtensorOn` below, and
+`IsIsometricExtensorOn.toIsIsometricExtensor` performs the transport, so the
+theorems of this file are available in both forms. -/
 structure IsIsometricExtensor {A X : Type*} (tA : TopologicalSpace A)
     [TopologicalSpace X] [TopologicalSpace.MetrizableSpace X] (ι : A → X) where
   closedEmbedding : @Topology.IsClosedEmbedding A X tA inferInstance ι
@@ -163,6 +244,95 @@ structure IsIsometricExtensor {A X : Type*} (tA : TopologicalSpace A)
    `[propext, Classical.choice, Quot.sound]`.  (The bundle is a plain
    structure, not a `Prop`: `toCPM` is data, and a `Prop`-valued structure
    cannot expose a data-valued field via projection.) -/
+
+/-! ## E1 itself -/
+
+/-- **E1 (audit §3), for one closed subset.**  Ishiki, *An isometric extensor
+of metrics*, arXiv:2407.03030, Theorem 1.1: for a metrizable `X` and a closed
+`A ⊆ X` there is an isometric extensor `Ẽ : CPM(A) → CPM(X)` of continuous
+pseudometrics restricting to the identity on `A²` and carrying `Met(A)` into
+`Met(X)`.
+
+Field by field against the source statement: `extension` is clause (1)
+(`Ẽ(d)|_{A²} = d`), `isometry_toCPM` is clause (2)
+(`𝒟_A(d,e) = 𝒟_X(Ẽd,Ẽe)`, at the extended-metric level `𝒟` lives at), and
+`met_preservation` is the inclusion half of the "furthermore" clause
+`Ẽ(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)`.  The reverse inclusion is deliberately not a
+field: the transfer does not need it, and its transported form comes back out
+as `IsIsometricExtensor.image_met_eq_range_inter`.  E1's clauses (3) and (4) —
+`BMet` and `Comp` preservation — are also omitted: they are used only by the
+§2.10 and §2.12 extensions, and (4) additionally needs "`X` completely
+metrizable" per the caveat in audit §3.
+
+What is left is Route M's share of E1 (audit §4), with no carrier-specific
+choices: `A` ranges over the subsets of `X`, and both ambients are the
+preprint's continuous-pseudometric ones.  Quantifying over the closed `A` is
+how the theorems at the end of this file take it. -/
+structure IsIsometricExtensorOn {X : Type*} [TopologicalSpace X]
+    [TopologicalSpace.MetrizableSpace X] (A : Set X) where
+  closed : IsClosed A
+  toCPM : CPMOn ↥A → CPMOn X
+  extension : ∀ (d : CPMOn ↥A) (a b : ↥A), (toCPM d).1.1 ↑a ↑b = d.1.1 a b
+  isometry_toCPM : Isometry toCPM
+  met_preservation : toCPM '' CPM.MetOn ↥A ⊆ CPM.MetOn X
+
+/- `#print axioms IshikiExt.IsIsometricExtensorOn`:
+   `[propext, Classical.choice, Quot.sound]`. -/
+
+/-- **The E1 bridge.**  E1 applied to the closed subset `Set.range ι` yields the
+transported bundle the transfer theorems consume, for any closed embedding `ι`
+of a discrete carrier.
+
+Two moves, in this order.  `ι` is an embedding, so it is a homeomorphism onto
+`↥(Set.range ι)`; `CPMOn.comap` relabels the extensor's domain along it, which
+is where the `CPMOn`-level relabelling layer is used.  The relabelled domain
+`CPMOn A` is then dropped to the bare `CPM A` by `CPMOn.equivCPM`, which is an
+isometric equivalence because `A` is discrete.  `met_preservation` follows the
+same two steps through `CPMOn.preimage_equivCPM_met` and
+`CPMOn.preimage_MetOn_comap`.
+
+`↥(Set.range ι)` is discrete because `ι` is an embedding out of a `⊥`-space, so
+`CPMOn.equivCPM`'s hypothesis is met after the relabelling as well. -/
+noncomputable def IsIsometricExtensorOn.toIsIsometricExtensor
+    {A X : Type*} [TopologicalSpace X] [TopologicalSpace.MetrizableSpace X]
+    {ι : A → X} (hι : @Topology.IsClosedEmbedding A X ⊥ inferInstance ι)
+    (hE : IsIsometricExtensorOn (Set.range ι)) :
+    IsIsometricExtensor (⊥ : TopologicalSpace A) ι := by
+  letI : TopologicalSpace A := ⊥
+  haveI : DiscreteTopology A := ⟨rfl⟩
+  let σ : A ≃ₜ ↥(Set.range ι) := hι.toIsEmbedding.toHomeomorph
+  haveI : DiscreteTopology ↥(Set.range ι) := σ.symm.isEmbedding.discreteTopology
+  have hσ : ∀ x : A, σ.symm ⟨ι x, x, rfl⟩ = x := fun x => by
+    have : σ x = (⟨ι x, x, rfl⟩ : ↥(Set.range ι)) := Subtype.ext rfl
+    rw [← this, Homeomorph.symm_apply_apply]
+  refine
+    { closedEmbedding := hι
+      domain_discrete := rfl
+      toCPM := fun d => hE.toCPM (CPMOn.comap σ.symm ((CPMOn.equivCPM A).symm d))
+      extension := ?_
+      isometry_toCPM := ?_
+      met_preservation := ?_ }
+  · intro d a b
+    rw [hE.extension (CPMOn.comap σ.symm ((CPMOn.equivCPM A).symm d))
+      ⟨ι a, a, rfl⟩ ⟨ι b, b, rfl⟩]
+    show ((CPMOn.equivCPM A).symm d).1.1 (σ.symm ⟨ι a, a, rfl⟩)
+      (σ.symm ⟨ι b, b, rfl⟩) = d.1 a b
+    rw [hσ a, hσ b, CPMOn.coe_equivCPM_symm]
+  · exact hE.isometry_toCPM.comp
+      ((CPMOn.isometry_comap σ.symm).comp (CPMOn.equivCPM A).symm.isometry)
+  · rintro e ⟨d, hd, rfl⟩
+    refine hE.met_preservation
+      ⟨CPMOn.comap σ.symm ((CPMOn.equivCPM A).symm d), ?_, rfl⟩
+    have hMetOn : (CPMOn.equivCPM A).symm d ∈ CPM.MetOn A := by
+      rw [← CPMOn.preimage_equivCPM_met A]
+      show CPMOn.equivCPM A ((CPMOn.equivCPM A).symm d) ∈ CPM.Met A
+      rw [IsometryEquiv.apply_symm_apply]
+      exact hd
+    rw [← CPMOn.preimage_MetOn_comap σ.symm] at hMetOn
+    exact hMetOn
+
+/- `#print axioms IshikiExt.IsIsometricExtensorOn.toIsIsometricExtensor`:
+   `[propext, Classical.choice, Quot.sound]`. -/
 
 private theorem isMetricOn_restrict_of_mem_MetOn
     {A X : Type*} {tA : TopologicalSpace A} [TopologicalSpace X]
@@ -228,8 +398,10 @@ This is the contrapositive form, and it is the one with mathematical content.
 Its hypotheses are satisfiable: E1 produces such a bundle for any closed
 discrete copy of the coded carrier inside a metrizable `X`, so the conclusion
 is not vacuous — unlike the separability phrasing recorded below, whose
-hypotheses are contradictory.  That E1 produces one is external and is not
-formalised here (see `IsIsometricExtensor`).  The proof is the
+hypotheses are contradictory.  That production is
+`IsIsometricExtensorOn.toIsIsometricExtensor`, and
+`not_measurableSet_CPM_MetOn_of_isometricExtensorOn` at the end of this file is
+the resulting E1-conditional form; E1 itself stays external.  The proof is the
 audit's §1 chain — complete domain, closed isometric image, closed sets are Borel,
 intersect with the hypothesis, pull back along the (continuous, injective)
 extensor — ending at `met_not_borel`, which is consumed verbatim because the
@@ -324,10 +496,10 @@ needs no `CPM`-level relabelling — the bijection between the coded carrier and
 the separated set is absorbed into `ι`.
 
 `hEx` is **not** E1 verbatim; it is what E1 yields for closed discrete
-subspaces after the transport described on `IsIsometricExtensor`, which is not
-formalised here.  Since E1 implies `hEx`, this theorem is at least as strong
-as the E1-conditional statement, but Lean checks only the `hEx` version, and
-the note in `notes/lean-axioms-borel.md` records the gap.
+subspaces after the transport of
+`IsIsometricExtensorOn.toIsIsometricExtensor`.  The E1-conditional form is
+`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` at the end of
+this file, which is this theorem with `hEx` derived from E1.
 
 Unlike `separable_of_measurableSet_CPM_MetOn`, the hypotheses here are not
 jointly inconsistent.  `hEx` holds vacuously whenever `X` admits no closed
@@ -372,6 +544,65 @@ theorem separable_of_measurableSet_CPM_MetOn_of_extensors
     exact hZclosed
   obtain ⟨hE⟩ := hEx _ hce
   exact (hE.not_measurableSet_CPM_MetOn hS hSnonmeas) hMet
+
+/-! ## The same two theorems, conditional on E1
+
+`IsIsometricExtensor` is a transported bundle; `IsIsometricExtensorOn` is E1's
+own shape, quantified below over the closed subsets of `X` as E1 quantifies it.
+E1 implies that hypothesis directly — nothing has to be moved onto a chosen
+carrier first, because `IsIsometricExtensorOn.toIsIsometricExtensor` does the
+moving inside the proof.  These are therefore the delivered forms of Theorem
+3.5, conditional on E1 as audited in §3 and on nothing else. -/
+
+/-- **Route M, core content of Theorem 3.5, conditional on E1.**  For a
+metrizable `X` admitting a closed discrete copy of the coded `ℵ₁`-sized
+carrier, E1 forbids Borelness of the metric locus of `X`.
+
+`hE1` is E1's statement for `X`: every closed `A ⊆ X` admits an isometric
+extensor of continuous pseudometrics.  It is a hypothesis, never an axiom —
+E1's proof stays external.
+
+The hypotheses are satisfiable, so the theorem is not vacuous: `hE1` holds for
+every metrizable `X` by E1, and a discrete `X` of cardinality `ℵ₁` admits the
+closed embedding `hι`.  That E1 holds is external and is not formalised. -/
+theorem not_measurableSet_CPM_MetOn_of_isometricExtensorOn
+    {X : Type*} [MetricSpace X]
+    {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1)
+    (hSnonmeas : ¬ MeasurableSet S)
+    {ι : ExtIndex S → X}
+    (hι : @Topology.IsClosedEmbedding (ExtIndex S) X ⊥ inferInstance ι)
+    (hE1 : ∀ A : Set X, IsClosed A → Nonempty (IsIsometricExtensorOn A)) :
+    ¬ MeasurableSet (CPM.MetOn X) := by
+  letI : TopologicalSpace (ExtIndex S) := ⊥
+  obtain ⟨hE⟩ := hE1 (Set.range ι) hι.isClosed_range
+  exact (hE.toIsIsometricExtensor hι).not_measurableSet_CPM_MetOn hS hSnonmeas
+
+/-- **Theorem 3.5 (`thm:borel-separability`), conditional on E1.**  `Met(X)`
+Borel in `CPM(X)` implies `X` separable, with E1 supplied as `hE1`.
+
+This is `separable_of_measurableSet_CPM_MetOn_of_extensors` with its extensor
+hypothesis replaced by E1 itself; the quantification over closed embeddings
+that theorem needs is recovered by applying `hE1` to `Set.range ι`, which is
+closed because `ι` is a closed embedding.
+
+The hypotheses are not jointly inconsistent.  A one-point `X` satisfies all of
+them: its `CPMOn X` is a one-point space, in which every subset is measurable,
+and E1 is available for its two closed subsets.  That witness is a remark, not
+a Lean declaration. -/
+theorem separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn
+    {X : Type*} [MetricSpace X]
+    {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1)
+    (hScard : #(↥S) = Cardinal.aleph 1)
+    (hSnonmeas : ¬ MeasurableSet S)
+    (hMet : MeasurableSet (CPM.MetOn X))
+    (hE1 : ∀ A : Set X, IsClosed A → Nonempty (IsIsometricExtensorOn A)) :
+    TopologicalSpace.SeparableSpace X := by
+  letI : TopologicalSpace (ExtIndex S) := ⊥
+  refine separable_of_measurableSet_CPM_MetOn_of_extensors hS hScard hSnonmeas
+    hMet ?_
+  intro ι hι
+  obtain ⟨hE⟩ := hE1 (Set.range ι) hι.isClosed_range
+  exact ⟨hE.toIsIsometricExtensor hι⟩
 
 end
 end IshikiExt

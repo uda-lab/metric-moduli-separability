@@ -1,6 +1,6 @@
 # Project Status
 
-**Updated:** 2026-08-23
+**Updated:** 2026-08-25
 
 ## Overall
 
@@ -14,16 +14,16 @@ v1 (20 Aug 2026).
 | Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
 | Discrete Borel obstruction, item 4 — relabelling (#63) | ✅ complete |
 | General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
-| General-space transfer, main theorem (#66) | ✅ bundle-conditional theorem complete; E1 bridge (#72) open |
+| General-space transfer, main theorem (#66) | ✅ bundle-conditional theorem complete |
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
-| E1 bridge: bundle → published extensor theorem (#72) | 🔄 open |
+| E1 bridge: bundle → published extensor theorem (#72) | ✅ complete |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
-statement gate for #56, #57 and #66. It audits every theorem in the preprint,
+statement gate for #56, #57, #66 and #72. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
 formalisation. The Lean work follows the audit's minimal route (Route M) for
 the Borel obstruction and separability result.
@@ -71,17 +71,29 @@ of the coded ℵ₁-sized discrete carrier forbids Borelness of `Met(X)` in
 over closed discrete copies of the carrier, which is how the audit's §2.8
 uses E1 and the only form in which the ℵ₁-separated-set lemma is consumed.
 Both are conditional on the `IsIsometricExtensor` hypothesis bundle, which
-enters as an explicit hypothesis and never as an axiom. That bundle is E1
-transported onto a fixed carrier; the transport itself (CPMOn-level
-relabelling, audit §7 item 4) is not yet formalised, so the checked claim is
-"Theorem 3.5 modulo the bundle", not "modulo E1". The literal statement of the issue text is recorded
-as a corollary and marked as having jointly inconsistent hypotheses —
-`IsIsometricExtensor.not_separableSpace` proves that a fixed extensor already
-refutes separability — so it is not presented as the result.
+enters as an explicit hypothesis and never as an axiom. The literal statement
+of the issue text is recorded as a corollary and marked as having jointly
+inconsistent hypotheses — `IsIsometricExtensor.not_separableSpace` proves that
+a fixed extensor already refutes separability — so it is not presented as the
+result.
+
+Issue #72 removes the distance between that bundle and E1. The bundle is E1
+transported onto a fixed carrier, and the transport is now formalised:
+`CPMOn.relabelIsometry` and `CPMOn.preimage_MetOn_comap` supply audit §7
+item 4 at the continuous-pseudometric level, `IsIsometricExtensorOn` states E1
+for one closed subset with no carrier-specific choices, and
+`IsIsometricExtensorOn.toIsIsometricExtensor` produces the bundle from it. The
+delivered forms of Theorem 3.5 are therefore
+`not_measurableSet_CPM_MetOn_of_isometricExtensorOn` and
+`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn`, which
+hypothesise `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1
+quantified over the closed subsets of `X`, as E1 quantifies itself. The checked
+claim is "Theorem 3.5 modulo E1". E1's proof stays external and is never an
+axiom.
 
 The non-Archimedean analogues and the finer component and complete-metric
 statements are recorded in the audit for later work. They are not part of the
-current #56/#57/#66 delivery.
+current #56/#57/#66/#72 delivery.
 
 ## Lean
 
@@ -101,19 +113,22 @@ namespace:
   distance with `BddPMet`'s real-valued one on bounded pairs,
   `bmet_not_borel_cpm`, `met_not_borel` (the literal, unbounded `Met(D)`
   non-Borelness statement), and `CPM.instCompleteSpace` (audit §2.8).
-- `Relabel.lean` (#63, #56 item 4) — relabelling of both ambients along a
-  bijection of the carrier (`BddPMet.relabelIsometry`, `CPM.relabelIsometry`)
-  with the `BMet`/`Met` preimage identities, and the arbitrary-carrier
-  theorems `bmet_not_borel_of_card`, `bmet_not_borel_cpm_of_card`,
-  `met_not_borel_of_card`.
+- `Relabel.lean` (#63, #56 item 4; extended by #72) — relabelling of both
+  ambients along a bijection of the carrier (`BddPMet.relabelIsometry`,
+  `CPM.relabelIsometry`) with the `BMet`/`Met` preimage identities, the
+  arbitrary-carrier theorems `bmet_not_borel_of_card`,
+  `bmet_not_borel_cpm_of_card`, `met_not_borel_of_card`, and `topology_comap`
+  (a relabelled metric induces the relabelled topology), which #72 needs where
+  the carriers are not discrete.
 - `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
-  lemmas; #66 package) — the nonseparable-space closed-discrete-subset
-  lemma, the closed-isometric-image lemma (now at `EMetricSpace` level), the
-  continuous-pseudometric ambient `CPMOn X`, `CPM.MetOn` inside it, the
-  `IsIsometricExtensor` hypothesis bundle with its derived `Met`-image
-  identity, and the transfer theorems
-  `IsIsometricExtensor.not_measurableSet_CPM_MetOn` and
-  `separable_of_measurableSet_CPM_MetOn_of_extensors`.
+  lemmas; #66 package; #72 E1 bridge) — the nonseparable-space
+  closed-discrete-subset lemma, the closed-isometric-image lemma (now at
+  `EMetricSpace` level), the continuous-pseudometric ambient `CPMOn X` with
+  its relabelling layer, `CPM.MetOn` inside it, the `IsIsometricExtensor`
+  hypothesis bundle with its derived `Met`-image identity, E1 itself as
+  `IsIsometricExtensorOn` with the derivation
+  `IsIsometricExtensorOn.toIsIsometricExtensor`, and the transfer theorems in
+  both their bundle-conditional and E1-conditional forms.
 
 Not yet done on this track: Corollary 3.6 (completely metrizable ⇒ Borel via
 Alexandrov–Lavrentiev), the `BMet`/`Comp` variants of the transfer that
@@ -122,8 +137,9 @@ audit §2.10 and §2.12 need, and the whole chain 3.10–3.17.
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
 in `notes/lean-axioms-borel.md`. External mathematical results (the E1
-isometric extensor) enter Lean only as an explicit hypothesis bundle
-(`IsIsometricExtensor`), never as a custom axiom.
+isometric extensor) enter Lean only as explicit hypotheses
+(`IsIsometricExtensorOn`, and the transported `IsIsometricExtensor`), never as
+a custom axiom.
 
 ## Archival verified core: Ishiki Conjecture 5.1
 
@@ -174,11 +190,11 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    supporting lemmas merged through **PR #67** at `a27d7f1`; the main
    theorem was deferred to **#66**. #57's acceptance criterion is the exact
    published theorem/interface, which the bundle-conditional form delivered
-   by #66 does not yet meet (see #72); **#57 stays open until #72 lands**.
+   by #66 did not meet; **#72 meets it**, so #57 closes with #72.
 4. **#66** — the Route M package (continuity-aware ambient `CPMOn`,
    `CompleteSpace (CPM D)`, the `EMetricSpace` closed-range generalisation,
    and the two transfer theorems): **delivered, conditional on the
-   `IsIsometricExtensor` bundle** (not on E1 verbatim — see #72).
+   `IsIsometricExtensor` bundle**; #72 supplies that bundle from E1.
 5. **#48** — Japanese Borel/descriptive-set-theory study note: **closed**;
    merged through **PR #49** at `2b8acf4`.
 6. **#58** — repository metadata cleanup and rename to
@@ -187,4 +203,6 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    action.
 7. **#72** — bridge the transported `IsIsometricExtensor` bundle to the
    published E1 theorem (audit §7 item 4's CPMOn-level relabelling
-   obligation): **open**.
+   obligation): **delivered**; `IsIsometricExtensorOn` states E1,
+   `IsIsometricExtensorOn.toIsIsometricExtensor` performs the transport, and
+   the two transfer theorems are restated with E1 as the hypothesis.

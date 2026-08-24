@@ -158,11 +158,13 @@ Attribution, following audit §2.6 and §2.8:
   continuity constraint on the discrete domain, and relabelling along `ι`
   moves the domain from `↥A` to the abstract carrier — but that second step
   needs a CPMOn-level relabelling layer, which is the outstanding obligation
-  of audit §7 item 4 and is **not formalised**. So E1 implies the Lean
-  hypothesis (making the Lean theorem at least as strong as the
-  E1-conditional statement), but Lean has not checked that implication. The
-  claim "Lean discharges Theorem 3.5 modulo E1" would overstate what is
-  proved; what is proved is "Lean discharges it modulo the bundle".
+  of audit §7 item 4 and is **not formalised** *as of this issue*. So E1
+  implies the Lean hypothesis (making the Lean theorem at least as strong as
+  the E1-conditional statement), but #66 did not check that implication. The
+  claim "Lean discharges Theorem 3.5 modulo E1" would overstate what #66
+  proves; what it proves is "Lean discharges it modulo the bundle". **This
+  paragraph is superseded by the #72 section below**, which closes the gap and
+  restates both theorems with E1 itself as the hypothesis.
 * No custom axiom is introduced for E1 or for the bundle.
 
 Vacuity:
@@ -180,3 +182,75 @@ Vacuity:
   whenever `X` admits no closed embedding of the (uncountable, discrete)
   coded carrier — which is exactly the situation the conclusion asserts. This
   is the form in which `exists_aleph1_closed_discrete_separated` is consumed.
+
+# Axiom audit — Issue #72 (the E1 bridge)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway module inside the build
+target (`import IshikiConj51.Ext.GeneralSeparability` plus the `#print axioms`
+lines), deleted before committing.
+
+| declaration | file | axioms |
+|---|---|---|
+| `IshikiExt.topology_comap` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.topology_comap_eq_iff` | `Ext/Relabel.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.coe_equivCPM_symm` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.comap` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.comap_coe` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.isometry_comap` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.relabelEquiv` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.relabelEquiv_apply` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.relabelIsometry` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.preimage_MetOn_comap` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensorOn` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensorOn.toIsIsometricExtensor` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.not_measurableSet_CPM_MetOn_of_isometricExtensorOn` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+
+No `sorryAx` and no custom axioms in the closure of any declaration above —
+only the three standard Lean/Mathlib axioms. `grep -rn sorry
+lean/IshikiConj51/` turns up only the word inside status comments.
+
+Attribution, superseding the "Conditionality" paragraph of the #66 section:
+
+* `IsIsometricExtensorOn` is **E1's own shape, for one closed subset**, with no
+  carrier-specific choices: `A` ranges over subsets of a metrizable `X`, the
+  domain is the preprint's `CPM(A)` (`CPMOn ↥A`), and the fields are E1's
+  clauses (1) `extension`, (2) `isometry_toCPM` and the inclusion half of the
+  "furthermore" clause, `met_preservation` — Route M's share of E1 (audit §4).
+  The reverse inclusion of `Ẽ(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)` is not assumed; its
+  transported form is derived, in
+  `IsIsometricExtensor.image_met_eq_range_inter`. Clauses (3) and (4) are
+  omitted; they belong to the §2.10 and §2.12 extensions, and (4) carries the
+  extra "`X` completely metrizable" hypothesis of the audit §3 caveat. So the
+  hypothesis is implied by E1 and assumes nothing E1 does not give.
+* `IsIsometricExtensorOn.toIsIsometricExtensor` is the transport that #66
+  described but did not check: for a closed embedding `ι` of a `⊥`-topologised
+  carrier, `CPMOn.comap` relabels the domain from `↥(range ι)` to the carrier
+  along the homeomorphism `ι` induces, and `CPMOn.equivCPM` then drops it to
+  the bare `CPM A`. The relabelling layer is audit §7 item 4 at `CPMOn` level:
+  `CPMOn.relabelIsometry` for the ambient, `CPMOn.preimage_MetOn_comap` for
+  the locus. The latter rests on `topology_comap` — a relabelled metric induces
+  the relabelled topology — which is the general form of `Ext/Relabel.lean`'s
+  discrete-carrier `topology_comap_eq_bot`.
+* `not_measurableSet_CPM_MetOn_of_isometricExtensorOn` and
+  `separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` are the
+  delivered forms of **Theorem 3.5**, hypothesising
+  `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1 quantified as E1
+  quantifies itself, over the closed subsets of `X`. "Lean discharges Theorem
+  3.5 modulo E1" is accurate for these two: no Lean-side transport is left
+  between the hypothesis and the external theorem. The bundle-conditional #66
+  theorems remain as the machinery they run on.
+* E1's proof stays external. No custom axiom is introduced for it, and the
+  hypothesis is discharged nowhere in the repository.
+
+Vacuity:
+
+* `not_measurableSet_CPM_MetOn_of_isometricExtensorOn` has satisfiable
+  hypotheses: E1 holds for every metrizable `X`, and a discrete `X` of
+  cardinality `ℵ₁` admits the closed embedding `hι`. That E1 holds is
+  external, so this is a remark, not a Lean declaration.
+* `separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` inherits the
+  situation of the `hEx` version: a one-point `X` satisfies `hMet` (its
+  `CPMOn X` is a one-point space) and E1 for both of its closed subsets. Also
+  a remark.

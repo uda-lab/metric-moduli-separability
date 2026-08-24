@@ -815,7 +815,9 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    deviation from the `MetD` mirror: `BddPMet.supDist` is a real conditional
    supremum, so the reindexing step cannot use `Equiv.iSup_comp` (no
    `ciSup` analogue exists in the pinned mathlib) and is proved by
-   antisymmetry from `le_supDist`/`supDist_le`.
+   antisymmetry from `le_supDist`/`supDist_le`. The same item at `CPMOn` level
+   — relabelling the continuous-pseudometric ambient along a *homeomorphism*,
+   which is what the E1 bridge needs — is *delivered by #72*, below.
 5. *Optional, not gating #57:* Theorem 3.4 (components; needs one-point
    amalgamation + regular-cardinal ball argument) and Theorem 3.8 (with the
    §2.11 repair baked in: complete base `d + 1`). Defer unless the owner
@@ -926,16 +928,51 @@ embedding `ι` and takes the extensor already transported along `ι`, with a bar
 continuity half of that bridge is proved (`CPMOn.equivCPM`,
 `CPMOn.preimage_equivCPM_met`); the relabelling half — moving the domain from
 `↥A` to the abstract carrier along `ι` — is the CPMOn-level instance of item 4
-above and is **not** formalised. E1 therefore implies the Lean hypothesis, so
-the Lean theorems are at least as strong as the E1-conditional statement, but
-Lean has not checked that implication. "Lean discharges Theorem 3.5 modulo E1"
-would overstate what is proved; "modulo the bundle" is accurate.
+above, and was **not** formalised in #66. E1 therefore implies the Lean
+hypothesis, so the Lean theorems are at least as strong as the E1-conditional
+statement, but #66 did not check that implication: for its two theorems,
+"modulo the bundle" is accurate and "modulo E1" would overstate. #72 below
+closes the bridge and restates both with E1 as the hypothesis.
 
-Not delivered here, and still open from this section: the E1 bridge just
-described (CPMOn-level relabelling, a generic extensor bundle over closed
-subsets, and the derivation), Corollary 3.6 (completely metrizable ⇒ Borel, via
-Alexandrov–Lavrentiev, E4d), and the `BMet`/`Comp` variants of the transfer
-needed for §2.10 and §2.12.
+Not delivered here: the E1 bridge just described (delivered by #72),
+Corollary 3.6 (completely metrizable ⇒ Borel, via Alexandrov–Lavrentiev, E4d),
+and the `BMet`/`Comp` variants of the transfer needed for §2.10 and §2.12. The
+last two remain open.
+
+### #72 — the E1 bridge (delivered)
+
+Three pieces, all in `Ext/GeneralSeparability.lean` except where noted.
+
+* **Item 4 at `CPMOn` level.** `CPMOn.comap`/`CPMOn.relabelIsometry` transport
+  the continuous-pseudometric ambient along a homeomorphism `σ : D ≃ₜ E`; the
+  pseudometric content is `CPM.comap σ` and the continuity field transports
+  because `σ × σ` is continuous. The locus identity is
+  `CPMOn.preimage_MetOn_comap`. Unlike the bare-carrier case, the condition
+  being transported is "`d` induces the topology of the ambient" rather than
+  "`d` induces `⊥`", so it needs `topology_comap` (`Ext/Relabel.lean`): a
+  relabelled metric induces the relabelled topology.
+  That is the general form of the existing `topology_comap_eq_bot`, which stays
+  as the discrete-carrier case.
+* **E1 as a Lean structure.** `IsIsometricExtensorOn (A : Set X)` for a
+  metrizable `X`: `closed`, `toCPM : CPMOn ↥A → CPMOn X`, `extension`,
+  `isometry_toCPM`, `met_preservation`. These are E1's clauses (1), (2) and the
+  inclusion half of the "furthermore" clause, with no carrier-specific choices;
+  the reverse inclusion stays derived
+  (`IsIsometricExtensor.image_met_eq_range_inter`), and clauses (3)/(4) are
+  omitted as before.
+* **The derivation.** `IsIsometricExtensorOn.toIsIsometricExtensor` takes
+  E1 for `Set.range ι`, for a closed embedding `ι` of a `⊥`-topologised carrier,
+  and produces the #66 bundle: relabel along the homeomorphism `ι` induces onto
+  `↥(range ι)`, then drop to the bare domain by `CPMOn.equivCPM`.
+  `met_preservation` transports through `CPMOn.preimage_equivCPM_met` and
+  `CPMOn.preimage_MetOn_comap`.
+
+Delivered statements:
+`not_measurableSet_CPM_MetOn_of_isometricExtensorOn` and
+`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn`, the #66 pair
+with `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1's statement
+for `X` — in place of the bundle. E1's proof stays external and is not an
+axiom.
 
 ### Non-Archimedean track (3.10–3.17)
 
