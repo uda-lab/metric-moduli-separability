@@ -14,7 +14,7 @@ v1 (20 Aug 2026).
 | Discrete Borel obstruction, items 1–3 (#56) | ✅ complete; merged in PR #64 at `8868eaa` |
 | Discrete Borel obstruction, item 4 — relabelling (#63) | ✅ complete |
 | General-space transfer, supporting lemmas (#57) | ✅ complete; merged in PR #67 at `a27d7f1` |
-| General-space transfer, capstone theorem (#66) | ✅ bundle-conditional capstone complete; E1 bridge (#72) open |
+| General-space transfer, main theorem (#66) | ✅ bundle-conditional theorem complete; E1 bridge (#72) open |
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
 | E1 bridge: bundle → published extensor theorem (#72) | 🔄 open |
@@ -24,10 +24,9 @@ v1 (20 Aug 2026).
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
 statement gate for #56, #57 and #66. It audits every theorem in the preprint,
-records PASS/FIX/EXTERNAL verdicts, and identifies the repairs that must be
-carried into formalisation. The Lean work follows the audit's minimal
-Archimedean route (Route M) for the headline Borel obstruction and
-separability result.
+records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
+formalisation. The Lean work follows the audit's minimal route (Route M) for
+the Borel obstruction and separability result.
 
 Issue #56 (discrete core), items 1–3 are done:
 
@@ -108,7 +107,7 @@ namespace:
   theorems `bmet_not_borel_of_card`, `bmet_not_borel_cpm_of_card`,
   `met_not_borel_of_card`.
 - `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
-  lemmas; #66 capstone) — the nonseparable-space closed-discrete-subset
+  lemmas; #66 package) — the nonseparable-space closed-discrete-subset
   lemma, the closed-isometric-image lemma (now at `EMetricSpace` level), the
   continuous-pseudometric ambient `CPMOn X`, `CPM.MetOn` inside it, the
   `IsIsometricExtensor` hypothesis bundle with its derived `Met`-image
@@ -159,7 +158,7 @@ closed. Two findings from that work remain relevant to the project boundary:
 The published preprint replaces that package with Borel statements, whose
 ambient Borel σ-algebra does not require a Polish ambient space. The old
 pointclass package is not a verification target. The pointclass-free metric
-coding from PR #52 survives as reusable infrastructure.
+coding from PR #52 remains reusable infrastructure.
 
 ## GitHub Issue work queue
 
@@ -172,11 +171,11 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    delivered; items 1–3 merged through **PR #64** at `8868eaa`, item 4
    (relabelling) through **#63**.
 3. **#57** — formalise the general-space Borel/separability transfer:
-   supporting lemmas merged through **PR #67** at `a27d7f1`; the capstone
+   supporting lemmas merged through **PR #67** at `a27d7f1`; the main
    theorem was deferred to **#66**. #57's acceptance criterion is the exact
    published theorem/interface, which the bundle-conditional form delivered
    by #66 does not yet meet (see #72); **#57 stays open until #72 lands**.
-4. **#66** — the Route M capstone (continuity-aware ambient `CPMOn`,
+4. **#66** — the Route M package (continuity-aware ambient `CPMOn`,
    `CompleteSpace (CPM D)`, the `EMetricSpace` closed-range generalisation,
    and the two transfer theorems): **delivered, conditional on the
    `IsIsometricExtensor` bundle** (not on E1 verbatim — see #72).

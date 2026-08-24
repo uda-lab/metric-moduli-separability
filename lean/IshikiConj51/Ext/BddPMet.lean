@@ -23,11 +23,10 @@
 -- claiming a continuity condition that is not stated.
 --
 -- Unlike `Conj51/MetD.lean` — where `Met(D)` consists of arbitrary, possibly
--- unbounded metrics and the supremum distance is therefore genuinely
--- `ℝ≥0∞`-valued — every element here is bounded, so `ρ` is an honest real
--- number and `BddPMet D` is a `MetricSpace`.  That is the whole point of the
--- bounded coding: it lets the parameter map be Lipschitz into a real metric
--- space.
+-- unbounded metrics and the supremum distance is therefore `ℝ≥0∞`-valued
+-- — every element here is bounded, so `ρ` is a real number and
+-- `BddPMet D` is a `MetricSpace`.  That is what the bounded coding is
+-- for: it lets the parameter map be Lipschitz into a real metric space.
 --
 -- `IsMetricOn` and `IsMetricOn.topology` are reused verbatim from
 -- `Conj51/MetD.lean` so that "compatible with the discrete topology" has one

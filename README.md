@@ -7,7 +7,7 @@ Research repository for Lean-assisted verification of results on spaces of compa
 The active external source is the joint preprint by Yoshito Ishiki and Tomoki Uda,
 **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618 (2026).
 
-The repository has been realigned to that public preprint after an earlier, stronger
+The repository now follows that public preprint after an earlier, stronger
 analytic/coanalytic draft was abandoned. The theorem-by-theorem audit and the Lean
 formalisation of the discrete Borel obstruction are complete; the general-space
 separability transfer is complete conditional on the transported
@@ -16,7 +16,7 @@ open as #72 (`notes/borel-preprint-audit.md`, `STATUS.md`).
 
 Open work:
 
-- **#72** — bridge the general-space capstone's extensor hypothesis to the published E1 theorem;
+- **#72** — bridge the general-space theorem's extensor hypothesis to the published E1 theorem;
 - **#58** — repository metadata cleanup and proposed rename to `metric-moduli-separability`.
 
 The merged `IshikiExt` Layer 1 development (PR #52) remains reusable: it proves the
@@ -57,13 +57,11 @@ adding `ℵ₂` Cohen reals), the largest thin `Π¹₁` set `C₁` (Kechris 197
 Sacks) is a coanalytic dense set of cardinality `ℵ₁`, a legitimate output of the
 recipe — so no ZFC proof of the "not coanalytic" half can exist for that recipe. By
 Mansfield–Solovay, a ZFC-safe repair would need `S ⊄ L[a]` for every real `a`, which
-the recipe does not supply. Only the asymmetric "not analytic" half survives in ZFC,
+the recipe does not supply. Only the asymmetric "not analytic" half remains in ZFC,
 by Souslin's perfect set theorem: under ¬CH from `ℵ₁ < 𝔠` directly, and under CH by
 choosing `S` as a Bernstein set. See `notes/borel-preprint-audit.md` §5 for the full
-account. The repair this raised was
-an author-level decision point in the superseded draft; the published joint preprint
-replaces the whole package. Valid pointclass-free metric coding from that work
-survives separately in PR #52.
+account. The published joint preprint replaces the whole package. Valid
+pointclass-free metric coding from that work remains from PR #52.
 
 ## Repository layout
 
