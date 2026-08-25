@@ -414,15 +414,16 @@ requires — the closed discrete subspace is produced by the separated-set
 argument only after nonseparability is assumed, so no single extensor can be
 named in advance.  E2's own proof stays external; it is never an axiom here.
 
-`hYultra` is the preprint's standing hypothesis that `Y` is ultrametrizable, in
-the `R`-valued form this ambient can state (for characteristic `R` the two agree,
-by Ishiki's factorization theorem — external, and not needed below).  The proof
-does not consume it: with E2 supplied as a hypothesis, ultrametrizability enters
-only through E2's own hypotheses.  It is kept so that the delivered statement is
-the preprint's, and the underscore in its name records that it is not consumed. -/
+The preprint's standing hypothesis that `Y` is ultrametrizable does **not**
+appear, and its absence is deliberate: the repair never uses it.  It is E2 whose
+hypotheses require it, and E2 is `hE2` here — so ultrametrizability enters
+exactly where the audit says it does, through the availability of the extensor.
+The statement below is therefore stronger than the preprint's 3.14 and implies
+it, with no auxiliary bridge to discharge; carrying an `R`-valued surrogate such
+as `(UMetOn Y R).Nonempty` instead would *weaken* it to a form that the audited
+hypotheses cannot instantiate without an external equivalence. -/
 theorem separable_of_measurableSet_UMetOn_of_ultraExtensors {Y : Type*} [MetricSpace Y]
     (hR : R.IsCharacteristic)
-    (_hYultra : (UMetOn Y R).Nonempty)
     (hMet : MeasurableSet (UMetOn Y R))
     (hE2 : ∀ (Z : Type) (ι : Z → Y), Nonempty Z →
       @Topology.IsClosedEmbedding Z Y ⊥ inferInstance ι →
@@ -457,14 +458,13 @@ properties of the topology. -/
 theorem separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors {Y : Type*}
     [TopologicalSpace Y] [TopologicalSpace.MetrizableSpace Y]
     (hR : R.IsCharacteristic)
-    (hYultra : (UMetOn Y R).Nonempty)
     (hMet : TopologicalSpace.IsCompletelyMetrizableSpace ↥(UMetOn Y R))
     (hE2 : ∀ (Z : Type) (ι : Z → Y), Nonempty Z →
       @Topology.IsClosedEmbedding Z Y ⊥ inferInstance ι →
       Nonempty (IsUltraIsometricExtensor (⊥ : TopologicalSpace Z) R ι)) :
     TopologicalSpace.SeparableSpace Y := by
   letI : MetricSpace Y := TopologicalSpace.metrizableSpaceMetric Y
-  exact separable_of_measurableSet_UMetOn_of_ultraExtensors hR hYultra
+  exact separable_of_measurableSet_UMetOn_of_ultraExtensors hR
     (measurableSet_of_isCompletelyMetrizableSpace hMet) hE2
 
 end

@@ -173,7 +173,10 @@ isometry composed with E2 extends from the witness to its closure, because
 Proposition 2.2's non-Borel parameter set. E2 enters as an explicit hypothesis
 bundle restricted to `UMet`, never as an axiom and never with the
 pseudo-ultrametric extensor it does not have; the false shortcut "separable
-metrizable spaces are absolutely Borel" is not used. Theorem 3.16 and
+metrizable spaces are absolutely Borel" is not used. The preprint's
+ultrametrizability hypothesis on `Y` is not carried, because the repair does not
+use it — it is E2 that requires it — so the delivered statements imply the
+preprint's. Theorem 3.16 and
 Corollary 3.17 remain future work.
 
 ## Lean

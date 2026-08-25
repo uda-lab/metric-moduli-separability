@@ -1204,9 +1204,10 @@ amalgam glues at `θ(z)` for an arbitrary bijection `θ`, and only `z ∈ E` and
 Deviations, both recorded there: `P` is used in its transported form
 `cl(Φ(2^ω∖S))` (equal to `Φ(P)`, proved), and the final step is the pullback
 identity rather than the printed relative trace (which is formalised
-alongside). The ultrametrizability of `Y` is carried as a hypothesis of the
-delivered 3.14/3.15 but is not consumed: with E2 supplied as a hypothesis it
-enters only through E2's own hypotheses.
+alongside). Ultrametrizability of `Y` is not a hypothesis of the delivered
+3.14/3.15: the repair does not use it, and it is E2 — supplied here as a
+hypothesis — whose own hypotheses require it. The delivered statements are
+therefore stronger than the preprint's and imply them.
 
 **Not delivered.** 3.16–3.17: the `UComp` (complete-member) locus and the
 complete-base normalisation of 3.16, and 3.17's use of E2 clause (N1). The
