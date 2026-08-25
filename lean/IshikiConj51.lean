@@ -27,3 +27,8 @@ import IshikiConj51.Ext.UltraPMet
 import IshikiConj51.Ext.CantorUltra
 import IshikiConj51.Ext.UltraCoding
 import IshikiConj51.Ext.UltraComponent
+
+-- Non-Archimedean track (Issue #82): the general-space transfer, Theorem 3.14
+-- and Corollary 3.15.
+import IshikiConj51.Ext.UltraGeneral
+import IshikiConj51.Ext.UltraTransfer

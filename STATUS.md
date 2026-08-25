@@ -22,11 +22,12 @@ v1 (20 Aug 2026).
 | Theorem 3.4: non-Borel components of `Met(Z)` (#84) | ✅ complete |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 | Discrete ultrametric core, Prop. 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13 (#81) | ✅ complete |
+| Ultrametric transfer, Theorem 3.14 and Corollary 3.15 (#82) | ✅ complete, conditional on E2 |
 
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
-statement gate for #56, #57, #66, #72, #79, #84 and #81. It audits every theorem in the preprint,
+statement gate for #56, #57, #66, #72, #79, #84, #81 and #82. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
 formalisation. The Lean work follows the audit's minimal route (Route M) for
 the Borel obstruction and separability result.
@@ -163,8 +164,17 @@ parameter pullback identities (`preimage_UMet_phiU`,
 `preimage_UComponent_psiU`); the printed proofs' compact traces and closed
 images are formalised alongside rather than assumed.
 
-Theorems 3.14–3.17 remain future work, including the 3.14 ambient-transfer
-repair that audit §2.14 records as not mechanizable from the paper's text.
+Issue #82 continues the track with Theorem 3.14 and Corollary 3.15. The
+preprint's proof of 3.14 does not close — audit §2.14 records that E2, unlike
+E1, supplies no `UCPM`-level extensor to pull ambient Borelness back along —
+so what is formalised is the audit's compact-witness repair: the coding
+isometry composed with E2 extends from the witness to its closure, because
+`UCPM(Y;R)` is complete, and the extension's exact pullback identity returns
+Proposition 2.2's non-Borel parameter set. E2 enters as an explicit hypothesis
+bundle restricted to `UMet`, never as an axiom and never with the
+pseudo-ultrametric extensor it does not have; the false shortcut "separable
+metrizable spaces are absolutely Borel" is not used. Theorem 3.16 and
+Corollary 3.17 remain future work.
 
 ## Lean
 
@@ -237,9 +247,22 @@ Non-Archimedean track (#81):
   ultrametric one-point max-amalgam, the audited component bound
   `𝒰𝒟^R(m_t,d) ≤ q ∨ r 0`, and non-Borelness of every `R`-component.
 
+Non-Archimedean track (#82):
+
+- `UltraGeneral.lean` — the general-space ambient `UCPMOn Y R` (the preprint's
+  *continuous* `R`-valued pseudo-ultrametrics) with its locus `UMetOn Y R`,
+  completeness of the ambient for every characteristic `R` (`completeSpace_UCPM`,
+  `completeSpace_UCPMOn`), the restriction map along a discrete closed subspace,
+  and E2 as the hypothesis bundle `IsUltraIsometricExtensor`.
+- `UltraTransfer.lean` — the audit §2.14 repair (`ultraExtend` and its pullback
+  and trace identities) and the two theorems, Theorem 3.14
+  (`separable_of_measurableSet_UMetOn_of_ultraExtensors`) and Corollary 3.15
+  (`separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`).
+
 Not yet done on this track: Theorem 3.8 (the complete-metric component
 statement, with the audit §2.11 repair), the `Comp` variant of the transfer
-that audit §2.12 needs, and the non-Archimedean chain 3.14–3.17.
+that audit §2.12 needs, and the non-Archimedean Theorem 3.16 and Corollary
+3.17 (the `UComp` locus and E2 clause (N1)).
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
@@ -325,3 +348,8 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    Lemmas 3.10–3.11, Theorems 3.12–3.13): **delivered**. The `UCPM`/`𝒰𝒟^R`
    ambient and the one-point max-amalgam layers are written to be reused by
    the follow-on non-Archimedean issues.
+11. **#82** — formalise Theorem 3.14 and Corollary 3.15: **delivered**, by the
+   audit §2.14 compact-witness repair rather than the printed proof, which does
+   not close. E2 is an explicit hypothesis bundle with no `UCPM`-level
+   extensor — the absence that forces the repair — and completeness of
+   `UCPM(Y;R)` is proved outright.
