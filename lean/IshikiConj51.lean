@@ -21,6 +21,8 @@ import IshikiConj51.Ext.Component
 import IshikiConj51.Ext.GeneralSpace
 import IshikiConj51.Ext.GeneralSeparability
 import IshikiConj51.Ext.CompleteMetrizability
+import IshikiConj51.Ext.Completeness
+import IshikiConj51.Ext.CompleteMetric
 
 -- Non-Archimedean track (Issue #81): the discrete ultrametric core, 3.10–3.13.
 import IshikiConj51.Ext.UltraPMet

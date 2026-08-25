@@ -20,6 +20,7 @@ v1 (20 Aug 2026).
 | E1 bridge: bundle → published extensor theorem (#72) | ✅ complete |
 | Corollaries 3.6 and 3.7, with the audit §2.10 repair (#79) | ✅ complete |
 | Theorem 3.4: non-Borel components of `Met(Z)` (#84) | ✅ complete |
+| Theorem 3.8 and Corollary 3.9, with the audit §2.11 repair (#80) | ✅ complete |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 | Discrete ultrametric core, Prop. 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13 (#81) | ✅ complete |
 | Ultrametric transfer, Theorem 3.14 and Corollary 3.15 (#82) | ✅ complete, conditional on E2 |
@@ -27,7 +28,7 @@ v1 (20 Aug 2026).
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
-statement gate for #56, #57, #66, #72, #79, #84, #81 and #82. It audits every theorem in the preprint,
+statement gate for #56, #57, #66, #72, #79, #84, #80, #81 and #82. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
 formalisation. The Lean work follows the audit's minimal route (Route M) for
 the Borel obstruction and separability result.
@@ -123,11 +124,23 @@ metric along one common point; the two steps the preprint leaves implicit —
 the amalgam stays at finite supremum distance from the base metric, and
 membership in the component reduces to compatibility — are the separate
 lemmas `edist_psi_base_le` (with the explicit bound `4 + 2H`) and
-`mem_Met_psi_iff`. The amalgamation layer is carrier-agnostic and is what the
-complete-metric statement (Theorem 3.8) will consume.
+`mem_Met_psi_iff`. The amalgamation layer is carrier-agnostic, and Issue #80
+consumes it unchanged.
 
-The complete-metric statements (Theorems 3.8 and 3.16) are recorded in the
-audit for later work.
+Issue #80 is the complete-metric branch, Theorem 3.8 and Corollary 3.9. Audit
+§2.11 rejects the printed proof of 3.8: it amalgamates the coding with an
+arbitrary representative of the component and asserts the result is complete,
+which fails whenever that representative is not. The repair, which is what is
+formalised, first normalises the base to `d + 1` off the diagonal — complete,
+compatible, and within supremum distance `1` of the original, so in the same
+component — and then proves completeness of the amalgam over that base. Both
+the component statement `𝔠 ∩ Comp(Z)` and the component-free `Comp(Z)` are
+delivered, the latter through the trace identity `Ψ⁻¹(Comp(Z)) = [0,1] \ S`
+rather than by intersecting with the non-Borel component. Corollary 3.9 adds
+E1 clause (4) to the extensor bundle; the audit §3 caveat — that the clause is
+printed without hypothesis but is false without `X` completely metrizable — is
+encoded in the bundle, which carries that hypothesis, so the clause cannot be
+assumed where its source proof does not supply it.
 
 ## Non-Archimedean track
 
@@ -229,6 +242,17 @@ namespace:
   `MetricSpace`), the bounded locus `CPM.BMetOn X` with its transport lemmas,
   E1 clause (3) as `IsBddIsometricExtensorOn`, the `BMet` analogue of Theorem
   3.5 that audit §2.10 requires, and Corollaries 3.6 and 3.7.
+- `Completeness.lean` (#80) — completeness for the bare metrics of this track
+  (`IsCompleteMetricOn`, pinned to Mathlib's `CompleteSpace` by
+  `isCompleteMetricOn_iff_completeSpace`), the audit §2.11 base normalisation
+  `addOneOffDiag`, completeness of the coding metrics and of the one-point
+  amalgam, restriction of a complete metric to a closed subspace, and the two
+  `Comp` loci `CPM.Comp Z` and `CPM.CompOn X` with their transport lemmas.
+- `CompleteMetric.lean` (#80) — the `CompleteComponentSetup` bundle and the
+  normalisation of an arbitrary representative, the three forms of Theorem 3.8
+  (representative, quotient, component-free), E1 clause (4) as
+  `IsCompIsometricExtensorOn`, the `Comp` image identity and transfer, and
+  Corollary 3.9.
 
 Non-Archimedean track (#81):
 
@@ -262,9 +286,7 @@ Non-Archimedean track (#82):
   (`separable_of_measurableSet_UMetOn_of_ultraExtensors`) and Corollary 3.15
   (`separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`).
 
-Not yet done on this track: Theorem 3.8 (the complete-metric component
-statement, with the audit §2.11 repair), the `Comp` variant of the transfer
-that audit §2.12 needs, and the non-Archimedean Theorem 3.16 and Corollary
+Not yet done on this track: the non-Archimedean Theorem 3.16 and Corollary
 3.17 (the `UComp` locus and E2 clause (N1)).
 
 Every declaration above is sorry-free; `#print axioms` shows only the
@@ -272,8 +294,8 @@ standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
 in `notes/lean-axioms-borel.md`. External mathematical results (the E1
 isometric extensor, and Koshino's theorem E3 in Corollary 3.7) enter Lean only
 as explicit hypotheses (`IsIsometricExtensorOn`, `IsBddIsometricExtensorOn`,
-the transported `IsIsometricExtensor`, and E3's iff as a hypothesis of the
-statement that uses it), never as a custom axiom.
+`IsCompIsometricExtensorOn`, the transported `IsIsometricExtensor`, and E3's
+iff as a hypothesis of the statement that uses it), never as a custom axiom.
 
 ## Archival verified core: Ishiki Conjecture 5.1
 
@@ -347,11 +369,17 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
 9. **#84** — formalise Theorem 3.4 (every finite-sup-distance component of
    `Met(Z)` is non-Borel in `CPM(Z)`): **delivered**, with the one-point
    amalgamation split out as reusable machinery for Theorem 3.8.
-10. **#81** — formalise the discrete non-Archimedean core (Proposition 2.2,
+10. **#80** — formalise Theorem 3.8 and Corollary 3.9: **delivered**, with the
+    audit §2.11 repair (the base metric is normalised to a complete one before
+    the amalgamation, and the printed proof's step is not formalised) and the
+    component-free `Comp(Z)` consequence obtained from the trace identity.
+    E1 clause (4) enters as a bundle field carrying the "`X` completely
+    metrizable" hypothesis its source proof requires.
+11. **#81** — formalise the discrete non-Archimedean core (Proposition 2.2,
    Lemmas 3.10–3.11, Theorems 3.12–3.13): **delivered**. The `UCPM`/`𝒰𝒟^R`
    ambient and the one-point max-amalgam layers are written to be reused by
    the follow-on non-Archimedean issues.
-11. **#82** — formalise Theorem 3.14 and Corollary 3.15: **delivered**, by the
+12. **#82** — formalise Theorem 3.14 and Corollary 3.15: **delivered**, by the
    audit §2.14 compact-witness repair rather than the printed proof, which does
    not close. E2 is an explicit hypothesis bundle with no `UCPM`-level
    extensor — the absence that forces the repair — and completeness of

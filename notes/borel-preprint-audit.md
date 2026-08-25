@@ -758,12 +758,13 @@ the separate, strictly weaker archival-track result) and Theorem 3.3
 (`bmet_not_borel_cpm`, `met_not_borel`, §7 item 3), plus Theorem 3.5
 conditionally (`IsIsometricExtensor.not_measurableSet_CPM_MetOn`, §7 "#66").
 Theorem 3.4 and the one-point amalgamation it rests on are now
-`Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"). Still no existing
-Lean declaration for: Proposition 2.1's density clause, Proposition 2.2 (the
-`2^ω` analogue, needed only by the non-Archimedean track), Theorems 3.6–3.9
-conclusions, the complete-metric branch of the amalgamation (3.8), extensor
-E2, or anything non-Archimedean (3.10–3.17) — none of these gate
-#56/#57/#66 (§7 item 5).
+`Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"), Corollaries 3.6 and
+3.7 are `Ext/CompleteMetrizability.lean` (§7 "#79"), and Theorem 3.8 with
+Corollary 3.9 are `Ext/Completeness.lean` and `Ext/CompleteMetric.lean`
+(§7 "#80"). Still no existing Lean declaration for: Proposition 2.1's density
+clause, Proposition 2.2 (the `2^ω` analogue, needed only by the
+non-Archimedean track), extensor E2, or anything non-Archimedean
+(3.10–3.17) — none of these gate #56/#57/#66 (§7 item 5).
 
 Archival mapping (unchanged by this audit): `Conj51/` +
 `report/report-ja.md` formalise the companion arXiv:2608.11023
@@ -1127,6 +1128,68 @@ topology on any carrier. Neither theorem is vacuously true.
 The verdict on 3.4 is unchanged: PASS. Nothing in the written proof had to be
 repaired to formalise it; the two implicit steps of §2.7 are the two lemmas
 named above.
+
+### #80 — Theorem 3.8 and Corollary 3.9 (delivered)
+
+Two files: `Ext/Completeness.lean`, which is completeness for the bare metrics
+of this track together with the two `Comp` loci, and `Ext/CompleteMetric.lean`,
+which is the two theorems. The component and amalgamation machinery of #84 is
+consumed unchanged.
+
+* **What completeness means here.** Metrics on this track are bare functions
+  satisfying `IsMetricOn`, so completeness is stated the same way:
+  `IsCompleteMetricOn d` says every `d`-Cauchy sequence converges, and
+  `isCompleteMetricOn_iff_completeSpace` identifies it with `CompleteSpace`
+  for `IsMetricOn.toMetricSpace`, so nothing weaker is in play.
+  `CPM.Comp Z` and `CPM.CompOn X` are the complete members of `CPM.Met Z` and
+  of `CPM.MetOn X` — §1's `Comp` in the discrete and the general ambient.
+  `CPMOn.preimage_equivCPM_comp` and `CPMOn.preimage_CompOn_comap` carry the
+  locus across the two moves of the #72 bridge, as their `Met` and `BMet`
+  counterparts do.
+* **The §2.11 repair, in three lemmas.** `addOneOffDiag d` is `d' := d + 1`
+  off the diagonal; `isMetricOn_addOneOffDiag`,
+  `topology_addOneOffDiag_eq_bot`, `isCompleteMetricOn_addOneOffDiag` and
+  `abs_addOneOffDiag_sub_le` are the four properties the repair needs, the
+  last one being what puts `d'` in the component of `d`.
+  `isCompleteMetricOn_dExt` is the half of the printed proof that survives
+  the audit: the coding metrics are complete for `t ∉ S`, cross-block
+  distances confining a Cauchy sequence to one star and `|t − a| > 0` making
+  it eventually constant there. `isCompleteMetricOn_amalgam` is the
+  amalgamation step, with hypotheses exactly as the argument uses them — the
+  base complete *and* compatible, the `E`-side metric complete, and the
+  uniform gap at the glue point. Compatibility of the base is what keeps the
+  limit of an outside sequence outside `E`; without it the amalgam of two
+  complete metrics need not be complete. The printed proof's step — an
+  arbitrary base metric — is not formalised anywhere.
+* **Theorem 3.8.** `component_inter_comp_not_measurableSet` for a
+  representative, `componentSet_inter_comp_not_measurableSet` for
+  `𝔠 ∈ 𝐌_{<∞}(Z)`, and `comp_not_measurableSet` for the component-free
+  consequence. `exists_completeComponentSetup` is the normalisation: every
+  component is the component of a complete compatible metric, over which the
+  §2.7 setup is rebuilt. `nonempty_component_inter_comp` records that
+  `𝔠 ∩ Comp(Z)` is nonempty, which is what §2.12 uses.
+* **Trace, not intersection.** The `Comp(Z)` consequence runs on
+  `preimage_Comp_psi` (`Ψ⁻¹(Comp(Z)) = [0,1] ∖ S`), with `range_inter_Comp`
+  recording the compact-witness form `L' ∩ Comp(Z) = Ψ([0,1] ∖ S)`. No
+  component is intersected, as §2.11 prescribes.
+* **E1 clause (4).** `IsCompIsometricExtensorOn` adds the single field
+  `Ẽ(Comp(A)) ⊆ Comp(X)` to `IsIsometricExtensorOn`, and carries
+  `IsCompletelyMetrizableSpace X` as an instance hypothesis — the §3 caveat,
+  encoded rather than only recorded, so the bundle cannot be asserted where
+  the source's proof does not justify it.
+  `IsCompIsometricExtensorOn.image_comp_subset` transports the clause along
+  `IsIsometricExtensorOn.toIsIsometricExtensor`.
+* **Corollary 3.9.** `IsIsometricExtensor.image_comp_eq_range_inter` is
+  `E(Comp(Z)) = Ẽ(CPM(Z)) ∩ Comp(X)`, its reverse inclusion carrying §3's
+  "restriction of a complete metric to a closed subspace is complete"
+  (`isCompleteMetricOn_restrict`).
+  `IsIsometricExtensor.not_measurableSet_CPM_CompOn` and
+  `not_measurableSet_CPM_CompOn_of_compIsometricExtensorOn` run §2.8's chain
+  on it, and
+  `separable_of_measurableSet_CPM_CompOn_of_compIsometricExtensorOn` is the
+  corollary. The route is the component-free one of §2.12.
+
+E1 stays external and is discharged nowhere in the repository.
 
 ### Non-Archimedean track (3.10–3.17)
 
