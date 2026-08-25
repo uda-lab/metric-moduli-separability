@@ -96,9 +96,11 @@ def CPM.metSetoid (Z : Type*) : Setoid ↥(CPM.Met Z) where
 /-- `𝐌_{<∞}(Z) = Met(Z)/∼`, the set of finite-sup-distance components. -/
 def CPM.Components (Z : Type*) : Type _ := Quotient (CPM.metSetoid Z)
 
-/-- A component, read as a subset of the ambient `CPM(Z)`. -/
-def CPM.componentSet (𝔠 : CPM.Components Z) : Set (CPM Z) :=
-  Subtype.val '' {e : ↥(CPM.Met Z) | Quotient.mk (CPM.metSetoid Z) e = 𝔠}
+/-- A component, read as a subset of the ambient `CPM(Z)`.  The class is named
+`comp` rather than `𝔠` because that glyph is Mathlib's notation for the
+continuum. -/
+def CPM.componentSet (comp : CPM.Components Z) : Set (CPM Z) :=
+  Subtype.val '' {e : ↥(CPM.Met Z) | Quotient.mk (CPM.metSetoid Z) e = comp}
 
 theorem CPM.componentSet_mk (d : ↥(CPM.Met Z)) :
     CPM.componentSet (Quotient.mk (CPM.metSetoid Z) d) = CPM.component d.1 := by
@@ -116,41 +118,56 @@ theorem CPM.componentSet_mk (d : ↥(CPM.Met Z)) :
 /-! ## Nonvacuity: the `0/1` metric -/
 
 open Classical in
-theorem isMetricOn_discreteFn (Z : Type*) :
-    IsMetricOn (fun x y : Z => if x = y then (0 : ℝ) else 1) := by
-  refine ⟨fun x => by simp, ?_, ?_, ?_⟩
-  · intro x y hxy
-    by_contra hne
-    rw [if_neg hne] at hxy
-    norm_num at hxy
-  · intro x y
-    by_cases h : x = y
-    · rw [if_pos h, if_pos h.symm]
-    · rw [if_neg h, if_neg (Ne.symm h)]
-  · intro x y z
-    by_cases hxz : x = z
-    · rw [if_pos hxz]
-      split_ifs <;> norm_num
-    · rw [if_neg hxz]
-      by_cases hxy : x = y
-      · rw [if_pos hxy, if_neg (by rw [← hxy]; exact hxz)]
-        norm_num
-      · rw [if_neg hxy]
-        split_ifs <;> norm_num
+/-- The `0/1` metric on a bare carrier, as a bare function.  It is a named
+definition so that every statement below refers to the same `Decidable`
+instance. -/
+def discreteFn (Z : Type*) : Z → Z → ℝ := fun x y => if x = y then 0 else 1
 
-open Classical in
+@[simp] theorem discreteFn_self {Z : Type*} (x : Z) : discreteFn Z x x = 0 := by
+  simp [discreteFn]
+
+theorem discreteFn_of_ne {Z : Type*} {x y : Z} (h : x ≠ y) : discreteFn Z x y = 1 := by
+  simp [discreteFn, h]
+
+theorem discreteFn_nonneg {Z : Type*} (x y : Z) : 0 ≤ discreteFn Z x y := by
+  by_cases h : x = y
+  · rw [h, discreteFn_self]
+  · rw [discreteFn_of_ne h]
+    norm_num
+
+theorem isMetricOn_discreteFn (Z : Type*) : IsMetricOn (discreteFn Z) where
+  dist_self x := discreteFn_self x
+  eq_of_dist_eq_zero {x y} h := by
+    by_contra hne
+    rw [discreteFn_of_ne hne] at h
+    norm_num at h
+  dist_comm x y := by
+    by_cases h : x = y
+    · rw [h]
+    · rw [discreteFn_of_ne h, discreteFn_of_ne (Ne.symm h)]
+  dist_triangle x y z := by
+    by_cases hxz : x = z
+    · rw [hxz, discreteFn_self]
+      linarith [discreteFn_nonneg z y, discreteFn_nonneg y z]
+    · rw [discreteFn_of_ne hxz]
+      by_cases hxy : x = y
+      · rw [discreteFn_of_ne (fun h => hxz (hxy.trans h))]
+        linarith [discreteFn_nonneg x y]
+      · rw [discreteFn_of_ne hxy]
+        linarith [discreteFn_nonneg y z]
+
 theorem topology_discreteFn_eq_bot (Z : Type*) :
     (isMetricOn_discreteFn Z).topology = ⊥ := by
   rw [IsMetricOn.topology_eq_bot_iff]
   intro u
   refine ⟨1, one_pos, fun v hv => ?_⟩
   by_contra hne
-  rw [if_neg hne] at hv
+  rw [discreteFn_of_ne hne] at hv
   exact absurd hv (lt_irrefl 1)
 
-/-- The `0/1` metric on a bare carrier. -/
+/-- The `0/1` metric as a member of the ambient. -/
 def CPM.discrete (Z : Type*) : CPM Z :=
-  ⟨fun x y => if x = y then 0 else 1, IsMetricOn.toIsPMetricOn (isMetricOn_discreteFn Z)⟩
+  ⟨discreteFn Z, IsMetricOn.toIsPMetricOn (isMetricOn_discreteFn Z)⟩
 
 theorem CPM.discrete_mem_Met (Z : Type*) : CPM.discrete Z ∈ CPM.Met Z :=
   ⟨isMetricOn_discreteFn Z, topology_discreteFn_eq_bot Z⟩
@@ -173,7 +190,7 @@ theorem exists_aleph1_ball (hZ : #Z = aleph 1) {d : Z → Z → ℝ} (hd : IsMet
     (z : Z) : ∃ H : ℝ, 1 ≤ H ∧ #(↥{x : Z | d z x ≤ H}) = aleph 1 := by
   have hexists : ∃ n : ℕ, ¬ ({x : Z | d z x ≤ (n : ℝ)}).Countable := by
     by_contra hall
-    push_neg at hall
+    push Not at hall
     have hcov : (Set.univ : Set Z) = ⋃ n : ℕ, {x : Z | d z x ≤ (n : ℝ)} := by
       ext x
       simp only [Set.mem_univ, true_iff, Set.mem_iUnion, Set.mem_setOf_eq]
@@ -189,10 +206,12 @@ theorem exists_aleph1_ball (hZ : #Z = aleph 1) {d : Z → Z → ℝ} (hd : IsMet
   have hge : aleph 1 ≤ #(↥{x : Z | d z x ≤ (n : ℝ)}) := by
     refine Cardinal.aleph_one_le_iff.mpr ?_
     by_contra hcon
-    push_neg at hcon
+    push Not at hcon
     exact hn (Cardinal.le_aleph0_iff_set_countable.mp hcon)
-  have hsub : {x : Z | d z x ≤ (n : ℝ)} ⊆ {x : Z | d z x ≤ max (n : ℝ) 1} :=
-    fun x hx => le_trans hx (le_max_left _ _)
+  have hsub : {x : Z | d z x ≤ (n : ℝ)} ⊆ {x : Z | d z x ≤ max (n : ℝ) 1} := by
+    intro x hx
+    simp only [Set.mem_setOf_eq] at hx ⊢
+    exact le_trans hx (le_max_left _ _)
   exact ⟨max (n : ℝ) 1, le_max_right _ _,
     le_antisymm ((Cardinal.mk_set_le _).trans_eq hZ)
       (hge.trans (Cardinal.mk_le_mk_of_subset hsub))⟩
@@ -472,9 +491,9 @@ theorem component_not_measurableSet (hZ : #Z = aleph 1) (d : CPM Z)
 /-- **Theorem 3.4, literally.**  For a discrete carrier `Z` with `|Z| = ℵ₁`,
 *every* component `𝔠 ∈ 𝐌_{<∞}(Z)` is non-Borel in `CPM(Z)`, the component
 being read as a subset of the ambient. -/
-theorem componentSet_not_measurableSet (hZ : #Z = aleph 1) (𝔠 : CPM.Components Z) :
-    ¬ MeasurableSet (CPM.componentSet 𝔠) := by
-  refine Quotient.inductionOn 𝔠 fun d => ?_
+theorem componentSet_not_measurableSet (hZ : #Z = aleph 1) (comp : CPM.Components Z) :
+    ¬ MeasurableSet (CPM.componentSet comp) := by
+  refine Quotient.inductionOn comp fun d => ?_
   rw [CPM.componentSet_mk]
   exact component_not_measurableSet hZ d.1 d.2
 
