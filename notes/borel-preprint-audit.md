@@ -761,9 +761,9 @@ Theorem 3.4 and the one-point amalgamation it rests on are now
 `Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"), Corollaries 3.6 and
 3.7 are `Ext/CompleteMetrizability.lean` (§7 "#79"), and Theorem 3.8 with
 Corollary 3.9 are `Ext/Completeness.lean` and `Ext/CompleteMetric.lean`
-(§7 "#80"); the non-Archimedean chain 2.2 and 3.10–3.15 landed with #81 and
-#82. Still no existing Lean declaration for: Proposition 2.1's density clause,
-Theorem 3.16 or Corollary 3.17 — none of these gate #56/#57/#66 (§7 item 5).
+(§7 "#80"); the non-Archimedean chain 2.2 and 3.10–3.17 landed with #81, #82
+and #83. Proposition 2.1's density clause is now the only audited statement
+with no Lean declaration, and it does not gate #56/#57/#66 (§7 item 5).
 
 Archival mapping (unchanged by this audit): `Conj51/` +
 `report/report-ja.md` formalise the companion arXiv:2608.11023
@@ -1192,9 +1192,10 @@ E1 stays external and is discharged nowhere in the repository.
 
 ### Non-Archimedean track (3.10–3.17)
 
-Fully audited above (§2.13–2.15). The discrete core — Proposition 2.2 and
-Lemmas 3.10–3.11, Theorems 3.12–3.13 — is *delivered by #81*; 3.14–3.17
-remain future work. The preprint presents the chain 3.1–3.9 as the headline
+Fully audited above (§2.13–2.15) and fully delivered: the discrete core —
+Proposition 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13 — by #81, the transfer
+3.14–3.15 by #82, and the complete branch 3.16–3.17 by #83. The preprint
+presents the chain 3.1–3.9 as the headline
 (abstract and introduction lead with `Met(Z)`, Borel ⇒ separability, and the
 Koshino combination; the non-Archimedean results are labelled "analogues").
 
@@ -1271,10 +1272,49 @@ alongside). Ultrametrizability of `Y` is not a hypothesis of the delivered
 hypothesis — whose own hypotheses require it. The delivered statements are
 therefore stronger than the preprint's and imply them.
 
-**Not delivered.** 3.16–3.17: the `UComp` (complete-member) locus and the
-complete-base normalisation of 3.16, and 3.17's use of E2 clause (N1). The
-3.14 transfer repair they inherit is delivered, so what remains for 3.17 is the
-`UComp` layer plus an E2 bundle extended by (N1).
+**Delivered (#83).** Two more files, carrying the complete branch 3.16 and
+3.17.
+
+7. `Ext/UltraComplete.lean` — the discrete locus and Theorem 3.16. `UComp Z R`
+   is the complete members of `UMet Z R`, with completeness the
+   `IsCompleteMetricOn` of `Ext/Completeness.lean` (#80), pinned to Mathlib's
+   `CompleteSpace` there. The complete-base normalisation is
+   `supConstOffDiag c d` — `d ∨ c` off the diagonal for `c ∈ R∖{0}` — with its
+   four properties (`isUltraPMetOn_supConstOffDiag`,
+   `topology_supConstOffDiag_eq_bot`, `isCompleteMetricOn_supConstOffDiag`,
+   and `edist_uSupConstOffDiag_le`, the last being the audited bound
+   `𝒰𝒟^R(d∨c,d) ≤ c` and hence `UComponent_uSupConstOffDiag`). The maximum is
+   what keeps the normalisation `R`-valued, where the Archimedean §2.11
+   normalisation has to add a constant. `isCompleteMetricOn_uAmalgam` is the
+   one-point max-amalgam step: past the index where the Cauchy condition drops
+   below the gap at the glue point a sequence cannot straddle the two sides, so
+   it settles in one of them. Completeness of the coding metrics is #81's
+   `dU_completeSpace`, restated as `isCompleteMetricOn_phiU`. The two theorems
+   are `ucomponent_inter_ucomp_not_borel` (componentwise) and
+   `ucomp_not_borel_of_card` (the "consequently" clause); as in §2.11 the
+   latter runs on `Ψ⁻¹(UComp(Z;R)) = 2^ω∖S` and not by intersecting with a
+   component.
+8. `Ext/UltraCompleteTransfer.lean` — the general-space locus `UCompOn Y R`
+   and Corollary 3.17. `isCompletelyMetrizableSpace_of_mem_UCompOn` is the
+   nonemptiness step, which supplies the hypothesis of E2 clause (N1);
+   `IsUltraCompIsometricExtensor` is #82's E2 bundle with (N1) as one further
+   field, gated on a proof of complete metrizability of `Y` so that the clause
+   cannot be asserted outside the range §3 quotes it for.
+   `isCompleteMetricOn_restrict_of_mem_UCompOn` is §3's "restriction of a
+   complete metric to a closed subspace is complete" in this ambient, and with
+   it `IsUltraCompIsometricExtensor.image_ucomp_eq_range_inter` is the audited
+   identity `E(UComp(Z;R)) = E(UMet(Z;R)) ∩ UComp(Y;R)`. The transfer reuses
+   #82's `ultraExtend` unchanged — it depends only on the witness and on E2
+   clauses (1), (2) — with `Ψ` read as the 3.16 witness
+   (`codingWitness_subset_UComp`); the two theorems are
+   `separable_of_measurableSet_UCompOn_of_ultraCompExtensors` and, via
+   Alexandrov–Lavrentiev (E4d),
+   `separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors`.
+
+The audited nonemptiness hypothesis on `UComp(Y;R)` is carried in both 3.17
+statements. Ultrametrizability of `Y` is not, for the reason recorded for
+3.14/3.15 above, so the delivered statements are again stronger than the
+preprint's and imply them.
 
 ---
 
