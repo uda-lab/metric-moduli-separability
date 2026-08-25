@@ -254,3 +254,71 @@ Vacuity:
   situation of the `hEx` version: a one-point `X` satisfies `hMet` (its
   `CPMOn X` is a one-point space) and E1 for both of its closed subsets. Also
   a remark.
+
+# Axiom audit — Issue #79 (Corollaries 3.6 and 3.7)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway module inside the build
+target (`import IshikiConj51` plus the `#print axioms` lines), deleted before
+committing. Every declaration added by this issue is listed, together with the
+three delivered capstones of #66/#72 whose proofs this issue refactored, as a
+regression pin.
+
+| declaration | file | axioms |
+|---|---|---|
+| `IshikiExt.exists_isClosedEmbedding_extIndex` | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isGδ_of_isCompletelyMetrizableSpace_of_metrizableSpace` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.measurableSet_of_isCompletelyMetrizableSpace` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.IsBdd` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.mem_BMet_iff` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.BMetOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.mem_CPM_BMetOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.preimage_equivCPM_bmet` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.preimage_BMetOn_comap` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsBddIsometricExtensorOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsBddIsometricExtensorOn.image_bmet_subset` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor.image_bmet_eq_range_inter` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor.not_measurableSet_CPM_BMetOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.not_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_isCompletelyMetrizableSpace_CPM_BMetOn_of_bddIsometricExtensorOn` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separableSpace_of_sigmaCompactSpace` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace` | `Ext/CompleteMetrizability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_measurableSet_CPM_MetOn_of_extensors` (regression pin) | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` (regression pin) | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.not_measurableSet_CPM_MetOn_of_isometricExtensorOn` (regression pin) | `Ext/GeneralSeparability.lean` | `[propext, Classical.choice, Quot.sound]` |
+
+No `sorryAx` and no custom axioms in the closure of any declaration above —
+only the three standard Lean/Mathlib axioms. `grep -rn sorry
+lean/IshikiConj51/` turns up only the word inside status comments.
+
+Attribution:
+
+* **E4d** is not hypothesised anywhere: `isGδ_of_isCompletelyMetrizableSpace`
+  (`Conj51/GDeltaComplete.lean`) is a proof, and
+  `isGδ_of_isCompletelyMetrizableSpace_of_metrizableSpace` only moves it to a
+  metrizable ambient, which is what `CPMOn X` is. So Corollary 3.6's
+  Alexandrov–Lavrentiev step is discharged, not assumed.
+* **E1** enters as `IsIsometricExtensorOn` (clauses (1), (2), the inclusion half
+  of the "furthermore" clause) and, for the bounded transfer, as
+  `IsBddIsometricExtensorOn`, which adds clause (3) `Ẽ(BMet(A)) ⊆ BMet(X)` to
+  the same extensor. Clause (4) is not assumed anywhere. Both are hypotheses of
+  the statements that use them; neither is an axiom or an instance.
+* **E3** (Koshino) enters Corollary 3.7 as the hypothesis
+  `SeparableSpace X → (SigmaCompactSpace X ↔ IsCompletelyMetrizableSpace
+  ↥(CPM.BMetOn X))` — the theorem for this `X`, separability hypothesis intact.
+  It is used in both directions of the corollary and is discharged nowhere.
+  Audit §2.10's caveat on its citation number is recorded, not resolved.
+* The `⇒` direction of Corollary 3.7 does **not** route through Corollary 3.6.
+  `separable_of_isCompletelyMetrizableSpace_CPM_BMetOn_of_bddIsometricExtensorOn`
+  is proved from the `BMet` analogue of Theorem 3.5, which is what audit §2.10
+  identifies as the missing link in the preprint.
+
+Vacuity:
+
+* Both corollaries have satisfiable hypotheses: E1 holds for every metrizable
+  `X`, E3 for every separable metrizable `X`, and each corollary's own
+  hypothesis holds for a one-point `X`: its `CPMOn X` is a one-point space, so
+  every subset of it is completely metrizable, and it is σ-compact. That E1 and
+  E3 hold is external, so this is a remark, not a Lean declaration.

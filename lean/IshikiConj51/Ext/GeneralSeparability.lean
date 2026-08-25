@@ -481,6 +481,51 @@ theorem separable_of_measurableSet_CPM_MetOn
     TopologicalSpace.SeparableSpace X :=
   ((hE.not_measurableSet_CPM_MetOn hS hSnonmeas) hMet).elim
 
+/-- A nonseparable metric space contains a closed discrete copy of the coded
+carrier `ExtIndex S`, for any parameter set `S` of cardinality `ℵ₁`.
+
+This is where the passage from an arbitrary `ℵ₁`-sized closed discrete
+subspace to the coded carrier happens.  `exists_aleph1_closed_discrete_separated`
+produces the separated set; the bijection with the coded carrier exists because
+both have cardinality `ℵ₁`, and it is a homeomorphism because both carriers are
+discrete, so composing with the inclusion of the separated set gives a closed
+embedding.  No `CPM`-level relabelling is involved: the bijection is absorbed
+into the embedding.
+
+Both transfer theorems consume nonseparability only through this lemma — the
+`Met` one below, and the `BMet` one of `Ext/CompleteMetrizability.lean`. -/
+theorem exists_isClosedEmbedding_extIndex {X : Type*} [MetricSpace X]
+    {S : Set ℝ} (hScard : #(↥S) = Cardinal.aleph 1)
+    (hX : ¬ TopologicalSpace.SeparableSpace X) :
+    ∃ ι : ExtIndex S → X,
+      @Topology.IsClosedEmbedding (ExtIndex S) X ⊥ inferInstance ι := by
+  obtain ⟨ε, -, Z, hZcard, hZclosed, hZdisc, -⟩ :=
+    exists_aleph1_closed_discrete_separated hX
+  -- The coded carrier and the separated set both have cardinality `ℵ₁`.
+  have hlift : Cardinal.lift.{_, 0} #(ExtIndex S) = Cardinal.lift.{0, _} #(↥Z) := by
+    rw [card_extIndex hScard, hZcard]
+    simp [Cardinal.lift_aleph]
+  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.mp hlift
+  refine ⟨Subtype.val ∘ (e : ExtIndex S → ↥Z), ?_⟩
+  letI : TopologicalSpace (ExtIndex S) := ⊥
+  haveI : DiscreteTopology (ExtIndex S) := ⟨rfl⟩
+  haveI : DiscreteTopology (↥Z) := hZdisc
+  let h : ExtIndex S ≃ₜ (↥Z) :=
+    { toEquiv := e
+      continuous_toFun := continuous_of_discreteTopology
+      continuous_invFun := continuous_of_discreteTopology }
+  have hemb : Topology.IsEmbedding (Subtype.val ∘ (e : ExtIndex S → ↥Z)) :=
+    Topology.IsEmbedding.subtypeVal.comp h.isEmbedding
+  have hrange : Set.range (Subtype.val ∘ (e : ExtIndex S → ↥Z)) = Z := by
+    rw [Set.range_comp, Set.range_eq_univ.mpr e.surjective, Set.image_univ,
+      Subtype.range_coe]
+  refine ⟨hemb, ?_⟩
+  rw [hrange]
+  exact hZclosed
+
+/- `#print axioms IshikiExt.exists_isClosedEmbedding_extIndex`:
+   `[propext, Classical.choice, Quot.sound]`. -/
+
 /-- **The conclusion of Theorem 3.5 (`thm:borel-separability`), conditional on
 `hEx`.**
 
@@ -518,30 +563,7 @@ theorem separable_of_measurableSet_CPM_MetOn_of_extensors
       Nonempty (IsIsometricExtensor (⊥ : TopologicalSpace (ExtIndex S)) ι)) :
     TopologicalSpace.SeparableSpace X := by
   by_contra hX
-  obtain ⟨ε, -, Z, hZcard, hZclosed, hZdisc, -⟩ :=
-    exists_aleph1_closed_discrete_separated hX
-  -- The coded carrier and the separated set both have cardinality `ℵ₁`.
-  have hlift : Cardinal.lift.{_, 0} #(ExtIndex S) = Cardinal.lift.{0, _} #(↥Z) := by
-    rw [card_extIndex hScard, hZcard]
-    simp [Cardinal.lift_aleph]
-  obtain ⟨e⟩ := Cardinal.lift_mk_eq'.mp hlift
-  have hce : @Topology.IsClosedEmbedding (ExtIndex S) X ⊥ inferInstance
-      (Subtype.val ∘ (e : ExtIndex S → ↥Z)) := by
-    letI : TopologicalSpace (ExtIndex S) := ⊥
-    haveI : DiscreteTopology (ExtIndex S) := ⟨rfl⟩
-    haveI : DiscreteTopology (↥Z) := hZdisc
-    let h : ExtIndex S ≃ₜ (↥Z) :=
-      { toEquiv := e
-        continuous_toFun := continuous_of_discreteTopology
-        continuous_invFun := continuous_of_discreteTopology }
-    have hemb : Topology.IsEmbedding (Subtype.val ∘ (e : ExtIndex S → ↥Z)) :=
-      Topology.IsEmbedding.subtypeVal.comp h.isEmbedding
-    have hrange : Set.range (Subtype.val ∘ (e : ExtIndex S → ↥Z)) = Z := by
-      rw [Set.range_comp, Set.range_eq_univ.mpr e.surjective, Set.image_univ,
-        Subtype.range_coe]
-    refine ⟨hemb, ?_⟩
-    rw [hrange]
-    exact hZclosed
+  obtain ⟨ι, hce⟩ := exists_isClosedEmbedding_extIndex (S := S) hScard hX
   obtain ⟨hE⟩ := hEx _ hce
   exact (hE.not_measurableSet_CPM_MetOn hS hSnonmeas) hMet
 

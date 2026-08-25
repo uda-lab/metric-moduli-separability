@@ -18,12 +18,13 @@ v1 (20 Aug 2026).
 | Japanese Borel/descriptive-set-theory note (#48 / PR #49) | ✅ complete; merged in PR #49 at `2b8acf4` |
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
 | E1 bridge: bundle → published extensor theorem (#72) | ✅ complete |
+| Corollaries 3.6 and 3.7, with the audit §2.10 repair (#79) | ✅ complete |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
-statement gate for #56, #57, #66 and #72. It audits every theorem in the preprint,
+statement gate for #56, #57, #66, #72 and #79. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
 formalisation. The Lean work follows the audit's minimal route (Route M) for
 the Borel obstruction and separability result.
@@ -91,9 +92,26 @@ quantified over the closed subsets of `X`, as E1 quantifies itself. The checked
 claim is "Theorem 3.5 modulo E1". E1's proof stays external and is never an
 axiom.
 
+Issue #79 takes the chain to its two corollaries. Corollary 3.6 — `Met(X)`
+completely metrizable implies `X` separable — is the step that settles Ishiki's
+Conjecture 5.1 in the strengthened Borel form, and it needs
+Alexandrov–Lavrentiev in the exact ambient of the preprint: the archival
+track's `isGδ_of_isCompletelyMetrizableSpace` is stated for a `MetricSpace`
+ambient, while `CPMOn X` is only an `EMetricSpace`, so it is restated for a
+metrizable ambient. Corollary 3.7 is delivered with the repair audit §2.10
+requires: its `⇒` direction cannot come from Corollary 3.6, because `BMet(X)`
+is a clopen union of components of `Met(X)` and complete metrizability
+transfers in neither direction, so the `BMet` analogue of Theorem 3.5 is
+formalised — E1 clause (3) gives the image identity
+`E(BMet(Z)) = Ẽ(CPM(Z)) ∩ BMet(X)`, and the pullback contradicts the discrete
+`BMet` obstruction `bmet_not_borel_cpm` directly. Koshino's theorem (E3) enters
+Corollary 3.7 as an explicit hypothesis with its separability assumption
+intact, never as an axiom or an instance, and the audit's caveat on its
+citation number is recorded rather than resolved.
+
 The non-Archimedean analogues and the finer component and complete-metric
 statements are recorded in the audit for later work. They are not part of the
-current #56/#57/#66/#72 delivery.
+current #56/#57/#66/#72/#79 delivery.
 
 ## Lean
 
@@ -129,17 +147,22 @@ namespace:
   `IsIsometricExtensorOn` with the derivation
   `IsIsometricExtensorOn.toIsIsometricExtensor`, and the transfer theorems in
   both their bundle-conditional and E1-conditional forms.
+- `CompleteMetrizability.lean` (#79) — Alexandrov–Lavrentiev for a metrizable
+  ambient (lifting `Conj51/GDeltaComplete.lean`, which is stated for a
+  `MetricSpace`), the bounded locus `CPM.BMetOn X` with its transport lemmas,
+  E1 clause (3) as `IsBddIsometricExtensorOn`, the `BMet` analogue of Theorem
+  3.5 that audit §2.10 requires, and Corollaries 3.6 and 3.7.
 
-Not yet done on this track: Corollary 3.6 (completely metrizable ⇒ Borel via
-Alexandrov–Lavrentiev), the `BMet`/`Comp` variants of the transfer that
-audit §2.10 and §2.12 need, and the whole chain 3.10–3.17.
+Not yet done on this track: the `Comp` variant of the transfer that audit
+§2.12 needs, and the whole chain 3.10–3.17.
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
 in `notes/lean-axioms-borel.md`. External mathematical results (the E1
-isometric extensor) enter Lean only as explicit hypotheses
-(`IsIsometricExtensorOn`, and the transported `IsIsometricExtensor`), never as
-a custom axiom.
+isometric extensor, and Koshino's theorem E3 in Corollary 3.7) enter Lean only
+as explicit hypotheses (`IsIsometricExtensorOn`, `IsBddIsometricExtensorOn`,
+the transported `IsIsometricExtensor`, and E3's iff as a hypothesis of the
+statement that uses it), never as a custom axiom.
 
 ## Archival verified core: Ishiki Conjecture 5.1
 
@@ -206,3 +229,7 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    obligation): **delivered**; `IsIsometricExtensorOn` states E1,
    `IsIsometricExtensorOn.toIsIsometricExtensor` performs the transport, and
    the two transfer theorems are restated with E1 as the hypothesis.
+8. **#79** — Corollaries 3.6 and 3.7: **delivered**. Corollary 3.6 runs the
+   audit §2.9 derivation (Alexandrov–Lavrentiev, then Theorem 3.5); Corollary
+   3.7 is delivered with the §2.10 repair, its `BMet` analogue of Theorem 3.5
+   formalised from E1 clause (3), and E3 kept as an explicit hypothesis.
