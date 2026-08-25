@@ -322,3 +322,92 @@ Vacuity:
   hypothesis holds for a one-point `X`: its `CPMOn X` is a one-point space, so
   every subset of it is completely metrizable, and it is σ-compact. That E1 and
   E3 hold is external, so this is a remark, not a Lean declaration.
+
+# Axiom audit — Issue #84 (Theorem 3.4, components and amalgamation)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked `.lean` file
+(`import IshikiConj51` plus the `#print axioms` lines), never committed. The
+same locked session ran `lake build` immediately before, so the audit is
+against the artifacts the build produced: `Build completed successfully
+(8672 jobs)`.
+
+All 61 top-level declarations introduced by `Ext/Amalgam.lean` and
+`Ext/Component.lean` are listed. Every one of them reports exactly
+`[propext, Classical.choice, Quot.sound]`; there is no `sorryAx`, no custom
+axiom, and no declaration with a different footprint.
+
+| declaration | file | axioms |
+|---|---|---|
+| `IshikiExt.IsMetricOn.nonneg` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsMetricOn.toIsPMetricOn` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam_mem_mem` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam_mem_notMem` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam_notMem_mem` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam_notMem_notMem` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isMetricOn_amalgam` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.amalgam_topology_eq_bot` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.topology_eq_bot_of_amalgam` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.abs_amalgam_sub_le` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.abs_amalgam_sub_amalgam_le` | `Ext/Amalgam.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.component` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.component_subset_Met` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.self_mem_component` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.component_eq_of_mem` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.metSetoid` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.Components` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.componentSet` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.componentSet_mk` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.discreteFn` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.discreteFn_self` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.discreteFn_of_ne` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.discreteFn_nonneg` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isMetricOn_discreteFn` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.topology_discreteFn_eq_bot` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.discrete` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.discrete_mem_Met` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.nonempty_Met` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.nonempty_Components` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.exists_aleph1_ball` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.one_le_dExt_anchor` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.base` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.base_val` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.ballMetric` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.isMetricOn_ballMetric` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.ballMetric_le_four` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.ballMetric_topology_eq_bot` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.ballMetric_topology_ne_bot` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.one_le_ballMetric_base` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.abs_ballMetric_sub_le` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.metric` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.isMetricOn_metric` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.psi_val` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.metric_topology_eq_bot` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.mem_Met_psi_iff` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.abs_metric_sub_base_le` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.edist_psi_base_le` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.edist_psi_base_lt_top` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.lipschitzWith_psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.continuous_psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.measurable_psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.preimage_component_psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.isCompact_range_psi` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.range_inter_component` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.measurableSet_of_measurableSet_image` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.ComponentSetup.not_measurableSet_component` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.component_not_measurableSet` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.componentSet_not_measurableSet` | `Ext/Component.lean` | `[propext, Classical.choice, Quot.sound]` |
+
+`grep -n sorry` on both files matches only the phrase "sorry-free" in their
+status headers.
+
+Scope note: `Ext/Amalgam.lean` is carrier-agnostic machinery — one-point
+amalgamation of a metric on a carrier with a metric on a subset — and
+`Ext/Component.lean` is Theorem 3.4 itself, in the representative form
+(`component_not_measurableSet`) and over the quotient `𝐌_{<∞}(Z)`
+(`componentSet_not_measurableSet`). Neither is in the import graph of
+`Ext/GeneralSeparability.lean`, so the Theorem 3.5 package's axiom footprint
+is unchanged by this issue.

@@ -19,6 +19,7 @@ v1 (20 Aug 2026).
 | Repository metadata and rename (#58) | 🔄 open; PR #59 merged, repository rename still requires an owner action |
 | E1 bridge: bundle → published extensor theorem (#72) | ✅ complete |
 | Corollaries 3.6 and 3.7, with the audit §2.10 repair (#79) | ✅ complete |
+| Theorem 3.4: non-Borel components of `Met(Z)` (#84) | ✅ complete |
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 
 ## Active Borel track
@@ -109,9 +110,22 @@ Corollary 3.7 as an explicit hypothesis with its separability assumption
 intact, never as an axiom or an instance, and the audit's caveat on its
 citation number is recorded rather than resolved.
 
-The non-Archimedean analogues and the finer component and complete-metric
-statements are recorded in the audit for later work. They are not part of the
-current #56/#57/#66/#72/#79 delivery.
+Issue #84 formalises Theorem 3.4, the finer component statement, which audit
+§2.8 records as *not* a prerequisite of Theorem 3.5. For a carrier of
+cardinality ℵ₁, every finite-sup-distance component of `Met(Z)` is non-Borel
+in `CPM(Z)`: `component_not_measurableSet` states this for the component of
+an arbitrary representative, `componentSet_not_measurableSet` over the
+quotient `𝐌_{<∞}(Z)` itself. The proof transfers the star coding to an
+uncountable closed ball of the base metric and amalgamates it with that
+metric along one common point; the two steps the preprint leaves implicit —
+the amalgam stays at finite supremum distance from the base metric, and
+membership in the component reduces to compatibility — are the separate
+lemmas `edist_psi_base_le` (with the explicit bound `4 + 2H`) and
+`mem_Met_psi_iff`. The amalgamation layer is carrier-agnostic and is what the
+complete-metric statement (Theorem 3.8) will consume.
+
+The non-Archimedean analogues and the complete-metric statements are recorded
+in the audit for later work.
 
 ## Lean
 
@@ -138,6 +152,17 @@ namespace:
   `bmet_not_borel_cpm_of_card`, `met_not_borel_of_card`, and `topology_comap`
   (a relabelled metric induces the relabelled topology), which #72 needs where
   the carriers are not discrete.
+- `Amalgam.lean` (#84) — the one-point amalgamation of a metric on a carrier
+  with a metric on a subset, glued along a common point: its metric axioms,
+  its compatibility criterion in both directions, the explicit bound
+  `|m − d| ≤ B + 2H` on the distance to the base metric, and its pointwise
+  Lipschitz dependence on the glued-in metric. Carrier-agnostic; it mentions
+  neither the coding nor any cardinality.
+- `Component.lean` (#84, Theorem 3.4) — the component locus `CPM.component`
+  and the quotient `CPM.Components`, the uncountable-ball lemma
+  `exists_aleph1_ball`, the `ComponentSetup` bundle with the parameter map
+  `Ψ`, its pullback identity and compact-range trace identity, and the two
+  forms of Theorem 3.4.
 - `GeneralSpace.lean`, `GeneralSeparability.lean` (PR #67, #57 supporting
   lemmas; #66 package; #72 E1 bridge) — the nonseparable-space
   closed-discrete-subset lemma, the closed-isometric-image lemma (now at
@@ -153,8 +178,9 @@ namespace:
   E1 clause (3) as `IsBddIsometricExtensorOn`, the `BMet` analogue of Theorem
   3.5 that audit §2.10 requires, and Corollaries 3.6 and 3.7.
 
-Not yet done on this track: the `Comp` variant of the transfer that audit
-§2.12 needs, and the whole chain 3.10–3.17.
+Not yet done on this track: Theorem 3.8 (the complete-metric component
+statement, with the audit §2.11 repair), the `Comp` variant of the transfer
+that audit §2.12 needs, and the whole chain 3.10–3.17.
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
@@ -233,3 +259,6 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    audit §2.9 derivation (Alexandrov–Lavrentiev, then Theorem 3.5); Corollary
    3.7 is delivered with the §2.10 repair, its `BMet` analogue of Theorem 3.5
    formalised from E1 clause (3), and E3 kept as an explicit hypothesis.
+9. **#84** — formalise Theorem 3.4 (every finite-sup-distance component of
+   `Met(Z)` is non-Borel in `CPM(Z)`): **delivered**, with the one-point
+   amalgamation split out as reusable machinery for Theorem 3.8.

@@ -16,6 +16,8 @@ import IshikiConj51.Ext.BoundedCoding
 import IshikiConj51.Ext.Borel
 import IshikiConj51.Ext.CPM
 import IshikiConj51.Ext.Relabel
+import IshikiConj51.Ext.Amalgam
+import IshikiConj51.Ext.Component
 import IshikiConj51.Ext.GeneralSpace
 import IshikiConj51.Ext.GeneralSeparability
 import IshikiConj51.Ext.CompleteMetrizability
