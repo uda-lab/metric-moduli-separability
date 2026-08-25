@@ -761,10 +761,9 @@ Theorem 3.4 and the one-point amalgamation it rests on are now
 `Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"), Corollaries 3.6 and
 3.7 are `Ext/CompleteMetrizability.lean` (§7 "#79"), and Theorem 3.8 with
 Corollary 3.9 are `Ext/Completeness.lean` and `Ext/CompleteMetric.lean`
-(§7 "#80"). Still no existing Lean declaration for: Proposition 2.1's density
-clause, Proposition 2.2 (the `2^ω` analogue, needed only by the
-non-Archimedean track), extensor E2, or anything non-Archimedean
-(3.10–3.17) — none of these gate #56/#57/#66 (§7 item 5).
+(§7 "#80"); the non-Archimedean chain 2.2 and 3.10–3.15 landed with #81 and
+#82. Still no existing Lean declaration for: Proposition 2.1's density clause,
+Theorem 3.16 or Corollary 3.17 — none of these gate #56/#57/#66 (§7 item 5).
 
 Archival mapping (unchanged by this audit): `Conj51/` +
 `report/report-ja.md` formalise the companion arXiv:2608.11023
