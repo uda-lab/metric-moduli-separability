@@ -131,9 +131,11 @@ distance — `relabelIsometry : MetD E ≃ᵢ MetD D`); `Ext/Relabel.lean`
 *(delivered by #63)* formalises the corresponding `BddPMet`/`CPM` relabelling
 isometries and the `BMet`/`Met` preimage identities, consumed by the
 arbitrary-carrier forms of §7 item 4. The `UCPM` relabelling isometry and the
-component-preservation lemmas (for 3.4/3.8/3.12/3.13/3.16, none of which gate
-#56/#57/#66 — §7 item 5, non-Archimedean track) remain **not yet
-formalised**.
+`UMet`/component preimage identities are in `Ext/UltraPMet.lean`
+(`UCPM.isometry_comap`, `preimage_UMet_comap`, `preimage_UComponent_comap`),
+*delivered by #81*, and carry the arbitrary-carrier forms of 3.12 and 3.13.
+The Archimedean component-preservation lemmas for 3.8 and the `UComp` ones
+(3.16) remain **not yet formalised**; neither gates #56/#57/#66.
 
 ---
 
@@ -186,6 +188,11 @@ Proposition 2.2 and is inherited verbatim.)
    branch is unchanged.
 Statement true in ZFC; the citation for the Borel isomorphism (Kechris,
 Theorem 15.6, currently uncited) should be added if route 1 is kept.
+
+**Lean** (`Ext/CantorUltra.lean`, #81): `exists_dense_aleph1_nonBorel_cantor`.
+The non-Borel `T` comes from route 2's dichotomy run directly in `2^ω` (no
+Bernstein set is needed in Lean, as in §7 item 1) and density from route 1's
+`S = T ∪ Q₀`; the Borel isomorphism of the printed proof is not used.
 
 ### 2.3 Setup before Lemma 3.1
 
@@ -426,6 +433,11 @@ gives `h(t,w_α) = ρ`, and `n` with `r(n) < ρ` witnesses
 `UMet(Z;R)`: a `𝒰𝒟^R`-limit forces `(t_k)` Cauchy in compact `(2^ω,h)`,
 limit `d = d_t`, compatibility forces `t ∉ S`. PASS. ✓
 
+**Lean** (`Ext/UltraCoding.lean`, #81): 3.10 is `dU_isUltraPMetOn`,
+`dU_le_head`, `isCompatible_phiU_iff` and `dU_completeSpace`; 3.11 is
+`edist_phiU` (both bounds, the lower one through `exists_separating_pair`,
+which consumes `Dense S`) and `isClosed_image_phiU`.
+
 ### 2.14 Theorems 3.12–3.14, Corollary 3.15
 
 **Theorem 3.12 (`thm:discrete-ultrametric-nonborel`) — PASS.**
@@ -446,6 +458,11 @@ otherwise, using the ultrametric isosceles `d(x,a) = d(x,z)` for `d(x,z) > q
 ≥ d(z,a)`). Isometry `𝒰𝒟^R(m_s,m_t) = h(s,t)` (coding clusters all inside
 `E`); compatibility ⟺ `t ∉ S` (`d(x,z) > q` outside `E` restores isolation);
 closed image in `𝔠^R`; trace as before. ✓
+
+**Lean** (#81): 3.12 is `umet_not_borel_of_card` (`Ext/UltraCoding.lean`) and
+3.13 is `ucomponent_not_borel_of_card` (`Ext/UltraComponent.lean`), both on an
+arbitrary discrete carrier of cardinality `ℵ₁`; the audited bound
+`𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` is `edist_uAmalgam_le`. 3.14 is not formalised.
 
 **Theorem 3.14 (`thm:ultrametric-borel-separability`) — FIX + EXTERNAL.**
 *Statement.* `Y` ultrametrizable; if `UMet(Y;R)` is Borel in `UCPM(Y;R)`,
@@ -1097,15 +1114,64 @@ named above.
 
 ### Non-Archimedean track (3.10–3.17)
 
-Fully audited above (§2.13–2.15) but **future work**, not part of
-#56/#57: the preprint presents the chain 3.1–3.9 as the headline
+Fully audited above (§2.13–2.15). The discrete core — Proposition 2.2 and
+Lemmas 3.10–3.11, Theorems 3.12–3.13 — is *delivered by #81*; 3.14–3.17
+remain future work. The preprint presents the chain 3.1–3.9 as the headline
 (abstract and introduction lead with `Met(Z)`, Borel ⇒ separability, and the
 Koshino combination; the non-Archimedean results are labelled "analogues").
-If formalised later, note: 2.2 (with §2.2 repair), the `𝒰𝒟^R` ambient (a
-different, non-Archimedean sup-structure — new Lean type), density of `S`
-becomes necessary (3.11), and the 3.14 transfer repair (§2.14) must be
-formalised as stated here, since the paper's own proof is not
-mechanizable as written.
+
+**Delivered (#81).** Four files, layered as the Archimedean side is.
+
+1. `Ext/UltraPMet.lean` — the ambient. `RangeSet` (the preprint's `R ⊆ [0,∞)`
+   with `0 ∈ R`), `RangeSet.IsCharacteristic` (the *exact* accumulation-point
+   hypothesis) and `RangeSet.IsScale` (the strictly decreasing `r : ℕ → R∖{0}`
+   with `r n → 0`). `exists_isScale` and `isCharacteristic_of_isScale` prove
+   both directions of the audit's "exists exactly because `R` is
+   characteristic", so no hypothesis is silently strengthened.
+   `IsUltraPMetOn`/`UCPM` are the `R`-valued pseudo-ultrametrics — nonnegativity
+   is *derived* from `R ⊆ [0,∞)`, not assumed — and `UCPM.edist` is the
+   preprint's `𝒰𝒟^R` verbatim, an infimum over `R ∪ {∞}` realised as an empty
+   infimum in `ℝ≥0∞`. It satisfies the *strong* triangle inequality
+   (`UCPM.edist_triangle_max`), which the Archimedean sup-metric does not, and
+   the two operations `UCPM.comap` (pullback along any map) and `UCPM.sup`
+   (pointwise maximum) are what the coding and the amalgam are built from.
+   Mathlib has none of this: the library gap is recorded in the file header.
+2. `Ext/CantorUltra.lean` — Proposition 2.2 with its §2.2 repair, and the
+   `R`-valued Cantor ultrametric `cantorDist`. The CH/¬CH dichotomy is stated
+   once for an arbitrary standard Borel space of cardinality `𝔠` whose Borel
+   σ-algebra has at most `𝔠` members (`exists_aleph1_nonMeasurable`), then run
+   in `2^ω`; density is then supplied by the audit's densification
+   `S = T ∪ Q₀`. `cantorDist_lt_iff` identifies the `h`-balls with cylinders,
+   which is the only bridge used between `h` and the product topology.
+3. `Ext/UltraCoding.lean` — Lemma 3.10 (`dU_isUltraPMetOn`, `dU_le_head`,
+   `isCompatible_phiU_iff`, `dU_completeSpace`), Lemma 3.11 (`edist_phiU`,
+   `isClosed_image_phiU`) and Theorem 3.12 (`umet_not_borel`,
+   `umet_not_borel_of_card`). The lower bound of 3.11 is
+   `exists_separating_pair`, which genuinely consumes `Dense S`; the
+   Archimedean observation that density is dispensable (§2.1) is *not*
+   imported.
+4. `Ext/UltraComponent.lean` — Theorem 3.13
+   (`ucomponent_not_borel_of_card`), with the ball selection
+   (`exists_countable_cofinal`, `exists_radius_not_countable`), the isosceles
+   identity off the ball (`uBall_isosceles`), the one-point max-amalgam
+   (`uAmalgam`) and the audited membership bound `𝒰𝒟^R(m_t,d) ≤ q ∨ r 0`
+   (`edist_uAmalgam_le`).
+
+Two deviations from the preprint's phrasing, both recorded because they
+*weaken* rather than strengthen what is used. (i) Theorem 3.12 and 3.13 are
+proved by the pullback route of §7 item 2 rather than the printed
+relative-closure argument; the trace identities and closed images the printed
+proof uses are formalised alongside (`image_compl_eq_range_inter_UMet`,
+`isClosed_image_phiU`, `image_compl_eq_range_inter_UComponent`,
+`isClosed_image_psiU`) but are not what the theorems consume. (ii) 3.13's
+"transfer 3.10 with the centre `y_0 ↦ z`" is a labelling convention: the
+amalgam glues at `θ(z)` for an arbitrary bijection `θ`, and only `z ∈ E` and
+"every cluster value is `≤ r 0`" are used.
+
+**Not delivered.** 3.14–3.17, including the 3.14 transfer repair (§2.14),
+which must be formalised as stated there since the paper's own proof is not
+mechanizable as written; E2 as a Lean hypothesis bundle; and the `UComp`
+(complete-member) locus of 3.16–3.17.
 
 ---
 
