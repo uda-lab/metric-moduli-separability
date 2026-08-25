@@ -185,8 +185,12 @@ theorem CPM.nonempty_Components (Z : Type*) : Nonempty (CPM.Components Z) :=
 /-- **The uncountable-ball step** (audit §2.7).  For a metric on a carrier of
 cardinality `ℵ₁` and any centre, some closed ball of radius at least `1` again
 has cardinality `ℵ₁`: the balls of integer radius exhaust the carrier, and a
-countable union of countable sets cannot. -/
-theorem exists_aleph1_ball (hZ : #Z = aleph 1) {d : Z → Z → ℝ} (hd : IsMetricOn d)
+countable union of countable sets cannot.
+
+Only finiteness of the values of `d z ·` is used, so no metric hypothesis is
+imposed; the statement is about the sublevel sets of one real-valued
+function. -/
+theorem exists_aleph1_ball (hZ : #Z = aleph 1) (d : Z → Z → ℝ)
     (z : Z) : ∃ H : ℝ, 1 ≤ H ∧ #(↥{x : Z | d z x ≤ H}) = aleph 1 := by
   have hexists : ∃ n : ℕ, ¬ ({x : Z | d z x ≤ (n : ℝ)}).Countable := by
     by_contra hall
@@ -462,7 +466,7 @@ theorem component_not_measurableSet (hZ : #Z = aleph 1) (d : CPM Z)
     rw [hZ]
     exact lt_of_lt_of_le Cardinal.aleph0_pos (aleph0_le_aleph 1)
   obtain ⟨z⟩ : Nonempty Z := Cardinal.mk_ne_zero_iff.mp hpos.ne'
-  obtain ⟨H, hH1, hHcard⟩ := exists_aleph1_ball hZ hdm z
+  obtain ⟨H, hH1, hHcard⟩ := exists_aleph1_ball hZ d.1 z
   have hzE : z ∈ {x : Z | d.1 z x ≤ H} := by
     show d.1 z z ≤ H
     rw [hdm.dist_self]
