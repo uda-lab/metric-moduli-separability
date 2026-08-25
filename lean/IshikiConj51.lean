@@ -18,3 +18,4 @@ import IshikiConj51.Ext.CPM
 import IshikiConj51.Ext.Relabel
 import IshikiConj51.Ext.GeneralSpace
 import IshikiConj51.Ext.GeneralSeparability
+import IshikiConj51.Ext.CompleteMetrizability

@@ -974,6 +974,68 @@ with `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1's stateme
 for `X` — in place of the bundle. E1's proof stays external and is not an
 axiom.
 
+### #79 — Corollaries 3.6 and 3.7 (delivered)
+
+All in `Ext/CompleteMetrizability.lean`, except E4d, which is reused from the
+archival track.
+
+* **E4d in the ambient this track needs.** `isGδ_of_isCompletelyMetrizableSpace`
+  (`Conj51/GDeltaComplete.lean`) is Alexandrov–Lavrentiev for a `MetricSpace`
+  ambient, with no separability assumption on either space; Mathlib has no
+  result concluding `IsGδ` from a completeness hypothesis, so the whole step is
+  local. Here the ambient is `CPMOn X`, whose supremum distance reaches `∞`
+  (§1), making it an `EMetricSpace` and not a `MetricSpace`, so
+  `isGδ_of_isCompletelyMetrizableSpace_of_metrizableSpace` restates it for a
+  metrizable ambient by choosing a compatible metric with
+  `TopologicalSpace.metrizableSpaceMetric`.
+* **The bounded locus in the continuous ambient.** `CPM.BMetOn X` is the
+  bounded part of `CPM.MetOn X` — Koshino's `AM(X)`. `CPM.mem_BMet_iff`
+  rewrites the discrete-carrier `CPM.BMet D` of `Ext/CPM.lean`, defined there
+  as an image of the bounded ambient, into the same shape, and
+  `CPMOn.preimage_equivCPM_bmet` / `CPMOn.preimage_BMetOn_comap` carry the
+  locus across the two moves of the #72 bridge.
+* **E1 clause (3).** `IsBddIsometricExtensorOn` extends `IsIsometricExtensorOn`
+  by the single field `Ẽ(BMet(A)) ⊆ BMet(X)`: the same extensor with one more
+  clause of E1, quoted as §3 quotes it. Clause (4) stays omitted (§2.12, and
+  the "`X` completely metrizable" caveat of §3).
+  `IsBddIsometricExtensorOn.image_bmet_subset` transports the clause along
+  `IsIsometricExtensorOn.toIsIsometricExtensor`.
+* **The §2.10 repair.** `IsIsometricExtensor.image_bmet_eq_range_inter` is
+  `E(BMet(Z)) = Ẽ(CPM(Z)) ∩ BMet(X)`, the ⊆ half from clause (3) and the ⊇ half
+  derived as in the `Met` case. `IsIsometricExtensor.not_measurableSet_CPM_BMetOn`
+  runs §2.8's chain on it and ends at `bmet_not_borel_cpm` — Theorem 3.3
+  directly, with no components, as §2.10 prescribes.
+
+All statements below quantify over a **metrizable** `X`, which is the
+hypothesis both corollaries carry. The transfer theorems of #66/#72 are stated
+for a metric space, so where they are consumed a compatible metric is chosen
+inside the proof; both the hypotheses and the conclusions are properties of the
+topology, so nothing depends on the choice.
+
+Delivered statements:
+
+* `separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn` —
+  **Corollary 3.6**, conditional on E1: `Met(X)` completely metrizable implies
+  `X` separable. The parameter set is produced internally by
+  `exists_aleph1_nonBorel`, so E1 is the only hypothesis besides the corollary's
+  own.
+* `not_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` and
+  `separable_of_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` — the
+  `BMet` analogue of Theorem 3.5 that §2.10 identifies as the missing link,
+  conditional on E1 clauses (1)–(3).
+* `separable_of_isCompletelyMetrizableSpace_CPM_BMetOn_of_bddIsometricExtensorOn`
+  — its complete-metrizability form, the `BMet` statement that Corollary 3.6
+  does not supply.
+* `isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace` — **Corollary
+  3.7**, repaired: `BMet(X)` completely metrizable iff `X` σ-compact. E3 enters
+  as the explicit hypothesis `SeparableSpace X → (SigmaCompactSpace X ↔
+  BMet(X) completely metrizable)` — Koshino's theorem for this `X`, with its
+  separability hypothesis intact. It is never an axiom or an instance, and the
+  citation-number caveat of §2.10 stands unresolved: it is recorded on the Lean
+  statement rather than settled there.
+
+E1 and E3 both stay external and are discharged nowhere in the repository.
+
 ### Non-Archimedean track (3.10–3.17)
 
 Fully audited above (§2.13–2.15) but **future work**, not part of
