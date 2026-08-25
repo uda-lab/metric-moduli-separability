@@ -306,10 +306,14 @@ theorem preimage_UMetOn_ultraExtend (hR : R.IsCharacteristic) (hr : RangeSet.IsS
     exact h2
   · intro hq
     show ultraExtend hr hE q ∈ UMetOn Y R
+    -- `q` *is* the inclusion of its own underlying point: the two differ only in
+    -- the membership proof, so the identification below is `rfl` (structure eta
+    -- and proof irrelevance) and is checked by the kernel rather than assumed.
+    have hq' : q = codingInclusion hr S ⟨q.1, hq⟩ := rfl
     have hmem : ultraExtend hr hE (codingInclusion hr S ⟨q.1, hq⟩) ∈ UMetOn Y R := by
       rw [ultraExtend_apply]
       exact hE.umet_preservation _
-    exact hmem
+    exact hq' ▸ hmem
 
 /-- **The compact witness `K = ῑ(P)`** of the audit's repair. -/
 theorem isCompact_range_ultraExtend (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
