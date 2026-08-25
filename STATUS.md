@@ -198,10 +198,9 @@ Issue #83 closes the track with the complete branch, Theorem 3.16 and Corollary
 the diagonal for `c ∈ R∖{0}`, which is a complete compatible `R`-valued
 ultrametric in the same `R`-component. That normalisation, completeness of the
 coding metrics and completeness of the one-point max-amalgam are the three
-ingredients, and all three are proved; the componentwise conclusion
-`𝔠^R ∩ UComp(Z;R)` non-Borel and the component-free one are both delivered, the
-latter through the parameter pullback identity rather than by intersecting with
-a component. Corollary 3.17 keeps the audited nonemptiness hypothesis on
+ingredients. Both printed conclusions are delivered — `𝔠^R ∩ UComp(Z;R)`
+non-Borel, and `UComp(Z;R)` non-Borel — the latter through the parameter
+pullback identity rather than by intersecting with a component. Corollary 3.17 keeps the audited nonemptiness hypothesis on
 `UComp(Y;R)` — it is what makes `Y` completely metrizable, which is the
 hypothesis under which E2 clause (N1) holds — and adds (N1) as one further field
 of #82's E2 bundle, gated on that complete metrizability so it cannot be
@@ -320,7 +319,8 @@ Non-Archimedean track (#83):
   metrizable (`separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors`)
   forms.
 
-Not yet done on this track: Proposition 2.1's density clause (audit §7 item 5).
+Not yet done on this track: Proposition 2.1's density clause, now the only
+audited statement without a Lean declaration.
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
