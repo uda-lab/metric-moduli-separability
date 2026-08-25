@@ -855,8 +855,8 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    which is what the E1 bridge needs — is *delivered by #72*, below.
 5. *Not gating #57:* Theorem 3.4 (components; one-point amalgamation plus
    the uncountable-ball argument) is *delivered by #84*, below. Theorem 3.8
-   (with the §2.11 repair baked in: complete base `d + 1`) remains open and
-   consumes #84's amalgamation layer unchanged.
+   (with the §2.11 repair baked in: complete base `d + 1`) is *delivered by
+   #80*, below, consuming #84's amalgamation layer unchanged.
 
 ### #57 — general-space transfer (Theorem 3.5)
 
