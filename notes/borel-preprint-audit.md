@@ -462,7 +462,8 @@ closed image in `𝔠^R`; trace as before. ✓
 **Lean** (#81): 3.12 is `umet_not_borel_of_card` (`Ext/UltraCoding.lean`) and
 3.13 is `ucomponent_not_borel_of_card` (`Ext/UltraComponent.lean`), both on an
 arbitrary discrete carrier of cardinality `ℵ₁`; the audited bound
-`𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` is `edist_uAmalgam_le`. 3.14 is not formalised.
+`𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` is `edist_uAmalgam_le`. 3.14 and 3.15 are #82; see
+the Lean notes after each statement below.
 
 **Theorem 3.14 (`thm:ultrametric-borel-separability`) — FIX + EXTERNAL.**
 *Statement.* `Y` ultrametrizable; if `UMet(Y;R)` is Borel in `UCPM(Y;R)`,
@@ -527,10 +528,25 @@ Statement true; the transfer argument above must be added to the paper, and
 a Lean formalisation of 3.14 must formalise it (it is not extractable from
 the paper's text).
 
+**Lean** (#82, `Ext/UltraTransfer.lean`): the repair, not the printed proof.
+`ultraExtend` is `ῑ` — the dense-uniform extension of `E ∘ Ψ`, available by
+`completeSpace_UCPMOn`; `restrict_ultraExtend` propagates E2 clause (1) to the
+closure and yields injectivity; `preimage_UMetOn_ultraExtend` is
+`ῑ⁻¹(UMet(Y;R)) = P∖S`; `isCompact_range_ultraExtend` and
+`range_ultraExtend_inter_UMetOn` are `K` and the trace identity. `P` appears
+transported along `Φ` as `codingClosure = cl(Φ(2^ω∖S))`, with
+`codingClosure_eq_image_closure` proving `= Φ(P)`; the theorem itself is
+`separable_of_measurableSet_UMetOn_of_ultraExtensors`, and — as in 3.12–3.13 —
+the last step is the pullback identity rather than the relative trace, for
+which closedness of `P` is enough.
+
 **Corollary 3.15 (`cor:ultrametric-space-complete-separability`) — PASS.**
 From 3.14 via Alexandrov (`UMet(Y;R)` completely metrizable ⇒ `G_δ` in the
 metrizable `UCPM(Y;R)` ⇒ Borel); proof omitted in the preprint, same remark
 as 3.6. Inherits the 3.14 FIX, adds nothing.
+
+**Lean** (#82): `separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`,
+through `measurableSet_of_isCompletelyMetrizableSpace` (E4d, #79).
 
 ### 2.15 Theorem 3.16, Corollary 3.17
 
@@ -1168,10 +1184,35 @@ proof uses are formalised alongside (`image_compl_eq_range_inter_UMet`,
 amalgam glues at `θ(z)` for an arbitrary bijection `θ`, and only `z ∈ E` and
 "every cluster value is `≤ r 0`" are used.
 
-**Not delivered.** 3.14–3.17, including the 3.14 transfer repair (§2.14),
-which must be formalised as stated there since the paper's own proof is not
-mechanizable as written; E2 as a Lean hypothesis bundle; and the `UComp`
-(complete-member) locus of 3.16–3.17.
+**Delivered (#82).** Two more files, carrying 3.14 and 3.15.
+
+5. `Ext/UltraGeneral.lean` — the general-space ambient and E2. `UCPMOn Y R` is
+   the preprint's `UCPM(Y;R)` over a topological space (the *continuous*
+   `R`-valued pseudo-ultrametrics; Borelness in the bare ambient would be a
+   strictly stronger hypothesis), `UMetOn Y R` its compatible locus.
+   `completeSpace_UCPM` is §2.14's sub-lemma with its three steps, and
+   `completeSpace_UCPMOn` is the form 3.14 consumes.
+   `UCPM.isCompatible_comap_of_mem_UMetOn` is the restriction map along a
+   discrete closed subspace — what stands in for the `UCPM`-level extensor E2
+   does not have. `IsUltraIsometricExtensor` is E2 (§3 clauses (1), (2), (5))
+   as a hypothesis bundle with **no** `UCPM`-level field, and
+   `nonempty_isUltraIsometricExtensor_id` records that the bundle is
+   satisfiable.
+6. `Ext/UltraTransfer.lean` — the §2.14 repair and the two theorems, listed in
+   the Lean notes of §2.14.
+
+Deviations, both recorded there: `P` is used in its transported form
+`cl(Φ(2^ω∖S))` (equal to `Φ(P)`, proved), and the final step is the pullback
+identity rather than the printed relative trace (which is formalised
+alongside). Ultrametrizability of `Y` is not a hypothesis of the delivered
+3.14/3.15: the repair does not use it, and it is E2 — supplied here as a
+hypothesis — whose own hypotheses require it. The delivered statements are
+therefore stronger than the preprint's and imply them.
+
+**Not delivered.** 3.16–3.17: the `UComp` (complete-member) locus and the
+complete-base normalisation of 3.16, and 3.17's use of E2 clause (N1). The
+3.14 transfer repair they inherit is delivered, so what remains for 3.17 is the
+`UComp` layer plus an E2 bundle extended by (N1).
 
 ---
 

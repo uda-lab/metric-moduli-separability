@@ -620,3 +620,74 @@ The declarations, in file order:
 * `IshikiExt.ucomponentBorelSpace`
 * `IshikiExt.ucomponent_not_borel_of_card`
 
+
+# Axiom audit — Issue #82 (Theorem 3.14 and Corollary 3.15)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked `.lean`
+file (`import IshikiConj51` plus the `#print axioms` lines), never committed.
+Every declaration introduced by this issue is listed.
+
+`Ext/UltraGeneral.lean`:
+
+* `IshikiExt.UCPMOn`
+* `IshikiExt.UCPMOn.edist_eq`
+* `IshikiExt.ucpmOnMeasurableSpace`
+* `IshikiExt.ucpmOnBorelSpace`
+* `IshikiExt.UMetOn`
+* `IshikiExt.mem_UMetOn`
+* `IshikiExt.UCPM.abs_sub_le_of_edist_le`
+* `IshikiExt.UCPM.exists_forall_le_max_of_cauchySeq`
+* `IshikiExt.completeSpace_UCPM`
+* `IshikiExt.isClosed_continuous_UCPM`
+* `IshikiExt.completeSpace_UCPMOn`
+* `IshikiExt.UCPM.tolerances_subset_comap`
+* `IshikiExt.UCPM.edist_comap_le`
+* `IshikiExt.UCPMOn.restrict`
+* `IshikiExt.UCPMOn.restrict_val`
+* `IshikiExt.UCPMOn.lipschitzWith_restrict`
+* `IshikiExt.UCPMOn.continuous_restrict`
+* `IshikiExt.UCPM.isCompatible_comap_of_mem_UMetOn`
+* `IshikiExt.IsUltraIsometricExtensor`
+* `IshikiExt.IsUltraIsometricExtensor.restrict_toUCPMOn`
+* `IshikiExt.IsUltraIsometricExtensor.injective_toUCPMOn`
+* `IshikiExt.nonempty_isUltraIsometricExtensor_id`
+
+`Ext/UltraTransfer.lean`:
+
+* `IshikiExt.codingWitness`
+* `IshikiExt.codingClosure`
+* `IshikiExt.codingWitness_eq`
+* `IshikiExt.codingClosure_eq`
+* `IshikiExt.codingWitness_subset_codingClosure`
+* `IshikiExt.isClosed_codingClosure`
+* `IshikiExt.codingWitness_subset_UMet`
+* `IshikiExt.codingClosure_inter_UMet`
+* `IshikiExt.isCompact_codingClosure`
+* `IshikiExt.codingClosure_eq_image_closure`
+* `IshikiExt.codingInclusion`
+* `IshikiExt.codingExtensor`
+* `IshikiExt.isometry_codingExtensor`
+* `IshikiExt.isUniformInducing_codingInclusion`
+* `IshikiExt.denseRange_codingInclusion`
+* `IshikiExt.ultraExtend`
+* `IshikiExt.ultraExtend_apply`
+* `IshikiExt.uniformContinuous_ultraExtend`
+* `IshikiExt.continuous_ultraExtend`
+* `IshikiExt.isometry_ultraExtend`
+* `IshikiExt.restrict_ultraExtend`
+* `IshikiExt.injective_ultraExtend`
+* `IshikiExt.preimage_UMetOn_ultraExtend`
+* `IshikiExt.isCompact_range_ultraExtend`
+* `IshikiExt.range_ultraExtend_inter_UMetOn`
+* `IshikiExt.IsUltraIsometricExtensor.not_measurableSet_UMetOn`
+* `IshikiExt.exists_isClosedEmbedding_of_card_aleph_one`
+* `IshikiExt.separable_of_measurableSet_UMetOn_of_ultraExtensors`
+* `IshikiExt.separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`
+
+Every one of the 51 declarations above reports exactly
+`[propext, Classical.choice, Quot.sound]`. No `sorryAx` and no custom axiom
+anywhere in the closure; in particular **E2 is not an axiom** — it is the
+hypothesis bundle `IsUltraIsometricExtensor`, which the two delivered theorems
+carry explicitly. `grep -n sorry` on both files matches only the word inside
+the status comment of each header.
