@@ -411,3 +411,212 @@ amalgamation of a metric on a carrier with a metric on a subset — and
 (`componentSet_not_measurableSet`). Neither is in the import graph of
 `Ext/GeneralSeparability.lean`, so the Theorem 3.5 package's axiom footprint
 is unchanged by this issue.
+
+# Axiom audit — Issue #81 (discrete non-Archimedean core, 3.10–3.13)
+
+Every new top-level declaration of this issue was checked with
+`#print axioms <name>` against the built `IshikiConj51` library (toolchain
+`leanprover/lean4:v4.32.2`), in a throwaway, untracked `.lean` file
+(`import IshikiConj51` plus one `#print axioms` line per declaration),
+deleted before committing.  182 declarations were checked; 180 report
+exactly `[propext, Classical.choice, Quot.sound]` and 2 report
+"does not depend on any axioms" (`IshikiExt.UltraIndex`,
+`IshikiExt.exists_spoke`).  No `sorryAx` and no custom axiom appears in the
+closure of any of them.
+
+The declarations, in file order:
+
+`Ext/UltraPMet.lean`:
+
+* `IshikiExt.RangeSet`
+* `IshikiExt.RangeSet.max_mem`
+* `IshikiExt.RangeSet.IsCharacteristic`
+* `IshikiExt.RangeSet.IsScale`
+* `IshikiExt.RangeSet.IsScale.antitone`
+* `IshikiExt.RangeSet.IsScale.lt_iff_lt`
+* `IshikiExt.RangeSet.IsScale.le_head`
+* `IshikiExt.RangeSet.IsScale.nonneg`
+* `IshikiExt.RangeSet.IsScale.exists_lt`
+* `IshikiExt.RangeSet.smallElt`
+* `IshikiExt.RangeSet.smallElt_mem`
+* `IshikiExt.RangeSet.smallElt_pos`
+* `IshikiExt.RangeSet.smallElt_lt`
+* `IshikiExt.RangeSet.scale`
+* `IshikiExt.RangeSet.scale_pos`
+* `IshikiExt.RangeSet.scale_mem`
+* `IshikiExt.RangeSet.scale_lt_succ`
+* `IshikiExt.RangeSet.scale_lt_one_div`
+* `IshikiExt.RangeSet.tendsto_scale`
+* `IshikiExt.RangeSet.exists_isScale`
+* `IshikiExt.RangeSet.isCharacteristic_of_isScale`
+* `IshikiExt.IsUltraPMetOn`
+* `IshikiExt.IsUltraPMetOn.nonneg`
+* `IshikiExt.IsUltraPMetOn.dist_triangle`
+* `IshikiExt.IsUltraPMetOn.eq_of_lt`
+* `IshikiExt.IsUltraPMetOn.toIsMetricOn`
+* `IshikiExt.UCPM`
+* `IshikiExt.UCPM.nonneg`
+* `IshikiExt.UCPM.tolerances`
+* `IshikiExt.UCPM.edist`
+* `IshikiExt.UCPM.tolerances_comm`
+* `IshikiExt.UCPM.edist_le_ofReal`
+* `IshikiExt.UCPM.ofReal_le_edist`
+* `IshikiExt.UCPM.le_max_of_edist_le`
+* `IshikiExt.UCPM.le_of_mem_tolerances`
+* `IshikiExt.UCPM.edist_self`
+* `IshikiExt.UCPM.edist_comm`
+* `IshikiExt.UCPM.max_mem_tolerances`
+* `IshikiExt.UCPM.ofReal_max`
+* `IshikiExt.UCPM.iInf_ofReal_max_le`
+* `IshikiExt.UCPM.edist_triangle_max`
+* `IshikiExt.UCPM.edist_triangle`
+* `IshikiExt.UCPM.eq_of_edist_eq_zero`
+* `IshikiExt.UCPM.instEDist`
+* `IshikiExt.UCPM.instPseudoEMetricSpace`
+* `IshikiExt.UCPM.instEMetricSpace`
+* `IshikiExt.UCPM.edist_eq`
+* `IshikiExt.UCPM.comap`
+* `IshikiExt.UCPM.comap_val`
+* `IshikiExt.UCPM.sup`
+* `IshikiExt.UCPM.sup_val`
+* `IshikiExt.UCPM.tolerances_comap`
+* `IshikiExt.UCPM.edist_comap`
+* `IshikiExt.UCPM.isometry_comap`
+* `IshikiExt.UCPM.IsCompatible`
+* `IshikiExt.UCPM.isCompatible_comap_iff`
+* `IshikiExt.UMet`
+* `IshikiExt.mem_UMet`
+* `IshikiExt.UComponent`
+* `IshikiExt.mem_UComponent`
+* `IshikiExt.preimage_UMet_comap`
+* `IshikiExt.preimage_UComponent_comap`
+* `IshikiExt.completeSpace_of_cauchySeq_eventually_const`
+
+`Ext/CantorUltra.lean`:
+
+* `IshikiExt.cardinal_measurableSet_le_continuum`
+* `IshikiExt.cardinal_eq_continuum_of_measurableSet`
+* `IshikiExt.exists_aleph1_nonMeasurable`
+* `IshikiExt.mk_cantor`
+* `IshikiExt.exists_dense_aleph1_nonBorel_cantor`
+* `IshikiExt.cantorDist`
+* `IshikiExt.cantorDist_self`
+* `IshikiExt.cantorDist_of_ne`
+* `IshikiExt.cantorDist_comm`
+* `IshikiExt.cantorDist_nonneg`
+* `IshikiExt.cantorDist_pos_of_ne`
+* `IshikiExt.cantorDist_eq_zero_iff`
+* `IshikiExt.cantorDist_mem`
+* `IshikiExt.cantorDist_le_head`
+* `IshikiExt.cantorDist_triangle_max`
+* `IshikiExt.cantorDist_isosceles`
+* `IshikiExt.cantorDist_lt_iff`
+* `IshikiExt.cantorDist_lt_of_mem_cylinder`
+* `IshikiExt.exists_mem_cantorDist_lt`
+* `IshikiExt.continuous_of_edist_le_cantorDist`
+
+`Ext/UltraCoding.lean`:
+
+* `IshikiExt.UltraIndex`  (no axioms)
+* `IshikiExt.card_ultraIndex`
+* `IshikiExt.uRadius`
+* `IshikiExt.uRadius_none`
+* `IshikiExt.uRadius_some`
+* `IshikiExt.uRadius_nonneg`
+* `IshikiExt.uRadius_le_head`
+* `IshikiExt.uRadius_mem`
+* `IshikiExt.cantorDist_le_uRadius`
+* `IshikiExt.head_le_uRadius`
+* `IshikiExt.clusterDist`
+* `IshikiExt.clusterDist_self`
+* `IshikiExt.clusterDist_comm`
+* `IshikiExt.clusterDist_nonneg`
+* `IshikiExt.clusterDist_le`
+* `IshikiExt.le_clusterDist_of_ne`
+* `IshikiExt.exists_spoke`  (no axioms)
+* `IshikiExt.clusterDist_triangle_max`
+* `IshikiExt.exists_head_le_clusterDist`
+* `IshikiExt.cantorDist_le_clusterDist`
+* `IshikiExt.exists_isolating_radius`
+* `IshikiExt.dU`
+* `IshikiExt.dU_of_fst_eq`
+* `IshikiExt.dU_of_fst_ne`
+* `IshikiExt.dU_same`
+* `IshikiExt.dU_diff`
+* `IshikiExt.dU_self`
+* `IshikiExt.dU_comm`
+* `IshikiExt.dU_nonneg`
+* `IshikiExt.dU_le_head`
+* `IshikiExt.dU_mem`
+* `IshikiExt.dU_triangle_max`
+* `IshikiExt.dU_isUltraPMetOn`
+* `IshikiExt.dU_pos_of_ne`
+* `IshikiExt.dU_isMetricOn`
+* `IshikiExt.dU_topology_eq_bot`
+* `IshikiExt.dU_topology_ne_bot`
+* `IshikiExt.dU_completeSpace`
+* `IshikiExt.phiU`
+* `IshikiExt.phiU_val`
+* `IshikiExt.uRadius_le_max`
+* `IshikiExt.dU_le_max`
+* `IshikiExt.edist_phiU_le`
+* `IshikiExt.exists_separating_pair`
+* `IshikiExt.le_edist_phiU`
+* `IshikiExt.edist_phiU`
+* `IshikiExt.continuous_phiU`
+* `IshikiExt.injective_phiU`
+* `IshikiExt.isCompatible_phiU_iff`
+* `IshikiExt.preimage_UMet_phiU`
+* `IshikiExt.isCompact_range_phiU`
+* `IshikiExt.isClosed_range_phiU`
+* `IshikiExt.image_compl_eq_range_inter_UMet`
+* `IshikiExt.isClosed_image_phiU`
+* `IshikiExt.ucpmMeasurableSpace`
+* `IshikiExt.ucpmBorelSpace`
+* `IshikiExt.umet_not_borel`
+* `IshikiExt.exists_equiv_ultraIndex_of_card`
+* `IshikiExt.umet_not_borel_of_card`
+* `IshikiExt.exists_mem_UMet_of_card`
+
+`Ext/UltraComponent.lean`:
+
+* `IshikiExt.exists_countable_cofinal`
+* `IshikiExt.uBall`
+* `IshikiExt.mem_uBall`
+* `IshikiExt.mem_uBall_self`
+* `IshikiExt.uBall_dist_le`
+* `IshikiExt.uBall_isosceles`
+* `IshikiExt.exists_radius_not_countable`
+* `IshikiExt.uRetract`
+* `IshikiExt.uInto`
+* `IshikiExt.uRetract_of_mem`
+* `IshikiExt.uRetract_of_notMem`
+* `IshikiExt.uInto_of_mem`
+* `IshikiExt.uInto_of_notMem`
+* `IshikiExt.uAmalgam`
+* `IshikiExt.uAmalgam_val`
+* `IshikiExt.base_le_uAmalgam`
+* `IshikiExt.coding_le_uAmalgam`
+* `IshikiExt.uAmalgam_in_in`
+* `IshikiExt.uAmalgam_out_out`
+* `IshikiExt.edist_uAmalgam_le`
+* `IshikiExt.psiU`
+* `IshikiExt.psiU_val`
+* `IshikiExt.psiU_in_in`
+* `IshikiExt.psiU_out_out`
+* `IshikiExt.psiU_val_symm`
+* `IshikiExt.edist_psiU_lt_top`
+* `IshikiExt.psiU_topology_eq_bot`
+* `IshikiExt.psiU_topology_ne_bot`
+* `IshikiExt.isCompatible_psiU_iff`
+* `IshikiExt.edist_psiU_le`
+* `IshikiExt.edist_psiU`
+* `IshikiExt.continuous_psiU`
+* `IshikiExt.preimage_UComponent_psiU`
+* `IshikiExt.isCompact_range_psiU`
+* `IshikiExt.image_compl_eq_range_inter_UComponent`
+* `IshikiExt.isClosed_image_psiU`
+* `IshikiExt.ucomponentMeasurableSpace`
+* `IshikiExt.ucomponentBorelSpace`
+* `IshikiExt.ucomponent_not_borel_of_card`
+
