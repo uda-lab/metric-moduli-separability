@@ -747,10 +747,10 @@ side uses Mathlib's `MeasurableSet` over the `borel` σ-algebra of the ambient
 `IsFSigma` (`Conj51/Cardinality.lean`) is irrelevant to this track. Density
 of `S` is **omitted** from the Archimedean statements (unused, §2.1).
 Sorry-freeness and the `#print axioms` footprint of every accepted
-declaration (exactly the three standard axioms `propext`, `Classical.choice`,
-`Quot.sound`; no `sorryAx`, no custom axioms) are review evidence, recorded
-and independently re-checked in the PR/issue trail, not in a committed
-ledger.
+declaration (a subset of the three standard axioms `propext`,
+`Classical.choice`, `Quot.sound`; no `sorryAx`, no custom axioms) are review
+evidence, recorded and independently re-checked in the PR/issue trail, not
+in a committed ledger.
 
 ### 7.1 Discrete core (statement gate: this note)
 
