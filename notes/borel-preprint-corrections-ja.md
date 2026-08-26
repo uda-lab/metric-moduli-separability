@@ -25,8 +25,9 @@ Separability*, arXiv:2608.19618v1（以下 [IU]）．2026 年 8 月．
 | 系 3.7 | A | $\operatorname{BMet}$ 版のボレル性・可分性転送補題が必要（§3.3） |
 | 定理 3.8 | A | 貼り合わせの基底距離を同じ成分の完備な代表に取り替える（§3.4） |
 | 系 3.9 | B | 拡張定理の完備性保存は $X$ 完備距離化可能の下で読む（§3.5） |
-| 定理 3.14 | A | 擬超距離レベルの拡張は存在しない．閉包を経る転送で修復（§3.6） |
-| 系 3.15・3.17 | 継承 + C | 定理 3.14 の修復を継承．Alexandrov–Lavrentiev の引用を明記（§3.7） |
+| 定理 3.14 | A | 引用する拡張定理は擬超距離レベルの拡張を与えない．閉包を経る転送で修復（§3.6） |
+| 系 3.15 | 継承 + C | 定理 3.14 の修復した経路に帰着．Alexandrov–Lavrentiev の引用を明記（§3.7） |
+| 系 3.17 | A（継承）+ B | 定理 3.14 と同じ転送の補正を継承．完備性保存は (N1) の明記された仮定の下で（§3.7） |
 
 上表以外の結果（命題 2.1，補題 3.1・3.2・3.10・3.11，定理 3.4・3.5・3.12・
 3.13・3.16，系 3.6）については，印刷された証明がそのまま成立することを確認した
@@ -105,14 +106,14 @@ $2^\omega$（またはそのコンパクトな同型像）の内部でのみ用�
 
 ### 3.1 命題 2.2 — Borel 同型は稠密性を保たない〔A〕
 
-**主張.** $2^\omega$ に，濃度 $\aleph_1$ の稠密な非ボレル集合 $S$ が存在する
+**主張．** $2^\omega$ に，濃度 $\aleph_1$ の稠密な非ボレル集合 $S$ が存在する
 （命題 2.1 の $[0,1]$ における対応物の $2^\omega$ 版）．
 
-**欠陥.** 印刷された証明は「$2^\omega$ と $[0,1]$ が Borel 同型であることから
+**欠陥．** 印刷された証明は「$2^\omega$ と $[0,1]$ が Borel 同型であることから
 従う」とする．Borel 同型はボレル構造と濃度を移すが，**稠密性を移さない**．
 稠密性は位相的性質であって Borel 同型の不変量ではない．
 
-**修正.** 次のいずれか一方で足りる．
+**修正．** 次のいずれか一方で足りる．
 
 1. 移送 + 稠密化．命題 2.1 の $S_0 \subseteq [0,1]$ を Borel 同型
    （[Ke, Theorem 15.6]）で引き戻し，非ボレルで濃度 $\aleph_1$ の
@@ -127,7 +128,7 @@ $2^\omega$（またはそのコンパクトな同型像）の内部でのみ用�
    [Ke, Theorem 13.6]，¬CH の場合は可算稠密集合を含む濃度 $\aleph_1$ の
    集合）は，そのまま $2^\omega$ の中で実行できる．
 
-**補足（稠密性が使われる場所）.** $S$ の稠密性が本質的に使われるのは非アルキ
+**補足（稠密性が使われる場所）．** $S$ の稠密性が本質的に使われるのは非アルキ
 メデス的な側だけである．補題 3.11 の等長性の下からの評価では，
 $\rho := h(s,t)$ に対し稠密性により $h(s,w_\alpha) < \rho$ なる
 $w_\alpha \in S$ を選び，強三角不等式（超距離の三角形は二等辺）から
@@ -154,12 +155,12 @@ $[0,1] \setminus S$ がボレルとなり，命題 2.1 に矛盾する．
 現れない．改訂では両方を，または上のトレース恒等式から両方が同時に出る旨の
 注意を，本文に明示することを勧める．
 
-### 3.3 系 3.7 — 有界距離の空間には固有の転送補題が要る〔A・外部入力 E1(3)，Koshino〕
+### 3.3 系 3.7 — 有界距離の空間には固有の転送補題が要る〔A・外部入力 [I1](3)，[Ko]〕
 
-**主張.** $X$ 距離化可能：$\operatorname{BMet}(X)$ が完備距離化可能である
+**主張．** $X$ 距離化可能：$\operatorname{BMet}(X)$ が完備距離化可能である
 ことと $X$ が $\sigma$-コンパクトであることは同値．
 
-**欠陥.** 印刷された証明は，Koshino の定理（$X$ 可分距離化可能：$X$ が
+**欠陥．** 印刷された証明は，Koshino の定理（$X$ 可分距離化可能：$X$ が
 $\sigma$-コンパクト $\iff$ $AM(X)$ が完備距離化可能，ここで $AM(X)$ は有界
 かつ両立する距離全体に上限距離を入れた空間，すなわち
 $\operatorname{BMet}(X)$）[Ko] と系 3.6 を「組み合わせる」と述べる．
@@ -171,7 +172,7 @@ $\operatorname{BMet}(X)$ 版ではない．$\operatorname{BMet}(X)$ は
 $\operatorname{Met}(X)$ の開かつ閉な部分集合（成分の和）だが，完備距離化可能性
 はどちら向きにも自動では移らない．
 
-**修正（[IU] 内の道具だけで足りる）.** 定理 3.5 の $\operatorname{BMet}$ 版を
+**修正（[IU] 内の道具だけで足りる）．** 定理 3.5 の $\operatorname{BMet}$ 版を
 補題として立てる：*$X$ 距離化可能で $\operatorname{BMet}(X)$ が
 $\operatorname{CPM}(X)$ のボレル集合ならば，$X$ は可分である．* 証明は
 定理 3.5 と同じ筋である．$X$ が非可分ならば閉離散部分空間 $Z \subseteq X$
@@ -197,12 +198,12 @@ $\Rightarrow$ 上の補題により $X$ 可分 $\Rightarrow$ Koshino の定理�
 
 ### 3.4 定理 3.8 — 貼り合わせの基底は完備な代表に取り替える〔A〕
 
-**主張.** $Z$ 離散，$\lvert Z \rvert = \aleph_1$：$\operatorname{Met}(Z)$ の
+**主張．** $Z$ 離散，$\lvert Z \rvert = \aleph_1$：$\operatorname{Met}(Z)$ の
 任意の成分 $\mathfrak{c}$ に対し $\mathfrak{c} \cap \operatorname{Comp}(Z)$ は
 $\operatorname{CPM}(Z)$ のボレル集合でなく，したがって
 $\operatorname{Comp}(Z)$ もボレル集合でない．
 
-**欠陥.** 印刷された証明は，定理 3.4 の構成 — 成分の代表 $d \in \mathfrak{c}$
+**欠陥．** 印刷された証明は，定理 3.4 の構成 — 成分の代表 $d \in \mathfrak{c}$
 と，濃度 $\aleph_1$ の閉球 $E$ の上に移した距離族 $e_t$ を，一点 $z$ で
 貼り合わせた $m_t(x,a) = d(x,z) + e_t(z,a)$（$x \notin E$，$a \in E$）— を
 そのまま用い，$t \notin S$ のとき $m_t$ が完備であると述べる．距離族の側は
@@ -218,7 +219,7 @@ $Z$ の可算部分集合が $\{1/n : n \ge 1\} \subseteq \mathbb{R}$ と等長�
 ついても $m_t$ は完備でない．書かれた形の「$t \notin S$ ならば $m_t$ は完備」
 は，このような成分 $\mathfrak{c}$ に対して偽である．
 
-**修正.** 構成の前に，基底を同じ成分に属する完備な代表に取り替える．
+**修正．** 構成の前に，基底を同じ成分に属する完備な代表に取り替える．
 $d'$ を対角線の外で $d' := d + 1$ と定めると，$d'$ は距離であり（三角不等式は
 $d$ のものから従う），対角線外の距離が $1$ 以上だから離散位相を誘導して両立し，
 Cauchy 列が最終的に定数になるので完備であり，しかも
@@ -226,16 +227,21 @@ $\mathcal{D}_Z(d, d') = 1 < \infty$ より $d' \in \mathfrak{c}$ である．基
 $d'$ で貼り合わせをやり直すと，$t \notin S$ のとき $m_t$ は完備になる：
 $m_t$-Cauchy 列は，最終的に $E$ 内に留まる（$e_t$ の完備性により収束する）か，
 さもなければ相異なる 2 点の距離が $1$ 以上の領域に出るので最終的に定数である．
-証明の残りは変更なしに通る．
+基底の取り替え後も成分の所属は保たれる：$E^2$ 上では $e_t \le 4$ かつ $d'$ は
+（$E$ が有限半径の閉球だから）有界，交差項では
+$\lvert m_t(x,a) - d'(x,a) \rvert \le e_t(z,a) + d'(z,a)$ で右辺は有界，
+$E$ の外では $m_t = d'$ だから，$\mathcal{D}_Z(m_t, d') < \infty$ であり，
+$t \notin S$ のとき $m_t \in \mathfrak{c}$ である．証明の残りは変更なしに通る．
 
-**「したがって」の部分.** $\operatorname{Comp}(Z)$ の非ボレル性は，非ボレル
+**「したがって」の部分．** $\operatorname{Comp}(Z)$ の非ボレル性は，非ボレル
 集合 $\mathfrak{c} \cap \operatorname{Comp}(Z)$，あるいは非ボレルな
 $\mathfrak{c}$（定理 3.4）との共通部分・包含関係からは従わない — 非ボレル
 集合と交わること・それを含むことは，ボレル性について何も言わない．正しい
 読み方は，パラメータ空間のコンパクトな像を経るトレース論法である．
 $\Psi \colon [0,1] \to \operatorname{CPM}(Z)$，$\Psi(t) = m_t$ をパラメータ
 写像，$L' := \Psi([0,1])$ をそのコンパクトな像とすると，$t \in S$ では $m_t$
-は両立せず $\operatorname{Met}(Z)$ にすら入らないから，
+は両立せず $\operatorname{Met}(Z)$ にすら入らず，$t \notin S$ では上で確認した
+通り $m_t \in \mathfrak{c} \cap \operatorname{Comp}(Z)$ だから，
 
 $$L' \cap \operatorname{Comp}(Z) = L' \cap (\mathfrak{c} \cap \operatorname{Comp}(Z)) = \Psi([0,1] \setminus S)$$
 
@@ -243,7 +249,7 @@ $$L' \cap \operatorname{Comp}(Z) = L' \cap (\mathfrak{c} \cap \operatorname{Comp
 $\mathfrak{c} \cap \operatorname{Comp}(Z)$）がボレルならば，
 $L' \cong [0,1]$ へのトレースにより $[0,1] \setminus S$ がボレルとなり矛盾する．
 
-**定理 3.16 との対比.** 非アルキメデス版の定理 3.16 の証明は，この正規化を
+**定理 3.16 との対比．** 非アルキメデス版の定理 3.16 の証明は，この正規化を
 最初から行っている：$c \in R \setminus \{0\}$ を固定し，基底を対角線の外で
 $d \vee c$ に取り替える（完備かつ両立する $R$-値超距離であり，
 $\mathcal{UD}^R_Z(d \vee c, d) \le c$ だから同じ $R$-成分に留まる）．このため
@@ -252,7 +258,7 @@ $\mathcal{UD}^R_Z(d \vee c, d) \le c$ だから同じ $R$-成分に留まる）�
 
 ### 3.5 系 3.9 — 拡張定理の完備性保存は $X$ の完備距離化可能性の下で〔B〕
 
-**主張（系 3.9）.** $X$ **完備距離化可能**：$\operatorname{Comp}(X)$ が
+**主張（系 3.9）．** $X$ **完備距離化可能**：$\operatorname{Comp}(X)$ が
 $\operatorname{CPM}(X)$ のボレル集合ならば $X$ は可分．
 
 系 3.9 の証明は，[I1, Theorem 1.1] の主張 (4)
@@ -285,14 +291,14 @@ $\operatorname{CPM}(Z)$ のボレル集合となり，定理 3.8 に矛盾する
 要点は二つである：外部定理の (4) を無条件には引用しないこと，および [I1] 側
 にも仮定の明記を提案することである．
 
-### 3.6 定理 3.14 — 擬超距離レベルの拡張は存在せず，閉包を経る転送で修復する〔A（原因は外部定理の適用範囲）〕
+### 3.6 定理 3.14 — 引用定理は擬超距離レベルの拡張を与えず，閉包を経る転送で修復する〔A（原因は外部定理の適用範囲）〕
 
 これが最も重要な補正である．
 
-**主張.** $Y$ 超距離化可能，$R$ characteristic：$\operatorname{UMet}(Y;R)$ が
+**主張．** $Y$ 超距離化可能，$R$ characteristic：$\operatorname{UMet}(Y;R)$ が
 $\operatorname{UCPM}(Y;R)$ のボレル集合ならば $Y$ は可分．
 
-**印刷された証明で成立している部分.** $Y$ が非可分ならば，分離集合の議論に
+**印刷された証明で成立している部分．** $Y$ が非可分ならば，分離集合の議論に
 より閉離散部分空間 $Z \subseteq Y$（$\lvert Z \rvert = \aleph_1$）が取れる．
 超距離の拡張定理 [I2, Theorem 4.7] は，写像
 $\Sigma \colon \operatorname{Met}(Z) \to \operatorname{Met}(Y)$ であって
@@ -304,21 +310,21 @@ $E \colon \operatorname{UMet}(Z;R) \to \operatorname{UMet}(Y;R)$ は等長で，
 の像 $E(\mathfrak{c}^R)$ も $\operatorname{UMet}(Y;R)$ の閉集合で
 $\mathfrak{c}^R$ と等長である．ここまでは正しい．
 
-**欠陥.** 最終段「$\operatorname{UMet}(Y;R)$ がボレルならば定理 3.13 に矛盾」
+**欠陥．** 最終段「$\operatorname{UMet}(Y;R)$ がボレルならば定理 3.13 に矛盾」
 には，ボレル性を $\operatorname{UCPM}(Y;R)$ から $\operatorname{UCPM}(Z;R)$
 へ引き戻す論法が要る．アルキメデス版（定理 3.5）では [I1] の拡張が擬距離
 レベル $\tilde{E} \colon \operatorname{CPM}(Z) \to \operatorname{CPM}(X)$
 まで伸びており，全体空間どうしの等長写像（閉な像への位相同型）に沿って
 ボレル性が引き戻せた．ところが [I2, Theorem 4.7] の $\Sigma$ の定義域は
-$\operatorname{Met}(Z)$ であり，
-$\operatorname{UCPM}(Z;R) \to \operatorname{UCPM}(Y;R)$ **のレベルの拡張は
-存在しない**．$E$ は部分空間 $\operatorname{UMet}(Z;R)$ の間の等長写像に
+$\operatorname{Met}(Z)$ であり，**この定理は
+$\operatorname{UCPM}(Z;R) \to \operatorname{UCPM}(Y;R)$ のレベルの拡張を
+与えない**．$E$ は部分空間 $\operatorname{UMet}(Z;R)$ の間の等長写像に
 過ぎず，「$\operatorname{UCPM}(Y;R)$ におけるボレル性」は部分集合
 $E(\mathfrak{c}^R)$ に内在的な性質ではない（どんな空間も自分自身の中では閉で
 ある）から，$E$ だけでは全体空間のボレル $\sigma$-代数を運べない．したがって
 印刷された最終段はそのままでは従わない．
 
-**修正（閉包とコンパクト性による転送）.** $R$-成分ではなく，パラメータ空間の
+**修正（閉包とコンパクト性による転送）．** $R$-成分ではなく，パラメータ空間の
 コンパクトな像で議論する．定理 3.13 の構成のパラメータ写像を
 $\Psi \colon 2^\omega \to \operatorname{UCPM}(Z;R)$ とする（$\Psi$ は
 $(2^\omega, h)$ からの等長写像であり，$\Psi(t) \in \operatorname{UMet}(Z;R)
@@ -330,11 +336,11 @@ $$F := E(\Psi(2^\omega \setminus S)), \qquad \iota := E \circ \Psi \colon (2^\om
 とおく．$E$ は $\operatorname{UMet}(Z;R)$ から閉な像への位相同型だから $F$ は
 $\operatorname{UMet}(Y;R)$ の閉集合であり，$\iota$ は等長写像である．
 
-**補題（$\operatorname{UCPM}(Y;R)$ の完備性）.** $R$ が characteristic なら
+**補題（$\operatorname{UCPM}(Y;R)$ の完備性）．** $R$ が characteristic なら
 ば，$\operatorname{UCPM}(Y;R)$ は $\mathcal{UD}^R_Y$（に付随する距離
 $\min\{\mathcal{UD}^R_Y, 1\}$）について完備である．
 
-*証明.* (i) $\varepsilon \in R \setminus \{0\}$ とし
+*証明．* (i) $\varepsilon \in R \setminus \{0\}$ とし
 $\mathcal{UD}^R_Y(d,e) < \varepsilon$ とすると，$\inf$ の定義から，各点で
 $d \le e \vee \varepsilon$ かつ $e \le d \vee \varepsilon$ が成り立つ
 （定義の集合に属する $\varepsilon' < \varepsilon$ が取れるから）．各点対で
@@ -370,9 +376,9 @@ $$\bar{\iota} \colon (P, h) \to \operatorname{UCPM}(Y;R)$$
 特に $\bar{\iota}$ は単射である．$K := \bar{\iota}(P)$ はコンパクトで，
 $\bar{\iota} \colon P \to K$ は位相同型である．
 
-**主張（トレース恒等式）.** $K \cap \operatorname{UMet}(Y;R) = F$．
+**主張（トレース恒等式）．** $K \cap \operatorname{UMet}(Y;R) = F$．
 
-*証明.* $\supseteq$ は構成から従う（$2^\omega \setminus S$ 上で
+*証明．* $\supseteq$ は構成から従う（$2^\omega \setminus S$ 上で
 $\bar{\iota} = \iota$）．$\subseteq$：$t \in P$，
 $\bar{\iota}(t) \in \operatorname{UMet}(Y;R)$ とする．
 $t_k \in 2^\omega \setminus S$，$t_k \to t$ を取ると
@@ -382,7 +388,7 @@ $\operatorname{UMet}(Y;R)$ の閉集合だから
 $\bar{\iota}(t) \in F = \iota(2^\omega \setminus S)$ であり，$\bar{\iota}$ の
 単射性より $t \in 2^\omega \setminus S$．∎
 
-**結論.** $\operatorname{UMet}(Y;R)$ が $\operatorname{UCPM}(Y;R)$ のボレル
+**結論．** $\operatorname{UMet}(Y;R)$ が $\operatorname{UCPM}(Y;R)$ のボレル
 集合であると仮定すると，$F = K \cap \operatorname{UMet}(Y;R)$ はコンパクト
 距離空間（したがってポーランド空間）$K$ のボレル集合であり（トレース，
 §2.2），位相同型 $\bar{\iota}$ で引き戻すと
@@ -391,15 +397,15 @@ $2^\omega$ の閉集合だから $2^\omega \setminus S$ は $2^\omega$ のボレ
 となり，命題 2.2 に矛盾する．なお $S$ の補集合の稠密性は仮定していない．
 閉包 $P$ に移って議論することで，この点は自動的に処理される．
 
-**注意（誤った近道）.** 「可分距離化可能空間は，それを含むどの距離化可能空間
+**注意（誤った近道）．** 「可分距離化可能空間は，それを含むどの距離化可能空間
 においてもボレルである」という形の補題を使えば転送は一行で済むように見える
 が，この主張は偽である．実際 $F$ は $2^\omega \setminus S$ と等長であり，
 $2^\omega \setminus S$ は $2^\omega$ のボレル集合でない．正しい転送は上の
 閉包・コンパクト性の議論による．
 
-### 3.7 系 3.15 と系 3.17 — 修復した経路の継承〔継承 + C〕
+### 3.7 系 3.15 と系 3.17 — 修復した経路の継承〔3.15: 継承 + C，3.17: A（継承）+ 外部入力 [I2](N1)〕
 
-**系 3.15.** $Y$ 超距離化可能：$\operatorname{UMet}(Y;R)$ が完備距離化可能
+**系 3.15．** $Y$ 超距離化可能：$\operatorname{UMet}(Y;R)$ が完備距離化可能
 ならば $Y$ は可分．証明は原稿では省略されているが，意図されている筋は明快で
 ある：完備距離化可能な部分空間は距離化可能な全体空間の $G_\delta$ 集合
 （Alexandrov–Lavrentiev，[Ke, Theorem 3.11]．全体空間の可分性は不要）だから
@@ -407,7 +413,7 @@ $\operatorname{UMet}(Y;R)$ は $\operatorname{UCPM}(Y;R)$ のボレル集合と�
 定理 3.14（修正済みの経路）に帰着する．改訂では引用を付して一文を追加する
 ことを勧める（証明が同様に省略されている系 3.6 も同じ）．
 
-**系 3.17.** $Y$ 超距離化可能，$\operatorname{UComp}(Y;R) \neq \emptyset$：
+**系 3.17．** $Y$ 超距離化可能，$\operatorname{UComp}(Y;R) \neq \emptyset$：
 $\operatorname{UComp}(Y;R)$ がボレル（または完備距離化可能）ならば $Y$ は
 可分．確認した筋は次の通りである．$\operatorname{UComp}(Y;R) \neq \emptyset$
 から $Y$ は完備距離化可能である（その元は $Y$ 上の完備な両立距離である）．
@@ -453,7 +459,7 @@ $$E(\operatorname{UComp}(Z;R)) = E(\operatorname{UMet}(Z;R)) \cap \operatorname{
 
 ## 5. 検証の範囲と外部入力
 
-**直接確認した部分.** [IU] 内部の全ての証明：命題 2.1・2.2（§3.1 の修正込み），
+**直接確認した部分．** [IU] 内部の全ての証明：命題 2.1・2.2（§3.1 の修正込み），
 補題 3.1・3.2・3.10・3.11，定理 3.3・3.4・3.5・3.8（§3.4 の修正込み）・3.12・
 3.13・3.14（§3.6 の修正込み）・3.16，系 3.6・3.7（§3.3 の修正込み）・3.9・
 3.15・3.17，および §2.2 に挙げた非可分な全体空間でのボレル集合の操作．暗黙に
@@ -462,7 +468,7 @@ $$E(\operatorname{UComp}(Z;R)) = E(\operatorname{UMet}(Z;R)) \cap \operatorname{
 成分が開かつ閉であること，完備距離の閉部分空間への制限の完備性，$\aleph_1$
 の正則性）も個別に再導出して確認した．
 
-**外部入力として使う定理.** 以下は出典の主張を（§3.5 で述べた条件の明確化を
+**外部入力として使う定理．** 以下は出典の主張を（§3.5 で述べた条件の明確化を
 除き）そのまま入力として使う．
 
 - 距離の等長拡張定理 [I1, Theorem 1.1]．定理 3.5 と系 3.7 は (1)(2)(3) と
