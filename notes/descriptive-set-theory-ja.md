@@ -1,8 +1,8 @@
 # 記述集合論用語・Borel 版学習ノート
 
-> **Status:** Issue #48 の現行 Borel 版ノート．
 > **Purpose:** 伊敷–宇田，*Borelness of Moduli Spaces of Metrics Implies Separability*，arXiv:2608.19618 の記述集合論的な道具と証明の流れを日本語で整理する．
-> **数学的な source of truth:** `notes/borel-preprint-audit.md`（Issue #55）．本文の「Prop. 2.1」「Lemma 3.1」などは同監査の番号を指す．
+> **数学的な source of truth:** `notes/borel-preprint-audit.md`．本文の「Prop. 2.1」「Lemma 3.1」などは同監査の番号を指す．
+> **用語:** 日本語術語の正典は `notes/terminology.md`．
 > **範囲:** 11 Aug の analytic/coanalytic 版ではなく，20 Aug 2026 v1 の Borel 版を扱う．`report/report-ja.md` は Conjecture 5.1 の archival track であり，本ノートでは変更しない．
 
 ## 0. このノートの読み方
@@ -21,27 +21,10 @@
 
 ## 1. Project 標準用語
 
-| English | 本 project の日本語 | 記号・備考 | このノートでの役割 |
-|---|---|---|---|
-| descriptive set theory | **記述集合論** |  | 現行の一般論 |
-| Polish space | **ポーランド空間** |  | `[0,1]`，`2^ω` の周囲空間 |
-| Borel set | **ボレル集合** |  | 現行の中心概念 |
-| Borel σ-algebra | **Borel σ-代数** |  | 非可分な周囲空間にも定義する |
-| Borel hierarchy | **ボレル階層** |  | 背景用語 |
-| projective hierarchy | **射影階層** |  | 歴史・背景のみ |
-| analytic set | **解析集合** | `Σ¹₁` | 歴史・背景のみ，現行の主張では使わない |
-| coanalytic set | **余解析的集合** | `Π¹₁` | 歴史・背景のみ，現行の主張では使わない |
-| perfect set | **完全集合** | 閉かつ孤立点を持たない集合 |  |
-| perfect set theorem | **完全集合定理** | ここでは Borel 集合に対する定理を主に使う |  |
-| perfect set property | **完全集合性** (perfect set property, PSP) | 初出で英語と記号を併記する |  |
-| Bernstein set | **ベルンシュタイン集合** |  | Prop. 2.1 の CH 分岐と歴史節 |
-| Cantor space | **カントール空間** | `2^ω` または `2^ℕ` | Prop. 2.2 のパラメータ空間 |
-| Baire space | **ベール空間** | `ω^ω` または `ℕ^ℕ` | 背景用語 |
-| standard Borel space | **標準 Borel 空間** |  | Borel 同型の背景 |
-| Borel isomorphism | **Borel 同型** | 位相同型とは異なる |  |
-| homeomorphism | **位相同型** | 稠密性や収束を保存する |  |
-| completely metrizable | **完備距離化可能** | ポーランド空間はこれに可分性を加えたもの |  |
-| compatible metric | **両立する距離** |  | 固定 |
+日本語術語の一覧表は `notes/terminology.md` の「Japanese terminology (both
+tracks)」に統合した．本ノートは同表の訳語に従う．特に，perfect set は
+**完全集合**（閉かつ孤立点を持たない集合）であり，「完全空間」という語は
+完備 (complete) と紛らわしいので使わず，「孤立点を持たない」と明示する．
 
 ### 1.1 ポーランド空間
 
@@ -49,7 +32,7 @@
 
 ### 1.2 analytic と coanalytic の日本語
 
-本 project では `analytic set` を **解析集合**，`coanalytic set` を **余解析的集合** とする．「解析的集合」は用いない．余解析的集合は，初出では `coanalytic set, Π¹₁` と併記する．
+訳語は `notes/terminology.md` の通り，`analytic set` は **解析集合**，`coanalytic set` は **余解析的集合** である．
 
 これらは記述集合論の標準用語として本ノートの歴史・背景節で使用するが，現行の arXiv:2608.19618 における Borel 版の定理を analytic/coanalytic の定理として読み替えてはならない．
 
@@ -131,7 +114,7 @@
 
 ### 4.2 ベルンシュタイン集合
 
-空でない完全ポーランド空間 `P` の部分集合 `B` が **ベルンシュタイン集合** であるとは，任意の空でない完全集合 `K⊆P` に対して
+空でなく孤立点を持たないポーランド空間 `P` の部分集合 `B` が **ベルンシュタイン集合** であるとは，任意の空でない完全集合 `K⊆P` に対して
 
 `K∩B≠∅` かつ `K\B≠∅`
 
@@ -157,7 +140,7 @@
 
 `2^ω={t:ω→{0,1}}`
 
-に積位相を入れたものを **カントール空間** と呼ぶ．`2^ω` はコンパクトなポーランド空間であり，空でない完全空間である．その標準的な非アルキメデス的距離は，非アルキメデス的距離への符号化のパラメータ空間として使われる．
+に積位相を入れたものを **カントール空間** と呼ぶ．`2^ω` はコンパクトなポーランド空間であり，空でなく孤立点を持たない．その標準的な非アルキメデス的距離は，非アルキメデス的距離への符号化のパラメータ空間として使われる．
 
 ### 5.2 Borel 同型は位相同型ではない
 
@@ -394,10 +377,3 @@ ZFC で安全な修正には Mansfield–Solovay の定理が関係する．こ�
 - A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995．特に Theorem 3.11，Theorem 13.6，Example 8.24，Theorem 15.6，Theorem 29.1．
 - K. Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024)．
 - A. S. Kechris, *The theory of countable analytical sets*, Trans. Amer. Math. Soc. 202 (1975)．最大の thin `Π¹₁` 集合 `C₁` の存在について．Guaspari (1973)，Sacks (1976) も独立に同じ事実を示している．§10.3 を参照．
-
-## Issues
-
-- #48 — 本ノートの Borel 版整備．
-- #55 — `notes/borel-preprint-audit.md` による現行の原稿の定理ごとの監査．
-- #56 — Borel σ-代数を用いた discrete core（監査 §7）の Lean 形式化．
-- #57 — 拡張作用素を用いた general-space transfer（監査 §7）と Theorem 3.5 の Lean 形式化．

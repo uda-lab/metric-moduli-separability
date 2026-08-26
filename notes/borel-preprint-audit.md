@@ -1,11 +1,10 @@
 # Borel preprint audit — arXiv:2608.19618 v1
 
-> **Status:** complete (Issue #55).
 > **Subject:** Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics
 > Implies Separability*, arXiv:2608.19618 v1 (20 Aug 2026). All statements were
 > checked against the LaTeX source of v1.
 > **Role:** this note is the active mathematical source of truth for the Borel
-> track and the statement gate for the downstream Lean issues (#56, #57).
+> track and the statement gate for its Lean formalisation.
 > Numbers such as "Theorem 3.3" are derived from the v1 source's `[section]`
 > theorem counter; the LaTeX labels are the stable identifiers.
 > **Policy:** a statement is not accepted because it appears in the preprint;
@@ -54,7 +53,7 @@ repaired**. Concretely: 3.10–3.13 and 3.16 consume only the *statement* of
 2.2 (whose proof is FIX but whose repair is verified in §2.2); 3.9 consumes
 3.8-as-repaired; 3.15 and 3.17 consume 3.14-as-repaired. A PASS on a
 downstream item therefore means "no *new* gap introduced here", not
-"unconditional"; any gate (in particular the Lean issues #56/#57) that
+"unconditional"; any gate (in particular the Lean formalisation, §7) that
 consumes a statement whose ancestors carry FIX must treat the recorded
 repairs as part of the statement being gated. With the four repairs of
 §§2.2, 2.10, 2.11, 2.14 admitted, every statement of the preprint has a
@@ -125,17 +124,15 @@ specific coded carrier fixed before Lemma 3.1 (resp. 3.10). A bijection of
 discrete spaces induces an isometry of `CPM`/`UCPM` preserving
 `Met/BMet/Comp/UMet/UComp` and components (elementary: relabel both
 arguments; every defining property is invariant), so this is sound; the
-preprint leaves it implicit. Lean status: `Conj51/Relabel.lean` formalises
+preprint leaves it implicit. In Lean, `Conj51/Relabel.lean` formalises
 this reduction for `MetD` (the space `Met(D)` with its extended sup
 distance — `relabelIsometry : MetD E ≃ᵢ MetD D`); `Ext/Relabel.lean`
-*(delivered by #63)* formalises the corresponding `BddPMet`/`CPM` relabelling
+formalises the corresponding `BddPMet`/`CPM` relabelling
 isometries and the `BMet`/`Met` preimage identities, consumed by the
-arbitrary-carrier forms of §7 item 4. The `UCPM` relabelling isometry and the
-`UMet`/component preimage identities are in `Ext/UltraPMet.lean`
+arbitrary-carrier forms of §7.1 item 4; and `Ext/UltraPMet.lean` carries the
+`UCPM` relabelling isometry and the `UMet`/component preimage identities
 (`UCPM.isometry_comap`, `preimage_UMet_comap`, `preimage_UComponent_comap`),
-*delivered by #81*, and carry the arbitrary-carrier forms of 3.12 and 3.13.
-The Archimedean component-preservation lemmas for 3.8 and the `UComp` ones
-(3.16) remain **not yet formalised**; neither gates #56/#57/#66.
+which supply the arbitrary-carrier forms of 3.12 and 3.13.
 
 ---
 
@@ -189,9 +186,9 @@ Proposition 2.2 and is inherited verbatim.)
 Statement true in ZFC; the citation for the Borel isomorphism (Kechris,
 Theorem 15.6, currently uncited) should be added if route 1 is kept.
 
-**Lean** (`Ext/CantorUltra.lean`, #81): `exists_dense_aleph1_nonBorel_cantor`.
+**Lean** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`.
 The non-Borel `T` comes from route 2's dichotomy run directly in `2^ω` (no
-Bernstein set is needed in Lean, as in §7 item 1) and density from route 1's
+Bernstein set is needed in Lean, as in §7.1 item 1) and density from route 1's
 `S = T ∪ Q₀`; the Borel isomorphism of the printed proof is not used.
 
 ### 2.3 Setup before Lemma 3.1
@@ -220,7 +217,7 @@ Compatibility: for `t ∉ S`, isolation radii are `1` at `p,q`, `l_n(α,t) ≥
 `t = w_β ∈ S`, `d_t(b_β, c_{β,n}) = 2^{−n} → 0`, so `b_β` is not isolated. ✓
 Identical (up to relabelling of the star index) to the construction already
 re-derived twice in this repo (superseded audit §4, verdict PASS) and
-formalised sorry-free in Lean (§6).
+formalised sorry-free in Lean (§7.1).
 
 ### 2.5 Lemma 3.2 (`lem:closed-parameter-embedding`) — PASS
 
@@ -233,7 +230,7 @@ upper bound `𝒟_Z(d_s,d_t) ≤ 2|s−t|` since each table entry is 1- or
 `d_{t_k} → d ∈ Met(Z)` with `t_k ∈ [0,1]∖S`, the anchor recovers
 `t_k → t := d(p,q) − 1 ∈ [0,1]`; the upper Lipschitz bound gives `d = d_t`;
 `d` compatible + Lemma 3.1 force `t ∉ S`. ✓ (Same status in the superseded
-audit §5; formalised, §6.) Note the two byproducts used later: `L :=
+audit §5; formalised, §7.1.) Note the two byproducts used later: `L :=
 Φ([0,1])` is compact (hence closed/Borel in `CPM(Z)`), and the exact
 trace identity `L ∩ Met(Z) = L ∩ BMet(Z) = Φ([0,1]∖S)` (all `d_t` are
 bounded, and `d_t` compatible ⟺ `t ∉ S`).
@@ -308,7 +305,7 @@ the preprint; it is the §1 argument.
 `Met(Z)` itself in place of the component `𝔠` (using `E(Met(Z))` closed and
 the `Met(Z)` version of 3.3 noted in §2.6), so the minimal verified chain for
 3.5 does **not** need Theorem 3.4. Theorem 3.4 stands as a finer independent
-result, and is not a prerequisite of the #57 Lean package (§7).
+result, and is not a prerequisite of the minimal Lean transfer package (§7).
 
 ### 2.9 Corollary 3.6 (`cor:metric-space-complete-separability`) — PASS + EXTERNAL
 
@@ -349,7 +346,7 @@ lemma to state explicitly in a revision.
 
 **Citation caveat (E3).** The preprint cites "[Corollary 1.2]" of Koshino,
 but this repo's verified literature record (`notes/literature.md`, checked
-against the arXiv v2 = published text on 2026-08-10) found the paper's main
+against the arXiv v2 = published text) found the paper's main
 Theorem and Corollary **unnumbered**. Verify the citation number against the
 published AGMS version before submission. Also note Koshino's object is
 `AM(X)` (bounded *admissible* metrics, sup-metric) — identical to `BMet(X)`;
@@ -433,7 +430,7 @@ gives `h(t,w_α) = ρ`, and `n` with `r(n) < ρ` witnesses
 `UMet(Z;R)`: a `𝒰𝒟^R`-limit forces `(t_k)` Cauchy in compact `(2^ω,h)`,
 limit `d = d_t`, compatibility forces `t ∉ S`. PASS. ✓
 
-**Lean** (`Ext/UltraCoding.lean`, #81): 3.10 is `dU_isUltraPMetOn`,
+**Lean** (`Ext/UltraCoding.lean`): 3.10 is `dU_isUltraPMetOn`,
 `dU_le_head`, `isCompatible_phiU_iff` and `dU_completeSpace`; 3.11 is
 `edist_phiU` (both bounds, the lower one through `exists_separating_pair`,
 which consumes `Dense S`) and `isClosed_image_phiU`.
@@ -459,10 +456,10 @@ otherwise, using the ultrametric isosceles `d(x,a) = d(x,z)` for `d(x,z) > q
 `E`); compatibility ⟺ `t ∉ S` (`d(x,z) > q` outside `E` restores isolation);
 closed image in `𝔠^R`; trace as before. ✓
 
-**Lean** (#81): 3.12 is `umet_not_borel_of_card` (`Ext/UltraCoding.lean`) and
+**Lean**: 3.12 is `umet_not_borel_of_card` (`Ext/UltraCoding.lean`) and
 3.13 is `ucomponent_not_borel_of_card` (`Ext/UltraComponent.lean`), both on an
 arbitrary discrete carrier of cardinality `ℵ₁`; the audited bound
-`𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` is `edist_uAmalgam_le`. 3.14 and 3.15 are #82; see
+`𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` is `edist_uAmalgam_le`. For 3.14 and 3.15 see
 the Lean notes after each statement below.
 
 **Theorem 3.14 (`thm:ultrametric-borel-separability`) — FIX + EXTERNAL.**
@@ -528,7 +525,7 @@ Statement true; the transfer argument above must be added to the paper, and
 a Lean formalisation of 3.14 must formalise it (it is not extractable from
 the paper's text).
 
-**Lean** (#82, `Ext/UltraTransfer.lean`): the repair, not the printed proof.
+**Lean** (`Ext/UltraTransfer.lean`): the repair, not the printed proof.
 `ultraExtend` is `ῑ` — the dense-uniform extension of `E ∘ Ψ`, available by
 `completeSpace_UCPMOn`; `restrict_ultraExtend` propagates E2 clause (1) to the
 closure and yields injectivity; `preimage_UMetOn_ultraExtend` is
@@ -545,8 +542,8 @@ From 3.14 via Alexandrov (`UMet(Y;R)` completely metrizable ⇒ `G_δ` in the
 metrizable `UCPM(Y;R)` ⇒ Borel); proof omitted in the preprint, same remark
 as 3.6. Inherits the 3.14 FIX, adds nothing.
 
-**Lean** (#82): `separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`,
-through `measurableSet_of_isCompletelyMetrizableSpace` (E4d, #79).
+**Lean**: `separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`,
+through `measurableSet_of_isCompletelyMetrizableSpace` (E4d, §7.3).
 
 ### 2.15 Theorem 3.16, Corollary 3.17
 
@@ -626,7 +623,7 @@ space is `G_δ` (Kechris, Theorem 3.11 — already number-verified in
 `notes/literature.md`; used implicitly by 3.6, 3.15, and 3.17's second
 sentence — the preprint never cites it; add).
 Number verification status: **all four numbers verified against the printed
-text of GTM 156** (2026-08-23, full-text copy).
+text of GTM 156** (full-text copy).
 (a) Theorem 13.6 is literally "(The Perfect Set Theorem for Borel Sets)
 (Alexandrov, Hausdorff) Let `X` be Polish and `A ⊆ X` be Borel. Then either
 `A` is countable or else it contains a Cantor set. In particular, every
@@ -670,8 +667,8 @@ subspace is complete (3.9, 3.17); regularity of `ℵ₁` (3.4, 3.13).
 ```
 
 **Route M — minimal verified chain for the main results** (§2.6, §2.8;
-this is the executable contract for the Lean issues, not what the paper
-prints):
+this is the executable contract for the Lean formalisation, not what the
+paper prints):
 
 ```
 2.1 → 3.1 → 3.2 → [Met(Z)/BMet(Z) pullback versions of 3.3, §2.6]
@@ -684,8 +681,9 @@ abstract/introduction of the preprint — §2.6), the ambient (`CPM`-level)
 pullback of §1, and, for the arbitrary-carrier statement forms, the
 relabelling isometries of §1. It does **not** consume 3.4/3.8/3.13/3.16,
 which are finer independent results. The two routes are both sound; §2's
-verdicts audit Route W, while §7 scopes #56/#57 along Route M and lists each
-Route M obligation explicitly.
+verdicts audit Route W, while §7 scopes the Lean discrete core and transfer
+package (§7.1–§7.2) along Route M and lists each Route M obligation
+explicitly.
 
 ---
 
@@ -727,70 +725,40 @@ question, not as a verification target.
 
 ---
 
-## 6. Correspondence with existing Lean (namespace `IshikiExt`, PR #52; plus `Conj51/`)
+## 6. Correspondence with the archival track
 
-Mapping recorded **only** where hypotheses/conclusions match literally;
-mismatches stated explicitly. Lean files:
-`lean/IshikiConj51/Ext/BddPMet.lean`, `lean/IshikiConj51/Ext/BoundedCoding.lean`
-(sorry-free, built against the 11 Aug draft's §3.1 = the preprint's §3.1
-coding, which is unchanged).
-
-| preprint | Lean declaration | match |
-|---|---|---|
-| carrier `Z = {p,q} ⊔ ⊔_α C_α` | `ExtIndex S = Bool ⊕ (↥S × Option ℕ)` | literal up to relabelling: stars indexed by `S` itself instead of an enumeration `α ↦ w_α`; `p,q ↦ inl true/false`, `b_α ↦ inr (a, none)`, `c_{α,n} ↦ inr (a, some n)`. (the `BddPMet`/`CPM`-level relabelling is `Ext/Relabel.lean`, *delivered by #63* — see §1) |
-| `card(Z) = ℵ₁` | `card_extIndex : #S = ℵ₁ → #(ExtIndex S) = ℵ₁` | literal |
-| `l_n(α,t) = \|t−w_α\| + 2^{−n}` | `spokeLen n a t = \|t − a\| + (1/2)^n` | literal |
-| ambient `BCPM(Z)`, sup metric | `BddPMet D` with `supDist`, `MetricSpace` instance | literal for the *bounded* ambient; the preprint's stated ambient `CPM(Z)` (unbounded, `[0,∞]`-valued `𝒟`) is `CPM D` in `Ext/CPM.lean`, *delivered by #56 item 3* |
-| 3.1: `d_t` is a metric, values in `[0,4]` (all `t ∈ [0,1]`) | `dExt_isMetricOn`, `dExt_nonneg`, `dExt_le_four` (hyp. `S ⊆ Icc 0 1`, `t ∈ Icc 0 1`) | literal |
-| 3.1: `d_t ∈ Met(Z) ⟺ t ∉ S` | `dExt_isCompatible_iff` (via `dExt_topology_eq_bot` / `_ne_bot`); `IsCompatible` = `IsMetricOn` + induced topology `= ⊥` | literal, phrased as membership in `BMet(D) ⊆ BddPMet D`; for `d_t` (bounded) the `Met`/`BMet` versions coincide |
-| 3.2: `\|s−t\| ≤ 𝒟(d_s,d_t) ≤ 2\|s−t\|` | `abs_sub_le_dist_phiFull`, `dist_phiFull_le`, `lipschitzWith_phiFull` (constant 2), `injective_phiFull` | literal (identical constants) |
-| 3.2: `Φ([0,1]∖S)` closed in `Met(Z)` | `isClosed_image_phiFull` — closed in the **subspace `BMet D`** | matches the `BMet`-relative form; the preprint's `Met(Z)`-relative closedness additionally needs "`BMet` is a union of components, clopen in `Met`" — not yet formalised (trivial) |
-| 3.3's implicit trace identity `F = L ∩ BMet(Z)` | `image_compl_eq_range_inter`; `preimage_BMet_phiFull` / `image_preimage_BMet_phiFull` (`Φ_full⁻¹(BMet) = Icc∖S`) | literal — and strictly stronger (exact pullback over all of `[0,1]`), which is the recommended Lean route for 3.3 (§7) |
-| `L = Φ([0,1])` compact/closed | `isClosed_range_phiFull` | literal (in the `BddPMet` ambient) |
-
-This table predates #56/#57/#63/#66; see §7 for the current, maintained
-delivery status. Superseded by delivery: Proposition 2.1's density-free
-ingredient (the non-**Borel** `[0,1]` parameter set, `#S = ℵ₁`, is now
-`exists_aleph1_nonBorel`, §7 item 1 — "2.1 *without* density"; the literal
-Proposition 2.1, which additionally asserts `S` dense, has no Lean
-declaration; `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` remains
-the separate, strictly weaker archival-track result) and Theorem 3.3
-(`bmet_not_borel_cpm`, `met_not_borel`, §7 item 3), plus Theorem 3.5
-conditionally (`IsIsometricExtensor.not_measurableSet_CPM_MetOn`, §7 "#66").
-Theorem 3.4 and the one-point amalgamation it rests on are now
-`Ext/Component.lean` and `Ext/Amalgam.lean` (§7 "#84"), Corollaries 3.6 and
-3.7 are `Ext/CompleteMetrizability.lean` (§7 "#79"), and Theorem 3.8 with
-Corollary 3.9 are `Ext/Completeness.lean` and `Ext/CompleteMetric.lean`
-(§7 "#80"); the non-Archimedean chain 2.2 and 3.10–3.17 landed with #81, #82
-and #83. Proposition 2.1's density clause is now the only audited statement
-with no Lean declaration, and it does not gate #56/#57/#66 (§7 item 5).
-
-Archival mapping (unchanged by this audit): `Conj51/` +
-`report/report-ja.md` formalise the companion arXiv:2608.11023
+`Conj51/` + `report/report-ja.md` formalise the companion arXiv:2608.11023
 (claim IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`,
-`THM-CONJ51`). Note the companion's coding differs from the preprint's
-(spokes `min(1, |t−a| + 1/(n+1))`, cross-distance 1, values in `[0,2]`,
-Fσ/Gδ instead of Borel): **`Conj51/` matches 2608.11023, `IshikiExt`
-matches 2608.19618**; do not confuse them.
+`THM-CONJ51`), which the preprint's acknowledgements record as the superseded
+earlier version. The companion's coding differs from the preprint's (spokes
+`min(1, |t−a| + 1/(n+1))`, cross-distance 1, values in `[0,2]`, Fσ/Gδ instead
+of Borel): **`Conj51/` matches 2608.11023, `IshikiExt` matches 2608.19618**;
+do not confuse them. The mapping of the preprint's statements onto
+`IshikiExt` declarations is recorded per theorem in §7.
 
 ---
 
 ## 7. Minimal Lean theorem package
 
-Constraints from this audit: external theorems (E1, E2) enter only as
+Constraints from this audit: external theorems (E1, E2, E3) enter only as
 **explicit hypotheses** of the Lean statements, never as axioms; the Borel
 side uses Mathlib's `MeasurableSet` over the `borel` σ-algebra of the ambient
 (extended-)metric topology (`BorelSpace` instances); the legacy local
 `IsFSigma` (`Conj51/Cardinality.lean`) is irrelevant to this track. Density
 of `S` is **omitted** from the Archimedean statements (unused, §2.1).
+Sorry-freeness and the `#print axioms` footprint of every accepted
+declaration (a subset of the three standard axioms `propext`,
+`Classical.choice`, `Quot.sound`; no `sorryAx`, no custom axioms) are review
+evidence, recorded and independently re-checked in the PR/issue trail, not
+in a committed ledger.
 
-### #56 — discrete core (statement gate: this note)
+### 7.1 Discrete core (statement gate: this note)
 
-1. **`exists_aleph1_nonBorel`** — `∃ S ⊆ Icc (0:ℝ) 1, #S = ℵ₁ ∧
-   ¬ MeasurableSet S` (Borel σ-algebra of `ℝ` or of `Icc 0 1`; equivalent by
-   trace). The *statement* is 2.1 without density; the Lean *proof route*
-   need not follow the preprint's Bernstein construction — a CH-dichotomy
-   runs entirely on Mathlib v4.32.2 API (declarations
+1. **`exists_aleph1_nonBorel`** (`Ext/Borel.lean`) — `∃ S ⊆ Icc (0:ℝ) 1,
+   #S = ℵ₁ ∧ ¬ MeasurableSet S` (Borel σ-algebra of `ℝ` or of `Icc 0 1`;
+   equivalent by trace). The *statement* is 2.1 without density; the Lean
+   *proof route* need not follow the preprint's Bernstein construction — a
+   CH-dichotomy runs entirely on Mathlib v4.32.2 API (declarations
    grep-verified against the pinned mathlib):
    * E4a in the needed form "`B` Borel in a Polish space, uncountable ⇒
      `#B = 𝔠`" is derivable: `MeasurableSet.standardBorel`
@@ -810,250 +778,241 @@ of `S` is **omitted** from the Archimedean statements (unused, §2.1).
    the preprint's own written proof stays as §2.1 — Route W and the Lean
    route legitimately differ here, the gated statement is identical.) The
    old `lem_A_exists` CH branch (`[0,1]∖ℚ`, Baire) still does not adapt —
-   `[0,1]∖ℚ` is Borel. *Delivered by #56* (`Ext/Borel.lean`,
-   `exists_aleph1_nonBorel`).
-2. **`bmet_not_borel`** (Theorem 3.3, bounded-ambient form) — for `S` as in
-   (1): `¬ MeasurableSet (BMet (ExtIndex S))` in `BddPMet (ExtIndex S)`.
-   Layer 1 supplies both inputs: `phiFull` is continuous
-   (`lipschitzWith_phiFull`), hence Borel-measurable, and
+   `[0,1]∖ℚ` is Borel. The literal Proposition 2.1 additionally asserts
+   density of `S`, which nothing in the Archimedean chain consumes (§2.1);
+   `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` is the separate,
+   strictly weaker archival-track result, not a substitute.
+2. **`bmet_not_borel`** (Theorem 3.3, bounded-ambient form;
+   `Ext/Borel.lean`) — for `S` as in (1): `¬ MeasurableSet (BMet (ExtIndex
+   S))` in `BddPMet (ExtIndex S)`. The Layer 1 coding
+   (`Ext/BddPMet.lean`, `Ext/BoundedCoding.lean` — literally the preprint's
+   §3.1 construction, with stars indexed by `S` itself instead of an
+   enumeration `α ↦ w_α`: carrier `ExtIndex S = Bool ⊕ (↥S × Option ℕ)`,
+   spoke lengths `spokeLen n a t = |t − a| + (1/2)^n`) supplies both inputs:
+   `phiFull` is continuous (`lipschitzWith_phiFull`, constant 2, with the
+   lower estimate `abs_sub_le_dist_phiFull`), hence Borel-measurable, and
    `image_preimage_BMet_phiFull` gives `Subtype.val '' Φ_full⁻¹(BMet) =
    Icc∖S`. What remains is that measurability of `BMet` would then make
    `Icc∖S`, hence `S`, measurable, contradicting (1). This *pullback route*
-   replaces the paper's relative-closure argument and needs no new topology. *Delivered by #56*
-   (`Ext/Borel.lean`, `bmet_not_borel`).
-3. **Transfer to the `CPM D` ambient** — a `CPM D` type (unbounded
-   continuous — i.e. arbitrary, `D` discrete — pseudometrics with
-   `EMetricSpace` sup distance, mirroring `Conj51/MetD.lean`), plus the
-   **bridge lemma** identifying the `BddPMet D` metric topology with the
-   subspace topology induced from `CPM D` (the real-valued `supDist` and the
-   `ENNReal`-valued sup distance agree on bounded pairs; hence the Borel
-   σ-algebra of `BddPMet D` is the trace σ-algebra), the subspace-trace
-   lemma ("`MeasurableSet` in the larger ambient ⇒ `MeasurableSet` of the
-   intersection in the subspace"), and the two corollaries: `BMet(D)`
-   non-Borel in `CPM(D)`, and the `Met(D)` version (§2.6) via
-   `phiFull⁻¹(Met D) = Icc∖S` in the `CPM` ambient. With this layer, the
-   preprint's literal 3.3 statement and the abstract's `Met(Z)` claim are
-   both discharged (item 2 alone is a bounded-ambient surrogate). *Delivered
-   by #56* (`Ext/CPM.lean`, `bmet_not_borel_cpm` and `met_not_borel`).
-4. **Arbitrary-carrier form (relabelling)** — for the statements "for every
-   discrete `D` with `#D = ℵ₁`": `BddPMet`- and `CPM`-level relabelling
-   isometries induced by a bijection `D ≃ E`, preserving `BMet`/`Met`
-   (mirror of `relabelIsometry` in `Conj51/Relabel.lean`, which covers
-   `MetD` only — §1). Without it the #56 theorems are stated for the
-   concrete `ExtIndex S` carrier, which is acceptable for the gate but not
-   for the literal preprint statement. *Delivered by #63*
-   (`Ext/Relabel.lean`): `bmet_not_borel_cpm_of_card` is Theorem 3.3 as
-   stated in the body, `met_not_borel_of_card` the abstract/introduction
-   `Met(Z)` claim (§2.6), and `bmet_not_borel_of_card` item 2's
-   bounded-ambient statement — each quantified over an arbitrary `D` with
-   `#D = ℵ₁` and carrying no residual hypothesis on the parameter set. One
+   replaces the paper's relative-closure argument and needs no new topology;
+   the closed image (`isClosed_image_phiFull`, in the subspace `BMet D`) and
+   closed range (`isClosed_range_phiFull`) of the printed proof are
+   formalised alongside.
+3. **Transfer to the `CPM D` ambient** (`Ext/CPM.lean`, `bmet_not_borel_cpm`
+   and `met_not_borel`) — the `CPM D` type (unbounded continuous — i.e.
+   arbitrary, `D` discrete — pseudometrics with `EMetricSpace` sup distance,
+   mirroring `Conj51/MetD.lean`), plus the **bridge lemma** identifying the
+   `BddPMet D` metric topology with the subspace topology induced from
+   `CPM D` (the real-valued `supDist` and the `ENNReal`-valued sup distance
+   agree on bounded pairs; hence the Borel σ-algebra of `BddPMet D` is the
+   trace σ-algebra), the subspace-trace lemma ("`MeasurableSet` in the
+   larger ambient ⇒ `MeasurableSet` of the intersection in the subspace"),
+   and the two corollaries: `BMet(D)` non-Borel in `CPM(D)`, and the
+   `Met(D)` version (§2.6) via `phiFull⁻¹(Met D) = Icc∖S` in the `CPM`
+   ambient. With this layer, the preprint's literal 3.3 statement and the
+   abstract's `Met(Z)` claim are both discharged (item 2 alone is a
+   bounded-ambient surrogate).
+4. **Arbitrary-carrier form (relabelling)** (`Ext/Relabel.lean`) — for the
+   statements "for every discrete `D` with `#D = ℵ₁`": `BddPMet`- and
+   `CPM`-level relabelling isometries induced by a bijection `D ≃ E`,
+   preserving `BMet`/`Met` (mirror of `relabelIsometry` in
+   `Conj51/Relabel.lean`, which covers `MetD` only — §1). Without it the
+   theorems of items 2–3 are stated for the concrete `ExtIndex S` carrier,
+   which is acceptable for the gate but not for the literal preprint
+   statement. `bmet_not_borel_cpm_of_card` is Theorem 3.3 as stated in the
+   body, `met_not_borel_of_card` the abstract/introduction `Met(Z)` claim
+   (§2.6), and `bmet_not_borel_of_card` item 2's bounded-ambient statement —
+   each quantified over an arbitrary `D` with `#D = ℵ₁` and carrying no
+   residual hypothesis on the parameter set; `exists_carrier_aleph_one`
+   shows the cardinality hypothesis satisfiable, so none is vacuous. One
    deviation from the `MetD` mirror: `BddPMet.supDist` is a real conditional
-   supremum, so the reindexing step cannot use `Equiv.iSup_comp` (no
-   `ciSup` analogue exists in the pinned mathlib) and is proved by
-   antisymmetry from `le_supDist`/`supDist_le`. The same item at `CPMOn` level
-   — relabelling the continuous-pseudometric ambient along a *homeomorphism*,
-   which is what the E1 bridge needs — is *delivered by #72*, below.
-5. *Not gating #57:* Theorem 3.4 (components; one-point amalgamation plus
-   the uncountable-ball argument) is *delivered by #84*, below. Theorem 3.8
-   (with the §2.11 repair baked in: complete base `d + 1`) is *delivered by
-   #80*, below, consuming #84's amalgamation layer unchanged.
+   supremum, so the reindexing step cannot use `Equiv.iSup_comp` (no `ciSup`
+   analogue exists in the pinned mathlib) and is proved by antisymmetry from
+   `le_supDist`/`supDist_le`. The same item at `CPMOn` level — relabelling
+   the continuous-pseudometric ambient along a *homeomorphism*, which is
+   what the E1 bridge needs — is part of §7.2.
+5. *Not gating the transfer package (§7.2):* Theorem 3.4 (components;
+   one-point amalgamation plus the uncountable-ball argument) is §7.4;
+   Theorem 3.8 (with the §2.11 repair baked in: complete base `d + 1`) is
+   §7.5, consuming §7.4's amalgamation layer unchanged.
 
-### #57 — general-space transfer (Theorem 3.5)
+### 7.2 Theorem 3.5 — the general-space transfer
 
-Statement shape (Route M of §4, the component-free route of §2.8). Consumed
-from #56: the `Met(D)`-version pullback theorem (item 3) and, if the
-arbitrary-carrier phrasing is wanted, the relabelling layer (item 4) —
-these are gating prerequisites and must exist before #57's final theorem is
-stated:
+Statement shape: Route M of §4, the component-free route of §2.8. Consumed
+from §7.1: the `Met(D)`-version pullback theorem (item 3) and, for the
+arbitrary-carrier phrasing, the relabelling layer (item 4).
 
-* Hypothesis bundle `IsIsometricExtensor` for a metrizable `X` (as a
-  Lean-side structure): maps `Ẽ : CPM(Z) → CPM(X)` and its restriction
-  `E`, with fields = E1's clauses (1) extension, (2) isometry (at
-  `EMetricSpace` level), Met-preservation `E '' Met(Z) ⊆ Met(X)`; the
-  identity `Ẽ(Met(Z)) = Ẽ(CPM(Z)) ∩ Met(X)` should be **derived** from (1) +
-  restriction-preserves-compatibility, not hypothesised. Clauses (3)/(4) are
-  needed only for the 3.7-repair / 3.9 extensions and can be optional fields;
-  (4) must carry the "`X` completely metrizable" hypothesis per the E1
-  caveat (§3).
-* Conditionality is by design: the #57 Lean theorem takes the E1 bundle as
-  an explicit hypothesis and does **not** formalise E1's proof, so Lean
+* **Hypothesis bundle.** `IsIsometricExtensor` for a metrizable `X` (a
+  Lean-side structure): maps `Ẽ : CPM(Z) → CPM(X)` and its restriction `E`,
+  with fields = E1's clauses (1) extension, (2) isometry (at `EMetricSpace`
+  level), Met-preservation `E '' Met(Z) ⊆ Met(X)`; the identity
+  `Ẽ(Met(Z)) = Ẽ(CPM(Z)) ∩ Met(X)` is **derived** from (1) +
+  restriction-preserves-compatibility
+  (`IsIsometricExtensor.image_met_eq_range_inter`), not hypothesised.
+  Clauses (3)/(4) are separate extensions for the §2.10 repair and 3.9
+  (§7.3, §7.5); (4) must carry the "`X` completely metrizable" hypothesis
+  per the E1 caveat (§3).
+* **Conditionality is by design:** the Lean theorems take the E1 bundle as
+  an explicit hypothesis and do **not** formalise E1's proof, so Lean
   discharges the preprint's 3.5 only modulo that hypothesis — matching the
   EXTERNAL verdict semantics, not silently strengthening them.
-* Supporting lemmas: nonseparable metric space has a closed discrete
-  `ε`-separated subset of cardinality `ℵ₁`; completeness of `CPM(Z)`;
-  isometric image of a complete space is closed; Borel pullback along a
-  continuous map + trace (from #56 item 3). *Delivered by #57*
-  (`Ext/GeneralSpace.lean`'s `exists_aleph1_closed_discrete_separated` and
-  `isClosed_range_of_isometry_complete`; `Ext/CPM.lean`'s
-  `CPM.instCompleteSpace`, added in #66).
-* Target: `Met(X)` Borel in `CPM(X)` → `SeparableSpace X`, with the E1
-  bundle as hypothesis; plus the 3.6 corollary via Mathlib's
-  completely-metrizable-⇒-Gδ. *The Borel-obstruction target is delivered by
-  #66* (`IsIsometricExtensor.not_measurableSet_CPM_MetOn` and
-  `separable_of_measurableSet_CPM_MetOn_of_extensors`, "#66" below); the 3.6
-  corollary remains open, listed under "#66"'s "Not delivered here" below.
-
-### #66 — the Route M package (delivered)
-
-Three prerequisites raised on review of #57 and #63 were resolved first.
-
-* **Continuity-aware ambient.** `CPM X` (`Ext/CPM.lean`) is the space of *all*
-  finite-valued pseudometrics on a bare carrier — the preprint's `CPM(X)` only
-  when `X` is discrete, which is the case it was written for. §1 fixes the
-  preprint's ambient as the *continuous* pseudometrics, and trace monotonicity
-  runs only from the larger ambient to the smaller, so "Borel in `CPM X`" is a
-  strictly stronger hypothesis than Theorem 3.5's and may not be substituted
-  for it. `Ext/GeneralSeparability.lean` therefore introduces
+* **Supporting lemmas** (`Ext/GeneralSpace.lean`, `Ext/CPM.lean`): a
+  nonseparable metric space has a closed discrete `ε`-separated subset of
+  cardinality `ℵ₁` (`exists_aleph1_closed_discrete_separated`); completeness
+  of `CPM(Z)` (`CPM.instCompleteSpace` — §2.8's "uniform limits of
+  pseudometrics" step, proved directly from
+  `EMetric.complete_of_cauchySeq_tendsto`: a Cauchy sequence for the
+  supremum distance is pointwise Cauchy, the pointwise limit is again a
+  pseudometric, and the Cauchy modulus survives passage to the limit in the
+  second index); the closed-isometric-image lemma
+  (`isClosed_range_of_isometry_complete`), stated at `EMetricSpace`
+  hypotheses because `CPM`'s supremum distance is `[0,∞]`-valued (§1) —
+  Mathlib's `Isometry.isClosedEmbedding` is already at the extended-metric
+  level, so the `MetricSpace` form could not have been applied; and the
+  Borel pullback along a continuous map + trace (item 3).
+* **Continuity-aware ambient.** `CPM X` (`Ext/CPM.lean`) is the space of
+  *all* finite-valued pseudometrics on a bare carrier — the preprint's
+  `CPM(X)` only when `X` is discrete, which is the case it was written for.
+  §1 fixes the preprint's ambient as the *continuous* pseudometrics, and
+  trace monotonicity runs only from the larger ambient to the smaller, so
+  "Borel in `CPM X`" is a strictly stronger hypothesis than Theorem 3.5's
+  and may not be substituted for it. `Ext/GeneralSeparability.lean`
+  therefore introduces
   `CPMOn X = {d : CPM X // Continuous (Function.uncurry d.1)}` carrying the
   subtype extended-metric structure — literally the restriction of `𝒟_X`,
-  since `Subtype.edist_eq` is `rfl` — and re-points `CPM.MetOn X` to
-  `Set (CPMOn X)` and the extensor's codomain to `CPMOn X`. The extensor's
-  **domain** stays the bare `CPM A`: E1 is applied to a closed *discrete* `A`,
-  where the preprint's `CPM(A)` is the set of all pseudometrics on `A`. As a
-  consequence `met_not_borel` is consumed verbatim and no discrete-carrier
-  transfer isometry is needed anywhere in the proof. The identification itself
-  is nevertheless recorded, as the checked justification of the design:
+  since `Subtype.edist_eq` is `rfl` — with the locus
+  `CPM.MetOn X : Set (CPMOn X)` and the extensor's codomain `CPMOn X`. The
+  extensor's **domain** stays the bare `CPM A`: E1 is applied to a closed
+  *discrete* `A`, where the preprint's `CPM(A)` is the set of all
+  pseudometrics on `A`. As a consequence `met_not_borel` is consumed
+  verbatim and no discrete-carrier transfer isometry is needed anywhere in
+  the proof. The identification itself is nevertheless recorded, as the
+  checked justification of the design:
   `CPMOn.equivCPM (D) [DiscreteTopology D] : CPMOn D ≃ᵢ CPM D` together with
   `CPMOn.preimage_equivCPM_met`, identifying the two metric loci. It is an
   isometric equivalence, not a definitional identity.
-* **`CompleteSpace (CPM D)`** (`Ext/CPM.lean`, `CPM.instCompleteSpace`) — the
-  §2.8 "uniform limits of pseudometrics" step, proved directly from
-  `EMetric.complete_of_cauchySeq_tendsto`: a Cauchy sequence for the supremum
-  distance is pointwise Cauchy, the pointwise limit is again a pseudometric,
-  and the Cauchy modulus survives passage to the limit in the second index.
-* **`isClosed_range_of_isometry_complete`** generalised from `MetricSpace` to
-  `EMetricSpace` hypotheses (`Ext/GeneralSpace.lean`); the proof term is
-  unchanged, because Mathlib's `Isometry.isClosedEmbedding` is already stated
-  at the extended-metric level. `CPM`'s supremum distance is
-  `[0,∞]`-valued (§1), so the `MetricSpace` form could not be applied to it.
 
-Delivered statements (all in `Ext/GeneralSeparability.lean`):
+Bundle-conditional theorems (`Ext/GeneralSeparability.lean`):
 
 * `IsIsometricExtensor.not_measurableSet_CPM_MetOn` — the core content of
   Theorem 3.5: an isometric extensor out of the coded `ℵ₁`-sized discrete
   carrier forbids `MeasurableSet (CPM.MetOn X)`. Conditional on the
-  `IsIsometricExtensor` bundle, which is a *transported* form of E1 and not E1
-  itself (see "Conditionality" below); the bundle is a hypothesis, never an
-  axiom, so nothing here strengthens the EXTERNAL verdict of §2.8.
+  `IsIsometricExtensor` bundle, which is a *transported* form of E1 and not
+  E1 itself (see "Conditionality" below); the bundle is a hypothesis, never
+  an axiom, so nothing here strengthens the EXTERNAL verdict of §2.8.
 * `separable_of_measurableSet_CPM_MetOn_of_extensors` — the conclusion of
-  Theorem 3.5 in its separability form, with the extensor input hypothesised as
-  "*every* closed discrete copy of the coded carrier inside `X` admits an
-  `IsIsometricExtensor` bundle". Quantifying rather than fixing the extensor is
-  what §2.8's argument needs: the closed discrete subspace is produced by the
-  separated-set argument only *after* nonseparability is assumed, so the
+  Theorem 3.5 in its separability form, with the extensor input hypothesised
+  as "*every* closed discrete copy of the coded carrier inside `X` admits an
+  `IsIsometricExtensor` bundle". Quantifying rather than fixing the extensor
+  is what §2.8's argument needs: the closed discrete subspace is produced by
+  the separated-set argument only *after* nonseparability is assumed, so the
   extensor cannot be fixed in advance. This is the variant in which
   `exists_aleph1_closed_discrete_separated` is actually consumed, and no
-  CPM-level relabelling (§7 item 4) is needed *inside the proof* — the
+  CPM-level relabelling (§7.1 item 4) is needed *inside the proof* — the
   bijection between the coded carrier and the separated set is absorbed into
   the embedding. Relabelling is still what stands between the hypothesis and
   E1 itself, below.
-* `separable_of_measurableSet_CPM_MetOn` — the literal statement of Issue #66,
-  recorded as a corollary and flagged as such: its hypotheses are jointly
-  inconsistent. `IsIsometricExtensor.not_separableSpace` proves that a fixed
-  extensor bundle already refutes separability with no Borel hypothesis at
-  all, so the corollary's proof runs through `False.elim`. It is not the
-  result; the two statements above are.
+* `separable_of_measurableSet_CPM_MetOn` is recorded as a corollary and
+  flagged as such: its hypotheses are jointly inconsistent.
+  `IsIsometricExtensor.not_separableSpace` proves that a fixed extensor
+  bundle already refutes separability with no Borel hypothesis at all, so
+  the corollary's proof runs through `False.elim`. It is not the result; the
+  two statements above are.
 
-**Conditionality, stated exactly.** Both theorems are conditional on the Lean
-`IsIsometricExtensor` bundle, which is *not* E1 verbatim. E1 quantifies over an
-arbitrary closed subset `A ⊆ X` and supplies `Ẽ` on the *continuous*
-pseudometrics of `A`; the bundle fixes an abstract carrier plus a closed
-embedding `ι` and takes the extensor already transported along `ι`, with a bare
-`CPM A` domain. For closed *discrete* `A` the two agree, and the
+**Conditionality, stated exactly.** The two theorems above are conditional
+on the Lean `IsIsometricExtensor` bundle, which is *not* E1 verbatim. E1
+quantifies over an arbitrary closed subset `A ⊆ X` and supplies `Ẽ` on the
+*continuous* pseudometrics of `A`; the bundle fixes an abstract carrier plus
+a closed embedding `ι` and takes the extensor already transported along `ι`,
+with a bare `CPM A` domain. For closed *discrete* `A` the two agree, and the
 continuity half of that bridge is proved (`CPMOn.equivCPM`,
-`CPMOn.preimage_equivCPM_met`); the relabelling half — moving the domain from
-`↥A` to the abstract carrier along `ι` — is the CPMOn-level instance of item 4
-above, and was **not** formalised in #66. E1 therefore implies the Lean
-hypothesis, so the Lean theorems are at least as strong as the E1-conditional
-statement, but #66 did not check that implication: for its two theorems,
-"modulo the bundle" is accurate and "modulo E1" would overstate. #72 below
-closes the bridge and restates both with E1 as the hypothesis.
+`CPMOn.preimage_equivCPM_met`); the relabelling half — moving the domain
+from `↥A` to the abstract carrier along `ι` — is the CPMOn-level instance of
+§7.1 item 4, formalised in the E1 bridge below. E1 therefore implies the
+Lean hypothesis: for the bundle-conditional pair "modulo the bundle" is the
+accurate reading, and the E1-conditional pair below is the form for which
+"modulo E1" is.
 
-Not delivered here: the E1 bridge just described (delivered by #72),
-Corollary 3.6 (completely metrizable ⇒ Borel, via Alexandrov–Lavrentiev, E4d),
-and the `BMet`/`Comp` variants of the transfer needed for §2.10 and §2.12. The
-last two remain open.
+**The E1 bridge.** Three pieces, all in `Ext/GeneralSeparability.lean`
+except where noted.
 
-### #72 — the E1 bridge (delivered)
-
-Three pieces, all in `Ext/GeneralSeparability.lean` except where noted.
-
-* **Item 4 at `CPMOn` level.** `CPMOn.comap`/`CPMOn.relabelIsometry` transport
-  the continuous-pseudometric ambient along a homeomorphism `σ : D ≃ₜ E`; the
-  pseudometric content is `CPM.comap σ` and the continuity field transports
-  because `σ × σ` is continuous. The locus identity is
+* **§7.1 item 4 at `CPMOn` level.** `CPMOn.comap`/`CPMOn.relabelIsometry`
+  transport the continuous-pseudometric ambient along a homeomorphism
+  `σ : D ≃ₜ E`; the pseudometric content is `CPM.comap σ` and the continuity
+  field transports because `σ × σ` is continuous. The locus identity is
   `CPMOn.preimage_MetOn_comap`. Unlike the bare-carrier case, the condition
   being transported is "`d` induces the topology of the ambient" rather than
   "`d` induces `⊥`", so it needs `topology_comap` (`Ext/Relabel.lean`): a
-  relabelled metric induces the relabelled topology.
-  That is the general form of the existing `topology_comap_eq_bot`, which stays
-  as the discrete-carrier case.
+  relabelled metric induces the relabelled topology. That is the general
+  form of `topology_comap_eq_bot`, which stays as the discrete-carrier case.
 * **E1 as a Lean structure.** `IsIsometricExtensorOn (A : Set X)` for a
   metrizable `X`: `closed`, `toCPM : CPMOn ↥A → CPMOn X`, `extension`,
-  `isometry_toCPM`, `met_preservation`. These are E1's clauses (1), (2) and the
-  inclusion half of the "furthermore" clause, with no carrier-specific choices;
-  the reverse inclusion stays derived
+  `isometry_toCPM`, `met_preservation`. These are E1's clauses (1), (2) and
+  the inclusion half of the "furthermore" clause, with no carrier-specific
+  choices; the reverse inclusion stays derived
   (`IsIsometricExtensor.image_met_eq_range_inter`), and clauses (3)/(4) are
   omitted as before.
-* **The derivation.** `IsIsometricExtensorOn.toIsIsometricExtensor` takes
-  E1 for `Set.range ι`, for a closed embedding `ι` of a `⊥`-topologised carrier,
-  and produces the #66 bundle: relabel along the homeomorphism `ι` induces onto
-  `↥(range ι)`, then drop to the bare domain by `CPMOn.equivCPM`.
-  `met_preservation` transports through `CPMOn.preimage_equivCPM_met` and
-  `CPMOn.preimage_MetOn_comap`.
+* **The derivation.** `IsIsometricExtensorOn.toIsIsometricExtensor` takes E1
+  for `Set.range ι`, for a closed embedding `ι` of a `⊥`-topologised
+  carrier, and produces the bundle: relabel along the homeomorphism `ι`
+  induces onto `↥(range ι)`, then drop to the bare domain by
+  `CPMOn.equivCPM`. `met_preservation` transports through
+  `CPMOn.preimage_equivCPM_met` and `CPMOn.preimage_MetOn_comap`.
 
-Delivered statements:
+E1-conditional theorems:
 `not_measurableSet_CPM_MetOn_of_isometricExtensorOn` and
-`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn`, the #66 pair
-with `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1's statement
-for `X` — in place of the bundle. E1's proof stays external and is not an
-axiom.
+`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` — the pair
+above with `∀ A, IsClosed A → Nonempty (IsIsometricExtensorOn A)` — E1's
+statement for `X` — in place of the bundle. E1's proof stays external and is
+not an axiom.
 
-### #79 — Corollaries 3.6 and 3.7 (delivered)
+### 7.3 Corollaries 3.6 and 3.7
 
-All in `Ext/CompleteMetrizability.lean`, except E4d, which is reused from the
-archival track.
+All in `Ext/CompleteMetrizability.lean`, except E4d, which is reused from
+the archival track.
 
-* **E4d in the ambient this track needs.** `isGδ_of_isCompletelyMetrizableSpace`
-  (`Conj51/GDeltaComplete.lean`) is Alexandrov–Lavrentiev for a `MetricSpace`
-  ambient, with no separability assumption on either space; Mathlib has no
-  result concluding `IsGδ` from a completeness hypothesis, so the whole step is
-  local. Here the ambient is `CPMOn X`, whose supremum distance reaches `∞`
-  (§1), making it an `EMetricSpace` and not a `MetricSpace`, so
+* **E4d in the ambient this track needs.**
+  `isGδ_of_isCompletelyMetrizableSpace` (`Conj51/GDeltaComplete.lean`) is
+  Alexandrov–Lavrentiev for a `MetricSpace` ambient, with no separability
+  assumption on either space; Mathlib has no result concluding `IsGδ` from a
+  completeness hypothesis, so the whole step is local. Here the ambient is
+  `CPMOn X`, whose supremum distance reaches `∞` (§1), making it an
+  `EMetricSpace` and not a `MetricSpace`, so
   `isGδ_of_isCompletelyMetrizableSpace_of_metrizableSpace` restates it for a
   metrizable ambient by choosing a compatible metric with
   `TopologicalSpace.metrizableSpaceMetric`.
 * **The bounded locus in the continuous ambient.** `CPM.BMetOn X` is the
   bounded part of `CPM.MetOn X` — Koshino's `AM(X)`. `CPM.mem_BMet_iff`
-  rewrites the discrete-carrier `CPM.BMet D` of `Ext/CPM.lean`, defined there
-  as an image of the bounded ambient, into the same shape, and
+  rewrites the discrete-carrier `CPM.BMet D` of `Ext/CPM.lean`, defined
+  there as an image of the bounded ambient, into the same shape, and
   `CPMOn.preimage_equivCPM_bmet` / `CPMOn.preimage_BMetOn_comap` carry the
-  locus across the two moves of the #72 bridge.
-* **E1 clause (3).** `IsBddIsometricExtensorOn` extends `IsIsometricExtensorOn`
-  by the single field `Ẽ(BMet(A)) ⊆ BMet(X)`: the same extensor with one more
-  clause of E1, quoted as §3 quotes it. Clause (4) stays omitted (§2.12, and
-  the "`X` completely metrizable" caveat of §3).
-  `IsBddIsometricExtensorOn.image_bmet_subset` transports the clause along
-  `IsIsometricExtensorOn.toIsIsometricExtensor`.
+  locus across the two moves of the E1 bridge (§7.2).
+* **E1 clause (3).** `IsBddIsometricExtensorOn` extends
+  `IsIsometricExtensorOn` by the single field `Ẽ(BMet(A)) ⊆ BMet(X)`: the
+  same extensor with one more clause of E1, quoted as §3 quotes it. Clause
+  (4) stays omitted (§2.12, and the "`X` completely metrizable" caveat of
+  §3). `IsBddIsometricExtensorOn.image_bmet_subset` transports the clause
+  along `IsIsometricExtensorOn.toIsIsometricExtensor`.
 * **The §2.10 repair.** `IsIsometricExtensor.image_bmet_eq_range_inter` is
-  `E(BMet(Z)) = Ẽ(CPM(Z)) ∩ BMet(X)`, the ⊆ half from clause (3) and the ⊇ half
-  derived as in the `Met` case. `IsIsometricExtensor.not_measurableSet_CPM_BMetOn`
-  runs §2.8's chain on it and ends at `bmet_not_borel_cpm` — Theorem 3.3
-  directly, with no components, as §2.10 prescribes.
+  `E(BMet(Z)) = Ẽ(CPM(Z)) ∩ BMet(X)`, the ⊆ half from clause (3) and the ⊇
+  half derived as in the `Met` case.
+  `IsIsometricExtensor.not_measurableSet_CPM_BMetOn` runs §2.8's chain on it
+  and ends at `bmet_not_borel_cpm` — Theorem 3.3 directly, with no
+  components, as §2.10 prescribes.
 
 All statements below quantify over a **metrizable** `X`, which is the
-hypothesis both corollaries carry. The transfer theorems of #66/#72 are stated
+hypothesis both corollaries carry. The transfer theorems of §7.2 are stated
 for a metric space, so where they are consumed a compatible metric is chosen
-inside the proof; both the hypotheses and the conclusions are properties of the
-topology, so nothing depends on the choice.
+inside the proof; both the hypotheses and the conclusions are properties of
+the topology, so nothing depends on the choice.
 
-Delivered statements:
+Statements:
 
-* `separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn` —
-  **Corollary 3.6**, conditional on E1: `Met(X)` completely metrizable implies
-  `X` separable. The parameter set is produced internally by
-  `exists_aleph1_nonBorel`, so E1 is the only hypothesis besides the corollary's
-  own.
+* `separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn`
+  — **Corollary 3.6**, conditional on E1: `Met(X)` completely metrizable
+  implies `X` separable. The parameter set is produced internally by
+  `exists_aleph1_nonBorel`, so E1 is the only hypothesis besides the
+  corollary's own.
 * `not_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` and
   `separable_of_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn` — the
   `BMet` analogue of Theorem 3.5 that §2.10 identifies as the missing link,
@@ -1061,17 +1020,18 @@ Delivered statements:
 * `separable_of_isCompletelyMetrizableSpace_CPM_BMetOn_of_bddIsometricExtensorOn`
   — its complete-metrizability form, the `BMet` statement that Corollary 3.6
   does not supply.
-* `isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace` — **Corollary
-  3.7**, repaired: `BMet(X)` completely metrizable iff `X` σ-compact. E3 enters
-  as the explicit hypothesis `SeparableSpace X → (SigmaCompactSpace X ↔
-  BMet(X) completely metrizable)` — Koshino's theorem for this `X`, with its
-  separability hypothesis intact. It is never an axiom or an instance, and the
-  citation-number caveat of §2.10 stands unresolved: it is recorded on the Lean
-  statement rather than settled there.
+* `isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace` —
+  **Corollary 3.7**, repaired: `BMet(X)` completely metrizable iff `X`
+  σ-compact. E3 enters as the explicit hypothesis `SeparableSpace X →
+  (SigmaCompactSpace X ↔ BMet(X) completely metrizable)` — Koshino's theorem
+  for this `X`, with its separability hypothesis intact. It is never an
+  axiom or an instance, and the citation-number caveat of §2.10 stands
+  unresolved: it is recorded on the Lean statement rather than settled
+  there.
 
 E1 and E3 both stay external and are discharged nowhere in the repository.
 
-### #84 — Theorem 3.4 (delivered)
+### 7.4 Theorem 3.4 — component non-Borelness
 
 Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
 `Ext/Component.lean`, which is the theorem.
@@ -1086,65 +1046,65 @@ Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
   *failure* of compatibility. `abs_amalgam_sub_le` is §2.7 (i) with the
   constant explicit: `|m − d| ≤ B + 2H` when `e ≤ B` and `E` lies in the
   closed `d`-ball of radius `H` around `z`. `abs_amalgam_sub_amalgam_le`
-  records that the amalgam depends on `e` pointwise `1`-Lipschitzly, which is
-  what carries the coding's parameter estimate to the amalgamated family.
-  None of these mentions the star coding or any cardinality, so 3.8 consumes
-  them unchanged with the §2.11 repair applied to the base metric.
-* **The component locus.** `CPM.component d = {e ∈ Met(Z) : 𝒟_Z(d,e) < ∞}` is
-  the `∼`-class of §1, and `CPM.metSetoid` / `CPM.Components` /
+  records that the amalgam depends on `e` pointwise `1`-Lipschitzly, which
+  is what carries the coding's parameter estimate to the amalgamated family.
+  None of these mentions the star coding or any cardinality, so 3.8 (§7.5)
+  consumes them unchanged with the §2.11 repair applied to the base metric.
+* **The component locus.** `CPM.component d = {e ∈ Met(Z) : 𝒟_Z(d,e) < ∞}`
+  is the `∼`-class of §1, and `CPM.metSetoid` / `CPM.Components` /
   `CPM.componentSet` carry the quotient `𝐌_{<∞}(Z)` itself, so that "every
   component" can be quantified over the quotient rather than over
   representatives.
 * **The `ℵ₁`-sized ball.** `exists_aleph1_ball`: the closed balls of integer
   radius around any centre exhaust the carrier, so one of them is
-  uncountable, and it has cardinality at most that of the carrier. The radius
-  is returned `≥ 1`, which is the form the gap hypothesis needs. Regularity
-  of `ℵ₁` is not invoked; "a countable union of countable sets is countable"
-  is all the argument uses.
-* **The bundle.** `ComponentSetup Z` collects §2.7's data: a base metric with
-  its compatibility, a subset `E` with `E ⊆ B_d(z,H)` and `d(z,·) ≥ 1` off
-  `E`, and a relabelling `θ : ↥E ≃ ExtIndex S` carrying `z` to the coding's
-  anchor. `mem_Met_psi_iff` is §2.7 (ii), `edist_psi_base_le` is §2.7 (i) at
-  `4 + 2H`, and `preimage_component_psi` is the exact pullback identity
-  `Ψ⁻¹(𝔠) = [0,1] ∖ S`. The written proof's compact witness is recorded as
-  `isCompact_range_psi` and `range_inter_component`
+  uncountable, and it has cardinality at most that of the carrier. The
+  radius is returned `≥ 1`, which is the form the gap hypothesis needs.
+  Regularity of `ℵ₁` is not invoked; "a countable union of countable sets is
+  countable" is all the argument uses.
+* **The bundle.** `ComponentSetup Z` collects §2.7's data: a base metric
+  with its compatibility, a subset `E` with `E ⊆ B_d(z,H)` and `d(z,·) ≥ 1`
+  off `E`, and a relabelling `θ : ↥E ≃ ExtIndex S` carrying `z` to the
+  coding's anchor. `mem_Met_psi_iff` is §2.7 (ii), `edist_psi_base_le` is
+  §2.7 (i) at `4 + 2H`, and `preimage_component_psi` is the exact pullback
+  identity `Ψ⁻¹(𝔠) = [0,1] ∖ S`. The written proof's compact witness is
+  recorded as `isCompact_range_psi` and `range_inter_component`
   (`L' ∩ 𝔠 = Ψ([0,1] ∖ S)`), while the obstruction itself runs on the
-  pullback identity, exactly as in item 2.
+  pullback identity, exactly as in §7.1 item 2.
 * **The theorems.** `component_not_measurableSet` — for every `d ∈ Met(Z)`,
-  its component is not Borel in `CPM(Z)` — and `componentSet_not_measurableSet`,
-  the same statement quantified over `𝔠 ∈ 𝐌_{<∞}(Z)`. Both are stated for an
-  arbitrary carrier with `#Z = ℵ₁` and carry no residual hypothesis on a
-  parameter set. The relabelling consumed is the bijection of the ball with
-  the coded carrier (`isMetricOn_comap`, `topology_comap_eq_bot` of
-  `Ext/Relabel.lean`); the construction never leaves `Z`, so no `CPM`-level
-  transfer isometry enters.
+  its component is not Borel in `CPM(Z)` — and
+  `componentSet_not_measurableSet`, the same statement quantified over
+  `𝔠 ∈ 𝐌_{<∞}(Z)`. Both are stated for an arbitrary carrier with `#Z = ℵ₁`
+  and carry no residual hypothesis on a parameter set. The relabelling
+  consumed is the bijection of the ball with the coded carrier
+  (`isMetricOn_comap`, `topology_comap_eq_bot` of `Ext/Relabel.lean`); the
+  construction never leaves `Z`, so no `CPM`-level transfer isometry enters.
 
-Vacuity: `exists_carrier_aleph_one` (#63) supplies a carrier of the required
-cardinality, and `CPM.nonempty_Met` / `CPM.nonempty_Components` supply a
-component to quantify over — the `0/1` metric is compatible with the discrete
-topology on any carrier. Neither theorem is vacuously true.
+Vacuity: `exists_carrier_aleph_one` (§7.1 item 4) supplies a carrier of the
+required cardinality, and `CPM.nonempty_Met` / `CPM.nonempty_Components`
+supply a component to quantify over — the `0/1` metric is compatible with
+the discrete topology on any carrier. Neither theorem is vacuously true.
 
-The verdict on 3.4 is unchanged: PASS. Nothing in the written proof had to be
-repaired to formalise it; the two implicit steps of §2.7 are the two lemmas
-named above.
+The verdict on 3.4 is unchanged: PASS. Nothing in the written proof had to
+be repaired to formalise it; the two implicit steps of §2.7 are the two
+lemmas named above.
 
-### #80 — Theorem 3.8 and Corollary 3.9 (delivered)
+### 7.5 Theorem 3.8 and Corollary 3.9 — the complete-metric branch
 
-Two files: `Ext/Completeness.lean`, which is completeness for the bare metrics
-of this track together with the two `Comp` loci, and `Ext/CompleteMetric.lean`,
-which is the two theorems. The component and amalgamation machinery of #84 is
-consumed unchanged.
+Two files: `Ext/Completeness.lean`, which is completeness for the bare
+metrics of this track together with the two `Comp` loci, and
+`Ext/CompleteMetric.lean`, which is the two theorems. The component and
+amalgamation machinery of §7.4 is consumed unchanged.
 
 * **What completeness means here.** Metrics on this track are bare functions
   satisfying `IsMetricOn`, so completeness is stated the same way:
   `IsCompleteMetricOn d` says every `d`-Cauchy sequence converges, and
   `isCompleteMetricOn_iff_completeSpace` identifies it with `CompleteSpace`
   for `IsMetricOn.toMetricSpace`, so nothing weaker is in play.
-  `CPM.Comp Z` and `CPM.CompOn X` are the complete members of `CPM.Met Z` and
-  of `CPM.MetOn X` — §1's `Comp` in the discrete and the general ambient.
-  `CPMOn.preimage_equivCPM_comp` and `CPMOn.preimage_CompOn_comap` carry the
-  locus across the two moves of the #72 bridge, as their `Met` and `BMet`
-  counterparts do.
+  `CPM.Comp Z` and `CPM.CompOn X` are the complete members of `CPM.Met Z`
+  and of `CPM.MetOn X` — §1's `Comp` in the discrete and the general
+  ambient. `CPMOn.preimage_equivCPM_comp` and `CPMOn.preimage_CompOn_comap`
+  carry the locus across the two moves of the E1 bridge (§7.2), as their
+  `Met` and `BMet` counterparts do.
 * **The §2.11 repair, in three lemmas.** `addOneOffDiag d` is `d' := d + 1`
   off the diagonal; `isMetricOn_addOneOffDiag`,
   `topology_addOneOffDiag_eq_bot`, `isCompleteMetricOn_addOneOffDiag` and
@@ -1190,38 +1150,39 @@ consumed unchanged.
 
 E1 stays external and is discharged nowhere in the repository.
 
-### Non-Archimedean track (3.10–3.17)
+### 7.6 Non-Archimedean track (Proposition 2.2, 3.10–3.17)
 
-Fully audited above (§2.13–2.15) and fully delivered: the discrete core —
-Proposition 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13 — by #81, the transfer
-3.14–3.15 by #82, and the complete branch 3.16–3.17 by #83. The preprint
-presents the chain 3.1–3.9 as the headline
-(abstract and introduction lead with `Met(Z)`, Borel ⇒ separability, and the
-Koshino combination; the non-Archimedean results are labelled "analogues").
+Fully audited in §2.13–§2.15. The layering mirrors the Archimedean side; the
+preprint presents the chain 3.1–3.9 as the headline (abstract and
+introduction lead with `Met(Z)`, Borel ⇒ separability, and the Koshino
+combination; the non-Archimedean results are labelled "analogues").
 
-**Delivered (#81).** Four files, layered as the Archimedean side is.
+**Discrete core (Proposition 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13).**
+Four files.
 
-1. `Ext/UltraPMet.lean` — the ambient. `RangeSet` (the preprint's `R ⊆ [0,∞)`
-   with `0 ∈ R`), `RangeSet.IsCharacteristic` (the *exact* accumulation-point
-   hypothesis) and `RangeSet.IsScale` (the strictly decreasing `r : ℕ → R∖{0}`
-   with `r n → 0`). `exists_isScale` and `isCharacteristic_of_isScale` prove
-   both directions of the audit's "exists exactly because `R` is
-   characteristic", so no hypothesis is silently strengthened.
-   `IsUltraPMetOn`/`UCPM` are the `R`-valued pseudo-ultrametrics — nonnegativity
-   is *derived* from `R ⊆ [0,∞)`, not assumed — and `UCPM.edist` is the
-   preprint's `𝒰𝒟^R` verbatim, an infimum over `R ∪ {∞}` realised as an empty
-   infimum in `ℝ≥0∞`. It satisfies the *strong* triangle inequality
-   (`UCPM.edist_triangle_max`), which the Archimedean sup-metric does not, and
-   the two operations `UCPM.comap` (pullback along any map) and `UCPM.sup`
-   (pointwise maximum) are what the coding and the amalgam are built from.
-   Mathlib has none of this: the library gap is recorded in the file header.
+1. `Ext/UltraPMet.lean` — the ambient. `RangeSet` (the preprint's
+   `R ⊆ [0,∞)` with `0 ∈ R`), `RangeSet.IsCharacteristic` (the *exact*
+   accumulation-point hypothesis) and `RangeSet.IsScale` (the strictly
+   decreasing `r : ℕ → R∖{0}` with `r n → 0`). `exists_isScale` and
+   `isCharacteristic_of_isScale` prove both directions of the audit's
+   "exists exactly because `R` is characteristic", so no hypothesis is
+   silently strengthened. `IsUltraPMetOn`/`UCPM` are the `R`-valued
+   pseudo-ultrametrics — nonnegativity is *derived* from `R ⊆ [0,∞)`, not
+   assumed — and `UCPM.edist` is the preprint's `𝒰𝒟^R` verbatim, an infimum
+   over `R ∪ {∞}` realised as an empty infimum in `ℝ≥0∞`. It satisfies the
+   *strong* triangle inequality (`UCPM.edist_triangle_max`), which the
+   Archimedean sup-metric does not, and the two operations `UCPM.comap`
+   (pullback along any map) and `UCPM.sup` (pointwise maximum) are what the
+   coding and the amalgam are built from. Mathlib has none of this: the
+   library gap is recorded in the file header.
 2. `Ext/CantorUltra.lean` — Proposition 2.2 with its §2.2 repair, and the
-   `R`-valued Cantor ultrametric `cantorDist`. The CH/¬CH dichotomy is stated
-   once for an arbitrary standard Borel space of cardinality `𝔠` whose Borel
-   σ-algebra has at most `𝔠` members (`exists_aleph1_nonMeasurable`), then run
-   in `2^ω`; density is then supplied by the audit's densification
-   `S = T ∪ Q₀`. `cantorDist_lt_iff` identifies the `h`-balls with cylinders,
-   which is the only bridge used between `h` and the product topology.
+   `R`-valued Cantor ultrametric `cantorDist`. The CH/¬CH dichotomy is
+   stated once for an arbitrary standard Borel space of cardinality `𝔠`
+   whose Borel σ-algebra has at most `𝔠` members
+   (`exists_aleph1_nonMeasurable`), then run in `2^ω`; density is then
+   supplied by the audit's densification `S = T ∪ Q₀`. `cantorDist_lt_iff`
+   identifies the `h`-balls with cylinders, which is the only bridge used
+   between `h` and the product topology.
 3. `Ext/UltraCoding.lean` — Lemma 3.10 (`dU_isUltraPMetOn`, `dU_le_head`,
    `isCompatible_phiU_iff`, `dU_completeSpace`), Lemma 3.11 (`edist_phiU`,
    `isClosed_image_phiU`) and Theorem 3.12 (`umet_not_borel`,
@@ -1231,81 +1192,81 @@ Koshino combination; the non-Archimedean results are labelled "analogues").
    imported.
 4. `Ext/UltraComponent.lean` — Theorem 3.13
    (`ucomponent_not_borel_of_card`), with the ball selection
-   (`exists_countable_cofinal`, `exists_radius_not_countable`), the isosceles
-   identity off the ball (`uBall_isosceles`), the one-point max-amalgam
-   (`uAmalgam`) and the audited membership bound `𝒰𝒟^R(m_t,d) ≤ q ∨ r 0`
-   (`edist_uAmalgam_le`).
+   (`exists_countable_cofinal`, `exists_radius_not_countable`), the
+   isosceles identity off the ball (`uBall_isosceles`), the one-point
+   max-amalgam (`uAmalgam`) and the audited membership bound
+   `𝒰𝒟^R(m_t,d) ≤ q ∨ r 0` (`edist_uAmalgam_le`).
 
 Two deviations from the preprint's phrasing, both recorded because they
-*weaken* rather than strengthen what is used. (i) Theorem 3.12 and 3.13 are
-proved by the pullback route of §7 item 2 rather than the printed
-relative-closure argument; the trace identities and closed images the printed
-proof uses are formalised alongside (`image_compl_eq_range_inter_UMet`,
-`isClosed_image_phiU`, `image_compl_eq_range_inter_UComponent`,
-`isClosed_image_psiU`) but are not what the theorems consume. (ii) 3.13's
-"transfer 3.10 with the centre `y_0 ↦ z`" is a labelling convention: the
-amalgam glues at `θ(z)` for an arbitrary bijection `θ`, and only `z ∈ E` and
-"every cluster value is `≤ r 0`" are used.
+*weaken* rather than strengthen what is used. (i) Theorems 3.12 and 3.13 are
+proved by the pullback route of §7.1 item 2 rather than the printed
+relative-closure argument; the trace identities and closed images the
+printed proof uses are formalised alongside
+(`image_compl_eq_range_inter_UMet`, `isClosed_image_phiU`,
+`image_compl_eq_range_inter_UComponent`, `isClosed_image_psiU`) but are not
+what the theorems consume. (ii) 3.13's "transfer 3.10 with the centre
+`y_0 ↦ z`" is a labelling convention: the amalgam glues at `θ(z)` for an
+arbitrary bijection `θ`, and only `z ∈ E` and "every cluster value is
+`≤ r 0`" are used.
 
-**Delivered (#82).** Two more files, carrying 3.14 and 3.15.
+**Transfer (Theorem 3.14, Corollary 3.15).** Two more files.
 
-5. `Ext/UltraGeneral.lean` — the general-space ambient and E2. `UCPMOn Y R` is
-   the preprint's `UCPM(Y;R)` over a topological space (the *continuous*
+5. `Ext/UltraGeneral.lean` — the general-space ambient and E2. `UCPMOn Y R`
+   is the preprint's `UCPM(Y;R)` over a topological space (the *continuous*
    `R`-valued pseudo-ultrametrics; Borelness in the bare ambient would be a
    strictly stronger hypothesis), `UMetOn Y R` its compatible locus.
    `completeSpace_UCPM` is §2.14's sub-lemma with its three steps, and
    `completeSpace_UCPMOn` is the form 3.14 consumes.
    `UCPM.isCompatible_comap_of_mem_UMetOn` is the restriction map along a
-   discrete closed subspace — what stands in for the `UCPM`-level extensor E2
-   does not have. `IsUltraIsometricExtensor` is E2 (§3 clauses (1), (2), (5))
-   as a hypothesis bundle with **no** `UCPM`-level field, and
+   discrete closed subspace — what stands in for the `UCPM`-level extensor
+   E2 does not have. `IsUltraIsometricExtensor` is E2 (§3 clauses (1), (2),
+   (5)) as a hypothesis bundle with **no** `UCPM`-level field, and
    `nonempty_isUltraIsometricExtensor_id` records that the bundle is
    satisfiable.
-6. `Ext/UltraTransfer.lean` — the §2.14 repair and the two theorems, listed in
-   the Lean notes of §2.14.
+6. `Ext/UltraTransfer.lean` — the §2.14 repair and the two theorems, listed
+   in the Lean notes of §2.14.
 
 Deviations, both recorded there: `P` is used in its transported form
 `cl(Φ(2^ω∖S))` (equal to `Φ(P)`, proved), and the final step is the pullback
 identity rather than the printed relative trace (which is formalised
-alongside). Ultrametrizability of `Y` is not a hypothesis of the delivered
+alongside). Ultrametrizability of `Y` is not a hypothesis of the formalised
 3.14/3.15: the repair does not use it, and it is E2 — supplied here as a
-hypothesis — whose own hypotheses require it. The delivered statements are
+hypothesis — whose own hypotheses require it. The formalised statements are
 therefore stronger than the preprint's and imply them.
 
-**Delivered (#83).** Two more files, carrying the complete branch 3.16 and
-3.17.
+**Complete branch (Theorem 3.16, Corollary 3.17).** Two more files.
 
-7. `Ext/UltraComplete.lean` — the discrete locus and Theorem 3.16. `UComp Z R`
-   is the complete members of `UMet Z R`, with completeness the
-   `IsCompleteMetricOn` of `Ext/Completeness.lean` (#80), pinned to Mathlib's
-   `CompleteSpace` there. The complete-base normalisation is
-   `supConstOffDiag c d` — `d ∨ c` off the diagonal for `c ∈ R∖{0}` — with its
-   four properties (`isUltraPMetOn_supConstOffDiag`,
+7. `Ext/UltraComplete.lean` — the discrete locus and Theorem 3.16.
+   `UComp Z R` is the complete members of `UMet Z R`, with completeness the
+   `IsCompleteMetricOn` of `Ext/Completeness.lean` (§7.5), pinned to
+   Mathlib's `CompleteSpace` there. The complete-base normalisation is
+   `supConstOffDiag c d` — `d ∨ c` off the diagonal for `c ∈ R∖{0}` — with
+   its four properties (`isUltraPMetOn_supConstOffDiag`,
    `topology_supConstOffDiag_eq_bot`, `isCompleteMetricOn_supConstOffDiag`,
    and `edist_uSupConstOffDiag_le`, the last being the audited bound
-   `𝒰𝒟^R(d∨c,d) ≤ c` and hence `UComponent_uSupConstOffDiag`). The maximum is
-   what keeps the normalisation `R`-valued, where the Archimedean §2.11
+   `𝒰𝒟^R(d∨c,d) ≤ c` and hence `UComponent_uSupConstOffDiag`). The maximum
+   is what keeps the normalisation `R`-valued, where the Archimedean §2.11
    normalisation has to add a constant. `isCompleteMetricOn_uAmalgam` is the
-   one-point max-amalgam step: past the index where the Cauchy condition drops
-   below the gap at the glue point a sequence cannot straddle the two sides, so
-   it settles in one of them. Completeness of the coding metrics is #81's
-   `dU_completeSpace`, restated as `isCompleteMetricOn_phiU`. The two theorems
-   are `ucomponent_inter_ucomp_not_borel` (componentwise) and
-   `ucomp_not_borel_of_card` (the "consequently" clause); as in §2.11 the
-   latter runs on `Ψ⁻¹(UComp(Z;R)) = 2^ω∖S` and not by intersecting with a
-   component.
+   one-point max-amalgam step: past the index where the Cauchy condition
+   drops below the gap at the glue point a sequence cannot straddle the two
+   sides, so it settles in one of them. Completeness of the coding metrics
+   is `dU_completeSpace` (item 3), restated as `isCompleteMetricOn_phiU`.
+   The two theorems are `ucomponent_inter_ucomp_not_borel` (componentwise)
+   and `ucomp_not_borel_of_card` (the "consequently" clause); as in §2.11
+   the latter runs on `Ψ⁻¹(UComp(Z;R)) = 2^ω∖S` and not by intersecting
+   with a component.
 8. `Ext/UltraCompleteTransfer.lean` — the general-space locus `UCompOn Y R`
    and Corollary 3.17. `isCompletelyMetrizableSpace_of_mem_UCompOn` is the
    nonemptiness step, which supplies the hypothesis of E2 clause (N1);
-   `IsUltraCompIsometricExtensor` is #82's E2 bundle with (N1) as one further
-   field, gated on a proof of complete metrizability of `Y` so that the clause
-   cannot be asserted outside the range §3 quotes it for.
+   `IsUltraCompIsometricExtensor` is the E2 bundle of item 5 with (N1) as
+   one further field, gated on a proof of complete metrizability of `Y` so
+   that the clause cannot be asserted outside the range §3 quotes it for.
    `isCompleteMetricOn_restrict_of_mem_UCompOn` is §3's "restriction of a
-   complete metric to a closed subspace is complete" in this ambient, and with
-   it `IsUltraCompIsometricExtensor.image_ucomp_eq_range_inter` is the audited
-   identity `E(UComp(Z;R)) = E(UMet(Z;R)) ∩ UComp(Y;R)`. The transfer reuses
-   #82's `ultraExtend` unchanged — it depends only on the witness and on E2
-   clauses (1), (2) — with `Ψ` read as the 3.16 witness
+   complete metric to a closed subspace is complete" in this ambient, and
+   with it `IsUltraCompIsometricExtensor.image_ucomp_eq_range_inter` is the
+   audited identity `E(UComp(Z;R)) = E(UMet(Z;R)) ∩ UComp(Y;R)`. The
+   transfer reuses `ultraExtend` (item 6) unchanged — it depends only on the
+   witness and on E2 clauses (1), (2) — with `Ψ` read as the 3.16 witness
    (`codingWitness_subset_UComp`); the two theorems are
    `separable_of_measurableSet_UCompOn_of_ultraCompExtensors` and, via
    Alexandrov–Lavrentiev (E4d),
@@ -1313,7 +1274,7 @@ therefore stronger than the preprint's and imply them.
 
 The audited nonemptiness hypothesis on `UComp(Y;R)` is carried in both 3.17
 statements. Ultrametrizability of `Y` is not, for the reason recorded for
-3.14/3.15 above, so the delivered statements are again stronger than the
+3.14/3.15 above, so the formalised statements are again stronger than the
 preprint's and imply them.
 
 ---
@@ -1325,11 +1286,11 @@ preprint's and imply them.
   acknowledgements record as the superseded earlier version). Not to be
   edited for this track; its claim IDs stay bound to the companion.
 * `lean/IshikiConj51/Ext/{BddPMet,BoundedCoding}.lean` (IshikiExt Layer 1) —
-  **reusable as-is** for #56: the coding is literally the preprint's §3.1
-  (§6). Its file-header SoT pointers were repointed to this note in #56
-  (PR #64).
-* `notes/ishiki-extension-audit.md` (branch `audit/ishiki-extension`, PR
-  #50) — historical record only; its §1–§3 findings are carried into §5
+  **reusable as-is** for the discrete core: the coding is literally the
+  preprint's §3.1 (§7.1 item 2). Its file-header SoT pointers point to this
+  note.
+* `notes/ishiki-extension-audit.md` (branch `audit/ishiki-extension`) —
+  historical record only; its §1–§3 findings are carried into §5
   here; its §4–§5 PASS verdicts are re-confirmed by §2.4–§2.5.
 * Old draft's analytic/coanalytic claims — removed, §5; not part of any
   verification target.
