@@ -11,8 +11,13 @@ arXiv:2608.19618 (2026). The repository verifies that preprint theorem by
 theorem: `notes/borel-preprint-audit.md` is the mathematical source of truth
 (exact statements, verdicts, verified repairs, and external-theorem
 dependencies), and the Lean development under `lean/IshikiConj51/Ext/`
-(namespace `IshikiExt`) formalises the audited statements. Two families of
-results are covered, both on the exact published hypotheses:
+(namespace `IshikiExt`) formalises the audited statements. The audit note
+records, per theorem, exactly what is formalised and modulo which explicit
+external theorems — including where a Lean statement deliberately differs
+from the printed one (a density-free parameter set, audited proof-route
+repairs, or statements stronger than the preprint's that imply them). The
+published `Met`/`BMet`/`CPM` ambient hypotheses are preserved exactly, never
+replaced by proxies. Two families of results are covered:
 
 - **Archimedean chain** (Proposition 2.1, Lemmas 3.1–3.2, Theorems 3.3–3.5
   and 3.8, Corollaries 3.6–3.7 and 3.9): the discrete non-Borelness

@@ -36,5 +36,5 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 ## Maintenance Notes
 
 - GitHub Issues/PRs are the sole work-queue and execution-evidence record; keep no status dashboard, completion matrix, or freshness timestamp in repository documents.
-- Docs carry only durable mathematical/architectural/reference content; build and axiom-check evidence stays in the PR/issue discussion, never in a committed ledger.
+- Docs carry only durable mathematical/architectural/reference content; build and axiom-check evidence stays in the PR/issue discussion, never in a committed ledger. Archival records (`notes/proof-audit.md`, `notes/arxiv-submission.md`, `report/`, `paper/`) are frozen provenance, exempt from cleanup.
 - Delete stale or inferable guidance; update commands and architecture when workflows change; keep durable rules here and detail in dedicated docs.

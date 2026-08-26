@@ -129,7 +129,7 @@ this reduction for `MetD` (the space `Met(D)` with its extended sup
 distance — `relabelIsometry : MetD E ≃ᵢ MetD D`); `Ext/Relabel.lean`
 formalises the corresponding `BddPMet`/`CPM` relabelling
 isometries and the `BMet`/`Met` preimage identities, consumed by the
-arbitrary-carrier forms of §7 item 4; and `Ext/UltraPMet.lean` carries the
+arbitrary-carrier forms of §7.1 item 4; and `Ext/UltraPMet.lean` carries the
 `UCPM` relabelling isometry and the `UMet`/component preimage identities
 (`UCPM.isometry_comap`, `preimage_UMet_comap`, `preimage_UComponent_comap`),
 which supply the arbitrary-carrier forms of 3.12 and 3.13.
@@ -188,7 +188,7 @@ Theorem 15.6, currently uncited) should be added if route 1 is kept.
 
 **Lean** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`.
 The non-Borel `T` comes from route 2's dichotomy run directly in `2^ω` (no
-Bernstein set is needed in Lean, as in §7 item 1) and density from route 1's
+Bernstein set is needed in Lean, as in §7.1 item 1) and density from route 1's
 `S = T ∪ Q₀`; the Borel isomorphism of the printed proof is not used.
 
 ### 2.3 Setup before Lemma 3.1

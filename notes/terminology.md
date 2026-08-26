@@ -21,7 +21,7 @@ Borel track and defers to this file for terminology decisions.
 | $\operatorname{UMet}(Y;R)$ | Compatible $R$-valued ultrametrics; $R$-components $\mathfrak{c}^R \in \mathbf{UM}_{<\infty}(Z;R)$ via $\mathcal{UD}^R < \infty$ |
 | $\operatorname{UComp}(Y;R)$ | Complete members of $\operatorname{UMet}(Y;R)$ |
 | E1 | Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 v4, Theorem 1.1 — the isometric extensor $E : \operatorname{Met}(A) \to \operatorname{Met}(X)$ with its pseudometric-level $\tilde{E}$; exact quote in `notes/borel-preprint-audit.md` §3 |
-| E2 | Ishiki, *A factorization of metric spaces*, Colloq. Math. 174 (2023), Theorem 4.7 — the ultrametric extensor $\Sigma$; no $\operatorname{UCPM}$-level extensor exists (audit §3) |
+| E2 | Ishiki, *A factorization of metric spaces*, Colloq. Math. 174 (2023), Theorem 4.7 — the ultrametric extensor $\Sigma$; E2 supplies no $\operatorname{UCPM}$-level extensor ($\Sigma$'s domain is $\operatorname{Met}(F)$; audit §3) |
 | E3 | Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024) — $X$ separable metrizable: $X$ σ-compact $\iff$ $AM(X)$ completely metrizable |
 
 External-theorem labels E1/E2/E3 (and E4 for the standard descriptive-set-theory
