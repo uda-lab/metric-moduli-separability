@@ -163,6 +163,16 @@ meets-every-perfect-set argument; no gap.
 non-Archimedean track (Lemma 3.11's isometry lower bound); the entire
 chain 3.1–3.9 uses only `|S| = ℵ₁` + non-Borel.
 
+**Lean** (`Ext/Borel.lean`): `exists_dense_aleph1_nonBorel_Icc` — all four
+printed clauses.  Density and non-Borelness are stated in the space `[0,1]`
+(the subtype `↥(Icc 0 1)`); `dense_val_preimage_Icc_iff` and
+`measurableSet_val_preimage_Icc_iff` are the equivalences with the
+ambient-`ℝ` reading `exists_dense_aleph1_nonBorel_Icc_ambient`.  The
+dichotomy input is `exists_aleph1_nonBorel` (§7.1 item 1, "2.1 without
+density"); density is then supplied by the same densification as in 2.2's
+repair (`S = T ∪ Q₀`, non-Borelness recovered from
+`T = (T ∪ Q₀) ∖ (Q₀ ∖ T)`).
+
 ### 2.2 Proposition 2.2 (`prop:dense-aleph1-nonborel-cantor`) — FIX
 
 **Statement.** Same as 2.1 with `[0,1]` replaced by the Cantor space
@@ -234,6 +244,15 @@ audit §5; formalised, §7.1.) Note the two byproducts used later: `L :=
 Φ([0,1])` is compact (hence closed/Borel in `CPM(Z)`), and the exact
 trace identity `L ∩ Met(Z) = L ∩ BMet(Z) = Φ([0,1]∖S)` (all `d_t` are
 bounded, and `d_t` compatible ⟺ `t ∉ S`).
+
+**Lean** (`Ext/BMetClopen.lean`): the `Met(Z)`-relative closedness clause is
+`isClosed_image_phiFullCPM_met`, obtained from the `BMet`-relative form
+(§7.1 item 2) by the elementary bridge "boundedness = finite sup-distance
+from a bounded base metric" (`CPM.isBdd_iff_edist_lt_top`), which identifies
+`BMet(Z)` with the finite-sup-distance component of the `0/1` metric
+(`CPM.BMet_eq_component_discrete`) and makes it clopen in `Met(Z)`
+(`CPM.isClopen_val_preimage_BMet`).  The bi-Lipschitz clauses stay in
+`Ext/BoundedCoding.lean` (§7.1 item 2).
 
 ### 2.6 Theorem 3.3 (`thm:bounded-discrete-nonborel`) — PASS
 
@@ -745,7 +764,9 @@ Constraints from this audit: external theorems (E1, E2, E3) enter only as
 side uses Mathlib's `MeasurableSet` over the `borel` σ-algebra of the ambient
 (extended-)metric topology (`BorelSpace` instances); the legacy local
 `IsFSigma` (`Conj51/Cardinality.lean`) is irrelevant to this track. Density
-of `S` is **omitted** from the Archimedean statements (unused, §2.1).
+of `S` is **omitted** from the Archimedean transfer statements (unused,
+§2.1); the literal Proposition 2.1 with density is formalised separately
+(`Ext/Borel.lean`, §2.1's Lean note).
 Sorry-freeness and the `#print axioms` footprint of every accepted
 declaration (a subset of the three standard axioms `propext`,
 `Classical.choice`, `Quot.sound`; no `sorryAx`, no custom axioms) are review
@@ -780,8 +801,9 @@ in a committed ledger.
    old `lem_A_exists` CH branch (`[0,1]∖ℚ`, Baire) still does not adapt —
    `[0,1]∖ℚ` is Borel. The literal Proposition 2.1 additionally asserts
    density of `S`, which nothing in the Archimedean chain consumes (§2.1);
-   `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` is the separate,
-   strictly weaker archival-track result, not a substitute.
+   it is formalised as `exists_dense_aleph1_nonBorel_Icc` (§2.1's Lean
+   note). `Conj51/Cardinality.lean`'s non-**Fσ** `lem_A_exists` is the
+   separate, strictly weaker archival-track result, not a substitute.
 2. **`bmet_not_borel`** (Theorem 3.3, bounded-ambient form;
    `Ext/Borel.lean`) — for `S` as in (1): `¬ MeasurableSet (BMet (ExtIndex
    S))` in `BddPMet (ExtIndex S)`. The Layer 1 coding
@@ -797,7 +819,9 @@ in a committed ledger.
    replaces the paper's relative-closure argument and needs no new topology;
    the closed image (`isClosed_image_phiFull`, in the subspace `BMet D`) and
    closed range (`isClosed_range_phiFull`) of the printed proof are
-   formalised alongside.
+   formalised alongside, and Lemma 3.2's literal `Met(Z)`-relative
+   closedness is `isClosed_image_phiFullCPM_met` (`Ext/BMetClopen.lean`,
+   §2.5's Lean note).
 3. **Transfer to the `CPM D` ambient** (`Ext/CPM.lean`, `bmet_not_borel_cpm`
    and `met_not_borel`) — the `CPM D` type (unbounded continuous — i.e.
    arbitrary, `D` discrete — pseudometrics with `EMetricSpace` sup distance,
@@ -1229,10 +1253,26 @@ arbitrary bijection `θ`, and only `z ∈ E` and "every cluster value is
 Deviations, both recorded there: `P` is used in its transported form
 `cl(Φ(2^ω∖S))` (equal to `Φ(P)`, proved), and the final step is the pullback
 identity rather than the printed relative trace (which is formalised
-alongside). Ultrametrizability of `Y` is not a hypothesis of the formalised
-3.14/3.15: the repair does not use it, and it is E2 — supplied here as a
-hypothesis — whose own hypotheses require it. The formalised statements are
-therefore stronger than the preprint's and imply them.
+alongside). The `Ext/UltraTransfer.lean` theorems are the **internal
+bundle-conditional** forms: they take the transported extensor family
+(`IsUltraIsometricExtensor`) as a hypothesis and carry no ultrametrizability
+hypothesis, because the repair does not use it — it is E2 whose own
+hypotheses require it. They are conditionally more general than the printed
+statements, not unconditionally "stronger": their bundle hypothesis is one
+the preprint never states. The **published-interface** forms — the printed
+Theorem 3.14 and Corollary 3.15, with the standing hypothesis `Y`
+ultrametrizable (`IsUltrametrizableSpace`) and E2 in its own closed-subset
+shape (`IsUltraIsometricExtensorOn`: nonempty closed `F ⊆ Y`, clauses
+(1)/(2)/(5) restricted to `UMet(F;R)`, the restriction §2.14 records as what
+the proof cites) — are
+`separable_of_measurableSet_UMetOn_of_isUltrametrizableSpace` and
+`separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`); the bridge
+`IsUltraIsometricExtensorOn.toIsUltraIsometricExtensor` proves that the
+published hypotheses produce the internal bundle, so the printed statements
+follow from the internal theorems
+(`nonempty_isUltraIsometricExtensorOn_univ` records that the closed-subset
+bundle is satisfiable).
 
 **Complete branch (Theorem 3.16, Corollary 3.17).** Two more files.
 
@@ -1273,9 +1313,17 @@ therefore stronger than the preprint's and imply them.
    `separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors`.
 
 The audited nonemptiness hypothesis on `UComp(Y;R)` is carried in both 3.17
-statements. Ultrametrizability of `Y` is not, for the reason recorded for
-3.14/3.15 above, so the formalised statements are again stronger than the
-preprint's and imply them.
+statements. Ultrametrizability of `Y` is not carried by these internal
+bundle-conditional forms, for the reason recorded for 3.14/3.15 above; as
+there, they are conditionally more general, not unconditionally "stronger".
+The **published-interface** forms of Corollary 3.17 — standing
+ultrametrizability, printed nonemptiness, and E2 with clause (N1) in the
+closed-subset shape (`IsUltraCompIsometricExtensorOn`, gated on complete
+metrizability of `Y` exactly as the source gates (N1)) — are
+`separable_of_measurableSet_UCompOn_of_isUltrametrizableSpace` and
+`separable_of_isCompletelyMetrizableSpace_UCompOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`), derived via the bridge
+`IsUltraCompIsometricExtensorOn.toIsUltraCompIsometricExtensor`.
 
 ---
 
