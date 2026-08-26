@@ -30,6 +30,7 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 ## Architecture
 
 - Issue-driven: statement audit → focused PR → independent review → merge; no direct pushes to main.
+- Two review gates, two triggers. The local pre-PR codex gate fires on *content*: skip it when `git rev-parse HEAD^{tree}` equals the reviewed tree hash, and when the base has moved compare branch contributions with `git range-diff` and review only what that reports — a rebase alone never re-triggers it (`A...B` is merge-base-relative, so it is the wrong test here). The broker gate fires on *head change*. Cite the reviewed tree hash next to the thread id so the next agent can tell what is already covered.
 - `Conj51/` is archival provenance. New public-preprint formalisation belongs under a separate extension/publication namespace, reusing `IshikiExt` infrastructure only where statement fidelity is clear.
 
 ## Maintenance Notes
