@@ -34,3 +34,8 @@ import IshikiConj51.Ext.UltraComponent
 -- and Corollary 3.15.
 import IshikiConj51.Ext.UltraGeneral
 import IshikiConj51.Ext.UltraTransfer
+
+-- Non-Archimedean track (Issue #83): the complete-ultrametric branch, Theorem
+-- 3.16 and Corollary 3.17.
+import IshikiConj51.Ext.UltraComplete
+import IshikiConj51.Ext.UltraCompleteTransfer

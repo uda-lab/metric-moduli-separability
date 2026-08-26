@@ -24,11 +24,12 @@ v1 (20 Aug 2026).
 | `IshikiExt` Layer 1 coding infrastructure (PR #52) | ✅ merged; consumed by #56 |
 | Discrete ultrametric core, Prop. 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13 (#81) | ✅ complete |
 | Ultrametric transfer, Theorem 3.14 and Corollary 3.15 (#82) | ✅ complete, conditional on E2 |
+| Complete ultrametric branch, Theorem 3.16 and Corollary 3.17 (#83) | ✅ complete, conditional on E2 clause (N1) |
 
 ## Active Borel track
 
 `notes/borel-preprint-audit.md` is the mathematical source of truth and the
-statement gate for #56, #57, #66, #72, #79, #84, #80, #81 and #82. It audits every theorem in the preprint,
+statement gate for #56, #57, #66, #72, #79, #84, #80, #81, #82 and #83. It audits every theorem in the preprint,
 records PASS/FIX/EXTERNAL verdicts, and identifies the repairs required in
 formalisation. The Lean work follows the audit's minimal route (Route M) for
 the Borel obstruction and separability result.
@@ -189,8 +190,22 @@ pseudo-ultrametric extensor it does not have; the false shortcut "separable
 metrizable spaces are absolutely Borel" is not used. The preprint's
 ultrametrizability hypothesis on `Y` is not carried, because the repair does not
 use it — it is E2 that requires it — so the delivered statements imply the
-preprint's. Theorem 3.16 and
-Corollary 3.17 remain future work.
+preprint's.
+
+Issue #83 closes the track with the complete branch, Theorem 3.16 and Corollary
+3.17. Audit §2.15 records 3.16 as PASS, and its proof — unlike the Archimedean
+3.8 — normalises the base before amalgamating: `d` is replaced by `d ∨ c` off
+the diagonal for `c ∈ R∖{0}`, which is a complete compatible `R`-valued
+ultrametric in the same `R`-component. That normalisation, completeness of the
+coding metrics and completeness of the one-point max-amalgam are the three
+ingredients. Both printed conclusions are delivered — `𝔠^R ∩ UComp(Z;R)`
+non-Borel, and `UComp(Z;R)` non-Borel — the latter through the parameter
+pullback identity rather than by intersecting with a component. Corollary 3.17 keeps the audited nonemptiness hypothesis on
+`UComp(Y;R)` — it is what makes `Y` completely metrizable, which is the
+hypothesis under which E2 clause (N1) holds — and adds (N1) as one further field
+of #82's E2 bundle, gated on that complete metrizability so it cannot be
+asserted where E2 does not license it. The ambient transfer reuses #82's
+extension machinery unchanged.
 
 ## Lean
 
@@ -286,8 +301,26 @@ Non-Archimedean track (#82):
   (`separable_of_measurableSet_UMetOn_of_ultraExtensors`) and Corollary 3.15
   (`separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`).
 
-Not yet done on this track: the non-Archimedean Theorem 3.16 and Corollary
-3.17 (the `UComp` locus and E2 clause (N1)).
+Non-Archimedean track (#83):
+
+- `UltraComplete.lean` — the discrete complete locus `UComp Z R`, the audited
+  complete-base normalisation `d ∨ c` off the diagonal with its four properties
+  (`isUltraPMetOn_supConstOffDiag`, `topology_supConstOffDiag_eq_bot`,
+  `isCompleteMetricOn_supConstOffDiag`, `edist_uSupConstOffDiag_le` and hence
+  `UComponent_uSupConstOffDiag`), completeness of the one-point max-amalgam
+  (`isCompleteMetricOn_uAmalgam`), and Theorem 3.16 in both its componentwise
+  (`ucomponent_inter_ucomp_not_borel`) and component-free
+  (`ucomp_not_borel_of_card`) forms.
+- `UltraCompleteTransfer.lean` — the general-space locus `UCompOn Y R`, the
+  nonemptiness step `isCompletelyMetrizableSpace_of_mem_UCompOn`, E2 clause (N1)
+  as the bundle `IsUltraCompIsometricExtensor` with the audited identity
+  `E(UComp(Z;R)) = E(UMet(Z;R)) ∩ UComp(Y;R)`, and Corollary 3.17 in its Borel
+  (`separable_of_measurableSet_UCompOn_of_ultraCompExtensors`) and completely
+  metrizable (`separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors`)
+  forms.
+
+Not yet done on this track: Proposition 2.1's density clause, now the only
+audited statement without a Lean declaration.
 
 Every declaration above is sorry-free; `#print axioms` shows only the
 standard Lean axioms (`propext`, `Classical.choice`, `Quot.sound`), recorded
@@ -384,3 +417,8 @@ evidence are summarised in `notes/proof-audit.md` and the archival files.
    not close. E2 is an explicit hypothesis bundle with no `UCPM`-level
    extensor — the absence that forces the repair — and completeness of
    `UCPM(Y;R)` is proved outright.
+12. **#83** — formalise Theorem 3.16 and Corollary 3.17: **delivered**, with
+   the audited complete-base normalisation `d ∨ c` off the diagonal, the
+   completeness of the one-point max-amalgam, and E2 clause (N1) as one further
+   field of #82's bundle, gated on the complete metrizability that 3.17's
+   nonemptiness hypothesis supplies.

@@ -771,3 +771,66 @@ Scope note: E1 enters Corollary 3.9 as the hypothesis bundle
 `IsCompletelyMetrizableSpace X` as an instance hypothesis (audit §3's caveat
 on that clause). It is never an axiom or an instance declaration, and its
 proof stays external.
+
+# Axiom audit — Issue #83 (Theorem 3.16 and Corollary 3.17)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked `.lean`
+file (`import IshikiConj51` plus the `#print axioms` lines), never committed.
+Every declaration introduced by this issue is listed.
+
+`Ext/UltraComplete.lean`:
+
+* `IshikiExt.UComp`
+* `IshikiExt.mem_UComp`
+* `IshikiExt.UComp_subset_UMet`
+* `IshikiExt.supConstOffDiag`
+* `IshikiExt.supConstOffDiag_self`
+* `IshikiExt.supConstOffDiag_of_ne`
+* `IshikiExt.le_supConstOffDiag`
+* `IshikiExt.supConstOffDiag_nonneg`
+* `IshikiExt.isUltraPMetOn_supConstOffDiag`
+* `IshikiExt.isMetricOn_supConstOffDiag`
+* `IshikiExt.topology_supConstOffDiag_eq_bot`
+* `IshikiExt.isCompleteMetricOn_supConstOffDiag`
+* `IshikiExt.uSupConstOffDiag`
+* `IshikiExt.uSupConstOffDiag_val`
+* `IshikiExt.isCompatible_uSupConstOffDiag`
+* `IshikiExt.edist_uSupConstOffDiag_le`
+* `IshikiExt.UComponent_uSupConstOffDiag`
+* `IshikiExt.isCompleteMetricOn_uAmalgam`
+* `IshikiExt.isCompleteMetricOn_phiU`
+* `IshikiExt.preimage_UComp_phiU`
+* `IshikiExt.isCompleteMetricOn_psiU`
+* `IshikiExt.preimage_UComp_psiU`
+* `IshikiExt.preimage_UComponent_inter_UComp_psiU`
+* `IshikiExt.exists_ucomp_witness`
+* `IshikiExt.ucomponent_inter_ucomp_not_borel`
+* `IshikiExt.ucomp_not_borel_of_card`
+* `IshikiExt.nonempty_ucomponent_inter_ucomp`
+
+`Ext/UltraCompleteTransfer.lean`:
+
+* `IshikiExt.UCompOn`
+* `IshikiExt.mem_UCompOn`
+* `IshikiExt.UCompOn_subset_UMetOn`
+* `IshikiExt.isCompletelyMetrizableSpace_of_mem_UCompOn`
+* `IshikiExt.isCompleteMetricOn_restrict_of_mem_UCompOn`
+* `IshikiExt.restrict_mem_UComp_of_mem_UCompOn`
+* `IshikiExt.IsUltraCompIsometricExtensor`
+* `IshikiExt.IsUltraCompIsometricExtensor.image_ucomp_eq_range_inter`
+* `IshikiExt.codingWitness_subset_UComp`
+* `IshikiExt.preimage_UCompOn_ultraExtend`
+* `IshikiExt.range_ultraExtend_inter_UCompOn`
+* `IshikiExt.IsUltraCompIsometricExtensor.not_measurableSet_UCompOn`
+* `IshikiExt.separable_of_measurableSet_UCompOn_of_ultraCompExtensors`
+* `IshikiExt.separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors`
+
+Every one of the 41 declarations above reports exactly
+`[propext, Classical.choice, Quot.sound]`. No `sorryAx` and no custom axiom
+anywhere in the closure; in particular **E2 clause (N1) is not an axiom** — it
+is the field `ucomp_preservation` of the hypothesis bundle
+`IsUltraCompIsometricExtensor`, gated on the complete metrizability of `Y` that
+audit §3 attaches to the clause, and Corollary 3.17 carries the bundle
+explicitly. `grep -n sorry` on both files matches only the word inside the
+status comment of each header.
