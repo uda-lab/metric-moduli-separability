@@ -24,8 +24,8 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 
 - Preserve the published `Met`/`BMet`/`CPM` hypotheses exactly; never replace them by bounded, uniformly discrete, separable or other proxies unless the audit note shows the source theorem has that hypothesis.
 - If an external extensor/descriptive-set theorem is absent from Mathlib, expose it as an explicit hypothesis or formalise it separately; never hide it behind a custom axiom.
-- Accepted Lean results must be sorry-free with an explained `#print axioms` audit. Record failed proof attempts in audit notes, not reader-facing reports.
-- Japanese mathematical prose uses comma/period punctuation; `notes/descriptive-set-theory-ja.md` is the terminology reference for the public-preprint track.
+- Accepted Lean results must be sorry-free with an explained `#print axioms` audit; the expected axiom set is exactly `propext`/`Classical.choice`/`Quot.sound` — no `sorryAx`, no custom axioms. The reviewer/shepherd re-runs the audit independently in a throwaway untracked scratch file (`import IshikiConj51` + `#print axioms`), never committed. Record failed proof attempts in audit notes, not reader-facing reports.
+- Japanese mathematical prose uses comma/period punctuation; `notes/terminology.md` is the terminology SoT for both tracks (`notes/descriptive-set-theory-ja.md` is the expository reference).
 
 ## Architecture
 
@@ -35,6 +35,6 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 
 ## Maintenance Notes
 
-- Delete stale or inferable guidance.
-- Update commands and architecture when workflows change.
-- Keep durable rules here; move detail to dedicated docs.
+- GitHub Issues/PRs are the sole work-queue and execution-evidence record; keep no status dashboard, completion matrix, or freshness timestamp in repository documents.
+- Docs carry only durable mathematical/architectural/reference content; build and axiom-check evidence stays in the PR/issue discussion, never in a committed ledger.
+- Delete stale or inferable guidance; update commands and architecture when workflows change; keep durable rules here and detail in dedicated docs.

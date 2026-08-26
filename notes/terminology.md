@@ -1,6 +1,63 @@
 # Terminology and Notation
 
-Quick reference for notation used consistently across the report, paper, and Lean source.
+Terminology and notation source of truth for both tracks: the archival
+Conjecture 5.1 track (`report/report-ja.md`, `paper/`, `lean/IshikiConj51/Conj51/`)
+and the public-preprint Borel track (arXiv:2608.19618, `lean/IshikiConj51/Ext/`).
+`notes/descriptive-set-theory-ja.md` is the expository background note for the
+Borel track and defers to this file for terminology decisions.
+
+## Public-preprint (Borel) track: ambient spaces and external theorems
+
+| Symbol / Term | Meaning |
+|---------------|---------|
+| $\operatorname{CPM}(X)$ | Continuous pseudometrics $d : X \times X \to [0,\infty)$ on a topological space $X$, with the supremum metric $\mathcal{D}_X(d,e) = \sup_{(x,y)} \lvert d(x,y) - e(x,y) \rvert$ (extended-valued; the topology is equivalently induced by $\min\{\mathcal{D}_X, 1\}$) |
+| $\operatorname{Met}(X)$ | Metrics in $\operatorname{CPM}(X)$ compatible with the topology of $X$ — no boundedness or uniform-discreteness restriction |
+| $\operatorname{BMet}(X)$ | Bounded members of $\operatorname{Met}(X)$; Koshino's $AM(X)$ (bounded admissible metrics) is identified with $\operatorname{BMet}(X)$, **not** with $\operatorname{Met}(X)$ |
+| $\operatorname{Comp}(X)$ | Complete members of $\operatorname{Met}(X)$ |
+| $\mathbf{M}_{<\infty}(Z)$, $\mathfrak{c}$ | Components of $\operatorname{Met}(Z)$ under $d \sim e \iff \mathcal{D}_Z(d,e) < \infty$; each component $\mathfrak{c}$ is clopen and path-connected |
+| range set $R$ | $R \subseteq [0,\infty)$ with $0 \in R$ (English term kept; no Japanese coinage is fixed) |
+| characteristic (range set) | $0$ is an accumulation point of $R \setminus \{0\}$ — equivalently, a strictly decreasing $r : \mathbb{N} \to R \setminus \{0\}$ with $r(n) \to 0$ exists (English term kept; no Japanese coinage is fixed) |
+| $\operatorname{UCPM}(Y;R)$ | Continuous $R$-valued pseudo-ultrametrics on $Y$, with the non-Archimedean uniform distance $\mathcal{UD}^R_Y(d,e) = \inf\{\varepsilon \in R \cup \{\infty\} : d \le e \vee \varepsilon,\ e \le d \vee \varepsilon\}$ (extended-valued) |
+| $\operatorname{UMet}(Y;R)$ | Compatible $R$-valued ultrametrics; $R$-components $\mathfrak{c}^R \in \mathbf{UM}_{<\infty}(Z;R)$ via $\mathcal{UD}^R < \infty$ |
+| $\operatorname{UComp}(Y;R)$ | Complete members of $\operatorname{UMet}(Y;R)$ |
+| E1 | Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 v4, Theorem 1.1 — the isometric extensor $E : \operatorname{Met}(A) \to \operatorname{Met}(X)$ with its pseudometric-level $\tilde{E}$; exact quote in `notes/borel-preprint-audit.md` §3 |
+| E2 | Ishiki, *A factorization of metric spaces*, Colloq. Math. 174 (2023), Theorem 4.7 — the ultrametric extensor $\Sigma$; no $\operatorname{UCPM}$-level extensor exists (audit §3) |
+| E3 | Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024) — $X$ separable metrizable: $X$ σ-compact $\iff$ $AM(X)$ completely metrizable |
+
+External-theorem labels E1/E2/E3 (and E4 for the standard descriptive-set-theory
+inputs) are fixed by `notes/borel-preprint-audit.md` §3, which quotes each
+statement exactly; they enter Lean only as explicit hypotheses.
+
+## Japanese terminology (both tracks)
+
+| English | 日本語 | 備考 |
+|---|---|---|
+| compatible (metric) | **両立する**距離 | 「離散位相を誘導する距離」は許容される別名；「適合する」は廃止 |
+| descriptive set theory | **記述集合論** | |
+| Polish space | **ポーランド空間** | 可分かつ完備距離化可能 |
+| Borel set / Borel σ-algebra | **ボレル集合** / **Borel σ-代数** | |
+| Borel isomorphism | **Borel 同型** | 位相同型とは異なる（稠密性・収束を保存しない） |
+| homeomorphism | **位相同型** | |
+| standard Borel space | **標準 Borel 空間** | |
+| analytic set | **解析集合** | `Σ¹₁`；「解析的集合」は用いない |
+| coanalytic set | **余解析的集合** | `Π¹₁`；初出では `coanalytic set, Π¹₁` を併記 |
+| perfect set | **完全集合** | 閉かつ孤立点を持たない集合．「完全空間」という語は完備 (complete) と紛らわしいので避け，「孤立点を持たない」と明示するか「完全集合」を使う |
+| perfect set theorem / property | **完全集合定理** / **完全集合性** (PSP) | |
+| Bernstein set | **ベルンシュタイン集合** | |
+| Cantor space | **カントール空間** | `2^ω` |
+| Baire space | **ベール空間** | `ω^ω` |
+| completely metrizable | **完備距離化可能** | Polish とは異なる（可分性を含まない）；混同しない |
+| ultrametric | **超距離** | |
+| ultrametric space | **超距離空間** | |
+| ultrametrizable | **超距離化可能** | |
+| non-Archimedean | **非アルキメデス的** | track 名などのより広い形容詞として使用 |
+| strong triangle inequality | **強三角不等式** | $d(x,z) \le \max\{d(x,y), d(y,z)\}$ |
+| range set / characteristic | 英語のまま | 十分に確立した日本語標準訳が無いため訳語を定めず，定義（上表）とともに英語で用いる |
+
+## Archival Conjecture 5.1 track: symbols
+
+Quick reference for notation used consistently across the report, paper, and
+archival Lean source.
 
 | Symbol / Term | Meaning |
 |---------------|---------|
@@ -30,7 +87,7 @@ Quick reference for notation used consistently across the report, paper, and Lea
 A metric on $D$ that induces a non-discrete topology (e.g. a bounded metric identifying
 nearby points) is **not** in $\operatorname{Met}(D)$.  This distinction is essential for the proof.
 
-## Japanese style decisions (Issue #34)
+## Japanese style decisions
 
 | Decision | Canonical form |
 |----------|----------------|
@@ -43,29 +100,30 @@ nearby points) is **not** in $\operatorname{Met}(D)$.  This distinction is essen
 | font for sets/spaces ($\mathbf{N}, \mathbf{R}$ vs $\mathbb{N}, \mathbb{R}$) | $\mathbf{N}, \mathbf{R}$ と $\mathbb{N}, \mathbb{R}$ はともに許容（タイプセット環境によって劣悪な黒板太字を避けるため） |
 | retired construction nicknames | 「第 $\alpha$ 星」「中心」「端点」「基準対」「ブロック」は廃止 — $C_\alpha$, $y_\alpha$, $x_{\alpha,n}$, $\{p,q\}$, 「分割の成分」を直接使う（Lean identifiers `StarIndex`, `starBlock` 等は proof engineering 上の内部名として存続） |
 
-## Lean naming conventions
+## Lean naming conventions (archival track)
 
 | Mathematical object | Lean identifier / note |
 |---------------------|------------------------|
 | `Cardinal.aleph 1` | `ℵ₁` |
 | `IsPolishSpace` | Preferred predicate for "Polish space / completely metrizable second-countable" |
 | `IsFSigma` | Defined locally in `Conj51/Cardinality.lean` (no Mathlib built-in as of v4.32.2) |
-| `Met(D)` as a type | `MetD D`, defined in `Conj51/MetD.lean` (Issue #6; relocated there from `MainTheorem.lean` in Issue #7 so the claim modules can import it) as `{d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` |
+| `Met(D)` as a type | `MetD D`, defined in `Conj51/MetD.lean` as `{d : D → D → ℝ // ∃ h : IsMetricOn d, h.topology = ⊥}` |
 | `IsMetricOn` | Raw-function metric axioms (`Conj51/MetD.lean`), used instead of bundling `MetricSpace` so the induced topology can be compared to `⊥` (discrete) separately |
 | $\rho$ (sup-distance on $\operatorname{Met}(D)$) | `MetD.edist`, `ℝ≥0∞`-valued (`Conj51/MetD.lean`); realises `EDist`/`PseudoEMetricSpace`/`EMetricSpace (MetD D)` instances, sorry-free |
 | Completely metrizable (as a Lean predicate) | `TopologicalSpace.IsCompletelyMetrizableSpace`, native to Mathlib v4.32.2 (`Mathlib/Topology/Metrizable/CompletelyMetrizable.lean`) — no local definition needed |
-| `LEM-STAR-METRIC` in Lean | `lem_star_metric` (`Conj51/MetricConstruction.lean`, Issue #7): for `A ⊆ ℝ` with `#↥A = ℵ₁`, the conjunction of `#(StarIndex A) = ℵ₁`, metricity of every `dStar A t` on `[0,1]`, the equivalence `d_t ∈ Met(D) ↔ t ∉ A` (separately `dStar_mem_MetD_iff`), and existence of the parameter map `φ : ↥([0,1] \ A) → MetD (StarIndex A)` — sorry-free.  Corresponds to report 補題 3.3 / paper Lemma `lem:star-metric` |
-| `LEM-CLOSED-IMAGE` in Lean | `lem_closed_image` (`Conj51/ClosedEmbedding.lean`, Issue #9): for `A ⊆ ℝ`, the conjunction of the two-sided estimate `edist t s ≤ edist (φ t) (φ s) ≤ 2 * edist t s` (report (C4)) and `IsClosedEmbedding (starParam A)` (report (C5)) — sorry-free. The map `φ` itself is `starParam A : StarParamSpace A → MetD (StarIndex A)`, and `StarParamSpace A := ↥([0,1] \ A)` is the report's `A^∁`.  Corresponds to report 補題 3.4 / paper Lemma `lem:closed-image` |
-| Relabelling `Met(D)` along a bijection | `MetD.relabelIsometry` (`Conj51/Relabel.lean`, Issue #9): `(σ : D ≃ E) : MetD E ≃ᵢ MetD D`. `Met(D)` depends on `D` only through `#D`, so the construction on the concrete `StarIndex A` transfers to an arbitrary `D` with `#D = ℵ₁` (report §3.2) — sorry-free |
-| Alexandrov–Lavrentiev direction in Lean | `isGδ_of_isCompletelyMetrizableSpace` (`Conj51/GDeltaComplete.lean`, Issue #23): `{X} [MetricSpace X] {Y : Set X} (h : IsCompletelyMetrizableSpace ↥Y) : IsGδ Y` — proved from scratch (absent from Mathlib v4.32.2), with **no separability assumption**, sorry-free; this matches report 定理 1.1 / paper Theorem `thm:background-gdelta` exactly. Note the `IsGδ` is taken in the **ambient** `X`; the report's "Gδ in [0,1]" phrasing is recovered inside `isFSigma_of_isGdelta_sdiff`, which intersects with the closed set `[0,1]`, so no ambient-conversion lemma is needed |
-| `THM-CONJ51` in Lean | `thm_conj51` (`Conj51/MainTheorem.lean`): `(D : Type*) (hD : #D = Cardinal.aleph 1) : ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` — statement unchanged since Issue #6, proved sorry-free (Issue #9). The whole of report §4 is proved in `thm_conj51_of_lavrentiev`, which carries the one Mathlib-absent ingredient as the explicit hypothesis `lavrentiev : ∀ Y : Set ℝ, IsCompletelyMetrizableSpace ↥Y → IsGδ Y`; `thm_conj51` discharges it with `isGδ_of_isCompletelyMetrizableSpace` at `X := ℝ`. `#print axioms` gives `[propext, Classical.choice, Quot.sound]`.  Corresponds to report 定理 2.1 / paper Theorem `thm:conj51` |
+| `LEM-STAR-METRIC` in Lean | `lem_star_metric` (`Conj51/MetricConstruction.lean`): for `A ⊆ ℝ` with `#↥A = ℵ₁`, the conjunction of `#(StarIndex A) = ℵ₁`, metricity of every `dStar A t` on `[0,1]`, the equivalence `d_t ∈ Met(D) ↔ t ∉ A` (separately `dStar_mem_MetD_iff`), and existence of the parameter map `φ : ↥([0,1] \ A) → MetD (StarIndex A)` — sorry-free.  Corresponds to report 補題 3.3 / paper Lemma `lem:star-metric` |
+| `LEM-CLOSED-IMAGE` in Lean | `lem_closed_image` (`Conj51/ClosedEmbedding.lean`): for `A ⊆ ℝ`, the conjunction of the two-sided estimate `edist t s ≤ edist (φ t) (φ s) ≤ 2 * edist t s` (report (C4)) and `IsClosedEmbedding (starParam A)` (report (C5)) — sorry-free. The map `φ` itself is `starParam A : StarParamSpace A → MetD (StarIndex A)`, and `StarParamSpace A := ↥([0,1] \ A)` is the report's `A^∁`.  Corresponds to report 補題 3.4 / paper Lemma `lem:closed-image` |
+| Relabelling `Met(D)` along a bijection | `MetD.relabelIsometry` (`Conj51/Relabel.lean`): `(σ : D ≃ E) : MetD E ≃ᵢ MetD D`. `Met(D)` depends on `D` only through `#D`, so the construction on the concrete `StarIndex A` transfers to an arbitrary `D` with `#D = ℵ₁` (report §3.2) — sorry-free |
+| Alexandrov–Lavrentiev direction in Lean | `isGδ_of_isCompletelyMetrizableSpace` (`Conj51/GDeltaComplete.lean`): `{X} [MetricSpace X] {Y : Set X} (h : IsCompletelyMetrizableSpace ↥Y) : IsGδ Y` — proved from scratch (absent from Mathlib v4.32.2), with **no separability assumption**, sorry-free; this matches report 定理 1.1 / paper Theorem `thm:background-gdelta` exactly. Note the `IsGδ` is taken in the **ambient** `X`; the report's "Gδ in [0,1]" phrasing is recovered inside `isFSigma_of_isGdelta_sdiff`, which intersects with the closed set `[0,1]`, so no ambient-conversion lemma is needed |
+| `THM-CONJ51` in Lean | `thm_conj51` (`Conj51/MainTheorem.lean`): `(D : Type*) (hD : #D = Cardinal.aleph 1) : ¬ TopologicalSpace.IsCompletelyMetrizableSpace (MetD D)` — proved sorry-free. The whole of report §4 is proved in `thm_conj51_of_lavrentiev`, which carries the one Mathlib-absent ingredient as the explicit hypothesis `lavrentiev : ∀ Y : Set ℝ, IsCompletelyMetrizableSpace ↥Y → IsGδ Y`; `thm_conj51` discharges it with `isGδ_of_isCompletelyMetrizableSpace` at `X := ℝ`. `#print axioms` gives `[propext, Classical.choice, Quot.sound]`.  Corresponds to report 定理 2.1 / paper Theorem `thm:conj51` |
 
 Stable claim IDs (`LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51`)
-remain in use in `STATUS.md`, `notes/proof-audit.md`, and Lean declarations/comments as
-internal management identifiers; they no longer appear as reader-facing theorem names in
-the report or the paper (Issue #34).  Reader-facing numbering: report 補題 3.1（閉集合の濃度）,
-補題 3.2 = LEM-A-EXISTS, 補題 3.3 = LEM-STAR-METRIC, 補題 3.4 = LEM-CLOSED-IMAGE,
-定理 2.1 = THM-CONJ51; paper `lem:closed-card`, `lem:A-exists`, `lem:star-metric`,
-`lem:closed-image`, `thm:conj51`.
+remain in use in `notes/proof-audit.md` and in Lean declarations/comments as
+internal identifiers of the archival track; they no longer appear as reader-facing
+theorem names in the report or the paper.  Reader-facing numbering: report
+補題 3.1（閉集合の濃度）, 補題 3.2 = LEM-A-EXISTS, 補題 3.3 = LEM-STAR-METRIC,
+補題 3.4 = LEM-CLOSED-IMAGE, 定理 2.1 = THM-CONJ51; paper `lem:closed-card`,
+`lem:A-exists`, `lem:star-metric`, `lem:closed-image`, `thm:conj51`.
 
-*Update as the formalisation develops.*
+Lean naming for the public-preprint track is recorded per theorem in
+`notes/borel-preprint-audit.md` §7.

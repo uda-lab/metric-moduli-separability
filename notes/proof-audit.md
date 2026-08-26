@@ -226,7 +226,8 @@ this entry decides plan-Gate A and, via §5 below, plan-Gate C; plan-Gate B was
 completed by Issues #6–#9/#23.
 
 Consequently the four claim IDs are marked **独立監査通過 (Gate B passed)** in
-the obligations table. Whether the report and `STATUS.md` may now drop the
+the obligations table. Whether the report and the then-maintained `STATUS.md`
+(since retired) may now drop the
 **証明候補 / proof candidate** label is a project decision for the owner, not
 the reviewer's to make; this review deliberately leaves that label in place and
 records only that no mathematical gap was found.
@@ -640,8 +641,8 @@ merge `dfcabd3`).
 
 #### 2. Open-obligation sweep
 
-* `STATUS.md`: every row of the Overall table is resolved (✅); no pending
-  row remains.
+* The then-maintained `STATUS.md` (since retired): every row of the Overall
+  table is resolved (✅); no pending row remains.
 * This file's Open obligations table: all five rows ✅ (Gate B passed); the
   sorry tracker reports 0 and the Lean TODO tracker is empty. The Mathlib
   library gaps table's `IsFSigma` row reads "open" only in the sense of an
@@ -717,8 +718,9 @@ the paper refers to the result only as "attributed there to Koshino" inside
   project-internal audit and machine-checking. **No wording implies external
   peer review, journal validation, or community acceptance.** The front
   matter is explicitly marked "Draft --- not for circulation".
-* `report/report-ja.md` §4 位置づけ and `STATUS.md` carry the matching
-  explicit caveat that verification to date is internal audit + Lean only.
+* `report/report-ja.md` §4 位置づけ and the then-maintained `STATUS.md`
+  (since retired) carry the matching explicit caveat that verification to
+  date is internal audit + Lean only.
 
 #### 5. Build and statement-consistency check
 

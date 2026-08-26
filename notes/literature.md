@@ -1,8 +1,7 @@
 # Literature Notes
 
-Status: primary source and directly cited literature verified against the
-arXiv v4 PDF (Issue #2, 2026-08-09). Update this file if the primary source
-is revised to a new version.
+Primary source and directly cited literature, verified against the arXiv v4
+PDF.
 
 ---
 
