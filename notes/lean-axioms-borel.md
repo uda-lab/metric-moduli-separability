@@ -691,3 +691,83 @@ anywhere in the closure; in particular **E2 is not an axiom** — it is the
 hypothesis bundle `IsUltraIsometricExtensor`, which the two delivered theorems
 carry explicitly. `grep -n sorry` on both files matches only the word inside
 the status comment of each header.
+
+# Axiom audit — Issue #80 (Theorem 3.8 and Corollary 3.9, complete metrics)
+
+Checked with `#print axioms <name>` against the built `IshikiConj51` library
+(toolchain `leanprover/lean4:v4.32.2`), in a throwaway, untracked `.lean` file
+(`import IshikiConj51` plus the `#print axioms` lines), never committed.
+
+`Ext/Completeness.lean`:
+
+| declaration | axioms |
+|---|---|
+| `IshikiExt.IsCauchySeqOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsLimitOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsCompleteMetricOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_iff_completeSpace` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_of_eventually_const` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_of_uniformly_separated` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_comap_iff` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsMetricOn.exists_radius_of_isOpen` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_restrict` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.addOneOffDiag` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.addOneOffDiag_self` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.addOneOffDiag_of_ne` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.one_le_addOneOffDiag` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.addOneOffDiag_nonneg` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isMetricOn_addOneOffDiag` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.topology_addOneOffDiag_eq_bot` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_addOneOffDiag` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.abs_addOneOffDiag_sub_le` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.extBlock_eq_of_dExt_lt_four` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.abs_sub_le_extRadius_add` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_dExt` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_amalgam` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.mem_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.Comp_subset_Met` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.CompOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.mem_CPM_CompOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.CompOn_subset_MetOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.isCompleteMetricOn_discreteFn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.discrete_mem_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPM.nonempty_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.preimage_equivCPM_comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CPMOn.preimage_CompOn_comap` | `[propext, Classical.choice, Quot.sound]` |
+
+`Ext/CompleteMetric.lean`:
+
+| declaration | axioms |
+|---|---|
+| `IshikiExt.CompleteComponentSetup` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.isCompleteMetricOn_ballMetric` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.isCompleteMetricOn_metric` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.mem_Comp_psi_iff` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.preimage_Comp_psi` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.preimage_component_inter_Comp_psi` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.range_inter_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.range_inter_component_inter_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.not_measurableSet_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.CompleteComponentSetup.not_measurableSet_component_inter_Comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.exists_completeComponentSetup` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.component_inter_comp_not_measurableSet` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.componentSet_inter_comp_not_measurableSet` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.comp_not_measurableSet` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.nonempty_component_inter_comp` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsCompIsometricExtensorOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsCompIsometricExtensorOn.image_comp_subset` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor.image_comp_eq_range_inter` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.IsIsometricExtensor.not_measurableSet_CPM_CompOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.not_measurableSet_CPM_CompOn_of_compIsometricExtensorOn` | `[propext, Classical.choice, Quot.sound]` |
+| `IshikiExt.separable_of_measurableSet_CPM_CompOn_of_compIsometricExtensorOn` | `[propext, Classical.choice, Quot.sound]` |
+
+No `sorryAx` and no custom axioms in the closure of any declaration above —
+only the three standard Lean/Mathlib axioms. `grep -n sorry` on both files
+matches only the phrase "sorry-free" in their status headers.
+
+Scope note: E1 enters Corollary 3.9 as the hypothesis bundle
+`IsCompIsometricExtensorOn`, which carries clause (4) as a field and
+`IsCompletelyMetrizableSpace X` as an instance hypothesis (audit §3's caveat
+on that clause). It is never an axiom or an instance declaration, and its
+proof stays external.
