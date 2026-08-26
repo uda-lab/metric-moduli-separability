@@ -273,10 +273,16 @@ what the argument requires — the subspace is produced by the separated-set
 argument only after nonseparability is assumed.  E2's own proof stays external;
 it is never an axiom here.
 
-As in Theorem 3.14 the preprint's standing hypothesis that `Y` is
-ultrametrizable does not appear, for the same reason: the repair never uses it,
-and it is E2 — here `hE2` — whose hypotheses require it.  The statement below is
-therefore stronger than the preprint's 3.17 and implies it. -/
+As in Theorem 3.14 this is the **internal, bundle-conditional** form: the
+preprint's standing hypothesis that `Y` is ultrametrizable does not appear,
+because the repair never uses it — it is E2, here `hE2`, whose hypotheses
+require it.  The printed Corollary 3.17 is
+`separable_of_measurableSet_UCompOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`), whose published hypotheses produce this
+theorem's `hE2` via the bridge
+`IsUltraCompIsometricExtensorOn.toIsUltraCompIsometricExtensor`; the printed
+statement follows from this one, while this form itself — conditional on a
+bundle the preprint never states — is not the printed statement. -/
 theorem separable_of_measurableSet_UCompOn_of_ultraCompExtensors {Y : Type*} [MetricSpace Y]
     (hR : R.IsCharacteristic)
     (hne : (UCompOn Y R).Nonempty)
@@ -307,10 +313,14 @@ Audit §2.15: "the completely-metrizable variant goes through Alexandrov as in
 3.11, in the form of `isGδ_of_isCompletelyMetrizableSpace_of_metrizableSpace`),
 hence Borel; the Borel form then applies and the variant adds nothing to it.
 
-`Y` is metrizable, the preprint's hypothesis; the Borel form is delivered for a
-metric space, so a compatible metric is chosen inside the proof, which changes
-nothing because the two loci, the hypotheses and the conclusion are all
-properties of the topology. -/
+`Y` is metrizable here, which is *weaker* than the preprint's standing
+hypothesis — the published Corollary 3.17 assumes `Y` ultrametrizable, and
+the published-interface form is
+`separable_of_isCompletelyMetrizableSpace_UCompOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`).  The Borel form is delivered for a metric space,
+so a compatible metric is chosen inside the proof, which changes nothing
+because the two loci, the hypotheses and the conclusion are all properties of
+the topology. -/
 theorem separable_of_isCompletelyMetrizableSpace_UCompOn_of_ultraCompExtensors {Y : Type*}
     [TopologicalSpace Y] [TopologicalSpace.MetrizableSpace Y]
     (hR : R.IsCharacteristic)

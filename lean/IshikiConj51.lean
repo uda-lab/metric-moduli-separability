@@ -24,6 +24,9 @@ import IshikiConj51.Ext.CompleteMetrizability
 import IshikiConj51.Ext.Completeness
 import IshikiConj51.Ext.CompleteMetric
 
+-- Literal-statement coverage (Issue #96): Lemma 3.2 relative to `Met(Z)`.
+import IshikiConj51.Ext.BMetClopen
+
 -- Non-Archimedean track (Issue #81): the discrete ultrametric core, 3.10–3.13.
 import IshikiConj51.Ext.UltraPMet
 import IshikiConj51.Ext.CantorUltra
@@ -39,3 +42,7 @@ import IshikiConj51.Ext.UltraTransfer
 -- 3.16 and Corollary 3.17.
 import IshikiConj51.Ext.UltraComplete
 import IshikiConj51.Ext.UltraCompleteTransfer
+
+-- Non-Archimedean track (Issue #96): the published-interface wrappers for
+-- Theorem 3.14 and Corollaries 3.15 and 3.17.
+import IshikiConj51.Ext.UltraPublished

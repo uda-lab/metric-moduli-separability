@@ -418,14 +418,22 @@ requires — the closed discrete subspace is produced by the separated-set
 argument only after nonseparability is assumed, so no single extensor can be
 named in advance.  E2's own proof stays external; it is never an axiom here.
 
-The preprint's standing hypothesis that `Y` is ultrametrizable does **not**
-appear, and its absence is deliberate: the repair never uses it.  It is E2 whose
-hypotheses require it, and E2 is `hE2` here — so ultrametrizability enters
-exactly where the audit says it does, through the availability of the extensor.
-The statement below is therefore stronger than the preprint's 3.14 and implies
-it, with no auxiliary bridge to discharge; carrying an `R`-valued surrogate such
-as `(UMetOn Y R).Nonempty` instead would *weaken* it to a form that the audited
-hypotheses cannot instantiate without an external equivalence. -/
+This is the **internal, bundle-conditional** form, not the published
+interface: the preprint's standing hypothesis that `Y` is *ultrametrizable*
+does not appear here, because the repair never uses it — it is E2 whose
+hypotheses require it, and E2 enters only through the transported bundle
+`hE2`.  The printed Theorem 3.14, with the ultrametrizability hypothesis and
+E2 in its own closed-subset shape, is
+`separable_of_measurableSet_UMetOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`); its published hypotheses produce this theorem's
+`hE2` via the bridge `IsUltraIsometricExtensorOn.toIsUltraIsometricExtensor`,
+so the printed statement follows from this one.  Conversely this form is not
+itself the printed statement — its `hE2` is a bundle the preprint never
+states — so it is *conditionally* more general, not unconditionally
+"stronger".  Carrying an `R`-valued surrogate such as `(UMetOn Y R).Nonempty`
+in place of ultrametrizability is rejected in either form: it would change
+the statement to one that the audited hypotheses cannot instantiate without
+an external equivalence. -/
 theorem separable_of_measurableSet_UMetOn_of_ultraExtensors {Y : Type*} [MetricSpace Y]
     (hR : R.IsCharacteristic)
     (hMet : MeasurableSet (UMetOn Y R))
@@ -455,10 +463,14 @@ arbitrary-metrizable-ambient form of
 3.14 then applies.  The corollary inherits the 3.14 repair and adds nothing to
 it.
 
-`Y` is metrizable, the preprint's hypothesis; Theorem 3.14 is delivered for a
-metric space, so a compatible metric is chosen inside the proof, which changes
-nothing because the two loci, the hypothesis and the conclusion are all
-properties of the topology. -/
+`Y` is metrizable here, which is *weaker* than the preprint's standing
+hypothesis — the published Corollary 3.15 assumes `Y` ultrametrizable, and
+the published-interface form is
+`separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltrametrizableSpace`
+(`Ext/UltraPublished.lean`).  Theorem 3.14 is delivered for a metric space,
+so a compatible metric is chosen inside the proof, which changes nothing
+because the two loci, the hypothesis and the conclusion are all properties of
+the topology. -/
 theorem separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors {Y : Type*}
     [TopologicalSpace Y] [TopologicalSpace.MetrizableSpace Y]
     (hR : R.IsCharacteristic)
