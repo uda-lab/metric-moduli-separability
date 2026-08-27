@@ -708,12 +708,13 @@ explicitly.
 
 ## 5. Removed claims — must not be reinstated
 
-The 11 Aug draft (Issue #46 track; audited in
-`notes/ishiki-extension-audit.md`, superseded) claimed, for a dense
+The August 2026 analytic/coanalytic manuscript draft (superseded)
+claimed, for a dense
 `S ⊆ [0,1]` of cardinality `ℵ₁` produced by the CH/¬CH recipe, that `S` is
 **neither analytic nor coanalytic**, and correspondingly that `BMet(D)` /
 `Met(X)` is neither analytic nor coanalytic in the ambient pseudometric
-space. Two independent findings of that audit stand and remain binding:
+space. Two independent findings of the audit of that draft stand and remain
+binding:
 
 1. **The `|S| = ℵ₁` "not coanalytic" claim is not a ZFC theorem.** The ¬CH
    branch is refutable: there are models of ZFC + ¬CH — any ccc forcing
