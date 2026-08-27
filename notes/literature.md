@@ -45,7 +45,7 @@ the supremum metric $\mathcal{D}_Z(d,e) = \sup_{x,y\in Z} |d(x,y) - e(x,y)|$.
 This matches the project's usage: **metrics compatible with (i.e. inducing)
 the discrete topology on $D$, under the sup-metric topology.**
 
-**Source-level nuance for the Lean model (acceptance criterion 3):**
+**Source-level nuance for the Lean model:**
 
 - **Each element of $\operatorname{Met}(Z)$ is an ordinary, finite real-valued
   metric on $Z$** ($d : Z \times Z \to [0,\infty)$): a genuine metric
@@ -85,19 +85,12 @@ the discrete topology on $D$, under the sup-metric topology.**
   formalization of "compatible with the discrete topology" must use the
   topology-equality condition, not a uniform-gap condition.
 - These two "no silent narrowing" points are the operative constraints for
-  Issue #6 (`Met(D)` construction in Lean): the type must range over
-  arbitrary (unbounded, non-uniformly-discrete) real-valued metrics on `D`
-  that induce the discrete topology.
+  the Lean construction of `Met(D)`: the type must range over arbitrary
+  (unbounded, non-uniformly-discrete) real-valued metrics on `D` that induce
+  the discrete topology.
 
-This matches `README.md` and `report/report-ja.md`, which already state the
-"compatible with the discrete topology" / sup-metric-topology definition
-correctly; no changes to those files were needed for the conjecture statement
-itself.
-
-**Correction:** this file previously read "Action required (Issue #1)" — that
-was a stale mis-reference; Issue #1 was the (already-merged) scaffold PR, and
-the verification action described belongs to **Issue #2** (this issue), now
-complete.
+`README.md` and `report/report-ja.md` state the same "compatible with the
+discrete topology" / sup-metric-topology definition.
 
 ---
 
@@ -113,7 +106,7 @@ complete.
 | DOI / arXiv | [10.1515/agms-2024-0014](https://doi.org/10.1515/agms-2024-0014); [arXiv:2403.07421](https://arxiv.org/abs/2403.07421) (v1: 2024-03-12, v2: 2024-04-07, math.GN) |
 | Role | A direct motivation for Conjecture 5.1, which addresses the least uncountable discrete case of the nonseparable problem. |
 | Statement caveat | The published paper studies $AM(X)$ = **bounded** admissible (continuous) metrics with the sup-metric. Its main **Theorem and Corollary are unnumbered** ("Theorem." / "Corollary."). The Corollary (verbatim, arXiv v2 p. 2 = published version): "Let $X$ be a separable metrizable space. Then $X$ is $\sigma$-compact if and only if $AM(X)$ is completely metrizable." The $\operatorname{Met}(X)$ form is how Ishiki (arXiv:2407.03030, §5) recalls the result; the paper cites Koshino for the $AM(X)$ statement and attributes the $\operatorname{Met}(X)$ form to Ishiki's recollection — do not silently identify the two spaces. |
-| Status | **Verified against the arXiv v2 PDF full text and the Crossref record of the DOI** (2026-08-10, Issue #36). Supersedes the 2026-08-09 "no arXiv/DOI found" record: the earlier arXiv API search missed the deposit (primary class math.GN). Now cited directly as `Koshino2024` in `paper/references.bib`. |
+| Status | **Verified against the arXiv v2 PDF full text and the Crossref record of the DOI**. Cited directly as `Koshino2024` in `paper/references.bib`. |
 
 ### Koshino (2022) — "Recognizing the topologies of spaces of metrics with the topology of uniform convergence" [ref. 28]
 
@@ -142,11 +135,11 @@ complete.
 
 | Result | Proposed source | Verified? |
 |--------|-----------------|-----------|
-| Alexandrov–Lavrentiev, forward direction: X metrizable, S ⊆ X completely metrizable ⇒ S is Gδ in X (no separability on X) | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 (§3.C, p. 17) — stated there in exactly this metrizable-X generality; general form also in Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179 | ✅ Engelking/Willard citations independently verified (Issue #4, 2026-08-09); Kechris Thm. 3.11 verified at full-statement level against a numbering-preserving transcription of the book (Issue #27 / E10, 2026-08-09 — see below), and re-confirmed with section/page (§3.C starting p. 17, via the book's printed table of contents, d-nb.info/941717364/04) in Issue #34 (2026-08-09); report 定理 1.1 and paper Thm. 2.1 now state this metrizable-X form and cite Kechris as primary |
-| Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1 定理 1.2 | ✅ audited (Issue #4, 2026-08-09) — this is the version actually used for Met(D), since Met(D) is not separable |
-| Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (Thm. 6.4 in §6.B, from p. 32; Thm. 6.2/Cor. 6.3 in §6.A, from p. 31; section pages re-confirmed via the printed table of contents in Issue #34) | ✅ used in report 補題 3.1, applied in the non-CH branch of 補題 3.2 (= LEM-A-EXISTS) (Issue #3, 2026-08-09) |
+| Alexandrov–Lavrentiev, forward direction: X metrizable, S ⊆ X completely metrizable ⇒ S is Gδ in X (no separability on X) | Kechris, *Classical Descriptive Set Theory*, Thm. 3.11 (§3.C, p. 17) — stated there in exactly this metrizable-X generality; general form also in Engelking, *General Topology*, Thm. 4.3.23–4.3.24; Willard, *General Topology*, Thm. 24.12, p. 179 | ✅ Engelking/Willard citations independently verified; Kechris Thm. 3.11 verified at full-statement level against a numbering-preserving transcription of the book (see below), and re-confirmed with section/page (§3.C starting p. 17, via the book's printed table of contents, d-nb.info/941717364/04); report 定理 1.1 and paper Thm. 2.1 state this metrizable-X form and cite Kechris as primary |
+| Closed subspace of a completely metrizable space is completely metrizable — no separability needed | Elementary direct argument (a complete metric restricted to a closed subset is complete); see report §1 定理 1.2 | ✅ audited — this is the version actually used for Met(D), since Met(D) is not separable |
+| Every uncountable closed subset of ℝ has cardinality **c** (continuum) — perfect set theorem | Cantor–Bendixson theorem, Kechris, *Classical Descriptive Set Theory* (GTM 156, 1995), §6 (Thm. 6.4 in §6.B, from p. 32; Thm. 6.2/Cor. 6.3 in §6.A, from p. 31; section pages re-confirmed via the printed table of contents) | ✅ used in report 補題 3.1, applied in the non-CH branch of 補題 3.2 (= LEM-A-EXISTS) |
 
-### References verified for the Gδ / complete-metrizability step (Issue #4, 2026-08-09)
+### References verified for the Gδ / complete-metrizability step
 
 | Result | Source | Role |
 |--------|--------|------|
@@ -176,9 +169,9 @@ of a separable space is countable, and an uncountable $\varepsilon$-separated
 set cannot be covered by a countable $\varepsilon/2$-net). This claim is not
 formally part of any of the four stable IDs and was not re-derived in full
 formal detail here; flagged for double-checking whenever $\operatorname{Met}(D)$
-is formally constructed in Lean (Issue #6).
+is formally constructed in Lean.
 
-### References verified for LEM-A-EXISTS (Issue #3, 2026-08-09)
+### References verified for LEM-A-EXISTS
 
 | Result | Source | Role |
 |--------|--------|------|
@@ -188,12 +181,11 @@ is formally constructed in Lean (Issue #6).
 | κ infinite, λ ≤ κ countable ⇒ κ = \|A\|+λ forces \|A\|=κ; countable union of countable sets is countable | Standard ZFC cardinal arithmetic (uses countable choice, available in ZFC) | CH branch cardinality count; non-CH branch final contradiction |
 | Bernstein set (a set meeting every uncountable closed set, whose complement also meets every uncountable closed set; exists in ZFC by a length-𝔠 transfinite recursion) | Oxtoby, *Measure and Category*, 2nd ed. (Springer GTM 2), p. 24 (definition) | Case-split-free alternative proof (report §3, "別証" remark): a subset of a Bernstein set of size ℵ₁ contains no perfect set, hence is not Fσ by Cantor–Bendixson |
 
-**Update (Issue #27 / E10, 2026-08-09): Kechris theorem numbers verified at
-full-statement level.** The previously unpinned numbers are now confirmed
-against a full-text transcription of the book that preserves its numbering
-(M. Sleziak's "kechris" transcription notes,
+**Kechris theorem numbers verified at full-statement level.** The numbers
+are confirmed against a full-text transcription of the book that preserves
+its numbering (M. Sleziak's "kechris" transcription notes,
 `thales.doa.fmph.uniba.sk/sleziak/texty/rozne/pozn/books/kechris.pdf`,
-retrieved 2026-08-09), corroborated by independent citing literature:
+retrieved August 2026), corroborated by independent citing literature:
 
 * **Thm 3.11 = the Alexandrov–Lavrentiev Gδ characterisation.** Transcription
   states verbatim: "If X is metrizable and Y ⊆ X is completely metrizable,
@@ -215,49 +207,38 @@ retrieved 2026-08-09), corroborated by independent citing literature:
   countable open." Corroborated by multiple descriptive-set-theory sources
   quoting the same numbering.
 
-**Load-bearing status (recorded per the PR #33 codex review).** In the
-paper's non-CH branch (Lemma 3.1, Case 2), the perfect subset of an
-uncountable closed set is obtained *from the cited Cantor–Bendixson theorem*
-— the citation is load-bearing for the natural-language paper, not a
-convenience pointer; the paper now cites it number-precisely
-(\cite[Theorem 6.4]{Kechris1995}, and \cite[Theorem 6.2, Corollary
-6.3]{Kechris1995} for the cardinality step). Independent safety nets, for
-the mathematics rather than the bibliography: the Gate B reviewer re-derived
-the non-CH branch from scratch (proof-audit, Issue #10 entry §2), and the
-Lean chain proves the corresponding step through Mathlib
-(`IsClosed.exists_nat_bool_injection_of_not_countable`) with no book
-citation. The verification above is of a faithful transcription, not a scan
-of the printed book; page numbers are not cited anywhere, so no page-level
-check is required.
+**Load-bearing status.** In the paper's non-CH branch (Lemma 3.1, Case 2),
+the perfect subset of an uncountable closed set is obtained *from the cited
+Cantor–Bendixson theorem* — the citation is load-bearing for the
+natural-language paper, not a convenience pointer; the paper cites it
+number-precisely (\cite[Theorem 6.4]{Kechris1995}, and \cite[Theorem 6.2,
+Corollary 6.3]{Kechris1995} for the cardinality step). Independent safety
+nets, for the mathematics rather than the bibliography: an independent
+reviewer re-derived the non-CH branch from scratch (recorded in
+`notes/proof-audit.md`), and the Lean chain proves the corresponding step
+through Mathlib (`IsClosed.exists_nat_bool_injection_of_not_countable`) with
+no book citation. The verification above is of a faithful transcription, not
+a scan of the printed book; page numbers are not cited anywhere, so no
+page-level check is required.
 
-Original Issue #3 record (kept for provenance): I could not independently pin exact Kechris theorem/page numbers beyond the
-"§6 / p. 150" region confirmed via a secondary source (Wikipedia's citation
-of Kechris 1995, p. 150 for the perfect set property) — general web search
-is unavailable in this environment and I did not have independent access to
-paginate the book itself. The Kelley/Willard citations for the Baire category
-theorem, and the Oxtoby p. 24 citation for the Bernstein set definition, are
-quoted directly from sources that cite them with exact theorem/page numbers,
-so those are higher-confidence. An earlier draft of this audit (relayed via
-the orchestrator) suggested more specific numbers — Kechris Thm 6.4 / Cor 6.5
-for Cantor–Bendixson, Kechris Thm 8.4 for Baire category, Oxtoby Ch. 5 for
-Bernstein sets — but those specific numbers could not be independently
-confirmed with the tools available in this environment (general web search
-disabled; no direct access to paginate either book), so they are intentionally
-**not** asserted here to avoid false precision. Re-verify against a
-physical/PDF copy of both books before citing exact theorem numbers in the
-paper.
+**Durable caveat on the non-Kechris citations:** the Kelley (Thm. 34,
+p. 200) and Willard (Cor. 25.4) citations for the Baire category theorem,
+and the Oxtoby p. 24 citation for the Bernstein set definition, are quoted
+from secondary sources that cite them with exact theorem/page numbers — they
+have not been checked by direct inspection of the printed books. Re-verify
+against a physical/PDF copy before relying on their page-level detail in a
+reader-facing artifact.
 
-**Update (Issue #34, 2026-08-09): citation set finalised for the reader-facing
-artifacts.** The report's bibliography is now self-contained (report §5 lists
-Ishiki, Kechris, Engelking, Willard, Oxtoby; no pointer to this file). The
-Baire category theorem is cited to Willard, Cor. 25.4 only — the redundant
-Kelley (Thm. 34, p. 200) citation was dropped from both report and paper, and
-the `Kelley1955` entry was removed from `paper/references.bib` (the Kelley
-verification record above remains valid as provenance). Kechris Thm. 3.11 is
-now the primary citation for the background Gδ theorem in both report (定理
+**Citation set in the reader-facing artifacts.** The report's bibliography
+is self-contained (report §5 lists Ishiki, Kechris, Engelking, Willard,
+Oxtoby; no pointer to this file). The Baire category theorem is cited to
+Willard, Cor. 25.4 only; the Kelley citation above remains a valid
+verification record but is not used in the report or paper, and
+`paper/references.bib` carries no `Kelley1955` entry. Kechris Thm. 3.11 is
+the primary citation for the background Gδ theorem in both report (定理
 1.1) and paper (Thm. 2.1), stated in its metrizable-X form; its verbatim
 statement ("If X is metrizable and Y ⊆ X is completely metrizable, then Y is
-a Gδ in X. ...") was re-confirmed against the numbering-preserving
+a Gδ in X. ...") was confirmed against the numbering-preserving
 transcription and independent citing literature, and its location (§3.C,
 p. 17) against the printed table of contents (d-nb.info/941717364/04).
 
@@ -271,7 +252,7 @@ p. 17) against the printed table of contents (d-nb.info/941717364/04).
 | `CompleteSpace` / `PseudoMetricSpace` | `Mathlib.Topology.UniformSpace.*` | available |
 | Cardinals / `Cardinal.aleph` | `Mathlib.SetTheory.Cardinal.Aleph` | available |
 | Gδ: `IsGdelta` | `Mathlib.Topology.GDelta.Basic` | available |
-| Closed subspace of Polish is Polish | ~~`IsPolishSpace.isClosed_univ` or similar — verify~~ | superseded (Issue #9 / E10, Issue #27): no Polish-specific lemma needed — the assembly uses `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace` (no separability hypothesis), see `notes/proof-audit.md` Mathlib gaps table |
+| Closed subspace of Polish is Polish | ~~`IsPolishSpace.isClosed_univ` or similar — verify~~ | not needed: no Polish-specific lemma is used — the assembly uses `Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace` (no separability hypothesis), see `notes/proof-audit.md` Mathlib gaps table |
 | `IsFSigma` predicate | — | **absent** — defined locally in `Conj51/Cardinality.lean` |
 
 ---

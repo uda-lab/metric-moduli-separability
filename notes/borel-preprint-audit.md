@@ -708,7 +708,7 @@ explicitly.
 
 ## 5. Removed claims — must not be reinstated
 
-The 11 Aug draft (Issue #46 track; audited in
+The August 2026 analytic/coanalytic manuscript draft (audited in
 `notes/ishiki-extension-audit.md`, superseded) claimed, for a dense
 `S ⊆ [0,1]` of cardinality `ℵ₁` produced by the CH/¬CH recipe, that `S` is
 **neither analytic nor coanalytic**, and correspondingly that `BMet(D)` /
