@@ -184,8 +184,8 @@ is formally constructed in Lean.
 **Kechris theorem numbers verified at full-statement level.** The numbers
 are confirmed against a full-text transcription of the book that preserves
 its numbering (M. Sleziak's "kechris" transcription notes,
-`thales.doa.fmph.uniba.sk/sleziak/texty/rozne/pozn/books/kechris.pdf`,
-retrieved August 2026), corroborated by independent citing literature:
+`thales.doa.fmph.uniba.sk/sleziak/texty/rozne/pozn/books/kechris.pdf`),
+corroborated by independent citing literature:
 
 * **Thm 3.11 = the Alexandrov–Lavrentiev Gδ characterisation.** Transcription
   states verbatim: "If X is metrizable and Y ⊆ X is completely metrizable,
@@ -213,11 +213,11 @@ Cantor–Bendixson theorem* — the citation is load-bearing for the
 natural-language paper, not a convenience pointer; the paper cites it
 number-precisely (\cite[Theorem 6.4]{Kechris1995}, and \cite[Theorem 6.2,
 Corollary 6.3]{Kechris1995} for the cardinality step). Independent safety
-nets, for the mathematics rather than the bibliography: an independent
-reviewer re-derived the non-CH branch from scratch (recorded in
-`notes/proof-audit.md`), and the Lean chain proves the corresponding step
-through Mathlib (`IsClosed.exists_nat_bool_injection_of_not_countable`) with
-no book citation. The verification above is of a faithful transcription, not
+nets, for the mathematics rather than the bibliography: the non-CH branch is
+independently re-derived from scratch in `notes/proof-audit.md`, and the
+Lean chain proves the corresponding step through Mathlib
+(`IsClosed.exists_nat_bool_injection_of_not_countable`) with no book
+citation. The verification above is of a faithful transcription, not
 a scan of the printed book; page numbers are not cited anywhere, so no
 page-level check is required.
 
