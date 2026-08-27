@@ -10,3 +10,4 @@ paper/*.pdf
 paper/*.synctex.gz
 paper/arxiv-v1.tar.gz
 report/*.pdf
+notes/*.pdf
