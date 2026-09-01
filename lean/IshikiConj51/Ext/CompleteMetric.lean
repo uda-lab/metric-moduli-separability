@@ -30,9 +30,14 @@
 -- identity `Ψ⁻¹(Comp(Z)) = [0,1] ∖ S`, and **not** by intersecting with the
 -- component, which is itself non-Borel.
 --
--- The three completeness ingredients (normalised base, coding metrics,
--- amalgam) are in `Ext/Completeness.lean`; the component/amalgamation
--- machinery is `Ext/Component.lean` and `Ext/Amalgam.lean`, reused unchanged.
+-- The three completeness facts (normalised base is complete, coding metrics
+-- are complete, the amalgam of complete pieces is complete) are proved in
+-- `Ext/Completeness.lean`, imported below — the normalised base's
+-- *definition*, compatibility and distance bound now live in
+-- `Ext/Component.lean` instead (see that file's header); only its
+-- completeness is proved in `Ext/Completeness.lean`.  The
+-- component/amalgamation machinery is `Ext/Component.lean` and
+-- `Ext/Amalgam.lean`, reused unchanged.
 --
 -- Status: sorry-free; no custom axioms.
 
@@ -155,9 +160,12 @@ end CompleteComponentSetup
 
 /-! ## Normalising an arbitrary representative (audit §2.11) -/
 
-/-- **The repair, as a construction.**  Every component of `Met(Z)` on a
-carrier of cardinality at least `ℵ₁` is the component of a *complete*
-compatible metric, and carries the whole Theorem 3.4 setup over that metric.
+/-- **The repair, as a construction** (carries the same Lean-only `≥ ℵ₁`
+generalisation as `exists_componentSetup`, not an audited change to the
+published Theorem 3.8 — see this file's header and Theorem 3.8's docstrings
+below).  Every component of `Met(Z)` on a carrier of cardinality at least
+`ℵ₁` is the component of a *complete* compatible metric, and carries the
+whole Theorem 3.4 setup over that metric.
 
 This reuses `Ext/Component.lean`'s shared `exists_componentSetup` (the "share
 the construction" step of the v2 ruling): that lemma already builds the
@@ -217,9 +225,10 @@ theorem componentSet_inter_comp_not_measurableSet (hZ : aleph 1 ≤ #Z)
   rw [CPM.componentSet_mk]
   exact component_inter_comp_not_measurableSet hZ d.1 d.2
 
-/-- **Theorem 3.8, the "consequently" part.**  For a discrete carrier `Z` with
-`|Z| ≥ ℵ₁`, the complete compatible metrics `Comp(Z)` are not Borel in
-`CPM(Z)`.
+/-- **Theorem 3.8, the "consequently" part** (same `|Z| ≥ ℵ₁` Lean-only
+generalisation as the two theorems above — the *published* statement is for
+`|Z| = ℵ₁`).  For a discrete carrier `Z` with `|Z| ≥ ℵ₁`, the complete
+compatible metrics `Comp(Z)` are not Borel in `CPM(Z)`.
 
 Audit §2.11: this does *not* follow by intersecting with a component, which is
 itself non-Borel.  It follows from the trace identity

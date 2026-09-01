@@ -1089,7 +1089,15 @@ E1 and E3 both stay external and are discharged nowhere in the repository.
 ### 7.4 Theorem 3.4 — component non-Borelness
 
 Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
-`Ext/Component.lean`, which is the theorem.
+`Ext/Component.lean`, which is the theorem and — moved up from
+`Ext/Completeness.lean`, which `Ext/Component.lean` does not import — also
+now `addOneOffDiag`'s definition and elementary properties: the ComponentSetup
+bundle needs its metric axioms and compatibility to populate the base-metric
+fields, and its distance bound to show the normalised base represents the
+same component as `d`; the v2 selection step specifically needs only the
+uniform off-diagonal separation, `one_le_addOneOffDiag` (see the
+normalisation bullet below and §7.5, whose file keeps only the one property
+that still needs the completeness machinery).
 
 * **One-point amalgamation.** `amalgam E z hz d e` glues a metric `e` on
   `E ⊆ Z` to a metric `d` on `Z` along a common point `z ∈ E`, routing cross
@@ -1127,6 +1135,16 @@ Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
   recorded as `isCompact_range_psi` and `range_inter_component`
   (`L' ∩ 𝔠 = Ψ([0,1] ∖ S)`), while the obstruction itself runs on the
   pullback identity, exactly as in §7.1 item 2.
+* **The normalisation `d' := addOneOffDiag d`.** `addOneOffDiag` is `d'`'s
+  definition (`addOneOffDiag_of_ne` its off-diagonal evaluation lemma);
+  `one_le_addOneOffDiag`, `isMetricOn_addOneOffDiag`,
+  `topology_addOneOffDiag_eq_bot` and `abs_addOneOffDiag_sub_le` are its
+  uniform `≥ 1` off-diagonal separation, its metric axioms, its
+  compatibility, and its `≤ 1` supremum-distance bound from `d`
+  respectively — all in this file. `isCompleteMetricOn_addOneOffDiag`, the
+  one additional property Theorem 3.8 needs, stays in `Ext/Completeness.lean`
+  (§7.5): it needs the completeness machinery, which this file does not
+  import.
 * **The shared construction (v2).** `exists_componentSetup` builds the
   bundle over the *normalised* base `addOneOffDiag d`, not the raw `d` — §2.7's
   v2 entry records why an arbitrary `ℵ₁`-subset of the raw ball is not
@@ -1157,7 +1175,10 @@ lemmas named above.
 Two files: `Ext/Completeness.lean`, which is completeness for the bare
 metrics of this track together with the two `Comp` loci, and
 `Ext/CompleteMetric.lean`, which is the two theorems. The component and
-amalgamation machinery of §7.4 is consumed unchanged.
+amalgamation machinery of §7.4 is consumed unchanged — including, since the
+v2 change, `d' := addOneOffDiag d`'s definition and elementary properties,
+which now live in `Ext/Component.lean` (§7.4) rather than in either file of
+this section.
 
 * **What completeness means here.** Metrics on this track are bare functions
   satisfying `IsMetricOn`, so completeness is stated the same way:
@@ -1169,11 +1190,15 @@ amalgamation machinery of §7.4 is consumed unchanged.
   ambient. `CPMOn.preimage_equivCPM_comp` and `CPMOn.preimage_CompOn_comap`
   carry the locus across the two moves of the E1 bridge (§7.2), as their
   `Met` and `BMet` counterparts do.
-* **The §2.11 repair, in three lemmas.** `addOneOffDiag d` is `d' := d + 1`
-  off the diagonal; `isMetricOn_addOneOffDiag`,
-  `topology_addOneOffDiag_eq_bot`, `isCompleteMetricOn_addOneOffDiag` and
-  `abs_addOneOffDiag_sub_le` are the four properties the repair needs, the
-  last one being what puts `d'` in the component of `d`.
+* **The §2.11 repair's completeness half.** The repair needs four properties
+  of `d' := addOneOffDiag d` (`d + 1` off the diagonal): its metric axioms
+  (`isMetricOn_addOneOffDiag`), its compatibility
+  (`topology_addOneOffDiag_eq_bot`), its `≤ 1` supremum-distance bound from
+  `d` (`abs_addOneOffDiag_sub_le` — what puts `d'` in the component of `d`),
+  and its completeness (`isCompleteMetricOn_addOneOffDiag`). The first three
+  are proved in `Ext/Component.lean` (§7.4's normalisation bullet), needed
+  there for the v2 selection step; only completeness is proved in this file,
+  by the uniform-separation criterion (`isCompleteMetricOn_of_uniformly_separated`).
   `isCompleteMetricOn_dExt` is the half of the printed proof that survives
   the audit: the coding metrics are complete for `t ∉ S`, cross-block
   distances confining a Cauchy sequence to one star and `|t − a| > 0` making
