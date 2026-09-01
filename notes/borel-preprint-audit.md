@@ -28,7 +28,7 @@
 | 3.1 | `lem:metric-coding` | bounded star coding `d_t`, compatibility iff `t ∉ S` | A | **PASS** |
 | 3.2 | `lem:closed-parameter-embedding` | `Φ` bi-Lipschitz, `Φ([0,1]∖S)` closed in `Met(Z)` | A | **PASS** |
 | 3.3 | `thm:bounded-discrete-nonborel` | `BMet(Z)` non-Borel in `CPM(Z)` | A | **PASS** |
-| 3.4 | `thm:metric-component-nonborel` | every component of `Met(Z)` non-Borel | A | **PASS** |
+| 3.4 | `thm:metric-component-nonborel` | every component of `Met(Z)` non-Borel (v2: `\|Z\| ≥ ℵ₁`) | A | **PASS** |
 | 3.5 | `thm:borel-separability` | `Met(X)` Borel ⇒ `X` separable | A | **PASS + EXTERNAL** (Thm 1.1) |
 | 3.6 | `cor:metric-space-complete-separability` | `Met(X)` completely metrizable ⇒ separable | A | **PASS + EXTERNAL** (Alexandrov) |
 | 3.7 | `cor:bounded-metric-complete-sigma-compact` | `BMet(X)` compl. metrizable ⟺ `X` σ-compact | A | **FIX + EXTERNAL** (Koshino; Thm 1.1(3)) |
@@ -296,6 +296,30 @@ Two steps are implicit but immediate; recorded for the Lean layer:
 bounded (`e_t ≤ 4`, `d ≤ 2h`), cross terms differ from `d` by at most
 `4 + h`, outside they agree; (ii) `m_t ∈ 𝔠 ⟺ t ∉ S` for the trace identity
 (membership in `Met(Z)` is the only condition, by (i)). ✓
+
+**v2 (2026-08-27 source): `|Z| ≥ ℵ₁`.** A strengthening, not a repair — the
+verdict and proof check above stand unchanged for `|Z| = ℵ₁` and extend
+verbatim. Fix `d ∈ 𝔠`, `z ∈ Z`; since `Z = ⋃ n : ℕ, {x | d(z,x) ≤ n}`, if
+every integer-radius ball were countable then `Z` would be countable, so some
+ball is uncountable, hence (minimality of `ℵ₁`) has cardinality at least
+`ℵ₁`; choose a sub-`ℵ₁`-sized subset `E` containing `z`, and run the rest of
+the construction on `E` exactly as above.
+
+One subtlety the exact-cardinality form hides, load-bearing for the Lean
+layer: `ComponentSetup.hout` needs `1 ≤ d(z,x)` for *every* `x ∉ E`, and an
+`ℵ₁`-sized subset of the *raw* ball chosen without regard to that condition
+need not satisfy it — take `d ≡ 1/2` off the diagonal on a carrier of size
+`ℵ₂` (compatible with the discrete topology); the set `{x : d(z,x) < 1}` can
+then have cardinality above `ℵ₁`, so an arbitrary `ℵ₁`-subset of the ball can
+miss points that need to stay inside `E`. The fix is to run the construction
+over the normalised base `d' := addOneOffDiag d` (§2.11's repair for Theorem
+3.8) instead of the raw `d`: `d'` is at least `1` off the diagonal
+unconditionally, so *any* `ℵ₁`-subset `E ∋ z` of `d'`'s ball satisfies `hout`,
+independent of how `E` was chosen. Lean: `IshikiExt.exists_componentSetup`
+(the shared construction, reused by the Theorem 3.8 branch of §2.11/§7.5),
+`IshikiExt.exists_aleph1_ball` (the uncountable-ball step, kept syntactically
+separate from `IshikiExt.exists_aleph1_subset`, the `ℵ₁`-selection step, per
+the v2 acceptance criteria).
 
 ### 2.8 Theorem 3.5 (`thm:borel-separability`) — PASS + EXTERNAL
 
@@ -1080,12 +1104,14 @@ Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
   `CPM.componentSet` carry the quotient `𝐌_{<∞}(Z)` itself, so that "every
   component" can be quantified over the quotient rather than over
   representatives.
-* **The `ℵ₁`-sized ball.** `exists_aleph1_ball`: the closed balls of integer
-  radius around any centre exhaust the carrier, so one of them is
-  uncountable, and it has cardinality at most that of the carrier. The
+* **The `ℵ₁`-sized ball (v2: `aleph 1 ≤ #Z`).** `exists_aleph1_ball`: the
+  closed balls of integer radius around any centre exhaust the carrier, so
+  one of them is uncountable, hence has cardinality *at least* `ℵ₁`. The
   radius is returned `≥ 1`, which is the form the gap hypothesis needs.
   Regularity of `ℵ₁` is not invoked; "a countable union of countable sets is
-  countable" is all the argument uses.
+  countable" is all the argument uses. The `ℵ₁`-sized subset is then chosen
+  separately by `exists_aleph1_subset`, kept as its own lemma per the v2
+  acceptance criteria (§2.7's v2 entry).
 * **The bundle.** `ComponentSetup Z` collects §2.7's data: a base metric
   with its compatibility, a subset `E` with `E ⊆ B_d(z,H)` and `d(z,·) ≥ 1`
   off `E`, and a relabelling `θ : ↥E ≃ ExtIndex S` carrying `z` to the
@@ -1095,12 +1121,19 @@ Two files: `Ext/Amalgam.lean`, which is carrier-agnostic machinery, and
   recorded as `isCompact_range_psi` and `range_inter_component`
   (`L' ∩ 𝔠 = Ψ([0,1] ∖ S)`), while the obstruction itself runs on the
   pullback identity, exactly as in §7.1 item 2.
+* **The shared construction (v2).** `exists_componentSetup` builds the
+  bundle over the *normalised* base `addOneOffDiag d`, not the raw `d` — §2.7's
+  v2 entry records why an arbitrary `ℵ₁`-subset of the raw ball is not
+  admissible. It is consumed both by `component_not_measurableSet` below and
+  by `Ext/CompleteMetric.lean`'s `exists_completeComponentSetup` (§7.5), which
+  extends its witness with the extra completeness field rather than
+  reconstructing the ball/selection/relabelling.
 * **The theorems.** `component_not_measurableSet` — for every `d ∈ Met(Z)`,
   its component is not Borel in `CPM(Z)` — and
   `componentSet_not_measurableSet`, the same statement quantified over
-  `𝔠 ∈ 𝐌_{<∞}(Z)`. Both are stated for an arbitrary carrier with `#Z = ℵ₁`
-  and carry no residual hypothesis on a parameter set. The relabelling
-  consumed is the bijection of the ball with the coded carrier
+  `𝔠 ∈ 𝐌_{<∞}(Z)`. Both are stated for an arbitrary carrier with
+  `aleph 1 ≤ #Z` and carry no residual hypothesis on a parameter set. The
+  relabelling consumed is the bijection of the ball with the coded carrier
   (`isMetricOn_comap`, `topology_comap_eq_bot` of `Ext/Relabel.lean`); the
   construction never leaves `Z`, so no `CPM`-level transfer isometry enters.
 
@@ -1149,9 +1182,14 @@ amalgamation machinery of §7.4 is consumed unchanged.
   representative, `componentSet_inter_comp_not_measurableSet` for
   `𝔠 ∈ 𝐌_{<∞}(Z)`, and `comp_not_measurableSet` for the component-free
   consequence. `exists_completeComponentSetup` is the normalisation: every
-  component is the component of a complete compatible metric, over which the
-  §2.7 setup is rebuilt. `nonempty_component_inter_comp` records that
-  `𝔠 ∩ Comp(Z)` is nonempty, which is what §2.12 uses.
+  component is the component of a complete compatible metric, obtained by
+  extending the witness of `exists_componentSetup` (§7.4, v2) with the
+  completeness field, rather than rebuilding the §2.7 setup separately.
+  `nonempty_component_inter_comp` records that `𝔠 ∩ Comp(Z)` is nonempty,
+  which is what §2.12 uses. All four theorems of this bullet carry the same
+  `aleph 1 ≤ #Z` generalisation as §7.4's, forced by the shared construction's
+  signature — the source's own statement of Theorem 3.8 is not itself under
+  audit here (§2.11 records that separately).
 * **Trace, not intersection.** The `Comp(Z)` consequence runs on
   `preimage_Comp_psi` (`Ψ⁻¹(Comp(Z)) = [0,1] ∖ S`), with `range_inter_Comp`
   recording the compact-witness form `L' ∩ Comp(Z) = Ψ([0,1] ∖ S)`. No
