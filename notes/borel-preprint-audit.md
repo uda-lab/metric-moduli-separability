@@ -24,7 +24,7 @@
 | # | label | statement (short) | track | verdict |
 |---|-------|-------------------|-------|---------|
 | 2.1 | `prop:dense-aleph1-nonborel-interval` | dense non-Borel `S ⊆ [0,1]`, `\|S\| = ℵ₁` | shared | **PASS** |
-| 2.2 | `prop:dense-aleph1-nonborel-cantor` | same in `2^ω` | NA | **FIX** (density transfer) |
+| 2.2 | `prop:dense-aleph1-nonborel-cantor` | same in `2^ω` (v2: bi-dense) | NA | **FIX** (density transfer) |
 | 3.1 | `lem:metric-coding` | bounded star coding `d_t`, compatibility iff `t ∉ S` | A | **PASS** |
 | 3.2 | `lem:closed-parameter-embedding` | `Φ` bi-Lipschitz, `Φ([0,1]∖S)` closed in `Met(Z)` | A | **PASS** |
 | 3.3 | `thm:bounded-discrete-nonborel` | `BMet(Z)` non-Borel in `CPM(Z)` | A | **PASS** |
@@ -196,10 +196,32 @@ Proposition 2.2 and is inherited verbatim.)
 Statement true in ZFC; the citation for the Borel isomorphism (Kechris,
 Theorem 15.6, currently uncited) should be added if route 1 is kept.
 
-**Lean** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`.
-The non-Borel `T` comes from route 2's dichotomy run directly in `2^ω` (no
-Bernstein set is needed in Lean, as in §7.1 item 1) and density from route 1's
-`S = T ∪ Q₀`; the Borel isomorphism of the printed proof is not used.
+**Lean, historical v1 route** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`
+was originally proved directly, with the non-Borel `T` from route 2's
+dichotomy run in `2^ω` (no Bernstein set needed in Lean, as in §7.1 item 1)
+and density from route 1's `S = T ∪ Q₀`; the Borel isomorphism of the
+printed proof was not used. Superseded by the v2 addendum below: the
+declaration now survives only as a corollary of the stronger v2 theorem, and
+no Lean code still builds `T ∪ Q₀`.
+
+**v2 addendum.** The 2026-08-27 source incorporates the repair above and
+further strengthens the statement to *bi*-density: `S ⊆ 2^ω` with `|S| = ℵ₁`,
+`S` dense, `2^ω ∖ S` dense, and `S` non-Borel. It chooses disjoint countable
+dense `P, Q ⊆ 2^ω`, a Borel isomorphism `[0,1] → 2^ω ∖ P`, and sets
+`S = f(S₀) ∪ Q`, so `P ⊆ Sᶜ` witnesses co-density. The Borel isomorphism is
+used only for Borel structure and cardinality, not to transport density, so
+this is not a repair of a false result — the v1 statement above was already
+correct, only weaker. The strengthening matters because the v2 development
+uses `G = 2^ω ∖ S` as a *dense* parameter domain for an isometry extended
+uniquely over the whole compact Cantor space.
+
+**Lean** (`Ext/CantorUltra.lean`): `exists_bidense_aleph1_nonBorel_cantor`,
+subtype-free. With `T` as above and `P`, `Q` the explicit disjoint countable
+dense pair of sequences eventually `false`, resp. eventually `true`,
+`S := (T ∖ P) ∪ Q`; co-density is `P ⊆ Sᶜ` directly from `T ∖ P` excluding
+`P` and `P`, `Q` disjoint, avoiding the source's Borel isomorphism
+altogether. `exists_dense_aleph1_nonBorel_cantor` is now an immediate
+corollary of this stronger statement.
 
 ### 2.3 Setup before Lemma 3.1
 
@@ -1244,14 +1266,16 @@ Four files.
    (pullback along any map) and `UCPM.sup` (pointwise maximum) are what the
    coding and the amalgam are built from. Mathlib has none of this: the
    library gap is recorded in the file header.
-2. `Ext/CantorUltra.lean` — Proposition 2.2 with its §2.2 repair, and the
-   `R`-valued Cantor ultrametric `cantorDist`. The CH/¬CH dichotomy is
-   stated once for an arbitrary standard Borel space of cardinality `𝔠`
-   whose Borel σ-algebra has at most `𝔠` members
-   (`exists_aleph1_nonMeasurable`), then run in `2^ω`; density is then
-   supplied by the audit's densification `S = T ∪ Q₀`. `cantorDist_lt_iff`
-   identifies the `h`-balls with cylinders, which is the only bridge used
-   between `h` and the product topology.
+2. `Ext/CantorUltra.lean` — Proposition 2.2, both the v1 repair and the v2
+   bi-density addendum, and the `R`-valued Cantor ultrametric `cantorDist`.
+   The CH/¬CH dichotomy is stated once for an arbitrary standard Borel
+   space of cardinality `𝔠` whose Borel σ-algebra has at most `𝔠` members
+   (`exists_aleph1_nonMeasurable`), then run in `2^ω`; `S := (T ∖ P) ∪ Q`
+   for the explicit disjoint countable dense pair `P`, `Q` supplies both
+   density and co-density (`exists_bidense_aleph1_nonBorel_cantor`), with
+   the v1 `exists_dense_aleph1_nonBorel_cantor` an immediate corollary.
+   `cantorDist_lt_iff` identifies the `h`-balls with cylinders, which is the
+   only bridge used between `h` and the product topology.
 3. `Ext/UltraCoding.lean` — Lemma 3.10 (`dU_isUltraPMetOn`, `dU_le_head`,
    `isCompatible_phiU_iff`, `dU_completeSpace`), Lemma 3.11 (`edist_phiU`,
    `isClosed_image_phiU`) and Theorem 3.12 (`umet_not_borel`,
