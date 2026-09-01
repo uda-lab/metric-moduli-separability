@@ -298,25 +298,31 @@ bounded (`e_t ≤ 4`, `d ≤ 2h`), cross terms differ from `d` by at most
 (membership in `Met(Z)` is the only condition, by (i)). ✓
 
 **v2 (2026-08-27 source): `|Z| ≥ ℵ₁`.** A strengthening, not a repair — the
-verdict and proof check above stand unchanged for `|Z| = ℵ₁` and extend
-verbatim. Fix `d ∈ 𝔠`, `z ∈ Z`; since `Z = ⋃ n : ℕ, {x | d(z,x) ≤ n}`, if
-every integer-radius ball were countable then `Z` would be countable, so some
-ball is uncountable, hence (minimality of `ℵ₁`) has cardinality at least
-`ℵ₁`; choose a sub-`ℵ₁`-sized subset `E` containing `z`, and run the rest of
-the construction on `E` exactly as above.
+verdict above stands. Fix `d ∈ 𝔠`, `z ∈ Z`; since
+`Z = ⋃ n : ℕ, {x | d(z,x) ≤ n}`, if every integer-radius ball were countable
+then `Z` would be countable, so some ball is uncountable, hence (minimality
+of `ℵ₁`) has cardinality at least `ℵ₁`. This much extends the `|Z| = ℵ₁`
+proof check verbatim: that proof derives the same "cardinality at least
+`ℵ₁`" first, then gets equality for free from `E ⊆ Z` and `|Z| = ℵ₁`, an
+inclusion no longer available once `|Z|` is only bounded below. What does
+**not** extend verbatim is the next step, choosing the `ℵ₁`-sized coding
+subset `E ∋ z`.
 
-One subtlety the exact-cardinality form hides, load-bearing for the Lean
-layer: `ComponentSetup.hout` needs `1 ≤ d(z,x)` for *every* `x ∉ E`, and an
+`ComponentSetup.hout` needs `1 ≤ d(z,x)` for *every* `x ∉ E`, and an
 `ℵ₁`-sized subset of the *raw* ball chosen without regard to that condition
 need not satisfy it — take `d ≡ 1/2` off the diagonal on a carrier of size
 `ℵ₂` (compatible with the discrete topology); the set `{x : d(z,x) < 1}` can
 then have cardinality above `ℵ₁`, so an arbitrary `ℵ₁`-subset of the ball can
-miss points that need to stay inside `E`. The fix is to run the construction
-over the normalised base `d' := addOneOffDiag d` (§2.11's repair for Theorem
-3.8) instead of the raw `d`: `d'` is at least `1` off the diagonal
-unconditionally, so *any* `ℵ₁`-subset `E ∋ z` of `d'`'s ball satisfies `hout`,
-independent of how `E` was chosen. Lean: `IshikiExt.exists_componentSetup`
-(the shared construction, reused by the Theorem 3.8 branch of §2.11/§7.5),
+miss points that need to stay inside `E`. So `E` cannot simply be selected
+from the raw ball and fed into the original construction as-is: the fix is
+to run the *whole* construction over the normalised base `d' := addOneOffDiag
+d` (§2.11's repair for Theorem 3.8) instead of the raw `d`, choosing `E` from
+`d'`'s ball — `d'` is at least `1` off the diagonal unconditionally, so *any*
+`ℵ₁`-subset `E ∋ z` of `d'`'s ball satisfies `hout`, independent of how `E`
+was chosen. `d'` represents the same component as `d` (audit §2.11), so the
+non-Borelness obstruction transfers back to `d`'s own component. Lean:
+`IshikiExt.exists_componentSetup` (the shared construction, reused by the
+Theorem 3.8 branch of §2.11/§7.5),
 `IshikiExt.exists_aleph1_ball` (the uncountable-ball step, kept syntactically
 separate from `IshikiExt.exists_aleph1_subset`, the `ℵ₁`-selection step, per
 the v2 acceptance criteria).
