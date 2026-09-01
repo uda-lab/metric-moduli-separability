@@ -183,10 +183,13 @@ theorem exists_completeComponentSetup (hZ : aleph 1 ≤ #Z) (d : CPM Z)
 /-! ## Theorem 3.8 -/
 
 /-- **Theorem 3.8** (audit §2.11), in the form "every representative
-determines a component whose complete part is non-Borel".  For a discrete
-carrier `Z` with `|Z| ≥ ℵ₁` and any `d ∈ Met(Z)`, the complete compatible
-metrics at finite supremum distance from `d` do not form a Borel subset of
-`CPM(Z)`.
+determines a component whose complete part is non-Borel", carrying the same
+`|Z| ≥ ℵ₁` generalisation as Theorem 3.4 v2 (audit §7.5): the *published*
+Theorem 3.8 is for `|Z| = ℵ₁`, and the `≥` form here is a Lean-only
+consequence of sharing `exists_componentSetup`'s construction, not an
+audited v2 change to the source statement.  For a discrete carrier `Z` with
+`|Z| ≥ ℵ₁` and any `d ∈ Met(Z)`, the complete compatible metrics at finite
+supremum distance from `d` do not form a Borel subset of `CPM(Z)`.
 
 The base metric of the construction is not `d` but its normalisation
 `addOneOffDiag d` (audit §2.11), which represents the same component; the
@@ -197,8 +200,12 @@ theorem component_inter_comp_not_measurableSet (hZ : aleph 1 ≤ #Z) (d : CPM Z)
   rw [← hbase]
   exact c.not_measurableSet_component_inter_Comp hSnonmeas
 
-/-- **Theorem 3.8, literally.**  For a discrete carrier `Z` with `|Z| ≥ ℵ₁`,
-*every* component `𝔠 ∈ 𝐌_{<∞}(Z)` has `𝔠 ∩ Comp(Z)` non-Borel in `CPM(Z)`. -/
+/-- **Theorem 3.8, quantified over every component** (Lean generalisation to
+`|Z| ≥ ℵ₁`, forced by sharing `exists_componentSetup` with Theorem 3.4 v2 —
+see `notes/borel-preprint-audit.md` §7.5; the *published* Theorem 3.8 is
+stated for `|Z| = ℵ₁`, and this file does not audit a v2 change to it).  For a
+discrete carrier `Z` with `|Z| ≥ ℵ₁`, *every* component `𝔠 ∈ 𝐌_{<∞}(Z)` has
+`𝔠 ∩ Comp(Z)` non-Borel in `CPM(Z)`. -/
 theorem componentSet_inter_comp_not_measurableSet (hZ : aleph 1 ≤ #Z)
     (comp : CPM.Components Z) :
     ¬ MeasurableSet (CPM.componentSet comp ∩ CPM.Comp Z) := by
