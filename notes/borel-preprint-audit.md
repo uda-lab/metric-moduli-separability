@@ -196,10 +196,13 @@ Proposition 2.2 and is inherited verbatim.)
 Statement true in ZFC; the citation for the Borel isomorphism (Kechris,
 Theorem 15.6, currently uncited) should be added if route 1 is kept.
 
-**Lean** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`.
-The non-Borel `T` comes from route 2's dichotomy run directly in `2^ω` (no
-Bernstein set is needed in Lean, as in §7.1 item 1) and density from route 1's
-`S = T ∪ Q₀`; the Borel isomorphism of the printed proof is not used.
+**Lean, historical v1 route** (`Ext/CantorUltra.lean`): `exists_dense_aleph1_nonBorel_cantor`
+was originally proved directly, with the non-Borel `T` from route 2's
+dichotomy run in `2^ω` (no Bernstein set needed in Lean, as in §7.1 item 1)
+and density from route 1's `S = T ∪ Q₀`; the Borel isomorphism of the
+printed proof was not used. Superseded by the v2 addendum below: the
+declaration now survives only as a corollary of the stronger v2 theorem, and
+no Lean code still builds `T ∪ Q₀`.
 
 **v2 addendum.** The 2026-08-27 source incorporates the repair above and
 further strengthens the statement to *bi*-density: `S ⊆ 2^ω` with `|S| = ℵ₁`,
