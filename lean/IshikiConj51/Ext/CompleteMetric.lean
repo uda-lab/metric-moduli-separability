@@ -4,7 +4,11 @@
 -- the complete-metric branch.  For a discrete `Z` with `|Z| = ℵ₁` every
 -- component of `Met(Z)` meets `Comp(Z)` in a non-Borel set, hence `Comp(Z)`
 -- itself is non-Borel; and for a completely metrizable `X`, Borelness of
--- `Comp(X)` in `CPM(X)` forces `X` to be separable.
+-- `Comp(X)` in `CPM(X)` forces `X` to be separable.  The Theorem 3.8 lemmas
+-- below are stated for `|Z| ≥ ℵ₁`, but that `≥` is *not* an audited v2 change
+-- to the published Theorem 3.8 — it is a Lean-only consequence of sharing
+-- `exists_componentSetup` with Theorem 3.4 v2 (`Ext/Component.lean`); see
+-- audit §7.5.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.11
 -- (Theorem 3.8, verdict FIX, with the repair formalised here), §2.12
@@ -152,73 +156,61 @@ end CompleteComponentSetup
 /-! ## Normalising an arbitrary representative (audit §2.11) -/
 
 /-- **The repair, as a construction.**  Every component of `Met(Z)` on a
-carrier of cardinality `ℵ₁` is the component of a *complete* compatible
-metric, and carries the whole Theorem 3.4 setup over that metric.
+carrier of cardinality at least `ℵ₁` is the component of a *complete*
+compatible metric, and carries the whole Theorem 3.4 setup over that metric.
 
-The base is `addOneOffDiag d`, audit §2.11's `d' := d + 1` off the diagonal;
-it is compatible, complete, and within supremum distance `1` of `d`, so it
-represents the same component.  Everything else is the Theorem 3.4
-construction of `Ext/Component.lean` run over `d'` instead of `d`: an
-uncountable closed `d'`-ball around a point, and a relabelling of it onto the
-coded carrier sending the centre to the coding's anchor. -/
-theorem exists_completeComponentSetup (hZ : #Z = aleph 1) (d : CPM Z)
+This reuses `Ext/Component.lean`'s shared `exists_componentSetup` (the "share
+the construction" step of the v2 ruling): that lemma already builds the
+`ComponentSetup` over the normalised base `addOneOffDiag d`, so the only work
+here is adding the completeness field, via the equality `c.d = addOneOffDiag
+d.1` that `exists_componentSetup` exposes for exactly this purpose. -/
+theorem exists_completeComponentSetup (hZ : aleph 1 ≤ #Z) (d : CPM Z)
     (hd : d ∈ CPM.Met Z) :
     ∃ c : CompleteComponentSetup Z,
       ¬ MeasurableSet c.S ∧ CPM.component c.base = CPM.component d := by
-  obtain ⟨hdm, -⟩ := hd
-  have hpos : (0 : Cardinal) < #Z := by
-    rw [hZ]
-    exact lt_of_lt_of_le Cardinal.aleph0_pos (aleph0_le_aleph 1)
-  obtain ⟨z⟩ : Nonempty Z := Cardinal.mk_ne_zero_iff.mp hpos.ne'
-  obtain ⟨H, hH1, hHcard⟩ := exists_aleph1_ball hZ (addOneOffDiag d.1) z
-  have hzE : z ∈ {x : Z | addOneOffDiag d.1 z x ≤ H} := by
-    show addOneOffDiag d.1 z z ≤ H
-    rw [addOneOffDiag_self]
-    linarith
-  obtain ⟨S, hSsub, -, hSnonmeas, ⟨σ⟩⟩ := exists_equiv_extIndex_of_card hHcard
-  refine ⟨{ S := S
-            hS := hSsub
-            d := addOneOffDiag d.1
-            hd := isMetricOn_addOneOffDiag hdm
-            hdbot := topology_addOneOffDiag_eq_bot hdm
-            E := {x : Z | addOneOffDiag d.1 z x ≤ H}
-            z := z
-            hz := hzE
-            H := H
-            hE := fun _ hx => hx
-            hout := fun x hx => by
-              have hgt : H < addOneOffDiag d.1 z x := not_le.mp hx
-              linarith
-            θ := σ.trans (Equiv.swap (σ ⟨z, hzE⟩) (Sum.inl true))
-            hθz := by simp
-            hdcomplete := isCompleteMetricOn_addOneOffDiag hdm }, hSnonmeas, ?_⟩
-  refine CPM.component_eq_of_mem ⟨⟨isMetricOn_addOneOffDiag hdm,
-    topology_addOneOffDiag_eq_bot hdm⟩, ?_⟩
-  refine lt_of_le_of_lt (CPM.edist_le_ofReal (c := (1 : ℝ)) fun x y => ?_)
-    ENNReal.ofReal_lt_top
-  rw [abs_sub_comm]
-  exact abs_addOneOffDiag_sub_le hdm x y
+  obtain ⟨c, hcd, hSnonmeas, hbase⟩ := exists_componentSetup hZ d hd
+  refine ⟨{ S := c.S
+            hS := c.hS
+            d := c.d
+            hd := c.hd
+            hdbot := c.hdbot
+            E := c.E
+            z := c.z
+            hz := c.hz
+            H := c.H
+            hE := c.hE
+            hout := c.hout
+            θ := c.θ
+            hθz := c.hθz
+            hdcomplete := hcd ▸ isCompleteMetricOn_addOneOffDiag hd.1 }, hSnonmeas, hbase⟩
 
 /-! ## Theorem 3.8 -/
 
 /-- **Theorem 3.8** (audit §2.11), in the form "every representative
-determines a component whose complete part is non-Borel".  For a discrete
-carrier `Z` with `|Z| = ℵ₁` and any `d ∈ Met(Z)`, the complete compatible
-metrics at finite supremum distance from `d` do not form a Borel subset of
-`CPM(Z)`.
+determines a component whose complete part is non-Borel", carrying the same
+`|Z| ≥ ℵ₁` generalisation as Theorem 3.4 v2 (audit §7.5): the *published*
+Theorem 3.8 is for `|Z| = ℵ₁`, and the `≥` form here is a Lean-only
+consequence of sharing `exists_componentSetup`'s construction, not an
+audited v2 change to the source statement.  For a discrete carrier `Z` with
+`|Z| ≥ ℵ₁` and any `d ∈ Met(Z)`, the complete compatible metrics at finite
+supremum distance from `d` do not form a Borel subset of `CPM(Z)`.
 
 The base metric of the construction is not `d` but its normalisation
 `addOneOffDiag d` (audit §2.11), which represents the same component; the
 printed proof's use of an arbitrary base is the step the audit rejects. -/
-theorem component_inter_comp_not_measurableSet (hZ : #Z = aleph 1) (d : CPM Z)
+theorem component_inter_comp_not_measurableSet (hZ : aleph 1 ≤ #Z) (d : CPM Z)
     (hd : d ∈ CPM.Met Z) : ¬ MeasurableSet (CPM.component d ∩ CPM.Comp Z) := by
   obtain ⟨c, hSnonmeas, hbase⟩ := exists_completeComponentSetup hZ d hd
   rw [← hbase]
   exact c.not_measurableSet_component_inter_Comp hSnonmeas
 
-/-- **Theorem 3.8, literally.**  For a discrete carrier `Z` with `|Z| = ℵ₁`,
-*every* component `𝔠 ∈ 𝐌_{<∞}(Z)` has `𝔠 ∩ Comp(Z)` non-Borel in `CPM(Z)`. -/
-theorem componentSet_inter_comp_not_measurableSet (hZ : #Z = aleph 1)
+/-- **Theorem 3.8, quantified over every component** (Lean generalisation to
+`|Z| ≥ ℵ₁`, forced by sharing `exists_componentSetup` with Theorem 3.4 v2 —
+see `notes/borel-preprint-audit.md` §7.5; the *published* Theorem 3.8 is
+stated for `|Z| = ℵ₁`, and this file does not audit a v2 change to it).  For a
+discrete carrier `Z` with `|Z| ≥ ℵ₁`, *every* component `𝔠 ∈ 𝐌_{<∞}(Z)` has
+`𝔠 ∩ Comp(Z)` non-Borel in `CPM(Z)`. -/
+theorem componentSet_inter_comp_not_measurableSet (hZ : aleph 1 ≤ #Z)
     (comp : CPM.Components Z) :
     ¬ MeasurableSet (CPM.componentSet comp ∩ CPM.Comp Z) := by
   refine Quotient.inductionOn comp fun d => ?_
@@ -226,7 +218,7 @@ theorem componentSet_inter_comp_not_measurableSet (hZ : #Z = aleph 1)
   exact component_inter_comp_not_measurableSet hZ d.1 d.2
 
 /-- **Theorem 3.8, the "consequently" part.**  For a discrete carrier `Z` with
-`|Z| = ℵ₁`, the complete compatible metrics `Comp(Z)` are not Borel in
+`|Z| ≥ ℵ₁`, the complete compatible metrics `Comp(Z)` are not Borel in
 `CPM(Z)`.
 
 Audit §2.11: this does *not* follow by intersecting with a component, which is
@@ -234,7 +226,7 @@ itself non-Borel.  It follows from the trace identity
 `Ψ⁻¹(Comp(Z)) = [0,1] ∖ S`, which is what `not_measurableSet_Comp` runs on;
 the component plays no role, and the setup is built over the `0/1` metric
 purely to have one. -/
-theorem comp_not_measurableSet (hZ : #Z = aleph 1) : ¬ MeasurableSet (CPM.Comp Z) := by
+theorem comp_not_measurableSet (hZ : aleph 1 ≤ #Z) : ¬ MeasurableSet (CPM.Comp Z) := by
   obtain ⟨c, hSnonmeas, -⟩ :=
     exists_completeComponentSetup hZ (CPM.discrete Z) (CPM.discrete_mem_Met Z)
   exact c.not_measurableSet_Comp hSnonmeas
@@ -242,7 +234,7 @@ theorem comp_not_measurableSet (hZ : #Z = aleph 1) : ¬ MeasurableSet (CPM.Comp 
 /-- Neither statement of Theorem 3.8 is vacuous: a non-Borel set is nonempty,
 so every component does meet `Comp(Z)` (audit §2.12 records this as part of
 3.8's conclusion, which is what Corollary 3.9 uses). -/
-theorem nonempty_component_inter_comp (hZ : #Z = aleph 1) (d : CPM Z)
+theorem nonempty_component_inter_comp (hZ : aleph 1 ≤ #Z) (d : CPM Z)
     (hd : d ∈ CPM.Met Z) : (CPM.component d ∩ CPM.Comp Z).Nonempty := by
   rw [Set.nonempty_iff_ne_empty]
   intro hempty
@@ -368,7 +360,7 @@ theorem IsIsometricExtensor.not_measurableSet_CPM_CompOn {X : Type*}
   have hpre : MeasurableSet (hE.toCPM ⁻¹' (hE.toCPM '' CPM.Comp (ExtIndex S))) :=
     hinter.preimage hE.isometry_toCPM.continuous.measurable
   rw [Set.preimage_image_eq _ hE.isometry_toCPM.injective] at hpre
-  exact comp_not_measurableSet (card_extIndex hScard) hpre
+  exact comp_not_measurableSet (card_extIndex hScard).ge hpre
 
 /-- **The `Comp` analogue of Theorem 3.5, conditional on E1.**  For a
 completely metrizable `X` admitting a closed discrete copy of the coded

@@ -1,8 +1,11 @@
 -- Ext.Component
 --
 -- Theorem 3.4 of the Borel preprint (arXiv:2608.19618,
--- `thm:metric-component-nonborel`): for a discrete `Z` with `|Z| = ℵ₁`, every
--- finite-sup-distance component of `Met(Z)` is non-Borel in `CPM(Z)`.
+-- `thm:metric-component-nonborel`): for a discrete `Z` with `|Z| ≥ ℵ₁`, every
+-- finite-sup-distance component of `Met(Z)` is non-Borel in `CPM(Z)`.  The
+-- `≥` form is the v2 (2026-08-27 source) statement; audit §2.7 records the
+-- v1 (`|Z| = ℵ₁`) verdict as still standing and this as a strengthening, not
+-- a repair.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.7, whose
 -- verdict is PASS and which records the two steps the preprint leaves
@@ -14,14 +17,20 @@
 -- the verified route to the separability theorem runs through `Met(Z)`
 -- itself.  Nothing in this file is consumed by `Ext/GeneralSeparability.lean`.
 --
--- The construction (audit §2.7).  Fix `d ∈ 𝔠` and `z ∈ Z`.  Some closed
--- `d`-ball `E` around `z` has `|E| = ℵ₁` (a countable union of countable balls
--- would exhaust `Z`).  Transfer the star coding of `Ext/BoundedCoding.lean` to
--- `E` along a bijection sending the coding's anchor `p` to `z`, and amalgamate
--- the result with `d` along `z` (`Ext/Amalgam.lean`).  The amalgamated family
--- `Ψ : [0,1] → CPM(Z)` is `2`-Lipschitz, has compact range, and satisfies the
--- exact pullback identity `Ψ⁻¹(𝔠) = [0,1] ∖ S`, so a Borel `𝔠` would make the
--- non-Borel parameter set `S` Borel.
+-- The construction (audit §2.7, v2).  Fix `d ∈ 𝔠` and `z ∈ Z`.  Some closed
+-- `d'`-ball around `z`, where `d' := addOneOffDiag d` (`d` shifted to be at
+-- least `1` off the diagonal, audit §2.11's normalisation), has cardinality
+-- at least `ℵ₁` (a countable union of countable balls would exhaust `Z`);
+-- select an `ℵ₁`-sized subset `E` of that ball containing `z` — the raw
+-- `d`-ball does *not* admit an arbitrary such subset, only the normalised
+-- one does (audit §2.7's v2 entry).  Transfer the star coding of
+-- `Ext/BoundedCoding.lean` to `E` along a bijection sending the coding's
+-- anchor `p` to `z`, and amalgamate the result with `d'` along `z`
+-- (`Ext/Amalgam.lean`).  The amalgamated family `Ψ : [0,1] → CPM(Z)` is
+-- `2`-Lipschitz, has compact range, and satisfies the exact pullback
+-- identity `Ψ⁻¹(𝔠) = [0,1] ∖ S`, so a Borel `𝔠` would make the non-Borel
+-- parameter set `S` Borel; `d'` represents the same component as `d`
+-- (audit §2.11), so the obstruction transfers back to `d`'s own component.
 --
 -- Component convention (audit §1): `d ∼ e` iff `𝒟_Z(d,e) < ∞`, the supremum
 -- distance being `[0,∞]`-valued.  `CPM.component` is the class of a member of
@@ -182,16 +191,17 @@ theorem CPM.nonempty_Components (Z : Type*) : Nonempty (CPM.Components Z) :=
 
 /-! ## An `ℵ₁`-sized closed ball -/
 
-/-- **The uncountable-ball step** (audit §2.7).  For a metric on a carrier of
-cardinality `ℵ₁` and any centre, some closed ball of radius at least `1` again
-has cardinality `ℵ₁`: the balls of integer radius exhaust the carrier, and a
-countable union of countable sets cannot.
+/-- **The uncountable-ball step** (audit §2.7, v2 generalisation — see the
+audit note's v2 entry on Theorem 3.4).  For a metric on a carrier of
+cardinality at least `ℵ₁` and any centre, some closed ball of radius at least
+`1` again has cardinality at least `ℵ₁`: the balls of integer radius exhaust
+the carrier, and a countable union of countable sets cannot reach `ℵ₁`.
 
 Only finiteness of the values of `d z ·` is used, so no metric hypothesis is
 imposed; the statement is about the sublevel sets of one real-valued
 function. -/
-theorem exists_aleph1_ball (hZ : #Z = aleph 1) (d : Z → Z → ℝ)
-    (z : Z) : ∃ H : ℝ, 1 ≤ H ∧ #(↥{x : Z | d z x ≤ H}) = aleph 1 := by
+theorem exists_aleph1_ball (hZ : aleph 1 ≤ #Z) (d : Z → Z → ℝ)
+    (z : Z) : ∃ H : ℝ, 1 ≤ H ∧ aleph 1 ≤ #(↥{x : Z | d z x ≤ H}) := by
   have hexists : ∃ n : ℕ, ¬ ({x : Z | d z x ≤ (n : ℝ)}).Countable := by
     by_contra hall
     push Not at hall
@@ -204,8 +214,8 @@ theorem exists_aleph1_ball (hZ : #Z = aleph 1) (d : Z → Z → ℝ)
       exact Set.countable_iUnion hall
     have hle : #(↥(Set.univ : Set Z)) ≤ Cardinal.aleph0 :=
       Cardinal.le_aleph0_iff_set_countable.mpr hcount
-    rw [Cardinal.mk_univ, hZ] at hle
-    exact absurd hle (not_le_of_gt Cardinal.aleph0_lt_aleph_one)
+    rw [Cardinal.mk_univ] at hle
+    exact absurd (hZ.trans hle) (not_le_of_gt Cardinal.aleph0_lt_aleph_one)
   obtain ⟨n, hn⟩ := hexists
   have hge : aleph 1 ≤ #(↥{x : Z | d z x ≤ (n : ℝ)}) := by
     refine Cardinal.aleph_one_le_iff.mpr ?_
@@ -216,9 +226,107 @@ theorem exists_aleph1_ball (hZ : #Z = aleph 1) (d : Z → Z → ℝ)
     intro x hx
     simp only [Set.mem_setOf_eq] at hx ⊢
     exact le_trans hx (le_max_left _ _)
-  exact ⟨max (n : ℝ) 1, le_max_right _ _,
-    le_antisymm ((Cardinal.mk_set_le _).trans_eq hZ)
-      (hge.trans (Cardinal.mk_le_mk_of_subset hsub))⟩
+  exact ⟨max (n : ℝ) 1, le_max_right _ _, hge.trans (Cardinal.mk_le_mk_of_subset hsub)⟩
+
+/-! ## Normalising the base metric (audit §2.11's `d'`)
+
+Moved up from `Ext/Completeness.lean` (which still imports this file): the
+`ℵ₁`-selection step below needs `one_le_addOneOffDiag` to make an *arbitrary*
+`ℵ₁`-sized subset of the ball admissible as `ComponentSetup.E` (see the
+`exists_componentSetup` docstring).  `isCompleteMetricOn_addOneOffDiag`
+itself stays in `Ext/Completeness.lean`, since it needs
+`IsCompleteMetricOn`/`isCompleteMetricOn_of_uniformly_separated`, not
+available here. -/
+
+open Classical in
+/-- Audit §2.11's normalisation of the base metric: add `1` off the diagonal. -/
+def addOneOffDiag (d : Z → Z → ℝ) : Z → Z → ℝ := fun x y => if x = y then 0 else d x y + 1
+
+@[simp] theorem addOneOffDiag_self (d : Z → Z → ℝ) (x : Z) : addOneOffDiag d x x = 0 := by
+  simp [addOneOffDiag]
+
+theorem addOneOffDiag_of_ne {d : Z → Z → ℝ} {x y : Z} (h : x ≠ y) :
+    addOneOffDiag d x y = d x y + 1 := by
+  simp [addOneOffDiag, h]
+
+/-- Off the diagonal the normalised metric is at least `1`: it is uniformly
+discrete, which is what makes it complete and what supplies the gap the
+amalgamation needs — and, for Theorem 3.4 (v2), what makes an arbitrary
+`ℵ₁`-subset of the ball admissible. -/
+theorem one_le_addOneOffDiag {d : Z → Z → ℝ} (hd : IsMetricOn d) {x y : Z} (h : x ≠ y) :
+    1 ≤ addOneOffDiag d x y := by
+  rw [addOneOffDiag_of_ne h]
+  linarith [IsMetricOn.nonneg hd x y]
+
+theorem addOneOffDiag_nonneg {d : Z → Z → ℝ} (hd : IsMetricOn d) (x y : Z) :
+    0 ≤ addOneOffDiag d x y := by
+  by_cases h : x = y
+  · rw [h, addOneOffDiag_self]
+  · linarith [one_le_addOneOffDiag hd h]
+
+theorem isMetricOn_addOneOffDiag {d : Z → Z → ℝ} (hd : IsMetricOn d) :
+    IsMetricOn (addOneOffDiag d) where
+  dist_self x := addOneOffDiag_self d x
+  eq_of_dist_eq_zero {x y} h := by
+    by_contra hne
+    have := one_le_addOneOffDiag hd hne
+    rw [h] at this
+    linarith
+  dist_comm x y := by
+    by_cases h : x = y
+    · rw [h]
+    · rw [addOneOffDiag_of_ne h, addOneOffDiag_of_ne (Ne.symm h), hd.dist_comm]
+  dist_triangle x y z := by
+    by_cases hxz : x = z
+    · rw [hxz, addOneOffDiag_self]
+      linarith [addOneOffDiag_nonneg hd z y, addOneOffDiag_nonneg hd y z]
+    · rw [addOneOffDiag_of_ne hxz]
+      by_cases hxy : x = y
+      · have hyz : y ≠ z := fun h => hxz (hxy.trans h)
+        rw [hxy, addOneOffDiag_self, addOneOffDiag_of_ne hyz]
+        linarith
+      · rw [addOneOffDiag_of_ne hxy]
+        by_cases hyz : y = z
+        · rw [hyz, addOneOffDiag_self]
+          linarith
+        · rw [addOneOffDiag_of_ne hyz]
+          linarith [hd.dist_triangle x y z]
+
+/-- The normalised metric is compatible with the discrete topology, whatever
+the original metric was: every point is isolated at radius `1`. -/
+theorem topology_addOneOffDiag_eq_bot {d : Z → Z → ℝ} (hd : IsMetricOn d) :
+    (isMetricOn_addOneOffDiag hd).topology = ⊥ := by
+  rw [IsMetricOn.topology_eq_bot_iff]
+  intro u
+  refine ⟨1, one_pos, fun v hv => ?_⟩
+  by_contra hne
+  exact absurd hv (not_lt.mpr (one_le_addOneOffDiag hd hne))
+
+/-- The normalisation moves the metric by at most `1` at every pair, so it
+stays at finite supremum distance — the reason `d'` lies in the component of
+`d` (audit §2.11). -/
+theorem abs_addOneOffDiag_sub_le {d : Z → Z → ℝ} (hd : IsMetricOn d) (x y : Z) :
+    |addOneOffDiag d x y - d x y| ≤ 1 := by
+  by_cases h : x = y
+  · rw [h, addOneOffDiag_self, hd.dist_self]
+    norm_num
+  · rw [addOneOffDiag_of_ne h]
+    rw [show d x y + 1 - d x y = 1 by ring]
+    norm_num
+
+/-! ## The `ℵ₁`-selection step (audit §2.7, v2) -/
+
+/-- **The `ℵ₁`-selection step**, kept separate from the uncountable-ball step
+per the v2 acceptance criteria.  Given a ball of cardinality at least `ℵ₁`
+containing `z`, select a sub-`ℵ₁`-sized subset that still contains `z`. -/
+theorem exists_aleph1_subset {ball : Set Z} {z : Z} (hz : z ∈ ball)
+    (hcard : aleph 1 ≤ #(↥ball)) :
+    ∃ E : Set Z, E ⊆ ball ∧ z ∈ E ∧ #(↥E) = aleph 1 := by
+  obtain ⟨E₀, hE₀sub, hE₀card⟩ := Cardinal.le_mk_iff_exists_subset.mp hcard
+  by_cases hzE₀ : z ∈ E₀
+  · exact ⟨E₀, hE₀sub, hzE₀, hE₀card⟩
+  · refine ⟨insert z E₀, Set.insert_subset hz hE₀sub, Set.mem_insert _ _, ?_⟩
+    rw [Cardinal.mk_insert hzE₀, hE₀card, Cardinal.add_one_eq (Cardinal.aleph0_le_aleph 1)]
 
 /-! ## The coding's anchor gap -/
 
@@ -447,55 +555,84 @@ theorem not_measurableSet_component (hSnonmeas : ¬ MeasurableSet c.S) :
 
 end ComponentSetup
 
+/-! ## The shared component-setup construction (audit §2.7, v2)
+
+**Why the base is normalised (T2).** `ComponentSetup.hout` demands
+`1 ≤ d z x` for every `x ∉ E`.  Over an arbitrary `d ∈ Met(Z)` this holds only
+when `E` contains every point within distance `1` of `z`, and an
+`ℵ₁`-sized subset of the raw ball chosen without regard to that condition
+need not satisfy it.  Instantiating over `addOneOffDiag d.1` instead removes
+the issue: `one_le_addOneOffDiag` gives `1 ≤ addOneOffDiag d.1 z x` for
+*every* `x ≠ z`, unconditionally, so `hout` holds for *any* `E ∋ z`.  This is
+what makes the `ℵ₁`-selection step (`exists_aleph1_subset`) independent of the
+ball-membership condition, and is the actual mathematical content of the `≥`
+generalisation. -/
+
+/-- **The shared selection lemma.**  For any `d ∈ Met(Z)` on a carrier with
+`aleph 1 ≤ #Z`, produces a `ComponentSetup` whose base is `addOneOffDiag d`
+and which represents the same component as `d`.  Consumed by
+`component_not_measurableSet` directly, and by
+`Ext/CompleteMetric.lean`'s `exists_completeComponentSetup`, which extends the
+witness with the extra completeness field via the exposed `c.d` equality —
+this is the "share the construction" step, so the two theorems do not
+duplicate the ball/selection/relabelling construction. -/
+theorem exists_componentSetup (hZ : aleph 1 ≤ #Z) (d : CPM Z) (hd : d ∈ CPM.Met Z) :
+    ∃ c : ComponentSetup Z, c.d = addOneOffDiag d.1 ∧ ¬ MeasurableSet c.S ∧
+      CPM.component c.base = CPM.component d := by
+  obtain ⟨hdm, hdbot⟩ := hd
+  have hpos : (0 : Cardinal) < #Z := lt_of_lt_of_le Cardinal.aleph0_pos
+    (Cardinal.aleph0_le_aleph 1 |>.trans hZ)
+  obtain ⟨z⟩ : Nonempty Z := Cardinal.mk_ne_zero_iff.mp hpos.ne'
+  obtain ⟨H, hH1, hHcard⟩ := exists_aleph1_ball hZ (addOneOffDiag d.1) z
+  have hzball : z ∈ {x : Z | addOneOffDiag d.1 z x ≤ H} := by
+    show addOneOffDiag d.1 z z ≤ H
+    rw [addOneOffDiag_self]
+    linarith
+  obtain ⟨E, hEsub, hzE, hEcard⟩ := exists_aleph1_subset hzball hHcard
+  obtain ⟨S, hSsub, -, hSnonmeas, ⟨σ⟩⟩ := exists_equiv_extIndex_of_card hEcard
+  refine ⟨{ S := S
+            hS := hSsub
+            d := addOneOffDiag d.1
+            hd := isMetricOn_addOneOffDiag hdm
+            hdbot := topology_addOneOffDiag_eq_bot hdm
+            E := E
+            z := z
+            hz := hzE
+            H := H
+            hE := fun _ hx => hEsub hx
+            hout := fun x hx => one_le_addOneOffDiag hdm (fun h => hx (h ▸ hzE))
+            θ := σ.trans (Equiv.swap (σ ⟨z, hzE⟩) (Sum.inl true))
+            hθz := by simp }, rfl, hSnonmeas, ?_⟩
+  refine CPM.component_eq_of_mem ⟨⟨isMetricOn_addOneOffDiag hdm,
+    topology_addOneOffDiag_eq_bot hdm⟩, ?_⟩
+  refine lt_of_le_of_lt (CPM.edist_le_ofReal (c := (1 : ℝ)) fun x y => ?_)
+    ENNReal.ofReal_lt_top
+  rw [abs_sub_comm]
+  exact abs_addOneOffDiag_sub_le hdm x y
+
 /-! ## Theorem 3.4 -/
 
-/-- **Theorem 3.4** (audit §2.7), in the form "every representative determines
-a non-Borel component".  For a discrete carrier `Z` with `|Z| = ℵ₁` and any
-`d ∈ Met(Z)`, the set of compatible metrics at finite supremum distance from
-`d` is not Borel in `CPM(Z)`.
+/-- **Theorem 3.4** (audit §2.7, v2: strengthened from `#Z = ℵ₁` to
+`aleph 1 ≤ #Z`, see the audit note's v2 entry), in the form "every
+representative determines a non-Borel component".  For a discrete carrier `Z`
+with `|Z| ≥ ℵ₁` and any `d ∈ Met(Z)`, the set of compatible metrics at finite
+supremum distance from `d` is not Borel in `CPM(Z)`.
 
 As in `met_not_borel_of_card`, discreteness of `Z` is carried by the
 membership condition itself (`Met(Z)` consists of the metrics inducing the
 discrete topology), so no topology on `Z` appears; and no hypothesis on a
 parameter set is left in the statement, the non-Borel `S ⊆ [0,1]` being
 produced internally by `exists_aleph1_nonBorel`. -/
-theorem component_not_measurableSet (hZ : #Z = aleph 1) (d : CPM Z)
+theorem component_not_measurableSet (hZ : aleph 1 ≤ #Z) (d : CPM Z)
     (hd : d ∈ CPM.Met Z) : ¬ MeasurableSet (CPM.component d) := by
-  obtain ⟨hdm, hdbot⟩ := hd
-  have hpos : (0 : Cardinal) < #Z := by
-    rw [hZ]
-    exact lt_of_lt_of_le Cardinal.aleph0_pos (aleph0_le_aleph 1)
-  obtain ⟨z⟩ : Nonempty Z := Cardinal.mk_ne_zero_iff.mp hpos.ne'
-  obtain ⟨H, hH1, hHcard⟩ := exists_aleph1_ball hZ d.1 z
-  have hzE : z ∈ {x : Z | d.1 z x ≤ H} := by
-    show d.1 z z ≤ H
-    rw [hdm.dist_self]
-    linarith
-  obtain ⟨S, hSsub, -, hSnonmeas, ⟨σ⟩⟩ := exists_equiv_extIndex_of_card hHcard
-  let c : ComponentSetup Z :=
-    { S := S
-      hS := hSsub
-      d := d.1
-      hd := hdm
-      hdbot := hdbot
-      E := {x : Z | d.1 z x ≤ H}
-      z := z
-      hz := hzE
-      H := H
-      hE := fun _ hx => hx
-      hout := fun x hx => by
-        have hgt : H < d.1 z x := not_le.mp hx
-        linarith
-      θ := σ.trans (Equiv.swap (σ ⟨z, hzE⟩) (Sum.inl true))
-      hθz := by simp }
-  have hbase : c.base = d := Subtype.ext rfl
+  obtain ⟨c, -, hSnonmeas, hbase⟩ := exists_componentSetup hZ d hd
   rw [← hbase]
   exact c.not_measurableSet_component hSnonmeas
 
-/-- **Theorem 3.4, literally.**  For a discrete carrier `Z` with `|Z| = ℵ₁`,
-*every* component `𝔠 ∈ 𝐌_{<∞}(Z)` is non-Borel in `CPM(Z)`, the component
-being read as a subset of the ambient. -/
-theorem componentSet_not_measurableSet (hZ : #Z = aleph 1) (comp : CPM.Components Z) :
+/-- **Theorem 3.4, literally** (v2).  For a discrete carrier `Z` with
+`|Z| ≥ ℵ₁`, *every* component `𝔠 ∈ 𝐌_{<∞}(Z)` is non-Borel in `CPM(Z)`, the
+component being read as a subset of the ambient. -/
+theorem componentSet_not_measurableSet (hZ : aleph 1 ≤ #Z) (comp : CPM.Components Z) :
     ¬ MeasurableSet (CPM.componentSet comp) := by
   refine Quotient.inductionOn comp fun d => ?_
   rw [CPM.componentSet_mk]

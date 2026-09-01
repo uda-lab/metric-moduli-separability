@@ -213,88 +213,22 @@ representative `d` of the component, and asserts that the result is complete.
 Audit §2.11 records that this is false as written — `d` need not be complete —
 and prescribes the repair: replace `d` by `d' := d + 1` off the diagonal,
 which is a complete compatible metric at supremum distance `1` from `d`, hence
-in the same component.  All four properties are proved below. -/
+in the same component.  The elementary properties of `addOneOffDiag` live in
+`Ext/Component.lean` (see below); completeness is proved here. -/
 
-open Classical in
-/-- Audit §2.11's normalisation of the base metric: add `1` off the diagonal. -/
-def addOneOffDiag (d : Z → Z → ℝ) : Z → Z → ℝ := fun x y => if x = y then 0 else d x y + 1
-
-@[simp] theorem addOneOffDiag_self (d : Z → Z → ℝ) (x : Z) : addOneOffDiag d x x = 0 := by
-  simp [addOneOffDiag]
-
-theorem addOneOffDiag_of_ne {d : Z → Z → ℝ} {x y : Z} (h : x ≠ y) :
-    addOneOffDiag d x y = d x y + 1 := by
-  simp [addOneOffDiag, h]
-
-/-- Off the diagonal the normalised metric is at least `1`: it is uniformly
-discrete, which is what makes it complete and what supplies the gap the
-amalgamation needs. -/
-theorem one_le_addOneOffDiag {d : Z → Z → ℝ} (hd : IsMetricOn d) {x y : Z} (h : x ≠ y) :
-    1 ≤ addOneOffDiag d x y := by
-  rw [addOneOffDiag_of_ne h]
-  linarith [IsMetricOn.nonneg hd x y]
-
-theorem addOneOffDiag_nonneg {d : Z → Z → ℝ} (hd : IsMetricOn d) (x y : Z) :
-    0 ≤ addOneOffDiag d x y := by
-  by_cases h : x = y
-  · rw [h, addOneOffDiag_self]
-  · linarith [one_le_addOneOffDiag hd h]
-
-theorem isMetricOn_addOneOffDiag {d : Z → Z → ℝ} (hd : IsMetricOn d) :
-    IsMetricOn (addOneOffDiag d) where
-  dist_self x := addOneOffDiag_self d x
-  eq_of_dist_eq_zero {x y} h := by
-    by_contra hne
-    have := one_le_addOneOffDiag hd hne
-    rw [h] at this
-    linarith
-  dist_comm x y := by
-    by_cases h : x = y
-    · rw [h]
-    · rw [addOneOffDiag_of_ne h, addOneOffDiag_of_ne (Ne.symm h), hd.dist_comm]
-  dist_triangle x y z := by
-    by_cases hxz : x = z
-    · rw [hxz, addOneOffDiag_self]
-      linarith [addOneOffDiag_nonneg hd z y, addOneOffDiag_nonneg hd y z]
-    · rw [addOneOffDiag_of_ne hxz]
-      by_cases hxy : x = y
-      · have hyz : y ≠ z := fun h => hxz (hxy.trans h)
-        rw [hxy, addOneOffDiag_self, addOneOffDiag_of_ne hyz]
-        linarith
-      · rw [addOneOffDiag_of_ne hxy]
-        by_cases hyz : y = z
-        · rw [hyz, addOneOffDiag_self]
-          linarith
-        · rw [addOneOffDiag_of_ne hyz]
-          linarith [hd.dist_triangle x y z]
-
-/-- The normalised metric is compatible with the discrete topology, whatever
-the original metric was: every point is isolated at radius `1`. -/
-theorem topology_addOneOffDiag_eq_bot {d : Z → Z → ℝ} (hd : IsMetricOn d) :
-    (isMetricOn_addOneOffDiag hd).topology = ⊥ := by
-  rw [IsMetricOn.topology_eq_bot_iff]
-  intro u
-  refine ⟨1, one_pos, fun v hv => ?_⟩
-  by_contra hne
-  exact absurd hv (not_lt.mpr (one_le_addOneOffDiag hd hne))
+-- `addOneOffDiag` and its elementary lemmas (`addOneOffDiag_self`,
+-- `addOneOffDiag_of_ne`, `one_le_addOneOffDiag`, `addOneOffDiag_nonneg`,
+-- `isMetricOn_addOneOffDiag`, `topology_addOneOffDiag_eq_bot`,
+-- `abs_addOneOffDiag_sub_le`) now live in `Ext/Component.lean`, which this
+-- file imports: Theorem 3.4 (v2) needs `one_le_addOneOffDiag` for its
+-- `ℵ₁`-selection step, and `Ext/Component.lean` does not import this file, so
+-- the block had to move up rather than be duplicated.
 
 /-- The normalised metric is complete: it is uniformly discrete. -/
 theorem isCompleteMetricOn_addOneOffDiag {d : Z → Z → ℝ} (hd : IsMetricOn d) :
     IsCompleteMetricOn (addOneOffDiag d) :=
   isCompleteMetricOn_of_uniformly_separated (isMetricOn_addOneOffDiag hd) one_pos
     fun _ _ h => one_le_addOneOffDiag hd h
-
-/-- The normalisation moves the metric by at most `1` at every pair, so it
-stays at finite supremum distance — the reason `d'` lies in the component of
-`d` (audit §2.11). -/
-theorem abs_addOneOffDiag_sub_le {d : Z → Z → ℝ} (hd : IsMetricOn d) (x y : Z) :
-    |addOneOffDiag d x y - d x y| ≤ 1 := by
-  by_cases h : x = y
-  · rw [h, addOneOffDiag_self, hd.dist_self]
-    norm_num
-  · rw [addOneOffDiag_of_ne h]
-    rw [show d x y + 1 - d x y = 1 by ring]
-    norm_num
 
 /-! ## Completeness of the coding metrics (audit §2.11)
 
