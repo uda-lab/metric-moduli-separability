@@ -22,9 +22,16 @@
 --   `isCompleteMetricOn_comap_iff`         — completeness is a relabelling
 --                                            invariant.
 --   `isCompleteMetricOn_addOneOffDiag`     — audit §2.11's normalisation
---                                            `d' := d + 1` off the diagonal
---                                            is complete, compatible, and at
---                                            supremum distance `≤ 1` from `d`.
+--                                            `d' := addOneOffDiag d` (`d + 1`
+--                                            off the diagonal) is complete.
+--                                            `d'`'s definition, compatibility
+--                                            and `≤ 1` supremum-distance-
+--                                            from-`d` bound are proved in
+--                                            `Ext/Component.lean`, not here
+--                                            (Theorem 3.4 v2 needs them too);
+--                                            this file adds only the
+--                                            completeness property, via the
+--                                            uniform-separation criterion.
 --   `isCompleteMetricOn_dExt`              — the coding metrics `d_t` are
 --                                            complete for `t ∉ S` (audit
 --                                            §2.11, the part of the printed
