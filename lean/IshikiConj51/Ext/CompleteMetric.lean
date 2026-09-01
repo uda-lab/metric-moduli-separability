@@ -1,10 +1,14 @@
 -- Ext.CompleteMetric
 --
 -- Theorem 3.8 and Corollary 3.9 of the Borel preprint (arXiv:2608.19618):
--- the complete-metric branch.  For a discrete `Z` with `|Z| ≥ ℵ₁` every
+-- the complete-metric branch.  For a discrete `Z` with `|Z| = ℵ₁` every
 -- component of `Met(Z)` meets `Comp(Z)` in a non-Borel set, hence `Comp(Z)`
 -- itself is non-Borel; and for a completely metrizable `X`, Borelness of
--- `Comp(X)` in `CPM(X)` forces `X` to be separable.
+-- `Comp(X)` in `CPM(X)` forces `X` to be separable.  The Theorem 3.8 lemmas
+-- below are stated for `|Z| ≥ ℵ₁`, but that `≥` is *not* an audited v2 change
+-- to the published Theorem 3.8 — it is a Lean-only consequence of sharing
+-- `exists_componentSetup` with Theorem 3.4 v2 (`Ext/Component.lean`); see
+-- audit §7.5.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.11
 -- (Theorem 3.8, verdict FIX, with the repair formalised here), §2.12

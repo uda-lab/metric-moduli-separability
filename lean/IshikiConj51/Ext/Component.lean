@@ -1,8 +1,11 @@
 -- Ext.Component
 --
 -- Theorem 3.4 of the Borel preprint (arXiv:2608.19618,
--- `thm:metric-component-nonborel`): for a discrete `Z` with `|Z| = ℵ₁`, every
--- finite-sup-distance component of `Met(Z)` is non-Borel in `CPM(Z)`.
+-- `thm:metric-component-nonborel`): for a discrete `Z` with `|Z| ≥ ℵ₁`, every
+-- finite-sup-distance component of `Met(Z)` is non-Borel in `CPM(Z)`.  The
+-- `≥` form is the v2 (2026-08-27 source) statement; audit §2.7 records the
+-- v1 (`|Z| = ℵ₁`) verdict as still standing and this as a strengthening, not
+-- a repair.
 --
 -- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.7, whose
 -- verdict is PASS and which records the two steps the preprint leaves
@@ -14,14 +17,20 @@
 -- the verified route to the separability theorem runs through `Met(Z)`
 -- itself.  Nothing in this file is consumed by `Ext/GeneralSeparability.lean`.
 --
--- The construction (audit §2.7).  Fix `d ∈ 𝔠` and `z ∈ Z`.  Some closed
--- `d`-ball `E` around `z` has `|E| = ℵ₁` (a countable union of countable balls
--- would exhaust `Z`).  Transfer the star coding of `Ext/BoundedCoding.lean` to
--- `E` along a bijection sending the coding's anchor `p` to `z`, and amalgamate
--- the result with `d` along `z` (`Ext/Amalgam.lean`).  The amalgamated family
--- `Ψ : [0,1] → CPM(Z)` is `2`-Lipschitz, has compact range, and satisfies the
--- exact pullback identity `Ψ⁻¹(𝔠) = [0,1] ∖ S`, so a Borel `𝔠` would make the
--- non-Borel parameter set `S` Borel.
+-- The construction (audit §2.7, v2).  Fix `d ∈ 𝔠` and `z ∈ Z`.  Some closed
+-- `d'`-ball around `z`, where `d' := addOneOffDiag d` (`d` shifted to be at
+-- least `1` off the diagonal, audit §2.11's normalisation), has cardinality
+-- at least `ℵ₁` (a countable union of countable balls would exhaust `Z`);
+-- select an `ℵ₁`-sized subset `E` of that ball containing `z` — the raw
+-- `d`-ball does *not* admit an arbitrary such subset, only the normalised
+-- one does (audit §2.7's v2 entry).  Transfer the star coding of
+-- `Ext/BoundedCoding.lean` to `E` along a bijection sending the coding's
+-- anchor `p` to `z`, and amalgamate the result with `d'` along `z`
+-- (`Ext/Amalgam.lean`).  The amalgamated family `Ψ : [0,1] → CPM(Z)` is
+-- `2`-Lipschitz, has compact range, and satisfies the exact pullback
+-- identity `Ψ⁻¹(𝔠) = [0,1] ∖ S`, so a Borel `𝔠` would make the non-Borel
+-- parameter set `S` Borel; `d'` represents the same component as `d`
+-- (audit §2.11), so the obstruction transfers back to `d`'s own component.
 --
 -- Component convention (audit §1): `d ∼ e` iff `𝒟_Z(d,e) < ∞`, the supremum
 -- distance being `[0,∞]`-valued.  `CPM.component` is the class of a member of
