@@ -9,21 +9,27 @@
 --
 -- Two independent pieces:
 --
--- 1. **Proposition 2.2** — a dense non-Borel `S ⊆ 2^ω` with `|S| = ℵ₁`.  The
---    preprint derives this from Proposition 2.1 "because `2^ω` is Borel
---    isomorphic to `[0,1]`", which transfers non-Borelness and cardinality but
---    **not density** (audit §2.2, verdict FIX).  The repair carried out here is
---    the audit's: obtain a non-Borel `T ⊆ 2^ω` with `|T| = ℵ₁` and then
---    *densify*, `S = T ∪ Q₀` with `Q₀` countable dense — the second half of the
---    audit's repair route 1, which needs of `T` only "non-Borel of size `ℵ₁`".
---    `T` is produced by running the CH/¬CH dichotomy of §2.1 directly in `2^ω`
---    (the audit's repair route 2 minus its Bernstein branch), for the same
---    reason as in `Ext/Borel.lean`: the dichotomy is available from Mathlib
---    while the Borel isomorphism `2^ω ≅ [0,1]` and Bernstein sets are not.
---    The dichotomy is stated once, for an arbitrary standard Borel space of
---    cardinality `𝔠` whose Borel σ-algebra has at most `𝔠` members, so that the
---    real-line instance of `Ext/Borel.lean` and this Cantor instance are two
---    readings of one argument.
+-- 1. **Proposition 2.2** — a bi-dense non-Borel `S ⊆ 2^ω` with `|S| = ℵ₁`
+--    (`exists_bidense_aleph1_nonBorel_cantor`; `S` and `Sᶜ` are both dense).
+--    The preprint derives the plain-density v1 statement from Proposition 2.1
+--    "because `2^ω` is Borel isomorphic to `[0,1]`", which transfers
+--    non-Borelness and cardinality but **not density** (audit §2.2, verdict
+--    FIX). The 2026-08-27 source incorporates that repair and further
+--    strengthens the statement to bi-density (audit §2.2, v2 addendum). Both
+--    are proved together here: obtain a non-Borel `T ⊆ 2^ω` with `|T| = ℵ₁`,
+--    then set `S = (T ∖ P) ∪ Q` for `P`, `Q` disjoint countable dense sets
+--    (sequences eventually `false`, resp. eventually `true`); the `∖ P` is
+--    what buys co-density over the v1 `T ∪ Q₀` construction. `T` is produced
+--    by running the CH/¬CH dichotomy of §2.1 directly in `2^ω` (the audit's
+--    repair route 2 minus its Bernstein branch), for the same reason as in
+--    `Ext/Borel.lean`: the dichotomy is available from Mathlib while the
+--    Borel isomorphism `2^ω ≅ [0,1]` and Bernstein sets are not. The
+--    dichotomy is stated once, for an arbitrary standard Borel space of
+--    cardinality `𝔠` whose Borel σ-algebra has at most `𝔠` members, so that
+--    the real-line instance of `Ext/Borel.lean` and this Cantor instance are
+--    two readings of one argument. The v1 statement
+--    `exists_dense_aleph1_nonBorel_cantor` is retained as an immediate
+--    corollary; its five downstream consumers are unaffected.
 --
 -- 2. **The standard `R`-valued Cantor ultrametric** `h(s,t) = r(min {n : s n ≠
 --    t n})` attached to a scale `r` (`Ext/UltraPMet.lean`), together with the
@@ -126,42 +132,127 @@ theorem mk_cantor : #(ℕ → Bool) = (𝔠 : Cardinal.{0}) := by
   rw [Cardinal.mk_arrow, Cardinal.mk_bool, Cardinal.mk_nat, Cardinal.lift_id, Cardinal.lift_id]
   exact Cardinal.two_power_aleph0
 
-/-- **Proposition 2.2** (audit §2.2, as repaired).  There is a *dense* subset
-`S ⊆ 2^ω` of cardinality `ℵ₁` that is not Borel.  Density is what the
-preprint's Borel-isomorphism argument fails to deliver and is what Lemma 3.11
-genuinely uses. -/
-theorem exists_dense_aleph1_nonBorel_cantor :
-    ∃ S : Set (ℕ → Bool), Dense S ∧ #(↥S) = aleph 1 ∧ ¬ MeasurableSet S := by
+/-! ### Explicit countable dense complementary pair
+
+The 2026-08-27 source strengthens Proposition 2.2 to *bi*-density (`S` and
+`2^ω ∖ S` both dense), which the audited v1 repair's `T ∪ Q₀` construction
+does not deliver: `T` may itself meet the countable dense set kept outside
+`S`, so co-density needs that set actively removed from `T`, not just union'd
+in.  `P` and `Q` below are the preprint's disjoint countable dense pair
+(sequences eventually `false`, resp. eventually `true`); `S := (T ∖ P) ∪ Q`
+is the v2 construction (audit §2.2, v2 addendum). -/
+
+/-- Sequences that are eventually constantly `b`. -/
+def eventuallyConst (b : Bool) : Set (ℕ → Bool) :=
+  {s : ℕ → Bool | ∃ N, ∀ i ≥ N, s i = b}
+
+theorem eventuallyConst_countable (b : Bool) : (eventuallyConst b).Countable := by
+  have hpiece : ∀ N : ℕ, {s : ℕ → Bool | ∀ i ≥ N, s i = b}.Countable := by
+    intro N
+    have hfin : Finite {s : ℕ → Bool // ∀ i ≥ N, s i = b} := by
+      refine Finite.of_injective
+        (fun s : {s : ℕ → Bool // ∀ i ≥ N, s i = b} => fun i : Fin N => (s : ℕ → Bool) i.val) ?_
+      rintro ⟨s, hs⟩ ⟨t, ht⟩ h
+      ext i
+      rcases lt_or_ge i N with hi | hi
+      · exact congrFun h ⟨i, hi⟩
+      · show s i = t i
+        rw [hs i hi, ht i hi]
+    exact (Set.finite_coe_iff.mp hfin).countable
+  have heq : eventuallyConst b = ⋃ N, {s : ℕ → Bool | ∀ i ≥ N, s i = b} := by
+    ext s; simp [eventuallyConst]
+  rw [heq]
+  exact Set.countable_iUnion hpiece
+
+/-- Each `eventuallyConst b` meets every cylinder: given a basic open set
+constrained on `[0, n)`, extend it by `b` from `n` on. -/
+theorem eventuallyConst_dense (b : Bool) : Dense (eventuallyConst b) := by
+  rw [(PiNat.isTopologicalBasis_cylinders (fun _ : ℕ => Bool)).dense_iff]
+  rintro o ⟨x, n, rfl⟩ -
+  exact ⟨fun i => if i < n then x i else b,
+    PiNat.mem_cylinder_iff.mpr fun i hi => if_pos hi,
+    n, fun i hi => if_neg (not_lt.mpr hi)⟩
+
+/-- A sequence cannot be eventually `false` and eventually `true` at once. -/
+theorem eventuallyConst_disjoint :
+    Disjoint (eventuallyConst false) (eventuallyConst true) := by
+  rw [Set.disjoint_left]
+  rintro s ⟨Nf, hf⟩ ⟨Nt, ht⟩
+  have hF := hf (max Nf Nt) (le_max_left _ _)
+  have hT := ht (max Nf Nt) (le_max_right _ _)
+  rw [hF] at hT
+  exact Bool.false_ne_true hT
+
+/-- **Proposition 2.2, v2** (audit §2.2, v2 addendum).  There is a subset
+`S ⊆ 2^ω` of cardinality `ℵ₁` that is *bi*-dense (`S` and `Sᶜ` both dense) and
+not Borel.  Bi-density is what `G := 2^ω ∖ S` needs to serve as a dense
+parameter domain for the amalgamated isometry, and is strictly stronger than
+the v1 statement's plain density. -/
+theorem exists_bidense_aleph1_nonBorel_cantor :
+    ∃ S : Set (ℕ → Bool),
+      Dense S ∧ Dense Sᶜ ∧ #(↥S) = aleph 1 ∧ ¬ MeasurableSet S := by
   obtain ⟨T, hTcard, hTnonmeas⟩ :=
     exists_aleph1_nonMeasurable (ℕ → Bool) mk_cantor
       (cardinal_measurableSet_le_continuum (ℕ → Bool))
-  obtain ⟨Q, hQcount, hQdense⟩ := TopologicalSpace.exists_countable_dense (ℕ → Bool)
-  refine ⟨T ∪ Q, Dense.mono Set.subset_union_right hQdense, ?_, ?_⟩
-  · refine le_antisymm ?_ ?_
-    · calc #(↥(T ∪ Q)) ≤ #(↥T) + #(↥Q) := Cardinal.mk_union_le T Q
-        _ ≤ aleph 1 + (ℵ₀ : Cardinal.{0}) :=
-            add_le_add hTcard.le (Cardinal.le_aleph0_iff_set_countable.mpr hQcount)
-        _ = aleph 1 := Cardinal.add_eq_left (Cardinal.aleph0_le_aleph 1)
-            (Cardinal.aleph0_le_aleph 1)
-    · calc (aleph 1 : Cardinal.{0}) = #(↥T) := hTcard.symm
-        _ ≤ #(↥(T ∪ Q)) := Cardinal.mk_le_mk_of_subset Set.subset_union_left
-  · -- If `T ∪ Q` were Borel, then `T = (T ∪ Q) ∖ (Q ∖ T)` would be Borel too,
-    -- because `Q ∖ T` is countable.
+  set P := eventuallyConst false with hPdef
+  set Q := eventuallyConst true with hQdef
+  have hPQdisjoint : Disjoint P Q := eventuallyConst_disjoint
+  have hPcount : P.Countable := eventuallyConst_countable false
+  have hQcount : Q.Countable := eventuallyConst_countable true
+  have hPdense : Dense P := eventuallyConst_dense false
+  have hQdense : Dense Q := eventuallyConst_dense true
+  -- Removing the countable `P` from the `ℵ₁` set `T` cannot drop below `ℵ₁`:
+  -- otherwise `ℵ₁ = #T ≤ #(T ∖ P) + #P ≤ ℵ₀ + ℵ₀ = ℵ₀`.
+  have hTPge : aleph 1 ≤ #(↥(T \ P)) := by
+    rw [Cardinal.aleph_one_le_iff]
+    by_contra hle
+    push Not at hle
+    have hPle : #(↥P) ≤ (ℵ₀ : Cardinal.{0}) := Cardinal.le_aleph0_iff_set_countable.mpr hPcount
+    have hle2 : #(↥T) ≤ (ℵ₀ : Cardinal.{0}) + (ℵ₀ : Cardinal.{0}) :=
+      (Cardinal.le_mk_sdiff_add_mk T P).trans (add_le_add hle hPle)
+    rw [hTcard, Cardinal.add_eq_left le_rfl le_rfl] at hle2
+    exact absurd hle2 (not_le_of_gt Cardinal.aleph0_lt_aleph_one)
+  refine ⟨(T \ P) ∪ Q, ?_, ?_, ?_, ?_⟩
+  · -- `Dense S` from `Q ⊆ S` and `Dense Q`.
+    exact Dense.mono Set.subset_union_right hQdense
+  · -- `Dense Sᶜ` from `P ⊆ Sᶜ` (disjointness plus construction) and `Dense P`.
+    have hPsub : P ⊆ ((T \ P) ∪ Q)ᶜ := by
+      intro x hxP
+      simp only [Set.mem_compl_iff, Set.mem_union, Set.mem_sdiff, not_or]
+      exact ⟨fun ⟨_, hxP'⟩ => hxP' hxP, Set.disjoint_left.mp hPQdisjoint hxP⟩
+    exact hPdense.mono hPsub
+  · -- Cardinality: `T ∖ P ⊆ S ⊆ (T ∖ P) ∪ Q` sandwiches `#S` between `ℵ₁`
+    -- (from `hTPge`) and `#(T ∖ P) + #Q ≤ #T + ℵ₀ = ℵ₁`.
+    refine le_antisymm ?_ (hTPge.trans (Cardinal.mk_le_mk_of_subset Set.subset_union_left))
+    calc #(↥((T \ P) ∪ Q)) ≤ #(↥(T \ P)) + #(↥Q) := Cardinal.mk_union_le (T \ P) Q
+      _ ≤ #(↥T) + (ℵ₀ : Cardinal.{0}) :=
+          add_le_add (Cardinal.mk_le_mk_of_subset Set.sdiff_subset)
+            (Cardinal.le_aleph0_iff_set_countable.mpr hQcount)
+      _ = aleph 1 := by
+          rw [hTcard]
+          exact Cardinal.add_eq_left (Cardinal.aleph0_le_aleph 1) (Cardinal.aleph0_le_aleph 1)
+  · -- If `S` were Borel, then `S ∖ Q = T ∖ (P ∪ Q)` would be Borel (removing
+    -- the countable `Q`), and then `T = (T ∖ (P ∪ Q)) ∪ (T ∩ (P ∪ Q))` would
+    -- be Borel too, since the second piece is a countable set.
     intro hmeas
     refine hTnonmeas ?_
-    have hQT : ((Q \ T : Set (ℕ → Bool))).Countable := hQcount.mono Set.sdiff_subset
-    have hTeq : T = (T ∪ Q) \ (Q \ T) := by
-      ext x
-      constructor
-      · intro hx
-        exact ⟨Or.inl hx, fun hx' => hx'.2 hx⟩
-      · rintro ⟨hx, hx'⟩
-        rcases hx with hx | hx
-        · exact hx
-        · by_contra hxT
-          exact hx' ⟨hx, hxT⟩
-    rw [hTeq]
-    exact hmeas.diff hQT.measurableSet
+    have hSQeq : ((T \ P) ∪ Q) \ Q = T \ (P ∪ Q) := by
+      rw [Set.union_sdiff_right, Set.sdiff_sdiff]
+    have hmeasQ : MeasurableSet (T \ (P ∪ Q)) := hSQeq ▸ hmeas.diff hQcount.measurableSet
+    have hTPQcount : (T ∩ (P ∪ Q)).Countable :=
+      (hPcount.union hQcount).mono Set.inter_subset_right
+    rw [(Set.sdiff_union_inter T (P ∪ Q)).symm]
+    exact hmeasQ.union hTPQcount.measurableSet
+
+/-- **Proposition 2.2** (audit §2.2, v1 repair).  There is a *dense* subset
+`S ⊆ 2^ω` of cardinality `ℵ₁` that is not Borel.  Density is what the
+preprint's Borel-isomorphism argument fails to deliver and is what Lemma 3.11
+genuinely uses.  Retained as an immediate corollary of the v2 bi-dense
+strengthening above; downstream users are unaffected. -/
+theorem exists_dense_aleph1_nonBorel_cantor :
+    ∃ S : Set (ℕ → Bool), Dense S ∧ #(↥S) = aleph 1 ∧ ¬ MeasurableSet S := by
+  obtain ⟨S, hDense, -, hCard, hNonBorel⟩ := exists_bidense_aleph1_nonBorel_cantor
+  exact ⟨S, hDense, hCard, hNonBorel⟩
 
 /-! ## The standard `R`-valued Cantor ultrametric -/
 
