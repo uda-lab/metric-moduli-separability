@@ -3,7 +3,7 @@
 > **Purpose:** 伊敷–宇田，*Borelness of Moduli Spaces of Metrics Implies Separability*，arXiv:2608.19618 の記述集合論的な道具と証明の流れを日本語で整理する．
 > **数学的な source of truth:** `notes/borel-preprint-audit.md`．本文の「Prop. 2.1」「Lemma 3.1」などは同監査の番号を指す．
 > **用語:** 日本語術語の正典は `notes/terminology.md`．
-> **範囲:** 11 Aug の analytic/coanalytic 版ではなく，20 Aug 2026 v1 の Borel 版を扱う．`report/report-ja.md` は Conjecture 5.1 の archival track であり，本ノートでは変更しない．
+> **範囲:** 11 Aug の analytic/coanalytic 版ではなく，20 Aug 2026 v1 の Borel 版と，非アルキメデス的距離への移行を扱う．`report/report-ja.md` は Conjecture 5.1 の archival track であり，本ノートでは変更しない．
 
 ## 0. このノートの読み方
 
@@ -15,7 +15,9 @@
    `Φ⁻¹(Met(Z)) = Φ⁻¹(BMet(Z)) = [0,1] \ S`
    という厳密な引き戻しの等式を得る（Lemmas 3.1–3.2）．
 4. この等式と，Borel 集合の連続写像による逆像が Borel であるという性質から，距離のモジュライ空間の Borel 性から可分性を導く（Thm. 3.3，Thm. 3.5，Cor. 3.6）．
-5. 最後に，Koshino の定理との関係と，旧 analytic/coanalytic 版がなぜ現行の検証対象ではないかを述べる．
+5. Koshino の定理との関係を確認する．
+6. 非アルキメデス的距離への移行を，bi-density の構成と `UMet(Y;R)` の成分の引き戻しによって説明する．
+7. 旧 analytic/coanalytic 版がなぜ現行の検証対象ではないかを述べる．
 
 ここで「`M` で Borel」とは，`M` の位相の開集合が生成する Borel σ-代数に属するという意味である．現行の中心的な議論では，`M` がポーランド空間であることを仮定しない．
 
@@ -148,6 +150,8 @@ tracks)」に統合した．本ノートは同表の訳語に従う．特に，p
 
 ### 5.3 Proposition 2.2 と稠密性の移送の修正
 
+**v1 の先行ルート（歴史的記録）．**
+
 > **Prop. 2.2**（`prop:dense-aleph1-nonborel-cantor`，監査 §2.2）．
 > `2^ω` の稠密な部分集合 `S` で，`Card(S)=ℵ₁` かつ `2^ω` で Borel でないものが存在する．
 
@@ -158,6 +162,35 @@ tracks)」に統合した．本ノートは同表の訳語に従う．特に，p
 `T=S\(Q₀\T)`
 
 も Borel となり，`T` の非 Borel 性に矛盾する．これで Prop. 2.2 が得られる．別の方法として，`2^ω` 自体で Prop. 2.1 の CH/¬CH 分岐を実行してもよい．
+
+この v1 の証明は先行ルートとして残すが，以下の強化された bi-density の構成によって置き換えられる．
+
+> **Prop. 2.2（強化形，bi-density）**（`prop:dense-aleph1-nonborel-cantor`，監査 §2.11）．
+> `2^ω` の部分集合 `S` で，`Card(S)=ℵ₁`，`S` と `2^ω∖S` の双方が `2^ω` で稠密であり，`S` が `2^ω` で Borel でないものが存在する．
+
+この強化が必要なのは，非アルキメデス的距離への移行で `G=2^ω∖S` を稠密なパラメータ領域として使い，その上の等長写像を `2^ω` 全体へ一意に拡張するためである．v1 の構成は `S` の稠密性だけを保証し，補集合について何も述べなかったため，この役割を果たせなかった．
+
+証明を段階ごとに確認する．
+
+1. `2^ω` の中に互いに素な可算稠密集合 `P,Q` を取る．`2^ω` は完全集合であるポーランド空間なので，二つの集合は可算稠密集合を交互に選ぶ帰納法で構成できる．これは本ノートで既に使っている可算稠密集合の標準的な選択であり，追加の引用を要しない．
+2. `2^ω∖P` は可算集合を除いた非可算なポーランド空間，したがって非可算な標準 Borel 空間である．よって Borel 同型
+   `f:[0,1]→2^ω∖P`
+   が存在する（S. M. Srivastava，*A Course on Borel Sets*，Graduate Texts in Mathematics 180，Springer，Theorem 3.3.13）．
+3. Prop. 2.1 が与える集合を `S₀⊆[0,1]` とし，
+   `S=f(S₀)∪Q`
+   と定める．
+4. `Q⊆S` かつ `Q` は稠密なので，`S` は `2^ω` で稠密である．
+5. `f` は単射で `Q` は可算だから，
+   `Card(S)=Card(f(S₀))=Card(S₀)=ℵ₁`
+   である．
+6. `f(S₀)⊆2^ω∖P` であり，`P∩Q=∅` なので，`P⊆2^ω∖S` である．`P` は稠密だから，`2^ω∖S` も稠密である．
+7. `S` が Borel だと仮定する．このとき `S∖Q` は Borel であり，`S∖Q=f(S₀)∖Q` である．したがって，
+   `f(S₀)=(S∖Q)∪(f(S₀)∩Q)`
+   であり，右辺の第二項は可算 Borel であるから `f(S₀)` も Borel である．一方，`P` は可算なので `2^ω∖P` は `2^ω` で Borel であり，`f` はそこへの Borel 同型である．したがって `f(S₀)` が Borel ならば，Borel 構造を `f⁻¹` で引き戻して `S₀` が `[0,1]` で Borel となる．これは Prop. 2.1 に矛盾する．ゆえに `S` は Borel ではない．
+
+ここで `f` は Borel 構造と濃度の移送だけに使い，稠密性その他の位相的性質の移送には使っていない．`S` の稠密性と `2^ω∖S` の稠密性は，`2^ω` 自体で選んだ互いに素な可算稠密集合 `P,Q` から直接得ている．これは §5.2 の「Borel 同型は位相同型ではない」という一般事実を正しく適用したものである．v1 の欠陥は `S=f(S₀)`（旧記法の `T`）そのものの稠密性を必要とした点にあり，Borel 同型はそれを保証しない．新しい証明は `f(S₀)` 単独の稠密性を一度も要求せず，Borel 同型で保存される非 Borel 性と濃度だけを移送し，`P,Q` によって稠密性と余稠密性を別に構成している．
+
+以上が，v1 の証明を先行ルートとして可視化したまま，現在の bi-density construction に置き換える修正である．
 
 ## 6. 距離の符号化と厳密な引き戻し
 
@@ -334,11 +367,51 @@ Corollary 3.6
 
 この議論では，非 Borel なパラメータ集合を連続写像によって Borel 集合の逆像として得る．Borel σ-代数の定義域である周囲空間が非可分でも，制限と連続写像による引き戻しはそのまま成立する．これが旧 analytic/coanalytic の定式化を Borel の定式化に置き換える理由である．
 
-## 10. 歴史・背景：解析集合・余解析的集合版で残ることと残らないこと
+## 10. 非アルキメデス的距離への移行
+
+以下では，`Y` を非可分な超距離化可能空間，`R` を characteristic な range set とする．すなわち，`0` は `R∖{0}` の集積点である．`UMet(Y;R)` は `Y` と両立する `R`-値超距離全体，`UCPM(Y;R)` は `Y` 上の連続な `R`-値擬超距離全体である．`R`-components `𝔠^R` は，
+`𝒰𝒟^R_Y(d,e)<∞`
+で定める同値関係の同値類である．
+
+> **Corollary**（`cor:nonseparable-ultrametric-nonborel`，監査 §2.19）．
+> `Y` が非可分な超距離化可能空間ならば，`UMet(Y;R)` のすべての `R`-component `𝔠^R` は `UCPM(Y;R)` で Borel ではない．したがって `UMet(Y;R)` 自体も `UCPM(Y;R)` で Borel ではない．
+
+v1 の経路が失敗した理由は，超距離版の extensor である Ishiki の因数分解定理（プロジェクトのラベル E2）が `UCPM` レベルの extensor を供給せず，`UMet` から `UMet` への等長埋込みだけを供給する点にある．そのため，Archimedean の場合のように，擬距離レベルの extensor に沿って周囲空間の Borel 構造を引き戻す戦略は直接には移せない．
+
+新しい経路を段階ごとに確認する．
+
+1. `R`-component `𝔠^R` と `d∈𝔠^R` を固定する．`(Y,d)` は非可分なので，ある `ε>0` に対して可算 `ε`-ネットが存在しない．`R` が characteristic なので，`a∈R∖{0}` を `a≤ε` となるように取れる．`A` を `Y` の maximal a-separated subset とする．超距離空間では，`A` の点を中心とする開 `a`-球は `Y` の開かつ閉な集合からなる分割（clopen partition）をなす．その各球の中心を送る写像
+   `π:Y→A`
+   は連続な retraction であり，すべての `x∈Y` に対して `d(x,π(x))<a` を満たす．`A` は `a`-ネットである．もし `A` が可算なら，`a≤ε` から可算 `ε`-ネットが得られ，仮定に矛盾する．したがって `A` は非可算であり，閉かつ離散である．
+2. `A` を一つの点に潰し，`Y` を `A` と各一点集合 `\{x\}`（`x∈Y∖A`）からなる分割で割った商を考える．これは 0 次元の距離化可能空間になる．`R` が characteristic なので，この商には両立する `R`-値超距離 `v₀` があり，`b∈R∖{0}` に対して
+   `v=min(v₀,b)`
+   と切り詰めても，`v` は両立する `R`-値超距離で `v≤b` を満たす．これは因数分解論文の構成データ（プロジェクトのラベルでは E2c）であり，その論文の内部構成をここで再現するものではない．
+3. 同じ因数分解論文の extensor construction をこの retraction `π` に特殊化する（E2/E2c）．構成の companion projection を `p` と書くと，`A` 上の `R`-値超距離 `w` に対して，等長埋込み型の extension operator `E` は
+   `E(w)(x,y)=w(π(x),π(y))∨v(p(x),p(y))`
+   という max-form を持つ．また，`E(w)|_{A×A}=w` である．ここで E2/E2c は，この形を使うための外部入力として扱う．
+4. `d` の `A×A` への制限に `E` を適用して
+   `d̂=E(d|_{A×A})`
+   とする．`d(x,π(x))<a`，`v≤b` および構成の max-form から，`τ=a∨b` とおけば強三角不等式を `π(x),π(y)` を経由して適用して
+   `d̂(x,y)≤d(x,y)∨τ`，`d(x,y)≤d̂(x,y)∨τ`
+   を得る．したがって `𝒰𝒟^R_Y(d̂,d)≤τ<∞` であり，`d̂∈𝔠^R` である．つまり，`d` 自身の制限に extension operator を適用した基準拡張は，`d` と同じ `R`-component に留まる．
+5. このプロジェクトで既に使っている離散超距離符号化，すなわち Lemmas 3.10–3.11 の Z-coding の超距離版を，`Y` 全体ではなく `A` の内部で実行する．`t∈2^ω` に対応する `R`-値超距離の族を `m_t` とすると，`m_t` は `t∉S` のときに限って `A` と両立する．各 `m_t` に上の max-form で `F(t)=E(m_t)` を定める．`G=2^ω∖S` 上では `F` は等長写像である．`G` が稠密なのは，Prop. 2.2 の強化形で `S` とその補集合の双方が稠密だからである．`UCPM(Y;R)` は完全距離化可能であるという標準事実を使うと，この稠密な定義域上の `F` は `2^ω` 全体から `UCPM(Y;R)` への一意な連続写像
+   `F̄:2^ω→UCPM(Y;R)`
+   に拡張される．
+6. 制限写像と `t↦m_t` は連続であり，`F̄` と `t↦m_t` が稠密な `G` 上で一致するので，
+   `F̄(t)|_{A×A}=m_t`
+   はすべての `t∈2^ω` で成り立つ．したがって，`t∈G` ならば，手順 4 の component bound と `E` の等長性により `F̄(t)∈𝔠^R` であり，`t∈S` ならば制限 `m_t` が `A` と両立しないので `F̄(t)∉UMet(Y;R)` である．ゆえに
+   `F̄⁻¹(𝔠^R)=G`
+   である．`G` は非 Borel である．実際，Prop. 2.2 により `S` が非 Borel であり，Borel 集合の補集合は Borel なので，`G=2^ω∖S` も非 Borel である．§2 の項目 4「連続写像による引き戻し」によれば，`𝔠^R` が `UCPM(Y;R)` で Borel なら `G` は `2^ω` で Borel になるため，`𝔠^R` は `UCPM(Y;R)` で Borel ではない．さらに `R`-components は `UMet(Y;R)` で開かつ閉なので，もし `UMet(Y;R)` 自体が `UCPM(Y;R)` で Borel なら，その中の `𝔠^R` も相対開集合として Borel になり，矛盾する．したがって `UMet(Y;R)` も Borel ではない．
+
+この経路の要点は，`F` を定義する `G` が稠密であることである．そのため，Prop. 2.2 の強化形の余稠密性は単なる付加条件ではなく，`UCPM(Y;R)` の完全性を使って `2^ω` 全体へ一意に拡張するための入力である．また，この証明は E2 の `UCPM` レベル extensor を必要としない．
+
+**Lean 形式化の状況．** `thm:ultrametric-borel-separability` 型および `cor:complete-ultrametric-borel-separability` 型の主張に対する Lean 開発の既存の経路は，`Ext/UltraTransfer.lean` と `Ext/UltraCompleteTransfer.lean` にある．これは `2^ω∖S` の閉包を完全な周囲空間の中で用いる密な一様拡張によるもので，本節で述べた経路とは独立に，以前から検証済みの経路である．この Lean の経路は同じ定理主張に対する健全で検証済みの代替ルートであり，本節の新しい経路に置き換えられたものでも，時代遅れとして扱うものでもない．本節で述べた，密な全カントール空間への拡張による経路の Lean 形式化は本ノート執筆時点で完了しておらず，本ノートはその完成を主張しない．新しい経路へ書き換えるか，既存の閉包に基づく証明を検証済みの代替として維持するかは GitHub の Issue #110 で追跡されている未解決の判断であり，Issue #110 は本ノート執筆時点で未解決のままである．
+
+## 11. 歴史・背景：解析集合・余解析的集合版で残ることと残らないこと
 
 この節の内容は記述集合論の背景であり，arXiv:2608.19618 の現行の検証対象ではない．
 
-### 10.1 古典的な点クラスの関係
+### 11.1 古典的な点クラスの関係
 
 ポーランド空間である周囲空間 `P` では，解析集合 `Σ¹₁` はポーランド空間からの連続写像の像として表される集合，余解析的集合 `Π¹₁` は補集合が解析集合である集合である．Borel 集合は解析集合かつ余解析的集合であり，Souslin の定理により
 
@@ -350,11 +423,11 @@ Corollary 3.6
 
 であるが，`non-Borel ⇒ neither analytic nor coanalytic` ではない．
 
-### 10.2 旧レシピの「解析集合でない」は何が残るか
+### 11.2 旧レシピの「解析集合でない」は何が残るか
 
 Prop. 2.1 の CH 分岐で選ぶベルンシュタイン集合は非可算で完全集合を含まないので，解析集合の完全集合性から解析集合ではない．¬CH 分岐では `|S|=ℵ₁<𝔠` であるため，解析集合の完全集合定理から解析集合ではない．したがって，旧 CH/¬CH のレシピから得られる「`S` は解析集合でない」という半分は ZFC で保たれる．
 
-### 10.3 「余解析的集合でない」は ZFC の定理ではない
+### 11.3 「余解析的集合でない」は ZFC の定理ではない
 
 一方，旧 draft が主張した「密な `S⊆[0,1]`，`|S|=ℵ₁` は余解析的集合でもない」という半分は ZFC の定理ではない．
 
@@ -364,16 +437,17 @@ ZFC + ¬CH のモデルとして，`ω₁^L=ω₁` を保つ `L` の ccc な強�
 
 ZFC で安全な修正には Mansfield–Solovay の定理が関係する．この定理は，`Σ¹₂(a)` 集合が `L[a]` に含まれるか，または完全部分集合を含むことを述べる．したがって，`S` が余解析的集合でないことをこの方向から保証するには，すべての実数 `a` に対して `S⊄L[a]` となる構成が必要になる．旧レシピはこの条件を ZFC で供給しない．
 
-### 10.4 なぜ Borel で十分か
+### 11.4 なぜ Borel で十分か
 
 古典的な analytic/coanalytic の関係はポーランドな周囲空間で有効であるが，非可分な `CPM(X)` にそのまま適用するには点クラスの規約が必要になる．旧 draft ではこの周囲空間の問題のため，非可分な周囲空間に対する analytic/coanalytic の主張が定義に依存し，`BMet(D)` やその補集合の稠密性のため古典的な点クラスの読み方では定理が空虚になる場合があった．
 
 現行の Borel の定式化では，Borel σ-代数を周囲空間の位相から直接定義する．Borel 集合に対する完全集合定理は ZFC の定理であり，thin な Borel 集合の問題は生じない．また，非可分な周囲空間にポーランド性を仮定せず，スースリン操作や analytic/coanalytic の点クラスの規約も導入しない．このため，Prop. 2.1 と Lemmas 3.1–3.2 の厳密な引き戻しが，Theorem 3.3 から Theorem 3.5，Corollary 3.6 へ直接つながる．
 
-## 11. 参考文献
+## 12. 参考文献
 
 - Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics Implies Separability*, arXiv:2608.19618 v1, 20 Aug 2026．
 - Y. Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 v4，Theorem 1.1．
 - A. S. Kechris, *Classical Descriptive Set Theory*, Graduate Texts in Mathematics 156, Springer, 1995．特に Theorem 3.11，Theorem 13.6，Example 8.24，Theorem 15.6，Theorem 29.1．
 - K. Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024)．
-- A. S. Kechris, *The theory of countable analytical sets*, Trans. Amer. Math. Soc. 202 (1975)．最大の thin `Π¹₁` 集合 `C₁` の存在について．Guaspari (1973)，Sacks (1976) も独立に同じ事実を示している．§10.3 を参照．
+- A. S. Kechris, *The theory of countable analytical sets*, Trans. Amer. Math. Soc. 202 (1975)．最大の thin `Π¹₁` 集合 `C₁` の存在について．Guaspari (1973)，Sacks (1976) も独立に同じ事実を示している．§11.3 を参照．
+- S. M. Srivastava, *A Course on Borel Sets*, Graduate Texts in Mathematics 180, Springer, Theorem 3.3.13．

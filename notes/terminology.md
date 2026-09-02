@@ -23,6 +23,8 @@ Borel track and defers to this file for terminology decisions.
 | E1 | Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 v4, Theorem 1.1 — the isometric extensor $E : \operatorname{Met}(A) \to \operatorname{Met}(X)$ with its pseudometric-level $\tilde{E}$; exact quote in `notes/borel-preprint-audit.md` §3 |
 | E2 | Ishiki, *A factorization of metric spaces*, Colloq. Math. 174 (2023), Theorem 4.7 — the ultrametric extensor $\Sigma$; E2 supplies no $\operatorname{UCPM}$-level extensor ($\Sigma$'s domain is $\operatorname{Met}(F)$; audit §3) |
 | E3 | Koshino, *On the Borel complexity and the complete metrizability of spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024) — $X$ separable metrizable: $X$ σ-compact $\iff$ $AM(X)$ completely metrizable |
+| $\operatorname{BCPM}(X)$ | Bounded members of $\operatorname{CPM}(X)$, i.e. bounded continuous pseudometrics on $X$; the pseudometric-level analogue of $\operatorname{BMet}(X)$ |
+| $P_d$ | For fixed $d \in \operatorname{CPM}(X)$, $P_d := \{p \in \operatorname{CPM}(X) \mid \mathcal{D}_X(p,d) < \infty\}$; the finite-distance ambient piece around $d$ in $\operatorname{CPM}(X)$, which need not be a single component of $\operatorname{Met}(X)$ |
 
 External-theorem labels E1/E2/E3 (and E4 for the standard descriptive-set-theory
 inputs) are fixed by `notes/borel-preprint-audit.md` §3, which quotes each
@@ -61,6 +63,13 @@ the theorem-level bundle whose label it is suffixed from.
 | non-Archimedean | **非アルキメデス的** | track 名などのより広い形容詞として使用 |
 | strong triangle inequality | **強三角不等式** | $d(x,z) \le \max\{d(x,y), d(y,z)\}$ |
 | range set / characteristic | 英語のまま | 十分に確立した日本語標準訳が無いため訳語を定めず，定義（上表）とともに英語で用いる |
+| epsilon-separated set | **ε-分離集合**（ε-離散集合） | $A \subseteq X$ で，任意の相異なる $x,y \in A$ に対して $d(x,y) \geq \varepsilon$ を満たす集合．大津幸男「リーマン多様体とその極限」，数学メモアール第3巻，日本数学会，2004，pp. 68–69，<https://www.mathsoc.jp/publication/SugakuMemoirs/sugaku-memoirs-03-1.pdf> は「ε-離散集合」を用い，加須栄篤「無限ネットワークの可解理想境界」，p. 2，<https://www.rs.kagu.tus.ac.jp/~koike/2016kiroku-kasue.pdf> は「ε-分離集合」を用いる．文献には $>\varepsilon$ の規約もあるため，このプロジェクトでは不等号を定義で明示する |
+| epsilon-net | **ε-ネット** | 任意の $x \in X$ に対して，ある $a \in A$ が存在して $d(x,a) < \varepsilon$ となる部分集合．任意の $\varepsilon>0$ に有限な ε-ネットをもつことが全有界性（プレコンパクト性）に相当し，極大 ε-分離集合は ε-ネットになる．塩谷隆「最適輸送理論とリッチ曲率」，『最適輸送理論とリッチ曲率』，数学メモアール第8巻，日本数学会，2017，§2.3，pp. 45–47，<https://www.mathsoc.jp/assets/pdf/publications/memoirs/sugaku-memoir-08.pdf> |
+| maximal epsilon-separated set | **極大 ε-分離集合**（極大 ε-離散集合） | ε-分離集合の包含関係に関する極大元．最大濃度の集合ではなく，点を付加しても ε-分離性を保てない集合を指す．上記の大津幸男，塩谷隆の各資料が「極大 ε-離散集合」を用いる．一般の存在は包含関係に関する Zorn の補題で得る |
+| clopen partition | **開閉集合からなる分割** | 位相空間 $X$ の分割 $\mathcal{P}$ で，各 $P \in \mathcal{P}$ が $X$ で開かつ閉であるもの．「開閉集合」は天野勝利「既約成分・連結成分」，2013年度代数学概論 IIA，定義5.1，<https://amanokatsutoshi.github.io/public_html/lec2013/s-algebraIIA/2013s-algebraIIA-05.pdf> による．「開かつ閉な集合からなる分割」という展開形も許容する |
+| one-point amalgamation | 英語のまま | $X_0$ と $X_1$ が一点 $z$ だけを共有する距離空間または超距離空間に対し，$x \in X_0 \setminus \{z\}$，$y \in X_1 \setminus \{z\}$ の距離を，距離の場合は $d_0(x,z)+d_1(z,y)$，超距離の場合は $\max\{d_0(x,z),d_1(z,y)\}$ と定めて $X_0\cup X_1$ に拡張する構成．両片が完備なら結果も完備である．共通部分を等長写像で貼り合わせる一般構成の一点の場合に当たる．「貼り合わせ」「接着」に相当する記述はあるが，この一般構成の標準名について信頼できる出典を確認できなかったため，英語を保持する |
+| metric interpolation / interpolation theorem | **補間定理**（metric interpolation） | 離散族をなす閉集合族 $\{A_i\}$，$d \in \operatorname{Met}(X)$，および $e_i \in \operatorname{Met}(A_i)$ に対し，$m \in \operatorname{Met}(X)$ を $m\!\restriction_{A_i^2}=e_i$ かつ $\mathcal{D}_X(m,d)=\sup_i \mathcal{D}_{A_i}(e_i,d\!\restriction_{A_i^2})$ となるように構成する E5 の定理．ここでいう interpolation は E1 の isometric extensor（等長 extensor）とは異なる．関数解析学で Riesz–Thorin の「補間定理」が定着していることは，丹羽美由紀「Block 上での2つのノルムの同値性について」，数理解析研究所講究録1399，2004，pp. 1–7，<https://www.kurims.kyoto-u.ac.jp/~kyodo/kokyuroku/contents/pdf/1399-1.pdf> の定理1–3で確認できる |
+| component (project-specific finite-distance class) | **成分** | このプロジェクトでいう「component」／「成分」は，$\mathbf{M}_{<\infty}(Z)$ では $\mathcal{D}_Z(d,e)<\infty$，$\mathbf{UM}_{<\infty}(Y;R)$ では $\mathcal{UD}^R_Y(d,e)<\infty$ による有限距離同値類であり，位相的連結成分ではない．超距離空間は位相的には完全不連結で連結成分が一点集合である一方，$\operatorname{UMet}(Y;R)$ の有限距離 $R$-component は大きく非自明になり得る |
 
 ## Archival Conjecture 5.1 track: symbols
 
