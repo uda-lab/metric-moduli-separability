@@ -32,8 +32,10 @@ noncomputable section
 
   Both existence results below are derived from this one lemma, so the net
   clause and the separation clause always come from the same set.
+  This is shared infrastructure for the ultrametric general-component track
+  of Issue #110 as well as the existing Archimedean one.
 -/
-private theorem exists_maximal_separated {X : Type*} [MetricSpace X]
+theorem exists_maximal_separated {X : Type*} [MetricSpace X]
     (ε : ℝ) (hε : 0 < ε) :
     ∃ s : Set X, s.Pairwise (fun x y => ε < dist x y) ∧
       ∀ x : X, ∃ y ∈ s, dist x y ≤ ε := by
@@ -73,6 +75,27 @@ private theorem exists_maximal_separated {X : Type*} [MetricSpace X]
     have hsinsertF : insert x s ∈ F := by
       simpa [F] using hsinsert
     exact hx (hsmax.mem_of_prop_insert hsinsertF)
+
+/--
+  A nonseparable metric space has a positive radius with no countable net.
+
+  This is the standalone form of the nonseparability argument already inline
+  in `exists_aleph1_closed_discrete_separated_net`.  It is kept generic so
+  that the two nonseparability arguments can share it.
+-/
+theorem exists_pos_no_countable_net {X : Type*} [MetricSpace X]
+    (hX : ¬ TopologicalSpace.SeparableSpace X) :
+    ∃ ε : ℝ, 0 < ε ∧
+      ¬ ∃ S : Set X, S.Countable ∧ ∀ x : X, ∃ y ∈ S, dist x y ≤ ε := by
+  by_contra h
+  have hnet : ∀ ε : ℝ, 0 < ε →
+      ∃ S : Set X, S.Countable ∧ ∀ x : X, ∃ y ∈ S, dist x y ≤ ε := by
+    intro ε hε
+    by_contra hεnet
+    exact h ⟨ε, hε, hεnet⟩
+  letI : SecondCountableTopology X :=
+    Metric.secondCountable_of_almost_dense_set hnet
+  exact hX (inferInstance : TopologicalSpace.SeparableSpace X)
 
 /--
   A nonseparable metric space has, for some `ε > 0`, an `ε`-separated closed

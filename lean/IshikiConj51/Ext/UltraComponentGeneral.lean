@@ -14,6 +14,7 @@
 --   * `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
 
 import IshikiConj51.Ext.UltraPublished
+import IshikiConj51.Ext.GeneralSpace
 
 open Set
 open scoped ENNReal Topology
@@ -134,6 +135,128 @@ theorem IsUltraComponentControlledExtensorOn.umet_preservation
     {Y : Type*} [TopologicalSpace Y] {A : Set Y} {d : UCPMOn Y R} {a : ℝ}
     (E : IsUltraComponentControlledExtensorOn R A d a) (u : ↥(UMet ↥A R)) :
     E.toExtensor.toUCPMOn u ∈ UMetOn Y R := E.toExtensor.umet_preservation u
+
+/-! ## B1: the maximal separated net and its centre map -/
+
+/-- A compatible ultrametric on a nonseparable space has a maximal separated
+net at a characteristic scale.  The strict separation retained in the first
+clause is the form supplied by `exists_maximal_separated`; its non-strict
+version is used to derive closedness and discreteness exactly through the
+standard metric lemmas. -/
+theorem exists_maximal_aScale_separated_net
+    {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R)
+    (hd : d ∈ UMetOn Y R)
+    (hY : ¬ TopologicalSpace.SeparableSpace Y)
+    (hR : R.IsCharacteristic) :
+    ∃ a : ℝ, a ∈ R.carrier ∧ a ≠ 0 ∧ ∃ A : Set Y,
+      A.Pairwise (fun x y => a < d.1.1 x y) ∧
+        (∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) ∧
+          ¬ A.Countable ∧ IsClosed A ∧ DiscreteTopology ↥A := by
+  obtain ⟨hmetric, htop⟩ := hd
+  letI : MetricSpace Y := hmetric.toMetricSpace.replaceTopology htop.symm
+  obtain ⟨ε, hε, hεnet⟩ := exists_pos_no_countable_net hY
+  let a : ℝ := RangeSet.smallElt R hR ε
+  have ha_mem : a ∈ R.carrier := by
+    exact RangeSet.smallElt_mem R hR hε
+  have ha_pos : 0 < a := by
+    exact RangeSet.smallElt_pos R hR hε
+  have ha_lt : a < ε := by
+    exact RangeSet.smallElt_lt R hR hε
+  obtain ⟨A, hAsep, hAnet⟩ :=
+    exists_maximal_separated (X := Y) a ha_pos
+  have hAsep_le : A.Pairwise (fun x y => a ≤ d.1.1 x y) := by
+    intro x hx y hy hxy
+    exact (hAsep hx hy hxy).le
+  have hAunc : ¬ A.Countable := by
+    intro hAcount
+    apply hεnet
+    refine ⟨A, hAcount, ?_⟩
+    intro x
+    obtain ⟨y, hyA, hxy⟩ := hAnet x
+    exact ⟨y, hyA, hxy.trans ha_lt.le⟩
+  have hAclosed : IsClosed A :=
+    Metric.isClosed_of_pairwise_le_dist ha_pos hAsep_le
+  letI : DiscreteTopology (A) :=
+    DiscreteTopology.of_forall_le_dist ha_pos (by
+      intro x y hxy
+      exact hAsep_le x.2 y.2 (by
+        intro hxy'
+        exact hxy (Subtype.ext hxy')))
+  exact ⟨a, ha_mem, ne_of_gt ha_pos, A, hAsep, hAnet, hAunc, hAclosed,
+    inferInstance⟩
+
+/-- Choose, from an `a`-net, one point of the net at `d`-distance at most
+`a` from each point.  The definition is expressed using `d.1.1`, so it is
+available without making a particular transported `MetricSpace` instance
+part of the declaration's type. -/
+noncomputable def centreMap
+    {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R) (a : ℝ) (A : Set Y)
+    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) : Y → ↥A :=
+  fun x =>
+    ⟨Classical.choose (hnet x), (Classical.choose_spec (hnet x)).1⟩
+
+/-- The chosen centre is within the net radius of its source point. -/
+theorem centreMap_dist_le
+    {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R) (a : ℝ) (A : Set Y)
+    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) (x : Y) :
+    d.1.1 x (centreMap d a A hnet x : Y) ≤ a := by
+  exact (Classical.choose_spec (hnet x)).2
+
+/-- The centre map is continuous for the topology induced by a compatible
+ultrametric.  The proof uses the clopen equal-radius closed-ball partition:
+the chosen centre is in a closed `a`-ball, and strict separation makes two
+such centre balls disjoint unless their centres agree. -/
+theorem continuous_centreMap
+    {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R)
+    (hd : d ∈ UMetOn Y R) (a : ℝ) (A : Set Y) (ha : 0 < a)
+    (hAsep : A.Pairwise (fun x y => a < d.1.1 x y))
+    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) :
+    Continuous (centreMap d a A hnet) := by
+  obtain ⟨hmetric, htop⟩ := hd
+  letI : MetricSpace Y := hmetric.toMetricSpace.replaceTopology htop.symm
+  have hUltra : @IsUltrametricDist Y ⟨d.1.1⟩ :=
+    d.1.2.toIsUltrametricDist
+  letI : IsUltrametricDist Y := hUltra
+  have hlocal : ∀ x x' : Y, x' ∈ Metric.closedBall x a →
+      centreMap d a A hnet x' = centreMap d a A hnet x := by
+    intro x x' hx'
+    have hx'dist : dist x' x ≤ a := by
+      simpa only [Metric.mem_closedBall] using hx'
+    have hx'centre : x' ∈ Metric.closedBall
+        (centreMap d a A hnet x : Y) a := by
+      rw [Metric.mem_closedBall]
+      exact (dist_triangle_max x' x (centreMap d a A hnet x : Y)).trans
+        (max_le hx'dist (by
+          change d.1.1 x (centreMap d a A hnet x : Y) ≤ a
+          exact centreMap_dist_le d a A hnet x))
+    have hx'centre' : x' ∈ Metric.closedBall
+        (centreMap d a A hnet x' : Y) a := by
+      rw [Metric.mem_closedBall]
+      change d.1.1 x' (centreMap d a A hnet x' : Y) ≤ a
+      exact centreMap_dist_le d a A hnet x'
+    rcases IsUltrametricDist.closedBall_eq_or_disjoint
+        (x := (centreMap d a A hnet x : Y))
+        (y := (centreMap d a A hnet x' : Y)) (r := a) with hballs | hdisj
+    · have hcentre : (centreMap d a A hnet x' : Y) ∈
+          Metric.closedBall (centreMap d a A hnet x : Y) a := by
+        rw [hballs]
+        exact Metric.mem_closedBall_self ha.le
+      have hcentre_dist : dist (centreMap d a A hnet x' : Y)
+          (centreMap d a A hnet x : Y) ≤ a := by
+        simpa only [Metric.mem_closedBall] using hcentre
+      apply Subtype.ext
+      by_contra hne
+      have hlt : a < dist (centreMap d a A hnet x' : Y)
+          (centreMap d a A hnet x : Y) := by
+        exact hAsep (centreMap d a A hnet x').property
+          (centreMap d a A hnet x).property hne
+      exact (not_lt_of_ge hcentre_dist) hlt
+    · exact (hdisj.le_bot ⟨hx'centre, hx'centre'⟩).elim
+  refine continuous_iff_continuousAt.mpr (fun x => ?_)
+  refine Filter.EventuallyEq.continuousAt
+    (y := centreMap d a A hnet x) ?_
+  filter_upwards [Metric.closedBall_mem_nhds x ha] with x' hx'
+  exact hlocal x x' hx'
 
 /-! ## B0 capstone statement signatures -/
 

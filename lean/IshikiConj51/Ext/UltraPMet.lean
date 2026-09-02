@@ -46,6 +46,7 @@
 --
 -- Status: sorry-free; no custom axioms.
 
+import Mathlib.Topology.MetricSpace.Ultra.Basic
 import IshikiConj51.Ext.Relabel
 
 open Set
@@ -226,6 +227,15 @@ structure IsUltraPMetOn (R : RangeSet) (d : Z → Z → ℝ) : Prop where
 namespace IsUltraPMetOn
 
 variable {R : RangeSet} {d : Z → Z → ℝ}
+
+/-- The strong triangle inequality of an `R`-valued pseudo-ultrametric,
+packaged in Mathlib's `IsUltrametricDist` class for the distance function
+`d`. -/
+theorem toIsUltrametricDist (h : IsUltraPMetOn R d) :
+    @IsUltrametricDist Z ⟨d⟩ :=
+  by
+    letI : Dist Z := ⟨d⟩
+    exact (⟨h.dist_triangle_max⟩ : IsUltrametricDist Z)
 
 theorem nonneg (h : IsUltraPMetOn R d) (x y : Z) : 0 ≤ d x y := R.nonneg (h.mem_range x y)
 
