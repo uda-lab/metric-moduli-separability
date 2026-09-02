@@ -23,6 +23,10 @@ import IshikiConj51.Ext.GeneralSeparability
 import IshikiConj51.Ext.CompleteMetrizability
 -- Issue #107: every component of `Met(X)` is non-Borel for nonseparable `X`.
 import IshikiConj51.Ext.GeneralComponent
+-- Issue #108: the five-way complete-metrizability/component/σ-compactness equivalence.
+import IshikiConj51.Ext.FiveWay
+-- Reverse-Alexandrov infrastructure needed by Issue #108.
+import IshikiConj51.Ext.GDeltaCompletelyMetrizable
 import IshikiConj51.Ext.Completeness
 import IshikiConj51.Ext.CompleteMetric
 

@@ -636,3 +636,55 @@ theorem separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn
 
 end
 end IshikiExt
+
+namespace IshikiExt
+
+noncomputable section
+
+/-! ## Ordinary subspace restriction
+
+This is the topology-aware restriction lemma used by Direction A of Issue
+#108.  In contrast with the preceding discrete-carrier lemma, the source
+topology is the ordinary ambient topology on `A`; the target equality is
+therefore obtained directly from the embedding's induced-topology equality.
+The declaration records the restriction step in
+`notes/borel-manuscript-20260827-audit.md` §2.16. -/
+
+/-- Restricting a compatible metric along a topological embedding preserves
+compatibility on the ordinary source topology. -/
+theorem isMetricOn_restrict_of_mem_MetOn_of_topologicalSpace
+    {A X : Type*} [TopologicalSpace A] [TopologicalSpace X]
+    {ι : A → X} (hι : Topology.IsEmbedding ι) {d : CPMOn A} {e : CPMOn X}
+    (he : e ∈ CPM.MetOn X)
+    (hrestrict : ∀ a b : A, e.1.1 (ι a) (ι b) = d.1.1 a b) :
+    d ∈ CPM.MetOn A := by
+  obtain ⟨hmetric, htop⟩ := he
+  have hmetric' : IsMetricOn d.1.1 := by
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro a
+      rw [← hrestrict a a, hmetric.dist_self]
+    · intro a b hab
+      apply hι.injective
+      apply hmetric.eq_of_dist_eq_zero
+      rw [hrestrict]
+      exact hab
+    · intro a b
+      rw [← hrestrict a b, ← hrestrict b a, hmetric.dist_comm]
+    · intro a b c
+      rw [← hrestrict a c, ← hrestrict a b, ← hrestrict b c]
+      exact hmetric.dist_triangle _ _ _
+  have htop_induced : hmetric'.topology = (inferInstance : TopologicalSpace A) := by
+    let mA : MetricSpace A := MetricSpace.induced ι hι.injective hmetric.toMetricSpace
+    have hmA : hmetric'.toMetricSpace = mA := by
+      apply MetricSpace.ext
+      ext a b
+      change d.1.1 a b = (hmetric.toMetricSpace).dist (ι a) (ι b)
+      exact (hrestrict a b).symm
+    rw [hmetric'.topology_eq_metricSpace_topology, hmA]
+    change TopologicalSpace.induced ι hmetric.topology = (inferInstance : TopologicalSpace A)
+    rw [htop]
+    exact hι.eq_induced.symm
+  exact ⟨hmetric', htop_induced⟩
+
+end
+end IshikiExt

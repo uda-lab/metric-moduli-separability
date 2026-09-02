@@ -370,5 +370,159 @@ theorem not_measurableSet_CPM_MetOn_of_isComponentControlledExtensorOn
     exact hmeas.inter (isClopen_setOf_edist_lt_top d₀).isOpen.measurableSet
   exact hnot hcompmeas
 
+/-- The inclusion of a finite-distance component into the compatible metric
+space is a closed embedding.  This is the "components are clopen in
+`Met(X)`" step of `notes/borel-manuscript-20260827-audit.md` §2.16, feeding
+the `met ⇒ each-component` direction of Issue #108's five-way equivalence.  The
+Mathlib half is that a closed subspace of a completely metrizable space is
+completely metrizable. -/
+theorem CPMOn.isClosedEmbedding_component_inclusion {X : Type*} [TopologicalSpace X]
+    (d : CPMOn X) :
+    Topology.IsClosedEmbedding
+      (fun e : ↥(CPMOn.component d) =>
+        (⟨(e : CPMOn X), CPMOn.component_subset_MetOn d e.2⟩ : ↥(CPM.MetOn X))) := by
+  let f : ↥(CPMOn.component d) → ↥(CPM.MetOn X) := fun e =>
+    ⟨(e : CPMOn X), CPMOn.component_subset_MetOn d e.2⟩
+  change Topology.IsClosedEmbedding f
+  have hcomponent_embedding :
+      Topology.IsEmbedding (fun e : ↥(CPMOn.component d) => (e : CPMOn X)) :=
+    Topology.IsEmbedding.subtypeVal
+  have hcomposition :
+      Topology.IsEmbedding
+        ((fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ∘ f) := by
+    simpa [f, Function.comp_def] using hcomponent_embedding
+  have hf : Topology.IsEmbedding f :=
+    (Topology.IsEmbedding.of_comp_iff
+      (f := f)
+      (g := (fun e : ↥(CPM.MetOn X) => (e : CPMOn X)))
+      (Topology.IsEmbedding.subtypeVal :
+        Topology.IsEmbedding
+          (fun e : ↥(CPM.MetOn X) => (e : CPMOn X)))).mp hcomposition
+  refine ⟨hf, ?_⟩
+  have hclosed :
+      IsClosed
+        ((fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ⁻¹'
+          {e : CPMOn X | edist d e < ⊤}) := by
+    exact (isClopen_setOf_edist_lt_top d).isClosed.preimage continuous_subtype_val
+  have hrange :
+      Set.range f =
+        (fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ⁻¹'
+          {e : CPMOn X | edist d e < ⊤} := by
+    ext e
+    constructor
+    · rintro ⟨a, rfl⟩
+      change edist d (a : CPMOn X) < ⊤
+      exact a.2.2
+    · intro he
+      change edist d (e : CPMOn X) < ⊤ at he
+      refine ⟨⟨(e : CPMOn X), ⟨e.2, he⟩⟩, ?_⟩
+      apply Subtype.ext
+      rfl
+  rw [hrange]
+  exact hclosed
+
+/-- The closed-embedding result above feeds the Mathlib theorem that a closed
+subspace of a completely metrizable space is completely metrizable.  This is
+the "components are clopen in `Met(X)`" step of
+`notes/borel-manuscript-20260827-audit.md` §2.16, feeding the `met ⇒
+each-component` direction of Issue #108's five-way equivalence. -/
+theorem CPMOn.isCompletelyMetrizableSpace_component_of_isCompletelyMetrizableSpace_MetOn
+    {X : Type*} [TopologicalSpace X]
+    (h : TopologicalSpace.IsCompletelyMetrizableSpace ↥(CPM.MetOn X)) (d : CPMOn X) :
+    TopologicalSpace.IsCompletelyMetrizableSpace ↥(CPMOn.component d) := by
+  letI : TopologicalSpace.IsCompletelyMetrizableSpace ↥(CPM.MetOn X) := h
+  exact (CPMOn.isClosedEmbedding_component_inclusion d).IsCompletelyMetrizableSpace
+
+/-- A compatible metric exists on every metrizable topological space.  This
+is the nonemptiness input for the component clauses in the
+`notes/borel-manuscript-20260827-audit.md` §2.16 five-way equivalence. -/
+theorem exists_mem_CPM_MetOn (X : Type*) [TopologicalSpace X]
+    [TopologicalSpace.MetrizableSpace X] :
+    ∃ d : CPMOn X, d ∈ CPM.MetOn X := by
+  letI : MetricSpace X := TopologicalSpace.metrizableSpaceMetric X
+  let d₀ : CPMOn X :=
+    ⟨⟨dist, ⟨dist_self, dist_comm, dist_triangle⟩⟩, by
+      change Continuous (fun p : X × X => dist p.1 p.2)
+      exact continuous_dist⟩
+  have hmetric : IsMetricOn (dist : X → X → ℝ) := by
+    refine ⟨dist_self, ?_, dist_comm, dist_triangle⟩
+    intro x y hxy
+    exact dist_eq_zero.mp hxy
+  have hmetric_toMetricSpace :
+      hmetric.toMetricSpace = (inferInstance : MetricSpace X) := by
+    apply MetricSpace.ext
+    ext x y
+    rfl
+  have htop : hmetric.topology = (inferInstance : TopologicalSpace X) := by
+    rw [hmetric.topology_eq_metricSpace_topology, hmetric_toMetricSpace]
+    with_reducible_and_instances rfl
+  refine ⟨d₀, ?_⟩
+  change ∃ h : IsMetricOn (dist : X → X → ℝ),
+    h.topology = (inferInstance : TopologicalSpace X)
+  exact ⟨hmetric, htop⟩
+
+/-- The preimage in `MetOn(X)` of every finite-distance component is open.
+This is the relative-open half of the clopen-component step in
+`notes/borel-manuscript-20260827-audit.md` §2.16: the `MetOn(X)` conjunct in
+the component definition is automatic in this preimage, leaving the open
+finite-distance locus. -/
+theorem CPMOn.isOpen_val_preimage_component {X : Type*} [TopologicalSpace X]
+    (d : CPMOn X) :
+    IsOpen
+      ((fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ⁻¹'
+        CPMOn.component d) := by
+  have hpreimage :
+      (fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ⁻¹'
+          CPMOn.component d =
+        (fun e : ↥(CPM.MetOn X) => (e : CPMOn X)) ⁻¹'
+          {e : CPMOn X | edist d e < ⊤} := by
+    ext e
+    constructor
+    · intro he
+      change (e : CPMOn X) ∈ CPMOn.component d at he
+      exact he.2
+    · intro he
+      change edist d (e : CPMOn X) < ⊤ at he
+      exact ⟨e.2, he⟩
+  rw [hpreimage]
+  exact (isClopen_setOf_edist_lt_top d).isOpen.preimage continuous_subtype_val
+
+end
+end IshikiExt
+
+namespace IshikiExt
+
+noncomputable section
+
+/-- Restriction to a subset is nonexpansive for the extended supremum distance.
+This is the restriction-map estimate required in
+`notes/borel-manuscript-20260827-audit.md` §2.16: the maps `r_n` in Direction A
+are 1-Lipschitz. -/
+theorem CPMOn.edist_restrict_le {X : Type*} [TopologicalSpace X] (A : Set X)
+    (d e : CPMOn X) : edist (CPMOn.restrict A d) (CPMOn.restrict A e) ≤ edist d e := by
+  change CPM.edist (CPMOn.restrict A d).1 (CPMOn.restrict A e).1 ≤ CPM.edist d.1 e.1
+  change (⨆ p : (↥A) × (↥A), ENNReal.ofReal
+      |d.1.1 (p.1 : X) (p.2 : X) - e.1.1 (p.1 : X) (p.2 : X)|) ≤
+    ⨆ p : X × X, ENNReal.ofReal |d.1.1 p.1 p.2 - e.1.1 p.1 p.2|
+  refine iSup_le fun p => ?_
+  exact le_iSup (fun q : X × X => ENNReal.ofReal
+    |d.1.1 q.1 q.2 - e.1.1 q.1 q.2|) ((p.1 : X), (p.2 : X))
+
+/-- Restriction to a subset is 1-Lipschitz for the extended supremum distance.
+This is the Lipschitz form of the `r_n` infrastructure in
+`notes/borel-manuscript-20260827-audit.md` §2.16. -/
+theorem CPMOn.lipschitzWith_restrict {X : Type*} [TopologicalSpace X] (A : Set X) :
+    LipschitzWith 1 (CPMOn.restrict A : CPMOn X → CPMOn ↥A) := by
+  intro d e
+  rw [ENNReal.coe_one, one_mul]
+  exact CPMOn.edist_restrict_le A d e
+
+/-- Restriction to a subset is continuous.  This is the continuity form of the
+1-Lipschitz restriction maps `r_n` required in
+`notes/borel-manuscript-20260827-audit.md` §2.16. -/
+theorem CPMOn.continuous_restrict {X : Type*} [TopologicalSpace X] (A : Set X) :
+    Continuous (CPMOn.restrict A : CPMOn X → CPMOn ↥A) :=
+  (CPMOn.lipschitzWith_restrict A).continuous
+
 end
 end IshikiExt
