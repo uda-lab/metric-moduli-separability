@@ -88,7 +88,7 @@ also shifts, because five statements were inserted into §3.
 | `lem:metric-extensor-pullbacks` | 2.8 | **new label** | the four pullback identities along `Ẽ` |
 | `lem:continuous-pullback-obstruction` | 2.9 | **new label** | the pullback obstruction, extracted as a lemma |
 | `lem:relative-borel-inheritance` | 2.10 | **new label** | relatively open/closed subsets of a Borel set are Borel |
-| `thm:complete-metrizability-g-delta` | 2.11 | used uncited | external **D1**(d), now cited |
+| `thm:complete-metrizability-g-delta` | 2.11 | used uncited | external **E4**d, now cited |
 | `prop:dense-aleph1-nonborel-interval` | 2.12 | 2.1 | unchanged statement |
 | `prop:dense-aleph1-nonborel-cantor` | 2.13 | 2.2 | statement strengthened to bi-density |
 
@@ -181,24 +181,24 @@ received source. Where v1 has no entry, the statement or its label is new.
 |---|---|---|---|
 | `thm:koshino-characterization` | A | — (E3) | **EXTERNAL** (E3) |
 | `thm:metric-isometric-extensor` | A | — (E1) | **EXTERNAL** (E1) |
-| `lem:one-point-amalgamation` | shared | — | **PASS + EXTERNAL** (E9) |
+| `lem:one-point-amalgamation` | shared | — | **PASS + EXTERNAL** (§4, standard) |
 | `lem:maximal-separated-set` | shared | — | **PASS** |
-| `lem:cpm-complete` | A | — | **EXTERNAL** (E8) |
-| `lem:ucpm-complete` | NA | — | **EXTERNAL** (E8) |
+| `lem:cpm-complete` | A | — | **EXTERNAL** (§4, standard) |
+| `lem:ucpm-complete` | NA | — | **EXTERNAL** (§4, standard) |
 | `thm:ultrametric-isometric-extensor` | NA | — (E2) | **EXTERNAL** (E2) |
 | `lem:metric-extensor-pullbacks` | A | — | **PASS + EXTERNAL** (E1) |
 | `lem:continuous-pullback-obstruction` | shared | — | **PASS** |
 | `lem:relative-borel-inheritance` | shared | — | **PASS** |
-| `thm:complete-metrizability-g-delta` | shared | — (E4d) | **EXTERNAL** (D1(d)) |
-| `prop:dense-aleph1-nonborel-interval` | shared | **PASS** | **PASS + EXTERNAL** (D1(a),(b)) |
-| `prop:dense-aleph1-nonborel-cantor` | NA | **FIX** | **PASS + EXTERNAL** (D1(c)) |
+| `thm:complete-metrizability-g-delta` | shared | — (E4d) | **EXTERNAL** (E4d) |
+| `prop:dense-aleph1-nonborel-interval` | shared | **PASS** | **PASS + EXTERNAL** (E4a, E4b) |
+| `prop:dense-aleph1-nonborel-cantor` | NA | **FIX** | **PASS + EXTERNAL** (E4c) |
 | `lem:metric-coding` | A | **PASS** | **PASS** |
 | `lem:closed-parameter-embedding` | A | **PASS** | **PASS** |
 | `thm:bounded-discrete-nonborel` | A | **PASS** | **PASS** |
 | `thm:metric-component-nonborel` | A | **PASS** | **PASS** |
 | `cor:discrete-metric-nonborel` | A | — | **PASS** |
 | `thm:borel-separability` | A | **PASS + EXTERNAL** | **PASS + EXTERNAL** (E1) |
-| `cor:nonseparable-metric-nonborel` | A | — | **PASS + EXTERNAL** (E1, E4) |
+| `cor:nonseparable-metric-nonborel` | A | — | **PASS + EXTERNAL** (E1, E1c) |
 | `cor:metric-space-complete-separability` | A | **PASS + EXTERNAL** | **FIX** (#113) |
 | `cor:bounded-metric-complete-sigma-compact` | A | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E3, E5, E6) |
 | `thm:complete-metric-nonborel` | A | **FIX** | **PASS** |
@@ -207,11 +207,11 @@ received source. Where v1 has no entry, the statement or its label is new.
 | `lem:closed-ultrametric-parameter-embedding` | NA | **PASS** | **PASS** |
 | `thm:discrete-ultrametric-nonborel` | NA | **PASS** | **PASS** |
 | `thm:ultrametric-component-nonborel` | NA | **PASS** | **PASS** |
-| `cor:nonseparable-ultrametric-nonborel` | NA | — | **PASS + EXTERNAL** (E2, E7) |
-| `thm:ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2, E7) |
-| `cor:ultrametric-space-complete-separability` | NA | **PASS** | **PASS + EXTERNAL** (D1(d)) |
+| `cor:nonseparable-ultrametric-nonborel` | NA | — | **PASS + EXTERNAL** (E2, E2c) |
+| `thm:ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2, E2c) |
+| `cor:ultrametric-space-complete-separability` | NA | **PASS** | **PASS + EXTERNAL** (E4d) |
 | `thm:complete-ultrametric-nonborel` | NA | **PASS** | **PASS** |
-| `cor:complete-ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2(N1), E7) |
+| `cor:complete-ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2(N1), E2c) |
 
 A = Archimedean, NA = non-Archimedean.
 
@@ -258,14 +258,14 @@ differences from the v1 rendition, both improvements:
   carries the hypothesis. The received source now renders the clause the way
   the source's proof supports it. Recorded in §4 under **E1**.
 
-### 2.3 `lem:one-point-amalgamation` — PASS + EXTERNAL (E9)
+### 2.3 `lem:one-point-amalgamation` — PASS + EXTERNAL (§4, standard)
 
 **Statement.** For sets `X₀, X₁` meeting in exactly one point `z`, with metrics
 `d₀, d₁`, the amalgam routing every cross pair through `z` (`d₀(x,z) + d₁(z,y)`
 in the metric case, `d₀(x,z) ∨ d₁(z,y)` in the ultrametric case) is a metric,
 resp. an ultrametric; it is complete when both pieces are.
 
-**Check.** The metric and ultrametric assertions are cited (E9). The
+**Check.** The metric and ultrametric assertions are cited (§4). The
 completeness half is proved in the manuscript, and the argument checks out. A
 Cauchy sequence is either eventually inside one piece — where it converges by
 completeness of that piece, and its limit is a limit in the amalgam because
@@ -308,7 +308,7 @@ the `ε`-net clause. The `ε`-net clause is load-bearing in
 `eq:metric-extensor-component-bound`), so a sibling lemma exposing it is
 needed there; this is the ε-net item of #107.
 
-### 2.5 `lem:cpm-complete`, `lem:ucpm-complete` — EXTERNAL (E8)
+### 2.5 `lem:cpm-complete`, `lem:ucpm-complete` — EXTERNAL (§4, standard)
 
 Complete metrizability of `CPM(X)` and, for characteristic `R`, of
 `UCPM(X;R)`, both cited to Ishiki, *Spaces of metrics are Baire*, Lemma 2.4,
@@ -376,7 +376,7 @@ the Lean development had already taken (v1 note §7.1 item 2, §7.6). The
 manuscript and the formalisation now agree on the proof shape, not only on the
 statements.
 
-### 2.9 `thm:complete-metrizability-g-delta` — EXTERNAL (D1(d))
+### 2.9 `thm:complete-metrizability-g-delta` — EXTERNAL (E4d)
 
 Alexandrov–Lavrentiev, both directions, now cited to Kechris Theorem 3.11.
 The v1 note §3 recorded that v1 used this silently and recommended adding the
@@ -384,14 +384,14 @@ citation; the received source has added it. The reverse direction (`X`
 completely metrizable and `A` `G_δ` implies `A` completely metrizable) is used
 for the first time in `cor:bounded-metric-complete-sigma-compact`.
 
-### 2.10 `prop:dense-aleph1-nonborel-interval` — PASS + EXTERNAL (D1(a),(b))
+### 2.10 `prop:dense-aleph1-nonborel-interval` — PASS + EXTERNAL (E4a, E4b)
 
 Statement and proof unchanged from v1: the CH/¬CH dichotomy producing a dense
 non-Borel `S ⊆ [0,1]` with `Card(S) = ℵ₁`. The v1 note §2.1 verdict stands
 verbatim, including the observation that density is consumed only by the
 non-Archimedean track.
 
-### 2.11 `prop:dense-aleph1-nonborel-cantor` — PASS + EXTERNAL (D1(c))
+### 2.11 `prop:dense-aleph1-nonborel-cantor` — PASS + EXTERNAL (E4c)
 
 **Statement (strengthened).** There is `S ⊆ 2^ω` with `Card(S) = ℵ₁`, with
 **both** `S` and `2^ω ∖ S` dense, and with `S` non-Borel in `2^ω`.
@@ -402,7 +402,7 @@ density.
 
 **Check of the received proof.** Take disjoint countable dense `P, Q ⊆ 2^ω`.
 `2^ω ∖ P` is an uncountable standard Borel space, so a Borel isomorphism
-`f : [0,1] → 2^ω ∖ P` exists (cited, **D1(c)**). With `S₀` from
+`f : [0,1] → 2^ω ∖ P` exists (cited, **E4c**). With `S₀` from
 `prop:dense-aleph1-nonborel-interval`, put `S = f(S₀) ∪ Q`. Density comes from
 `Q ⊆ S`; cardinality is `ℵ₁` because `f` is injective and `Q` is countable;
 co-density comes from `P ⊆ 2^ω ∖ S`, which holds because `f(S₀) ⊆ 2^ω ∖ P` and
@@ -517,7 +517,7 @@ main transfer theorem. The cost is the nomenclature mismatch that #113 reports
 (§8) — the statement labelled `thm:borel-separability` is no longer the
 `Met(X)` statement the abstract and introduction announce.
 
-#### `cor:nonseparable-metric-nonborel` (E1, E4) — the principal new result
+#### `cor:nonseparable-metric-nonborel` (E1, E1c) — the principal new result
 
 **Statement.** `X` nonseparable metrizable: (1) each component of `Met(X)` is
 non-Borel in `CPM(X)`; (2) `Met(X)` is non-Borel in `CPM(X)`.
@@ -536,7 +536,7 @@ non-Borel in `CPM(X)`; (2) `Met(X)` is non-Borel in `CPM(X)`.
    theorem-level clauses **and** the construction-specific point estimate
    `eq:metric-extensor-point-estimate`, `r(x,a) ≤ 4 d(x,a) + 1` for `x ∈ X`,
    `a ∈ Z`, where `r = E(d_Z)` — cited to Lemma 4.4 of E1's source. This is
-   external dependency **E4**, and it is strictly stronger data than the
+   external dependency **E1c**, and it is strictly stronger data than the
    theorem-level E1 bundle.
 4. The finite-distance estimate `eq:metric-extensor-component-bound`
    re-derives exactly. Choose `a_x ∈ Z` with `d(x,a_x) < ε`, available because
@@ -698,7 +698,7 @@ corollary, which re-runs the coding directly on the separated set (§2.19).
 The asymmetry is deliberate as far as correctness goes; a revision may still
 want to align the two statements.
 
-### 2.19 `cor:nonseparable-ultrametric-nonborel` — PASS + EXTERNAL (E2, E7)
+### 2.19 `cor:nonseparable-ultrametric-nonborel` — PASS + EXTERNAL (E2, E2c)
 
 **Statement.** `Y` nonseparable ultrametrizable: (1) every `R`-component of
 `UMet(Y;R)` is non-Borel in `UCPM(Y;R)`; (2) `UMet(Y;R)` is non-Borel.
@@ -714,8 +714,8 @@ transfer route entirely. Checked step by step.
    retraction, and `eq:clopen-net-retraction` gives `d(x,π(x)) < a`. `A` is an
    `a`-net and `a ≤ ε`, so `A` is uncountable; it is closed and discrete. ✓
 2. Collapsing `A` gives a zero-dimensional metrizable quotient
-   (factorization paper, Proposition 2.8 — **E7**), which carries a compatible
-   `R`-valued ultrametric `v₀` (Proposition 2.3 — **E7**) because `R` is
+   (factorization paper, Proposition 2.8 — **E2c**), which carries a compatible
+   `R`-valued ultrametric `v₀` (Proposition 2.3 — **E2c**) because `R` is
    characteristic. Truncating, `v = min{v₀,b}` for `b ∈ R ∖ {0}` is still
    compatible, is `R`-valued, and satisfies `v ≤ b`. ✓ (Truncation of an
    ultrametric by a constant is an ultrametric, and does not change the
@@ -730,7 +730,7 @@ transfer route entirely. Checked step by step.
    and the explicit max-form extensor of its Theorem 4.7,
    `E(w)(x,y) = w(π x, π y) ∨ v(p x, p y)` (`eq:component-controlled-ultrametric-extension`),
    are then available. **This is construction data from the proofs, not the
-   theorem-level E2 bundle**, and §4 records it as **E7**.
+   theorem-level E2 bundle**, and §4 records it as **E2c**.
 4. The base extension `d̂ = E(d|_{A²})` lies at finite distance from `d`.
    Checked: `d̂(x,π(x)) = v(p x, ϖ_A) ≤ b`; then with `τ = a ∨ b`, the strong
    triangle inequality through `π(x)`, `π(y)` and
@@ -796,7 +796,7 @@ bi-density was for. Lean task: #110 (open).
   because the new proof never transports a σ-algebra along the extensor. The
   explicit transfer argument the v1 audit had to construct (v1 note §2.14) is
   no longer the only verified route; the manuscript now prints one.
-* **`cor:ultrametric-space-complete-separability` — PASS + EXTERNAL (D1(d)).**
+* **`cor:ultrametric-space-complete-separability` — PASS + EXTERNAL (E4d).**
   Unchanged, now with the Alexandrov–Lavrentiev citation present.
 * **`thm:complete-ultrametric-nonborel` — PASS.** Unchanged; the complete-base
   normalisation `d ∨ c` off the diagonal (`c ∈ R ∖ {0}`) is the one the v1
@@ -805,7 +805,7 @@ bi-density was for. Lean task: #110 (open).
   "consequently" clause uses the same clopen finite-distance-class route as
   `thm:complete-metric-nonborel`. ✓
 * **`cor:complete-ultrametric-borel-separability`, v1 verdict FIX, now PASS
-  (E2(N1), E7).** `UComp(Y;R) ≠ ∅` makes `Y` completely metrizable, so E2's
+  (E2(N1), E2c).** `UComp(Y;R) ≠ ∅` makes `Y` completely metrizable, so E2's
   completeness clause is available; the coding ultrametrics on `A` are
   complete and so are their amalgams, so `F̄⁻¹(UComp(Y;R)) = 2^ω ∖ S`, the
   reverse inclusion coming from restriction to `A²` as in §2.19 item 10. ✓
