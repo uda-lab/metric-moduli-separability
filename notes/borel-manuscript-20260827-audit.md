@@ -314,7 +314,8 @@ formalises only the "closed discrete of cardinality `ℵ₁`" conclusion and dro
 the `ε`-net clause. The `ε`-net clause is load-bearing in
 `cor:nonseparable-metric-nonborel` (it is what supplies `a_x` in
 `eq:metric-extensor-component-bound`), so a sibling lemma exposing it is
-needed there; this is the ε-net item of #107.
+needed there; this is the ε-net item of PR #119 (Issue #107), formalised as
+`exists_aleph1_closed_discrete_separated_net` in `Ext/GeneralSpace.lean`.
 
 ### 2.5 `lem:cpm-complete`, `lem:ucpm-complete` — EXTERNAL (§4, standard)
 
@@ -573,8 +574,8 @@ non-Borel in `CPM(X)`; (2) `Met(X)` is non-Borel in `CPM(X)`.
 
 **Verdict: PASS.** The only external input beyond E1 is E1c, the construction
 data from the proof of E1's own theorem; §4 records it separately from the
-theorem-level bundle, as the acceptance criteria require. Statement gate: #107
-(see §7).
+theorem-level bundle, as the acceptance criteria require. Formalised at
+PR #119 (Issue #107; see §7).
 
 ### 2.15 `cor:metric-space-complete-separability` — FIX
 
@@ -1270,7 +1271,7 @@ from the Lean sources and from the Issue, never from this table.
 |---|---|---|
 | `thm:metric-component-nonborel`, `\|Z\| ≥ ℵ₁` form | #106 | none beyond the discrete core |
 | `prop:dense-aleph1-nonborel-cantor`, bi-density | #109 | none; the Lean route avoids E4c |
-| `cor:nonseparable-metric-nonborel` | #107 | E1 and E1c, kept separate |
+| `cor:nonseparable-metric-nonborel` | PR #119 (Issue #107) | E1 and E1c, kept separate |
 | `cor:bounded-metric-complete-sigma-compact`, five-way | #108 | E3, E5 and E6, kept separate |
 | `cor:nonseparable-ultrametric-nonborel` | #110 | E2 and E2c, kept separate |
 
@@ -1326,15 +1327,22 @@ issue trail, never in a committed ledger.
   `separable_of_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn`), the
   latter being exactly the v1 §2.10 repair that the received source promoted.
 
+* **`cor:nonseparable-metric-nonborel`** — `Ext/GeneralComponent.lean` (PR #119,
+  Issue #107). The ε-net clause is exposed by the sibling
+  `exists_aleph1_closed_discrete_separated_net` in `Ext/GeneralSpace.lean`
+  (`Cardinal.aleph 1 ≤ #↥D`, net clause retained; the old
+  `exists_aleph1_closed_discrete_separated` is now derived from it by
+  cardinality shrinkage, statement byte-identical). E1c is carried by the new
+  `IsComponentControlledExtensorOn` structure, which *composes* an ordinary
+  `IsIsometricExtensorOn` (E1) with the Lemma 4.4 point estimate rather than
+  adding a field to it; no existing theorem acquires the new bundle as a
+  hypothesis. Clause (1) is `not_measurableSet_CPMOn_component_of_isComponentControlledExtensorOn`;
+  clause (2) is `not_measurableSet_CPM_MetOn_of_isComponentControlledExtensorOn`,
+  derived from clause (1) via openness of the finite-distance locus
+  (`isClopen_setOf_edist_lt_top`), matching `lem:relative-borel-inheritance`.
+
 ### 7.2 Not yet formalised in the received source's form
 
-* **`cor:nonseparable-metric-nonborel`** — statement gate **#107**. Nothing
-  about its Lean form is settled here, and no declaration name for it should
-  be assumed. Two constraints this audit confirms from the source:
-  (i) the ε-net clause of `lem:maximal-separated-set` is load-bearing, and the
-  existing `exists_aleph1_closed_discrete_separated` does not expose it;
-  (ii) **E1c must not become a field of the existing `IsIsometricExtensorOn`
-  bundle** (§4), and no existing theorem may acquire it as a hypothesis.
 * **`cor:bounded-metric-complete-sigma-compact`, five-way** — statement gate
   **#108**.
   `Ext/CompleteMetrizability.lean` currently proves the v1 two-way statement
