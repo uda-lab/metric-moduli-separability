@@ -18,6 +18,7 @@
 -- Status: sorry-free; no custom axioms.
 
 import IshikiConj51.Ext.Component
+import IshikiConj51.Ext.BMetClopen
 import IshikiConj51.Ext.GeneralSeparability
 
 open Cardinal Set
@@ -214,6 +215,160 @@ theorem IsIsometricExtensorOn.preimage_component_eq {X : Type*} [TopologicalSpac
       edist (hE.toCPM d) (hE.toCPM e) < ⊤) ↔
       (e ∈ CPM.MetOn ↥A ∧ edist d e < ⊤)
   rw [IsIsometricExtensorOn.toCPM_mem_MetOn_iff hE e, hE.isometry_toCPM d e]
+
+theorem not_measurableSet_CPMOn_component_of_isComponentControlledExtensorOn
+    {X : Type*} [TopologicalSpace X] [TopologicalSpace.MetrizableSpace X]
+    (hX : ¬ TopologicalSpace.SeparableSpace X)
+    (hEx : ∀ (A : Set X), IsClosed A → ∀ e : CPMOn X, e ∈ CPM.MetOn X →
+      Nonempty (IsComponentControlledExtensorOn A e))
+    (d : CPMOn X) (hd : d ∈ CPM.MetOn X) :
+    ¬ MeasurableSet (CPMOn.component d) := by
+  obtain ⟨h, htop⟩ := id hd
+  letI : MetricSpace X := h.toMetricSpace.replaceTopology htop.symm
+  have hdist : ∀ x y : X, dist x y = d.1.1 x y := fun _ _ => rfl
+  obtain ⟨ε, hε, D, hDcard, hDclosed, hDdisc, hDpair, hDnet⟩ :=
+    exists_aleph1_closed_discrete_separated_net hX
+  letI : DiscreteTopology D := hDdisc
+  obtain ⟨bundle⟩ := hEx D hDclosed d hd
+  let d_D : CPMOn D := CPMOn.restrict D d
+  have hd_D_bare : d_D.1 ∈ CPM.Met D := by
+    apply isMetricOn_restrict_of_mem_MetOn
+      (ι := (Subtype.val : D → X))
+      (tA := (inferInstance : TopologicalSpace D))
+      (d := d_D.1)
+      (e := d)
+      (hι := Topology.IsEmbedding.subtypeVal)
+      (htA := DiscreteTopology.eq_bot)
+      (he := hd)
+      (hrestrict := fun a b => by
+        simp [d_D])
+  have hd_D : d_D ∈ CPM.MetOn D := by
+    obtain ⟨hm, htopbot⟩ := hd_D_bare
+    exact ⟨hm, htopbot.trans DiscreteTopology.eq_bot.symm⟩
+  let r : CPMOn X := bundle.toExtensor.toCPM d_D
+  have hr_MetOn : r ∈ CPM.MetOn X := by
+    change bundle.toExtensor.toCPM d_D ∈ CPM.MetOn X
+    exact bundle.toExtensor.met_preservation ⟨d_D, hd_D, rfl⟩
+  have hbound : ∀ x y : X, |r.1.1 x y - d.1.1 x y| ≤ 10 * ε + 2 := by
+    intro x y
+    obtain ⟨a, haD, hxa⟩ := hDnet x
+    obtain ⟨b, hbD, hyb⟩ := hDnet y
+    have hxa' : d.1.1 x a ≤ ε := by
+      rw [← hdist x a]
+      exact hxa
+    have hyb' : d.1.1 y b ≤ ε := by
+      rw [← hdist y b]
+      exact hyb
+    have hra : r.1.1 x a ≤ 4 * ε + 1 := by
+      have hpoint := bundle.point_estimate x ⟨a, haD⟩
+      have hpoint' : r.1.1 x a ≤ 4 * d.1.1 x a + 1 := by
+        simpa [r, d_D] using hpoint
+      linarith [hpoint', hxa']
+    have hrb : r.1.1 y b ≤ 4 * ε + 1 := by
+      have hpoint := bundle.point_estimate y ⟨b, hbD⟩
+      have hpoint' : r.1.1 y b ≤ 4 * d.1.1 y b + 1 := by
+        simpa [r, d_D] using hpoint
+      linarith [hpoint', hyb']
+    have hrab : r.1.1 a b = d.1.1 a b := by
+      have hext := bundle.toExtensor.extension d_D ⟨a, haD⟩ ⟨b, hbD⟩
+      simpa [r, d_D] using hext
+    have hrby : r.1.1 b y ≤ 4 * ε + 1 := by
+      rw [r.1.2.dist_comm b y]
+      exact hrb
+    have hdax : d.1.1 a x ≤ ε := by
+      rw [d.1.2.dist_comm a x]
+      exact hxa'
+    have hdyb : d.1.1 y b ≤ ε := hyb'
+    have hdby : d.1.1 b y ≤ ε := by
+      rw [d.1.2.dist_comm b y]
+      exact hdyb
+    have hrxy : r.1.1 x y ≤
+        r.1.1 x a + r.1.1 a b + r.1.1 b y := by
+      linarith [r.1.2.dist_triangle x a y, r.1.2.dist_triangle a b y]
+    have hdab : d.1.1 a b ≤
+        d.1.1 a x + d.1.1 x y + d.1.1 y b := by
+      linarith [d.1.2.dist_triangle a x b, d.1.2.dist_triangle x y b]
+    have hru : r.1.1 x y ≤ d.1.1 x y + 10 * ε + 2 := by
+      linarith [hrxy, hra, hrby, hrab, hdab, hdax, hdyb]
+    have hdxy : d.1.1 x y ≤
+        d.1.1 x a + d.1.1 a b + d.1.1 b y := by
+      linarith [d.1.2.dist_triangle x a y, d.1.2.dist_triangle a b y]
+    have hrax : r.1.1 a x ≤ 4 * ε + 1 := by
+      rw [r.1.2.dist_comm a x]
+      exact hra
+    have hrab_upper : r.1.1 a b ≤
+        r.1.1 a x + r.1.1 x y + r.1.1 y b := by
+      linarith [r.1.2.dist_triangle a x b, r.1.2.dist_triangle x y b]
+    have hdown : d.1.1 x y ≤ r.1.1 x y + 10 * ε + 2 := by
+      linarith [hdxy, hxa', hdby, hrab, hrab_upper, hrax, hrb]
+    rw [abs_sub_le_iff]
+    constructor <;> linarith [hru, hdown]
+  have hed : CPM.edist d.1 r.1 ≤ ENNReal.ofReal (10 * ε + 2) := by
+    apply CPM.edist_le_ofReal
+    intro x y
+    rw [abs_sub_comm]
+    exact hbound x y
+  have hed' : CPM.edist d.1 r.1 < ⊤ :=
+    lt_of_le_of_lt hed ENNReal.ofReal_lt_top
+  have hedOn : edist d r < ⊤ := by
+    rw [CPMOn.edist_eq]
+    exact hed'
+  have hr_in_component_d : r ∈ CPMOn.component d := ⟨hr_MetOn, hedOn⟩
+  have hcompeq : CPMOn.component r = CPMOn.component d :=
+    CPMOn.component_eq_of_mem hr_in_component_d
+  have hpullback : bundle.toExtensor.toCPM ⁻¹' CPMOn.component r =
+      CPMOn.component d_D := bundle.toExtensor.preimage_component_eq d_D
+  have hpullback_d : bundle.toExtensor.toCPM ⁻¹' CPMOn.component d =
+      CPMOn.component d_D := by
+    rw [← hcompeq]
+    exact hpullback
+  have hD_not_meas : ¬ MeasurableSet (CPMOn.component d_D) :=
+    CPMOn.component_not_measurableSet hDcard d_D hd_D
+  intro hmeas
+  have hpre_meas : MeasurableSet
+      (bundle.toExtensor.toCPM ⁻¹' CPMOn.component d) :=
+    hmeas.preimage bundle.toExtensor.isometry_toCPM.continuous.measurable
+  rw [hpullback_d] at hpre_meas
+  exact hD_not_meas hpre_meas
+
+theorem not_measurableSet_CPM_MetOn_of_isComponentControlledExtensorOn
+    {X : Type*} [TopologicalSpace X] [TopologicalSpace.MetrizableSpace X]
+    (hX : ¬ TopologicalSpace.SeparableSpace X)
+    (hEx : ∀ (A : Set X), IsClosed A → ∀ e : CPMOn X, e ∈ CPM.MetOn X →
+      Nonempty (IsComponentControlledExtensorOn A e)) :
+    ¬ MeasurableSet (CPM.MetOn X) := by
+  intro hmeas
+  letI : MetricSpace X := TopologicalSpace.metrizableSpaceMetric X
+  let d₀ : CPMOn X :=
+    ⟨⟨dist, ⟨dist_self, dist_comm, dist_triangle⟩⟩, by
+      change Continuous (fun p : X × X => dist p.1 p.2)
+      exact continuous_dist⟩
+  have hmetric : IsMetricOn (dist : X → X → ℝ) := by
+    refine ⟨dist_self, ?_, dist_comm, dist_triangle⟩
+    intro x y hxy
+    exact dist_eq_zero.mp hxy
+  have hmetric_toMetricSpace :
+      hmetric.toMetricSpace = (inferInstance : MetricSpace X) := by
+    apply MetricSpace.ext
+    ext x y
+    rfl
+  have htop : hmetric.topology = (inferInstance : TopologicalSpace X) := by
+    rw [hmetric.topology_eq_metricSpace_topology, hmetric_toMetricSpace]
+    with_reducible_and_instances rfl
+  have hd₀ : d₀ ∈ CPM.MetOn X := by
+    change ∃ h : IsMetricOn (dist : X → X → ℝ),
+      h.topology = (inferInstance : TopologicalSpace X)
+    exact ⟨hmetric, htop⟩
+  have hnot :=
+    not_measurableSet_CPMOn_component_of_isComponentControlledExtensorOn
+      hX hEx d₀ hd₀
+  have hcomponent : CPMOn.component d₀ =
+      CPM.MetOn X ∩ {e : CPMOn X | edist d₀ e < ⊤} := by
+    rfl
+  have hcompmeas : MeasurableSet (CPMOn.component d₀) := by
+    rw [hcomponent]
+    exact hmeas.inter (isClopen_setOf_edist_lt_top d₀).isOpen.measurableSet
+  exact hnot hcompmeas
 
 end
 end IshikiExt
