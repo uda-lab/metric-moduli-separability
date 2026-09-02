@@ -14,9 +14,10 @@
 --   * `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
 
 import IshikiConj51.Ext.UltraPublished
+import IshikiConj51.Ext.Component
 import IshikiConj51.Ext.GeneralSpace
 
-open Set
+open Cardinal Set
 open scoped ENNReal Topology
 
 namespace IshikiExt
@@ -257,6 +258,265 @@ theorem continuous_centreMap
     (y := centreMap d a A hnet x) ?_
   filter_upwards [Metric.closedBall_mem_nhds x ha] with x' hx'
   exact hlocal x x' hx'
+
+/-! ## B2: coding on an `ℵ₁`-subset of an uncountable ball
+
+The subset `H` need not itself be a ball.  The component estimate remembers an
+enclosing `d`-ball, while compatibility below uses a uniform separation bound
+on the whole carrier and never infers a distance bound from `x ∉ H`. -/
+
+/-- Select an `ℵ₁`-sized `H` containing `z` inside an uncountable closed
+ball and identify it with the carrier of the ultrametric coding. -/
+theorem exists_aleph1_subset_uBall_equiv
+    {Z : Type*} (d : UCPM Z R) (z : Z) (hZ : ¬ Countable Z)
+    {S : Set (ℕ → Bool)} (hScard : #(↥S) = Cardinal.aleph 1) :
+    ∃ q ∈ R.carrier, ∃ H : Set Z,
+      H ⊆ uBall d z q ∧ z ∈ H ∧ #(↥H) = Cardinal.aleph 1 ∧
+        Nonempty (↥H ≃ UltraIndex S) := by
+  obtain ⟨q, hqR, hqunc⟩ := exists_radius_not_countable d z hZ
+  have hq : 0 ≤ q := R.nonneg hqR
+  have hballcard : Cardinal.aleph 1 ≤ #(↥(uBall d z q)) := by
+    exact Cardinal.aleph_one_le_iff.mpr
+      (Cardinal.aleph0_lt_mk_iff.mpr (not_countable_iff.mp hqunc))
+  obtain ⟨H, hHsub, hzH, hHcard⟩ :=
+    exists_aleph1_subset (mem_uBall_self d z hq) hballcard
+  refine ⟨q, hqR, H, hHsub, hzH, hHcard, ?_⟩
+  refine Cardinal.lift_mk_eq'.mp ?_
+  rw [hHcard, card_ultraIndex hScard]
+  simp
+
+section SubsetCoding
+
+variable {Z : Type*} {r : ℕ → ℝ} {S : Set (ℕ → Bool)}
+
+/-- The Lemma 3.10 coding transported to `H`, then max-amalgamated with the
+base ultrametric on the whole carrier. -/
+def mCoding (hr : RangeSet.IsScale R r) (d : UCPM Z R) (H : Set Z)
+    (z : Z) (hz : z ∈ H) (θ : ↥H → UltraIndex S) (t : ℕ → Bool) : UCPM Z R :=
+  hAmalgam d H z hz θ (phiU hr S t)
+
+theorem mCoding_val (hr : RangeSet.IsScale R r) {d : UCPM Z R}
+    {H : Set Z} {z : Z} {hz : z ∈ H} (θ : ↥H → UltraIndex S)
+    (t : ℕ → Bool) (x y : Z) :
+    (mCoding hr d H z hz θ t).1 x y
+      = max (d.1 (hRetract H z x) (hRetract H z y))
+        (dU r S t (θ (hInto H z hz x)) (θ (hInto H z hz y))) := rfl
+
+theorem mCoding_in_in (hr : RangeSet.IsScale R r) {d : UCPM Z R}
+    {H : Set Z} {z : Z} {hz : z ∈ H} {θ : ↥H → UltraIndex S}
+    {t : ℕ → Bool} {x y : Z} (hx : x ∈ H) (hy : y ∈ H) :
+    (mCoding hr d H z hz θ t).1 x y = dU r S t (θ ⟨x, hx⟩) (θ ⟨y, hy⟩) :=
+  hAmalgam_in_in (d := d) (H := H) (z := z) (hz := hz)
+    (κ := θ) (e := phiU hr S t) hx hy
+
+theorem mCoding_out_out (hr : RangeSet.IsScale R r) {d : UCPM Z R}
+    {H : Set Z} {z : Z} {hz : z ∈ H} {θ : ↥H → UltraIndex S}
+    {t : ℕ → Bool} {x y : Z} (hx : x ∉ H) (hy : y ∉ H) :
+    (mCoding hr d H z hz θ t).1 x y = d.1 x y :=
+  hAmalgam_out_out (d := d) (H := H) (z := z) (hz := hz)
+    (κ := θ) (e := phiU hr S t) hx hy
+
+/-- On a pair pulled back through the coding equivalence, the amalgam is
+exactly the original Lemma 3.10 coding. -/
+theorem mCoding_val_symm (hr : RangeSet.IsScale R r) {d : UCPM Z R}
+    {H : Set Z} {z : Z} {hz : z ∈ H} (θ : ↥H ≃ UltraIndex S)
+    (t : ℕ → Bool) (u v : UltraIndex S) :
+    (mCoding hr d H z hz θ t).1 (θ.symm u : Z) (θ.symm v : Z) = dU r S t u v := by
+  rw [mCoding_in_in hr (θ.symm u).2 (θ.symm v).2, Subtype.coe_eta,
+    Subtype.coe_eta, θ.apply_symm_apply, θ.apply_symm_apply]
+
+/-- Compatibility for `t ∉ S`.  The strict `a`-separation of the base carrier
+supplies the uniform isolating radius in every branch crossing or outside
+`H`; no ball-membership implication is used. -/
+theorem mCoding_topology_eq_bot (hr : RangeSet.IsScale R r)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    (θ : ↥H ≃ UltraIndex S) {a : ℝ} (ha : 0 < a)
+    (hsep : ∀ x y : Z, x ≠ y → a < d.1 x y)
+    {t : ℕ → Bool} (htS : t ∉ S) :
+    UCPM.IsCompatible (mCoding hr d H z hz θ t) := by
+  have hdm : IsMetricOn d.1 := by
+    refine d.2.toIsMetricOn fun x y hxy => ?_
+    by_contra hne
+    exact absurd hxy (ne_of_gt (ha.trans (hsep x y hne)))
+  have hbase : ∀ x y : Z,
+      d.1 (hRetract H z x) (hRetract H z y) ≤
+        (mCoding hr d H z hz θ t).1 x y :=
+    base_le_hAmalgam (d := d) (H := H) (z := z) (hz := hz)
+      (κ := θ) (e := phiU hr S t)
+  have hcm : IsMetricOn (mCoding hr d H z hz θ t).1 := by
+    refine (mCoding hr d H z hz θ t).2.toIsMetricOn fun x y hxy => ?_
+    by_cases hx : x ∈ H
+    · by_cases hy : y ∈ H
+      · rw [mCoding_in_in hr hx hy] at hxy
+        have hθ := (dU_isMetricOn hr S t).eq_of_dist_eq_zero hxy
+        exact congrArg Subtype.val (θ.injective hθ)
+      · exfalso
+        have hle := hbase x y
+        rw [hRetract_of_mem hx, hRetract_of_notMem hy, hxy] at hle
+        have hzy : z ≠ y := fun h => hy (h ▸ hz)
+        exact (not_lt_of_ge hle) (ha.trans (hsep z y hzy))
+    · by_cases hy : y ∈ H
+      · exfalso
+        have hle := hbase x y
+        rw [hRetract_of_notMem hx, hRetract_of_mem hy, hxy] at hle
+        have hxz : x ≠ z := fun h => hx (h ▸ hz)
+        exact (not_lt_of_ge hle) (ha.trans (hsep x z hxz))
+      · rw [mCoding_out_out hr hx hy] at hxy
+        exact hdm.eq_of_dist_eq_zero hxy
+  refine ⟨hcm, hcm.topology_eq_bot_iff.mpr fun u => ?_⟩
+  by_cases hu : u ∈ H
+  · obtain ⟨ε, hε, hall⟩ :=
+      (dU_isMetricOn hr S t).topology_eq_bot_iff.mp
+        (dU_topology_eq_bot hr htS) (θ ⟨u, hu⟩)
+    refine ⟨min ε a, lt_min hε ha, fun v hv => ?_⟩
+    by_cases hvH : v ∈ H
+    · rw [mCoding_in_in hr hvH hu] at hv
+      have hθ := hall _ (lt_of_lt_of_le hv (min_le_left _ _))
+      exact congrArg Subtype.val (θ.injective hθ)
+    · exfalso
+      have hle := hbase v u
+      rw [hRetract_of_notMem hvH, hRetract_of_mem hu] at hle
+      have hvz : v ≠ z := fun h => hvH (h ▸ hz)
+      have hvza : d.1 v z < a :=
+        lt_of_le_of_lt hle (lt_of_lt_of_le hv (min_le_right _ _))
+      exact (not_lt_of_ge (hsep v z hvz).le) hvza
+  · refine ⟨a, ha, fun v hv => ?_⟩
+    by_cases hvH : v ∈ H
+    · exfalso
+      have hle := hbase v u
+      rw [hRetract_of_mem hvH, hRetract_of_notMem hu] at hle
+      have hzu : z ≠ u := fun h => hu (h ▸ hz)
+      exact (not_lt_of_ge (hsep z u hzu).le) (lt_of_le_of_lt hle hv)
+    · rw [mCoding_out_out hr hvH hu] at hv
+      by_contra hvu
+      exact (not_lt_of_ge (hsep v u hvu).le) hv
+
+/-- Compatibility fails for `t ∈ S`; the non-isolated coding centre and its
+approaching spokes all lie inside `H`. -/
+theorem mCoding_topology_ne_bot (hr : RangeSet.IsScale R r)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    (θ : ↥H ≃ UltraIndex S) {t : ℕ → Bool} (htS : t ∈ S) :
+    ¬ UCPM.IsCompatible (mCoding hr d H z hz θ t) := by
+  rintro ⟨hcm, hbot⟩
+  obtain ⟨ε, hε, hall⟩ :=
+    hcm.topology_eq_bot_iff.mp hbot
+      (θ.symm ((⟨t, htS⟩ : ↥S), none) : Z)
+  obtain ⟨n, hn⟩ := hr.exists_lt hε
+  have hval : dU r S t ((⟨t, htS⟩ : ↥S), some n) ((⟨t, htS⟩ : ↥S), none) = r n := by
+    rw [dU_same, clusterDist, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+    show max (uRadius r t t (some n)) (uRadius r t t none) = r n
+    rw [uRadius_some, uRadius_none, cantorDist_self, max_eq_right (hr.nonneg n),
+      max_eq_left (hr.nonneg n)]
+  have hlt : (mCoding hr d H z hz θ t).1
+      (θ.symm ((⟨t, htS⟩ : ↥S), some n) : Z)
+      (θ.symm ((⟨t, htS⟩ : ↥S), none) : Z) < ε := by
+    rw [mCoding_val_symm hr θ t, hval]
+    exact hn
+  have heq := hall _ hlt
+  have hinj := θ.symm.injective (Subtype.ext heq)
+  simp at hinj
+
+/-- **Amalgamated-coding compatibility.** -/
+theorem mem_UMet_mCoding_iff (hr : RangeSet.IsScale R r)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    (θ : ↥H ≃ UltraIndex S) {a : ℝ} (ha : 0 < a)
+    (hsep : ∀ x y : Z, x ≠ y → a < d.1 x y) (t : ℕ → Bool) :
+    mCoding hr d H z hz θ t ∈ UMet Z R ↔ t ∉ S :=
+  ⟨fun h htS => mCoding_topology_ne_bot hr θ htS h,
+    fun htS => mCoding_topology_eq_bot hr θ ha hsep htS⟩
+
+/-- **Amalgamated-coding component bound.**  The subset `H` is only assumed
+to lie in the selected closed ball.  The proof splits on membership in that
+enclosing ball, not on membership in `H`. -/
+theorem edist_mCoding_base_le (hr : RangeSet.IsScale R r)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    {θ : ↥H → UltraIndex S} {q : ℝ} (hqR : q ∈ R.carrier)
+    (hHball : H ⊆ uBall d z q) (t : ℕ → Bool) :
+    UCPM.edist d (mCoding hr d H z hz θ t) ≤
+      ENNReal.ofReal (max q (r 0)) := by
+  have hq : 0 ≤ q := R.nonneg hqR
+  have hret_mem : ∀ {x : Z}, x ∈ uBall d z q → hRetract H z x ∈ uBall d z q := by
+    intro x hx
+    by_cases hxH : x ∈ H
+    · rw [hRetract_of_mem hxH]
+      exact mem_uBall_self d z hq
+    · rw [hRetract_of_notMem hxH]
+      exact hx
+  refine UCPM.edist_le_ofReal ⟨R.max_mem hqR (hr.mem 0), fun x y => ?_⟩
+  by_cases hx : x ∈ uBall d z q
+  · by_cases hy : y ∈ uBall d z q
+    · rw [mCoding_val hr]
+      exact
+        ⟨le_max_of_le_right (le_max_of_le_left (uBall_dist_le hx hy)),
+          le_max_of_le_right (max_le
+            (le_max_of_le_left (uBall_dist_le (hret_mem hx) (hret_mem hy)))
+            (le_max_of_le_right (dU_le_head hr S t _ _)))⟩
+    · have hyH : y ∉ H := fun hy' => hy (hHball hy')
+      by_cases hxH : x ∈ H
+      · have hzy : d.1 z y = d.1 x y := by
+          rw [d.2.dist_comm z y, ← uBall_isosceles hy hx]
+          exact d.2.dist_comm y x
+        rw [mCoding_val hr, hRetract_of_mem hxH, hRetract_of_notMem hyH,
+          hInto_of_mem hxH, hInto_of_notMem hyH, hzy]
+        exact
+          ⟨le_max_of_le_left (le_max_left _ _),
+            max_le (le_max_left _ _)
+              (le_max_of_le_right (le_max_of_le_right (dU_le_head hr S t _ _)))⟩
+      · rw [mCoding_out_out hr hxH hyH]
+        exact ⟨le_max_left _ _, le_max_left _ _⟩
+  · have hxH : x ∉ H := fun hx' => hx (hHball hx')
+    by_cases hy : y ∈ uBall d z q
+    · by_cases hyH : y ∈ H
+      · have hxz : d.1 x z = d.1 x y := (uBall_isosceles hx hy).symm
+        rw [mCoding_val hr, hRetract_of_notMem hxH, hRetract_of_mem hyH,
+          hInto_of_notMem hxH, hInto_of_mem hyH, hxz]
+        exact
+          ⟨le_max_of_le_left (le_max_left _ _),
+            max_le (le_max_left _ _)
+              (le_max_of_le_right (le_max_of_le_right (dU_le_head hr S t _ _)))⟩
+      · rw [mCoding_out_out hr hxH hyH]
+        exact ⟨le_max_left _ _, le_max_left _ _⟩
+    · have hyH : y ∉ H := fun hy' => hy (hHball hy')
+      rw [mCoding_out_out hr hxH hyH]
+      exact ⟨le_max_left _ _, le_max_left _ _⟩
+
+/-- The upper half of the coding-family isometry. -/
+theorem edist_mCoding_le (hr : RangeSet.IsScale R r)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    {θ : ↥H → UltraIndex S} (s t : ℕ → Bool) :
+    UCPM.edist (mCoding hr d H z hz θ s) (mCoding hr d H z hz θ t) ≤
+      ENNReal.ofReal (cantorDist r s t) := by
+  refine UCPM.edist_le_ofReal ⟨cantorDist_mem hr s t, fun x y => ⟨?_, ?_⟩⟩
+  · rw [mCoding_val hr, mCoding_val hr]
+    refine max_le (le_max_of_le_left (le_max_left _ _)) ?_
+    refine (dU_le_max hr S s t _ _).trans ?_
+    exact max_le (le_max_of_le_left (le_max_right _ _)) (le_max_right _ _)
+  · rw [mCoding_val hr, mCoding_val hr]
+    refine max_le (le_max_of_le_left (le_max_left _ _)) ?_
+    have h := dU_le_max hr S t s (θ (hInto H z hz x)) (θ (hInto H z hz y))
+    rw [cantorDist_comm r t s] at h
+    exact h.trans
+      (max_le (le_max_of_le_left (le_max_right _ _)) (le_max_right _ _))
+
+/-- **Amalgamated-coding isometry.**  The separating pair lies in `H`, where
+the amalgam agrees exactly with the transported Lemma 3.10 coding. -/
+theorem edist_mCoding (hr : RangeSet.IsScale R r) (hS : Dense S)
+    {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+    (θ : ↥H ≃ UltraIndex S) (s t : ℕ → Bool) :
+    UCPM.edist (mCoding hr d H z hz θ s) (mCoding hr d H z hz θ t) =
+      ENNReal.ofReal (cantorDist r s t) := by
+  refine le_antisymm (edist_mCoding_le hr s t) ?_
+  rcases eq_or_ne s t with rfl | hst
+  · simp
+  obtain ⟨u, v, hus, hut⟩ := exists_separating_pair hr hS hst
+  refine UCPM.ofReal_le_edist fun c hc => ?_
+  refine UCPM.le_of_mem_tolerances hc (θ.symm u : Z) (θ.symm v : Z) ?_ ?_
+  · rw [mCoding_val_symm hr θ s]
+    exact hus
+  · rw [mCoding_val_symm hr θ t]
+    exact hut
+
+end SubsetCoding
 
 /-! ## B0 capstone statement signatures -/
 
