@@ -21,6 +21,8 @@ import IshikiConj51.Ext.Component
 import IshikiConj51.Ext.GeneralSpace
 import IshikiConj51.Ext.GeneralSeparability
 import IshikiConj51.Ext.CompleteMetrizability
+-- Issue #107: every component of `Met(X)` is non-Borel for nonseparable `X`.
+import IshikiConj51.Ext.GeneralComponent
 import IshikiConj51.Ext.Completeness
 import IshikiConj51.Ext.CompleteMetric
 

@@ -334,7 +334,15 @@ noncomputable def IsIsometricExtensorOn.toIsIsometricExtensor
 /- `#print axioms IshikiExt.IsIsometricExtensorOn.toIsIsometricExtensor`:
    `[propext, Classical.choice, Quot.sound]`. -/
 
-private theorem isMetricOn_restrict_of_mem_MetOn
+/-- **Restriction along a closed embedding of a discrete carrier.**  If the
+extended pseudometric `e` is a compatible metric on `X` and restricts along
+`ι` to `d`, then `d` is a compatible metric on the discrete carrier `A`.
+
+This is the reverse half of the extensor's `Met` correspondence: the forward
+half is the bundle's `met_preservation` field.  It is consumed by
+`IsIsometricExtensor.image_met_eq_range_inter` below and by the component
+pullback of `Ext/GeneralComponent.lean`. -/
+theorem isMetricOn_restrict_of_mem_MetOn
     {A X : Type*} {tA : TopologicalSpace A} [TopologicalSpace X]
     {ι : A → X} (hι : @Topology.IsEmbedding A X tA inferInstance ι)
     (htA : tA = ⊥) {d : CPM A} {e : CPMOn X}
