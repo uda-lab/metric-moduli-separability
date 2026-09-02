@@ -143,11 +143,15 @@ source order:
 `eq:metric-amalgamation-bilipschitz`,
 `eq:metric-component-coding-pullback`;
 `eq:metric-extensor-point-estimate`, `eq:metric-extensor-component-bound`;
-`cor:bounded-metric-complete-sigma-compact:met` … `:bmet`,
-`:each-component`, `:some-component`, `:sigma-compact`;
+`cor:bounded-metric-complete-sigma-compact:met`,
+`cor:bounded-metric-complete-sigma-compact:bmet`,
+`cor:bounded-metric-complete-sigma-compact:each-component`,
+`cor:bounded-metric-complete-sigma-compact:some-component`,
+`cor:bounded-metric-complete-sigma-compact:sigma-compact`;
 `eq:component-restriction-characterization`;
 `eq:metric-interpolation-distance`, `eq:restriction-map-ball-image`;
 `eq:complete-metric-coding-pullback`;
+`eq:complete-ultrametric-coding-pullback`;
 `item:ultrametric-coding-completeness`,
 `item:ultrametric-coding-compatibility`;
 `eq:ultrametric-parameter-compatible-pullback`;
@@ -212,15 +216,18 @@ received source. Where v1 has no entry, the statement or its label is new.
 | `thm:ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2, E2c) |
 | `cor:ultrametric-space-complete-separability` | NA | **PASS** | **PASS + EXTERNAL** (E4d) |
 | `thm:complete-ultrametric-nonborel` | NA | **PASS** | **PASS** |
-| `cor:complete-ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2(N1), E2c) |
+| `cor:complete-ultrametric-borel-separability` | NA | **FIX + EXTERNAL** | **PASS + EXTERNAL** (E2(N1)) |
 
 A = Archimedean, NA = non-Archimedean.
 
-**Net movement.** Four of the five v1 FIXes are discharged in the received
-source (`prop:dense-aleph1-nonborel-cantor`,
-`cor:bounded-metric-complete-sigma-compact`, `thm:complete-metric-nonborel`,
-and the shared ambient-transfer defect of `thm:ultrametric-borel-separability`
-/ `cor:complete-ultrametric-borel-separability`). One new FIX appears:
+**Net movement.** **All five v1 FIX verdicts are discharged** in the received
+source. They arise from four distinct defects, because
+`thm:ultrametric-borel-separability` and
+`cor:complete-ultrametric-borel-separability` shared one ambient-transfer
+cause; the other three are `prop:dense-aleph1-nonborel-cantor`,
+`cor:bounded-metric-complete-sigma-compact` and
+`thm:complete-metric-nonborel`. §3.1 classifies all five rows. One new FIX
+appears:
 `cor:metric-space-complete-separability`, a regression introduced between v1
 and this draft (§8). **The received source has no BLOCKED-level defect, and no
 statement in it was found to be false.**
@@ -408,8 +415,14 @@ density.
 `Q ⊆ S`; cardinality is `ℵ₁` because `f` is injective and `Q` is countable;
 co-density comes from `P ⊆ 2^ω ∖ S`, which holds because `f(S₀) ⊆ 2^ω ∖ P` and
 `P ∩ Q = ∅`; and `f(S₀)` is non-Borel because `2^ω ∖ P` is Borel in `2^ω` and
-`f` is a Borel isomorphism, so a Borel `f(S₀)` would make `S₀` Borel. Finally
-`S ∖ Q = f(S₀)` with `Q` countable, so a Borel `S` would make `f(S₀)` Borel.
+`f` is a Borel isomorphism, so a Borel `f(S₀)` would make `S₀` Borel. Finally,
+if `S` were Borel then so would be `S ∖ Q`, and hence so would be
+`f(S₀) = (S ∖ Q) ∪ (f(S₀) ∩ Q)`, a Borel set united with a countable one.
+**Note that `f(S₀)` and `Q` need not be disjoint**: `Q` avoids `P` but lies in
+`2^ω ∖ P`, which is exactly the range of `f`, so `S ∖ Q` is `f(S₀) ∖ Q` rather
+than `f(S₀)`. The manuscript's one-line "every countable set is Borel" is the
+correct hint for this step, but the step is the countable correction just
+given, not a set equality.
 ✓ **The Borel isomorphism is used only for Borel structure and cardinality,
 never to transport density**, which is precisely the v1 defect; and the
 citation the v1 note recommended adding is present, to Srivastava rather than
@@ -806,7 +819,7 @@ bi-density was for. Lean task: #110 (open).
   "consequently" clause uses the same clopen finite-distance-class route as
   `thm:complete-metric-nonborel`. ✓
 * **`cor:complete-ultrametric-borel-separability`, v1 verdict FIX, now PASS
-  (E2(N1), E2c).** `UComp(Y;R) ≠ ∅` makes `Y` completely metrizable, so E2's
+  (E2(N1), and *not* E2c).** `UComp(Y;R) ≠ ∅` makes `Y` completely metrizable, so E2's
   completeness clause is available; the coding ultrametrics on `A` are
   complete and so are their amalgams, so `F̄⁻¹(UComp(Y;R)) = 2^ω ∖ S`, the
   reverse inclusion coming from restriction to `A²` as in §2.19 item 10. ✓
@@ -824,7 +837,10 @@ bi-density was for. Lean task: #110 (open).
   and there is no claim in the source that it can be chosen *simultaneously*
   with the component-controlled data of §2.19. The proof does not need such a
   claim; a revision should make the scope of "repeat" explicit so that a
-  reader does not infer one.
+  reader does not infer one. Because the component estimates are not consumed,
+  **this corollary depends on E2(N1) alone and not on E2c**; §4's E2c row and
+  the dependency graph in §6 both record E2c as an input of
+  `cor:nonseparable-ultrametric-nonborel` only.
 
 ### 2.21 Editorial findings (no verdict change)
 
@@ -911,7 +927,7 @@ proof or statement makes the defect moot).
 | v1 §3, E4d | cite Alexandrov–Lavrentiev, used silently in three places | **incorporated correctly** — `thm:complete-metrizability-g-delta` |
 | v1 §2.9 | give `cor:metric-space-complete-separability` a proof | **incorporated, but the printed proof is the #113 defect** (§8) |
 | v1 §2.6 | state the `Met(Z)` version, announced in the abstract but stated nowhere | **incorporated correctly** — `cor:discrete-metric-nonborel`(2); but the introduction still cites the component theorem for it (§2.21) |
-| v1 §2.7 (i), (ii) | two implicit steps in the component proof | **still outstanding** — `eq:metric-amalgamation-compatibility` is still asserted without proof, and `z ∈ H` is still implicit (§2.13) |
+| v1 §2.7 (i), (ii) | make two implicit steps of the component proof explicit | **still outstanding as an exposition request** — the received source still asserts `eq:metric-amalgamation-compatibility` without proof and still leaves `z ∈ H` implicit. Both steps are discharged in §2.13, so the verdict stays PASS, exactly as the v1 note kept PASS on 3.4 while recording the same two steps as "implicit but immediate" |
 | v1 §2.8 | the pullback step left implicit in the transfer proof | **incorporated correctly** — `lem:metric-extensor-pullbacks` and `lem:continuous-pullback-obstruction` |
 | v1 §2.10 / §3, E3 | verify Koshino's "Corollary 1.2" number against the published version | **still outstanding** — the manuscript still cites that number |
 | v1 §2.14 sub-lemma | `𝒰𝒟^R`-completeness of `UCPM(Y;R)`, proved by the audit because v1 did not state it | **superseded** — now `lem:ucpm-complete`, cited |
@@ -928,23 +944,36 @@ averaged across the two columns of §2.
 ## 4. External dependencies (exact statements)
 
 **E1 — Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 (v4),
-Theorem 1.1.** Verified against the arXiv source. Statement: *let `X` be a
-metrizable space and `A` a closed subset; then there are isometric embeddings
-`E : Met(A) → Met(X)` and `Ẽ : CPM(A) → CPM(X)` such that (1) `Ẽ` extends `E`
-and `E(d)|_{A²} = d`; (2) `𝒟_X(E(d),E(e)) = 𝒟_A(d,e)`; (3)
-`E(BMet(A)) ⊆ BMet(X)` and `Ẽ(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)`; (4) if `X` is
-completely metrizable, the embeddings can be chosen so that
-`E(Comp(A)) ⊆ Comp(X)`. In particular `E(Met(A))` is closed in `Met(X)`.*
+Theorem 1.1.** The external statement and the received source's rendering of
+it differ in one clause, so they are recorded separately.
+
+*What the external source states*, verified against the arXiv v4 text and
+carried over unchanged from the v1 note §3: *let `X` be a metrizable space and
+`A` a closed subset; then there is a map `E : Met(A) → Met(X)` such that (1)
+`E(d)|_{A²} = d`; (2) `𝒟_A(d,e) = 𝒟_X(E(d),E(e))`; (3)
+`E(BMet(A)) ⊆ BMet(X)`; (4) `E(Comp(A)) ⊆ Comp(X)`. Furthermore there is an
+isometric extensor `Ẽ : CPM(A) → CPM(X)` of pseudometrics with
+`Ẽ|_{Met(A)} = E`; in this setting `Ẽ(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)`, and
+`E(Met(A))` is closed in `Met(X)`.*
+
+*How the received source renders it*: the same content, with the two halves of
+`Ẽ` folded into clause (3), and with clause (4) **conditioned on `X` being
+completely metrizable** — a hypothesis the external statement does not carry.
+
 Used by: `lem:metric-extensor-pullbacks`, `thm:borel-separability` (clause 3),
 `cor:nonseparable-metric-nonborel` (clauses 1–3, plus **E1c**),
 `cor:complete-metric-borel-separability` (clause 4).
 
-*Caveat resolved.* The v1 note recorded that the source states clause (4)
-unconditionally, that it cannot hold when `Comp(X) = ∅` while
-`Comp(A) ≠ ∅` (take `X = ℚ`, `A = {0}`), and that the source's own proof
-carries "`X` completely metrizable". The received source now renders the
-clause with that hypothesis, so the audit's caveat is discharged **in the
-manuscript**; it still stands as a report to make against the cited source.
+*The clause (4) defect is in the external source and is still outstanding
+there.* As literally stated on arXiv, clause (4) is unconditioned on `X`, but
+it cannot hold when `Comp(X) = ∅` while `Comp(A) ≠ ∅` (take `X = ℚ`,
+`A = {0}`); the source's own proof carries "`X` completely metrizable". The
+received source's conditional rendering is therefore **more faithful to what
+the source proves than the source's own statement is**, and consuming E1
+clause (4) is sound wherever the received source consumes it. What is
+discharged is the audit's request that the manuscript record the hypothesis;
+the misstatement in the cited paper stands and is still worth reporting to its
+author.
 
 **E1c — Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 (v4),
 Lemma 4.4 (printed p. 24) — construction data from the proof of Theorem 1.1.**

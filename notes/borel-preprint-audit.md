@@ -13,8 +13,11 @@
 > **Subject:** Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics
 > Implies Separability*, arXiv:2608.19618 v1 (20 Aug 2026). All statements were
 > checked against the LaTeX source of v1.
-> **Role:** this note is the active mathematical source of truth for the Borel
-> track and the statement gate for its Lean formalisation.
+> **Role:** this note was the mathematical source of truth for the Borel track
+> and the statement gate for its Lean formalisation through arXiv v1; the
+> successor note named in the banner above is now that gate. This note remains
+> authoritative for the v1 verdicts and for the per-declaration Lean package of
+> §7.
 > Numbers such as "Theorem 3.3" are derived from the v1 source's `[section]`
 > theorem counter; the LaTeX labels are the stable identifiers.
 > **Policy:** a statement is not accepted because it appears in the preprint;
