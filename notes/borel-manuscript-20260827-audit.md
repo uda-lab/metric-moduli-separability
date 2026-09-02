@@ -1272,7 +1272,7 @@ from the Lean sources and from the Issue, never from this table.
 | `thm:metric-component-nonborel`, `\|Z\| ≥ ℵ₁` form | #106 | none beyond the discrete core |
 | `prop:dense-aleph1-nonborel-cantor`, bi-density | #109 | none; the Lean route avoids E4c |
 | `cor:nonseparable-metric-nonborel` | PR #119 (Issue #107) | E1 and E1c, kept separate |
-| `cor:bounded-metric-complete-sigma-compact`, five-way | #108 | E3, E5 and E6, kept separate |
+| `cor:bounded-metric-complete-sigma-compact`, five-way | Issue #108 | E3, E5 and E6, kept separate |
 | `cor:nonseparable-ultrametric-nonborel` | #110 | E2 and E2c, kept separate |
 
 ---
@@ -1341,13 +1341,53 @@ issue trail, never in a committed ledger.
   derived from clause (1) via openness of the finite-distance locus
   (`isClopen_setOf_edist_lt_top`), matching `lem:relative-borel-inheritance`.
 
+* **`cor:bounded-metric-complete-sigma-compact`, five-way** — Issue #108.
+  `Ext/CompleteMetrizability.lean`'s v1 two-way statement
+  (`isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace`) is
+  reused unchanged, not rewritten, and its lemma chain feeds the new
+  `bmet ⇒ sigma-compact` step. The five-way statement itself is
+  `Ext/FiveWay.lean`'s `tfae_isCompletelyMetrizableSpace_iff_sigmaCompactSpace`,
+  a `List.TFAE` over the five clauses, assembled as a Hamiltonian cycle via
+  `List.tfae_of_cycle`. E5 and E6 entered as the two provenance-labelled
+  bundles the fidelity gate fixed: `IsMetricInterpolationOn` (E5, singleton
+  form, exact `edist` equality) and `HausdorffOpenImageHypothesis` (E6,
+  confirmed absent from Mathlib at the 2026-09-02 inventory), neither folded
+  into E1 or E3. The six-step route:
+  - `met ⇒ each-component`:
+    `isCompletelyMetrizableSpace_component_of_isCompletelyMetrizableSpace_CPM_MetOn`,
+    via the closed-embedding fact
+    `CPMOn.isClosedEmbedding_component_inclusion` (`Ext/GeneralComponent.lean`).
+  - `each-component ⇒ met`:
+    `isCompletelyMetrizableSpace_CPM_MetOn_of_forall_component`, via the
+    homeomorphism between `Met(X)` and the topological disjoint union of its
+    components (`Mathlib`'s `Function.Fiber`/`sigmaIsoHom` machinery and the
+    index-unrestricted `IsCompletelyMetrizableSpace.sigma` instance).
+  - `each-component ⇒ bmet`: `isCompletelyMetrizableSpace_CPM_BMetOn_of_forall_component`,
+    identifying `BMet(X)` with the component of the truncated metric
+    `min{d,1}`.
+  - `bmet ⇒ sigma-compact`: `sigmaCompactSpace_of_isCompletelyMetrizableSpace_CPM_BMetOn`,
+    reusing the v1 two-way theorem via `hE3` specialised to `A = univ`.
+  - `sigma-compact ⇒ each-component` (Direction A):
+    `isCompletelyMetrizableSpace_component_of_sigmaCompactSpace`, the
+    ball-confinement `G_δ` characterisation
+    (`eq:component-restriction-characterization`) of §2.16 above, proved
+    against the reverse Alexandrov theorem `isCompletelyMetrizableSpace_of_isGδ`
+    (`Ext/GDeltaCompletelyMetrizable.lean`) — new infrastructure, confirmed
+    absent from Mathlib, formalising Kechris Theorem 3.11's reverse direction
+    (E4d) for the first time in this repository.
+  - `some-component ⇒ sigma-compact` (Direction B):
+    `sigmaCompactSpace_of_exists_isCompletelyMetrizableSpace_component`, via
+    the restriction maps' continuity/surjectivity/openness
+    (`continuous_restrictAballComponentMap`,
+    `surjective_restrictAballComponentMap`,
+    `isOpenMap_restrictAballComponentMap`, all built from E5's
+    `exists_component_interpolant`) and E1 "restricted" to a closed subspace
+    (`exists_isBddIsometricExtensorOn_of_isClosed_subset`, a genuine new
+    isometry-squeeze argument: E1's extensor composed with restriction to a
+    closed superset stays an exact isometry, not merely non-expansive).
+
 ### 7.2 Not yet formalised in the received source's form
 
-* **`cor:bounded-metric-complete-sigma-compact`, five-way** — statement gate
-  **#108**.
-  `Ext/CompleteMetrizability.lean` currently proves the v1 two-way statement
-  and the `Met(X)` complete-metrizability corollary. E5 and E6 must enter as
-  separate provenance-labelled hypotheses, not folded into E1 or E3.
 * **`cor:nonseparable-ultrametric-nonborel`** — statement gate **#110**. E2c must not
   become a field of the existing `IsUltraIsometricExtensor` bundle.
 * **`cor:discrete-metric-nonborel`** — no separate gate. Clause (1) is
