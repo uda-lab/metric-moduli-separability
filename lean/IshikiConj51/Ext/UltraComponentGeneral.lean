@@ -637,6 +637,188 @@ theorem exists_continuous_Fbar {d : UCPMOn Y R} {a : ℝ}
 
 end DenseCodingExtension
 
+/-! ## B4: exact pullback of the finite-distance component -/
+
+section ExactComponentPullback
+
+variable {Y : Type*} [TopologicalSpace Y] {A : Set Y}
+variable {r : ℕ → ℝ} {S : Set (ℕ → Bool)}
+
+/-- The extension of the coding family restricts to the original amalgamated
+coding for every Cantor parameter, including parameters in the bad set `S`. -/
+theorem restrict_Fbar_eq_mCoding {d : UCPMOn Y R} {a : ℝ}
+    (hd : d ∈ UMetOn Y R) (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hS : Dense S) (hG : Dense Sᶜ)
+    (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
+    (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+      Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩)
+    (t : ℕ → Bool) :
+    UCPMOn.restrict (Subtype.val : ↥A → Y) (Fbar t) =
+      mCoding hr (UCPMOn.restrict (Subtype.val : ↥A → Y) d) H z hz θ t := by
+  let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  have hdA : dA ∈ UMet ↥A R := by
+    exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+      (by
+        letI : TopologicalSpace ↥A := ⊥
+        exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+      E2c.toExtensor.domain_discrete hd
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+    intro x y hxy
+    simpa [dA] using hsep x y hxy
+  have heq :
+      (fun t : ℕ → Bool => UCPMOn.restrict (Subtype.val : ↥A → Y) (Fbar t)) =
+        fun t : ℕ → Bool => mCoding hr dA H z hz θ t := by
+    refine Continuous.ext_on hG
+      ((UCPMOn.lipschitzWith_restrict
+        (Subtype.val : ↥A → Y)).continuous.comp hFbar)
+      (continuous_of_edist_le_cantorDist hr fun s t => edist_mCoding_le hr s t) ?_
+    intro u hu
+    show UCPMOn.restrict (Subtype.val : ↥A → Y) (Fbar u) =
+      mCoding hr dA H z hz θ u
+    rw [hFbar_apply u hu]
+    change UCPMOn.restrict (Subtype.val : ↥A → Y)
+        (E2c.toExtensor.toUCPMOn
+          ⟨mCoding hr dA H z hz θ u,
+            (mem_UMet_mCoding_iff hr θ ha hsepA u).mpr hu⟩) =
+      mCoding hr dA H z hz θ u
+    exact E2c.restrict _
+  simpa [dA] using congrFun heq t
+
+/-- Compatibility of the extended coding is pulled back exactly to the dense
+complement of `S`. -/
+theorem mem_UMetOn_Fbar_iff {d : UCPMOn Y R} {a : ℝ}
+    (hd : d ∈ UMetOn Y R) (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hS : Dense S) (hG : Dense Sᶜ)
+    (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
+    (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+      Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩)
+    (t : ℕ → Bool) :
+    Fbar t ∈ UMetOn Y R ↔ t ∈ Sᶜ := by
+  let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  have hdA : dA ∈ UMet ↥A R := by
+    exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+      (by
+        letI : TopologicalSpace ↥A := ⊥
+        exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+      E2c.toExtensor.domain_discrete hd
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+    intro x y hxy
+    simpa [dA] using hsep x y hxy
+  constructor
+  · intro ht
+    have hrestrict : UCPMOn.restrict (Subtype.val : ↥A → Y) (Fbar t) ∈
+        UMet ↥A R := by
+      exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+        (by
+          letI : TopologicalSpace ↥A := ⊥
+          exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+        E2c.toExtensor.domain_discrete ht
+    rw [restrict_Fbar_eq_mCoding hd hR hr E2c H z hz θ ha hsep hS hG
+      Fbar hFbar hFbar_apply t] at hrestrict
+    exact (mem_UMet_mCoding_iff hr θ ha hsepA t).mp hrestrict
+  · intro ht
+    rw [hFbar_apply t ht]
+    change E2c.toExtensor.toUCPMOn
+        ⟨mCoding hr dA H z hz θ t,
+          (mem_UMet_mCoding_iff hr θ ha hsepA t).mpr ht⟩ ∈ UMetOn Y R
+    exact E2c.umet_preservation _
+
+/-- Every value of the extended coding family lies at finite distance from
+the base metric.  The ball hypotheses are exactly the B2 data used by
+`edist_mCoding_base_le`; they are not needed by the B3 extension itself. -/
+theorem edist_Fbar_lt_top {d : UCPMOn Y R} {a q : ℝ}
+    (hd : d ∈ UMetOn Y R) (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hS : Dense S) (hG : Dense Sᶜ)
+    (hqR : q ∈ R.carrier)
+    (hHball : H ⊆ uBall
+      (UCPMOn.restrict (Subtype.val : ↥A → Y) d) z q)
+    (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
+    (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+      Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩)
+    (t : ℕ → Bool) :
+    edist d (Fbar t) < ⊤ := by
+  let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  have hdA : dA ∈ UMet ↥A R := by
+    exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+      (by
+        letI : TopologicalSpace ↥A := ⊥
+        exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+      E2c.toExtensor.domain_discrete hd
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+    intro x y hxy
+    simpa [dA] using hsep x y hxy
+  let dHat := E2c.toExtensor.toUCPMOn (⟨dA, hdA⟩ : ↥(UMet ↥A R))
+  have hdHat : edist d dHat < ⊤ := by
+    rw [edist_comm]
+    exact E2c.component_control hd
+  have hfinite_on_compl : ∀ u ∈ Sᶜ, edist d (Fbar u) < ⊤ := by
+    intro u hu
+    have hdHat_Fbar : edist dHat (Fbar u) < ⊤ := by
+      rw [hFbar_apply u hu]
+      change edist
+          (E2c.toExtensor.toUCPMOn (⟨dA, hdA⟩ : ↥(UMet ↥A R)))
+          (E2c.toExtensor.toUCPMOn
+            ⟨mCoding hr dA H z hz θ u,
+              (mem_UMet_mCoding_iff hr θ ha hsepA u).mpr hu⟩) < ⊤
+      rw [E2c.isometry_toUCPMOn]
+      exact lt_of_le_of_lt (edist_mCoding_base_le hr hqR hHball u)
+        ENNReal.ofReal_lt_top
+    exact lt_of_le_of_lt (edist_triangle d dHat (Fbar u))
+      (ENNReal.add_lt_top.mpr ⟨hdHat, hdHat_Fbar⟩)
+  have hfinite_closed : IsClosed {e : UCPMOn Y R | edist d e < ⊤} := by
+    rw [← isOpen_compl_iff, EMetric.isOpen_iff]
+    intro e he
+    refine ⟨1, one_pos, fun f hf hfd => he ?_⟩
+    have hfe : edist f e < ⊤ :=
+      lt_of_lt_of_le (Metric.mem_eball.mp hf) le_top
+    calc edist d e ≤ edist d f + edist f e := edist_triangle d f e
+      _ < ⊤ := ENNReal.add_lt_top.mpr ⟨hfd, hfe⟩
+  have hclosure : closure (Sᶜ) ⊆
+      Fbar ⁻¹' {e : UCPMOn Y R | edist d e < ⊤} :=
+    closure_minimal hfinite_on_compl (hfinite_closed.preimage hFbar)
+  exact hclosure (hG t)
+
+/-- The literal pullback identity
+`Fbar ⁻¹' UCPMOn.component R d = Sᶜ`. -/
+theorem preimage_UCPMOn_component_Fbar {d : UCPMOn Y R} {a q : ℝ}
+    (hd : d ∈ UMetOn Y R) (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hS : Dense S) (hG : Dense Sᶜ)
+    (hqR : q ∈ R.carrier)
+    (hHball : H ⊆ uBall
+      (UCPMOn.restrict (Subtype.val : ↥A → Y) d) z q)
+    (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
+    (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+      Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩) :
+    Fbar ⁻¹' UCPMOn.component R d = Sᶜ := by
+  ext t
+  constructor
+  · intro ht
+    exact (mem_UMetOn_Fbar_iff hd hR hr E2c H z hz θ ha hsep hS hG
+      Fbar hFbar hFbar_apply t).mp ht.1
+  · intro ht
+    exact ⟨(mem_UMetOn_Fbar_iff hd hR hr E2c H z hz θ ha hsep hS hG
+        Fbar hFbar hFbar_apply t).mpr ht,
+      edist_Fbar_lt_top hd hR hr E2c H z hz θ ha hsep hS hG hqR hHball
+        Fbar hFbar hFbar_apply t⟩
+
+end ExactComponentPullback
+
 /-! ## B0 capstone statement signatures -/
 
 /-- The component clause of `cor:nonseparable-ultrametric-nonborel` from audit
