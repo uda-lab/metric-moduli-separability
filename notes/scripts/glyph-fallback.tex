@@ -1,0 +1,22 @@
+\usepackage{fontspec}
+% Fallback entries must not end with a semicolon; a trailing semicolon makes
+% luaotfload's parser fail with "attempt to index a nil value (local 'f')".
+% An unresolvable font name is fatal at build time on this engine, not silently
+% skipped; typeset.sh filters entries with luaotfload-tool --find before rendering.
+\directlua{
+luaotfload.add_fallback("symfb", {
+  @@FALLBACK_ENTRIES@@
+})
+}
+% U+2705 (✅) exists in none of the fallback fonts; typeset.sh substitutes it
+% with ✓ on a temporary copy before conversion, while sources stay untouched.
+\setmainfont{Latin Modern Roman}[RawFeature={fallback=symfb}]
+% The sans face needs its own fallback because section headings use lmsans.
+\setsansfont{Latin Modern Sans}[RawFeature={fallback=symfb}]
+\setmonofont{Latin Modern Mono}[Scale=0.92,RawFeature={fallback=symfb}]
+% jacharrange={-2,-3} is required so Greek/symbol ranges reach the Latin
+% fallback chain instead of the Japanese font.
+\ltjsetparameter{jacharrange={-2,-3}}
+% unicode-math routes some Unicode math-class codepoints through the math font,
+% bypassing the fontspec fallback above; use the first resolvable fallback font.
+\setmathfont{@@MATH_FONT@@}
