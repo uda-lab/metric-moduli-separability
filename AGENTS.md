@@ -9,9 +9,9 @@
 
 ## Project Overview
 
-- Active goal: Lean-assisted verification of Ishiki–Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**, arXiv:2608.19618. Mathematical SoT for this track: `notes/borel-preprint-audit.md`; do not accept top-level theorem statements until they are checked against it and the public preprint.
+- Active goal: Lean-assisted verification of Ishiki–Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**. Mathematical SoT: `notes/borel-manuscript-20260827-audit.md`, auditing the manuscript source received 2026-09-02 (archive timestamp 2026-08-27); `notes/borel-preprint-audit.md` is the frozen arXiv:2608.19618 v1 record and keeps the per-declaration Lean package in its §7. Do not accept top-level theorem statements until they are checked against the successor note. The received source is reference-only, lives outside the repository, and is never called "arXiv v2" — arXiv carries v1 only.
 - The original Conjecture 5.1 proof is an archival verified core: `report/report-ja.md` + `lean/IshikiConj51/Conj51/`. Stable IDs `LEM-A-EXISTS`, `LEM-STAR-METRIC`, `LEM-CLOSED-IMAGE`, `THM-CONJ51` belong to that archival track.
-- The analytic/coanalytic track is superseded; `notes/borel-preprint-audit.md` §5 lists the claims that must not be reinstated. The `IshikiExt` namespace it left behind is reusable only for the pointclass-free coding statements it actually proves.
+- The analytic/coanalytic track is superseded; `notes/borel-manuscript-20260827-audit.md` §5 lists the claims that must not be reinstated. The `IshikiExt` namespace it left behind is reusable only for the pointclass-free coding statements it actually proves.
 
 ## Commands
 

@@ -1,5 +1,15 @@
 # Borel preprint audit — arXiv:2608.19618 v1
 
+> **Frozen v1 record.** This note audits **arXiv:2608.19618 v1** and its
+> verdicts are v1 verdicts. The active source of truth for the Borel track is
+> its successor, `notes/borel-manuscript-20260827-audit.md`, which audits the
+> manuscript source received on 2026-09-02 (archive timestamp 2026-08-27) and
+> carries every verdict here into its own **v1 verdict** column. Read this note
+> for the v1 record and for the per-declaration Lean package of §7; read the
+> successor for what the received source says. Where this note says "v2" it
+> means that received source, which is **not** an arXiv version — arXiv carries
+> v1 only.
+
 > **Subject:** Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics
 > Implies Separability*, arXiv:2608.19618 v1 (20 Aug 2026). All statements were
 > checked against the LaTeX source of v1.

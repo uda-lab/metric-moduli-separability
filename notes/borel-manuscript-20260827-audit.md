@@ -843,3 +843,555 @@ bi-density was for. Lean task: #110 (open).
    for `Card(Z) ≥ ℵ₁`. Nothing is wrong; the corollary is simply weaker than
    its proof gives, and aligning it with the theorem would remove an apparent
    inconsistency between neighbouring statements.
+
+---
+
+## 3. Resolution status of every v1 defect and recommendation
+
+Categories: **incorporated correctly** (the received source applies the repair
+this repository verified), **incorporated differently but valid** (a different
+repair, re-checked here), **still outstanding**, **superseded** (a stronger
+proof or statement makes the defect moot).
+
+### 3.1 The five v1 FIXes
+
+| v1 item | defect | status in the received source |
+|---|---|---|
+| v1 §2.2 (`prop:dense-aleph1-nonborel-cantor`) | proof transported density along a Borel isomorphism | **incorporated correctly**, and strengthened |
+| v1 §2.10 (`cor:bounded-metric-complete-sigma-compact`) | the `⇒` direction needed a `BMet`-Borel separability statement v1 did not have | **incorporated correctly** |
+| v1 §2.11 (`thm:complete-metric-nonborel`) | the amalgams were asserted complete over an arbitrary, possibly incomplete, base metric | **incorporated differently but valid** |
+| v1 §2.14 (`thm:ultrametric-borel-separability`) | no `UCPM`-level extensor, so Borelness could not be pulled back | **superseded** |
+| v1 §2.15 (`cor:complete-ultrametric-borel-separability`) | the same ambient-transfer defect | **superseded** |
+
+* **v1 §2.2 — incorporated correctly.** The received proof uses the Borel
+  isomorphism only for Borel structure and cardinality and supplies density
+  separately from a countable dense `Q ⊆ S`, which is v1 repair route 1
+  exactly. It goes further: a second countable dense `P`, disjoint from `Q`
+  and kept outside the isomorphism's range, gives co-density. The citation the
+  v1 note asked for is present (to Srivastava rather than the Kechris number
+  the v1 note suggested; both are correct — §4, E4c). Checked in §2.11.
+* **v1 §2.10 — incorporated correctly.** The v1 repair was "prove the `BMet`
+  analogue of the transfer theorem, contradicting `thm:bounded-discrete-nonborel`
+  directly, with no components". The received source does precisely that, and
+  promotes the `BMet` statement to be `thm:borel-separability` itself. Checked
+  in §2.14. The cost is the #113 regression (§8): the label
+  `thm:borel-separability` no longer names the `Met(X)` statement the abstract
+  and introduction announce.
+* **v1 §2.11 — incorporated differently but valid.** The v1 repair normalised
+  the base metric to `d + 1` off the diagonal; the received source uses
+  `d ∨ 1` off the diagonal. Both are compatible, complete, uniformly discrete
+  and within `𝒟_Z ≤ 1` of `d`, hence in the same component. The received
+  source's "consequently `Comp(Z)` is non-Borel" clause also differs from the
+  v1 prescription: v1 prescribed a compact-witness trace route after noting
+  that intersecting with the (non-Borel) component is invalid; the received
+  source intersects instead with the finite-distance class **in `CPM(Z)`**,
+  which is clopen there, so `lem:relative-borel-inheritance` applies. Both are
+  valid. Checked in §2.17.
+* **v1 §2.14 and §2.15 — superseded.** The v1 defect was that E2 supplies no
+  `UCPM`-level extensor, so the isometry onto the extensor image cannot
+  transport the ambient Borel σ-algebra. The v1 audit's own repair extended the
+  coding isometry over the closure of `2^ω ∖ S` inside the complete ambient.
+  The received source does not repair the v1 proof: it replaces the whole route
+  by `cor:nonseparable-ultrametric-nonborel`, whose extension is built over the
+  **entire** compact Cantor space from the *dense* parameter domain
+  `G = 2^ω ∖ S` that the strengthened `prop:dense-aleph1-nonborel-cantor`
+  supplies, and whose pullback identity is against a component rather than
+  against the extensor image. Both theorems then follow with no ambient
+  transfer at all. Checked in §2.19 and §2.20. The v1 repair remains the record
+  of what was verified for the *v1* text and is what
+  `Ext/UltraTransfer.lean` formalises (§7).
+
+### 3.2 v1 recommendations that were not FIX-level
+
+| v1 item | recommendation | status |
+|---|---|---|
+| v1 §3, E1 clause (4) | record the completeness clause as conditional on `X` completely metrizable | **incorporated correctly** — the clause is now stated with that hypothesis |
+| v1 §3, E4c | add a citation for the Borel isomorphism `2^ω ≅_B [0,1]` | **incorporated correctly** — cited to Srivastava |
+| v1 §3, E4d | cite Alexandrov–Lavrentiev, used silently in three places | **incorporated correctly** — `thm:complete-metrizability-g-delta` |
+| v1 §2.9 | give `cor:metric-space-complete-separability` a proof | **incorporated, but the printed proof is the #113 defect** (§8) |
+| v1 §2.6 | state the `Met(Z)` version, announced in the abstract but stated nowhere | **incorporated correctly** — `cor:discrete-metric-nonborel`(2); but the introduction still cites the component theorem for it (§2.21) |
+| v1 §2.7 (i), (ii) | two implicit steps in the component proof | **still outstanding** — `eq:metric-amalgamation-compatibility` is still asserted without proof, and `z ∈ H` is still implicit (§2.13) |
+| v1 §2.8 | the pullback step left implicit in the transfer proof | **incorporated correctly** — `lem:metric-extensor-pullbacks` and `lem:continuous-pullback-obstruction` |
+| v1 §2.10 / §3, E3 | verify Koshino's "Corollary 1.2" number against the published version | **still outstanding** — the manuscript still cites that number |
+| v1 §2.14 sub-lemma | `𝒰𝒟^R`-completeness of `UCPM(Y;R)`, proved by the audit because v1 did not state it | **superseded** — now `lem:ucpm-complete`, cited |
+| v1 §3, silent standard facts | separated sets, ambient completeness, one-point amalgamation, clopen components, restriction of complete metrics | **incorporated correctly** — the first three are now `lem:maximal-separated-set`, `lem:cpm-complete`/`lem:ucpm-complete` and `lem:one-point-amalgamation`; the rest remain silent and remain elementary |
+
+### 3.3 Defects introduced between v1 and the received source
+
+One: `cor:metric-space-complete-separability`, recorded in full in §8. Its v1
+verdict was PASS and its received-source verdict is FIX, so it must not be
+averaged across the two columns of §2.
+
+---
+
+## 4. External dependencies (exact statements)
+
+**E1 — Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 (v4),
+Theorem 1.1.** Verified against the arXiv source. Statement: *let `X` be a
+metrizable space and `A` a closed subset; then there are isometric embeddings
+`E : Met(A) → Met(X)` and `Ẽ : CPM(A) → CPM(X)` such that (1) `Ẽ` extends `E`
+and `E(d)|_{A²} = d`; (2) `𝒟_X(E(d),E(e)) = 𝒟_A(d,e)`; (3)
+`E(BMet(A)) ⊆ BMet(X)` and `Ẽ(Met(A)) = Ẽ(CPM(A)) ∩ Met(X)`; (4) if `X` is
+completely metrizable, the embeddings can be chosen so that
+`E(Comp(A)) ⊆ Comp(X)`. In particular `E(Met(A))` is closed in `Met(X)`.*
+Used by: `lem:metric-extensor-pullbacks`, `thm:borel-separability` (clause 3),
+`cor:nonseparable-metric-nonborel` (clauses 1–3, plus **E1c**),
+`cor:complete-metric-borel-separability` (clause 4).
+
+*Caveat resolved.* The v1 note recorded that the source states clause (4)
+unconditionally, that it cannot hold when `Comp(X) = ∅` while
+`Comp(A) ≠ ∅` (take `X = ℚ`, `A = {0}`), and that the source's own proof
+carries "`X` completely metrizable". The received source now renders the
+clause with that hypothesis, so the audit's caveat is discharged **in the
+manuscript**; it still stands as a report to make against the cited source.
+
+**E1c — Ishiki, *An isometric extensor of metrics*, arXiv:2407.03030 (v4),
+Lemma 4.4 (printed p. 24) — construction data from the proof of Theorem 1.1.**
+Statement, in the notation of the proof: the embedding `J` into the target
+function space satisfies `L(J(x),J(y)) ≤ 4 w(x,y) + 1` for `y ∈ A`, where `w`
+is the fixed ambient base metric. Primary-source verification of record: the
+owner's comment on Issue #111 of 2026-08-27. In the manuscript this appears as
+`eq:metric-extensor-point-estimate`, `r(x,a) ≤ 4 d(x,a) + 1` for `x ∈ X`,
+`a ∈ Z`, with `r = E(d_Z)`.
+Used by: `cor:nonseparable-metric-nonborel` only.
+
+**This is strictly stronger data than E1 and must never become a clause of
+E1.** E1 quantifies over an arbitrary closed `A` and asserts nothing about
+where in `Met(X)` a particular extension lands; E1c is a bound tied to the
+specific construction inside the proof of Theorem 1.1, applied with a chosen
+pair of base metrics. Anything consuming E1c must also record that the
+extensor it uses is that construction, not an arbitrary E1 instance.
+
+**E2 — Ishiki, *A factorization of metric spaces*, Colloq. Math. 174 (2023),
+101–119, Theorem 4.7 and (N1).** Verified against the full text. As the
+received source renders it: *let `X` be ultrametrizable, `A` a nonempty closed
+subset, `R` a characteristic range set; there is an isometric embedding
+`E : UMet(A;R) → UMet(X;R)` with (1) `E(u)|_{A²} = u`; (2)
+`𝒰𝒟^R_X(E(u),E(v)) = 𝒰𝒟^R_A(u,v)`; (3) if `X` is completely metrizable, `E`
+can be chosen so that `E(UComp(A;R)) ⊆ UComp(X;R)`.* This is the
+specialisation to `UMet` of the source's `Σ : Met(F) → Met(X)`, using its
+clauses (1), (2), (5) and (N1); the v1 note quoted the unspecialised form.
+Used by: `cor:nonseparable-ultrametric-nonborel` (via **E2c**),
+`cor:complete-ultrametric-borel-separability` (clause 3).
+
+*Domain caveat, unchanged.* There is still **no pseudo-ultrametric-level
+(`UCPM`) extensor** in E2. In v1 that was the cause of a FIX; the received
+source no longer needs one (§3.1).
+
+**E2c — Ishiki, *A factorization of metric spaces*, construction data from the
+proofs of Theorem 3.1 and Theorem 4.7, with Propositions 2.3 and 2.8 and the
+conditions (D), (SR) of Theorem 2.11.** Verified against the full text. What
+the received source uses, item by item:
+* *Proposition 2.8*: for metrizable `X`, nonempty closed `F` and
+  `dim_T(X ∖ F) = 0`, the quotient `X/F` is zero-dimensional in the topology
+  generated by the quotient metric.
+* *Proposition 2.3*: for characteristic `S`, a metrizable `X` has
+  `UMet(X;S) ≠ ∅` iff `dim_T(X) = 0`.
+* *Theorem 2.11's conditions*, verbatim: **(D)** for every `ε > 0` the image
+  `r(Ẽ(F,ε))` is closed and discrete in `F`; **(SR)** if
+  `ϱ_{d,F}(x_i) → 0` then `d(x_i, r(x_i)) → 0`. Theorem 2.11 *constructs* a
+  retraction satisfying them; the received source instead **substitutes its
+  own retraction** — the centre map of the clopen `a`-ball partition — and
+  verifies (D) and (SR) for it. That substitution is legitimate because the
+  proof of Theorem 3.1 consumes only (D) and (SR).
+* *Proof of Theorem 3.1*: `Θ(x) = (π(x), p(x))` is a topological embedding.
+* *Proof of Theorem 4.7*: the explicit max-form extensor
+  `E(w)(x,y) = w(π x, π y) ∨ v(p x, p y)`, which is the source's
+  `Σ(d) = Φ^*(d ×_∞ v)` written out.
+
+Used by: `cor:nonseparable-ultrametric-nonborel` only. Like E1c, this is data
+from a proof, and **must never become a clause of E2**. The finite-component
+control it yields (`eq:base-ultrametric-component-bound`) depends on the
+retraction being an `a`-net centre map and on the quotient ultrametric being
+truncated at `b`; neither is available from E2's statement.
+
+**E3 — Koshino, *On the Borel complexity and the complete metrizability of
+spaces of metrics*, Anal. Geom. Metr. Spaces 12 (2024).** *For separable
+metrizable `X`: `X` is σ-compact iff `AM(X)` (= `BMet(X)`) is completely
+metrizable.* Used by: `cor:bounded-metric-complete-sigma-compact`, in both the
+`bmet ⇒ sigma-compact` branch and, applied to each `A_n`, the
+`some-component ⇒ sigma-compact` branch.
+
+*Citation-number caveat, still outstanding.* The manuscript cites
+"[Corollary 1.2]"; this repository's verified literature record
+(`notes/literature.md`) found the paper's main theorem and corollary
+unnumbered in the text it checked. Verify against the published version before
+submission. The identification of Koshino's `AM(X)` with `BMet(X)` is
+legitimate, unlike the `Met(X)` recollection that record warns about.
+
+**E4 — standard descriptive set theory.** Labels and sub-labels unchanged from
+the v1 note §3, where the number verification against the printed text of
+Kechris, GTM 156 is recorded; only the citations the manuscript now supplies
+have changed.
+(a) perfect set theorem for Borel sets (Kechris, Theorem 13.6) — used by
+`prop:dense-aleph1-nonborel-interval`, both branches;
+(b) existence of Bernstein sets (Kechris, Example 8.24) — used by the CH
+branch;
+(c) `2^ω` Borel-isomorphic to `[0,1]` — used by
+`prop:dense-aleph1-nonborel-cantor`. **The v1 note recorded this as cited
+without a number and recommended adding one; the received source cites
+Srivastava, *A Course on Borel Sets*, Theorem 3.3.13**, applied to
+`2^ω ∖ P` rather than to `2^ω`. That is a correct citation for the form used;
+the v1 note's suggested Kechris 15.6 would also serve.
+(d) Alexandrov–Lavrentiev (Kechris, Theorem 3.11) — **now cited**, as
+`thm:complete-metrizability-g-delta`, and used in both directions: the forward
+direction by `cor:metric-space-complete-separability`,
+`cor:bounded-metric-complete-sigma-compact`,
+`cor:ultrametric-space-complete-separability` and
+`cor:complete-ultrametric-borel-separability`; the reverse direction, for the
+first time, by the `sigma-compact ⇒ each-component` branch of
+`cor:bounded-metric-complete-sigma-compact`.
+
+**E5 — Ishiki, *An interpolation of metrics and spaces of metrics*, Topol.
+Appl. 388 (2026), 109856 (arXiv:2003.13227 v3), Theorem 1.1.** Verified
+against the arXiv v3 text. Statement: *let `X` be a metrizable space and
+`{A_i}_{i ∈ I}` a discrete family of closed subsets; then for every
+`d ∈ Met(X)` and every family `{e_i}` with `e_i ∈ Met(A_i)` there is
+`m ∈ Met(X)` with (1) `m|_{A_i²} = e_i` for every `i`, and (2)
+`𝒟_X(m,d) = sup_i 𝒟_{A_i}(e_i, d|_{A_i²})`; moreover if `X` is completely
+metrizable and each `e_i` is complete, `m` may be chosen complete.*
+Used by: the `some-component ⇒ sigma-compact` branch of
+`cor:bounded-metric-complete-sigma-compact`, with the **singleton** family
+`{A_n}` (`A_n` a closed `d`-ball, hence closed in `X`; a one-element family is
+discrete), yielding `eq:metric-interpolation-distance`. The completeness
+clause is not used.
+
+**Hypothesis-level check.** The manuscript needs exactly clauses (1) and (2)
+with `|I| = 1`, and it needs the equality in (2) — not merely `≤` — because
+the openness of the restriction map is proved by exhibiting a preimage at
+*exactly* the prescribed distance (`eq:restriction-map-ball-image`). E5
+supplies the equality. ✓
+
+**E6 — Hausdorff's open-image theorem, cited via Michael and Stone,
+*Quotients of the space of irrationals*, Pacific J. Math. 28 (1969), 629–633,
+§3.4.** Read verbatim. §3.4's own numbered assertion is about a nonempty
+**separable** metric space being an open continuous image of the irrationals.
+The statement the manuscript needs appears inside its justification of "only
+if" and is attributed to Hausdorff: *"every metrizable image of a complete
+metric space under a continuous open map has a complete metric"* — with **no
+separability restriction on the image**, which is the form required.
+Used by: the `some-component ⇒ sigma-compact` branch of
+`cor:bounded-metric-complete-sigma-compact`, with domain a completely
+metrizable component and image `BMet(A_n)`.
+
+*Citation-precision note.* Because the cited section's own assertion is not
+the theorem being used, a revision should cite Hausdorff directly, or phrase
+the citation as "the theorem of Hausdorff recorded in [Michael–Stone, §3.4]".
+Recorded as a recommendation, not a defect: the section does contain the
+statement, attributed.
+
+**Standard facts, silent in v1 and now cited.** The v1 note §3 listed these
+under "standard non-DST facts used silently"; the received source supplies
+citations for three of them, which changes their bookkeeping but not their
+status. They stay standard facts rather than acquiring `E`-labels.
+* *Completeness of the ambients.* `lem:cpm-complete` and `lem:ucpm-complete`
+  cite Ishiki, *Spaces of metrics are Baire*, Topol. Appl. 369 (2025), 109408,
+  Lemma 2.4. In v1 the Archimedean half was re-derived inline by the audit and
+  the non-Archimedean half had to be proved by the audit outright (v1 §2.14
+  sub-lemma). Both remain proved in Lean, so nothing in the formalisation
+  becomes conditional.
+* *One-point amalgamation.* `lem:one-point-amalgamation` cites the
+  interpolation paper's Proposition 3.2 for the metric case and Ishiki,
+  *Fractal dimensions in the Gromov–Hausdorff space*, Bull. Pol. Acad. Sci.
+  Math. 71 (2023), Lemma 2.15 for the ultrametric case; the completeness half
+  is proved in the manuscript and is checked in §2.3.
+* *Still silent, still elementary.* Separated sets are closed and discrete;
+  components are clopen; the restriction of a complete metric to a closed
+  subspace is complete; a countable union of countable sets is countable
+  (which is all that the ball-selection steps need — regularity of `ℵ₁` is not
+  invoked); truncating an ultrametric by a constant leaves an ultrametric
+  inducing the same topology; a topological sum of completely metrizable
+  spaces is completely metrizable.
+
+---
+
+## 5. Removed claims — must not be reinstated
+
+Carried over from the v1 note §5 without change of content, because the
+received source reinstates none of it and the prohibition still binds.
+
+The August 2026 analytic/coanalytic manuscript draft (superseded) claimed, for
+a dense `S ⊆ [0,1]` of cardinality `ℵ₁` produced by the CH/¬CH recipe, that
+`S` is **neither analytic nor coanalytic**, and correspondingly that
+`BMet(D)` / `Met(X)` is neither analytic nor coanalytic in the ambient
+pseudometric space. Two findings of the audit of that draft stand and remain
+binding:
+
+1. **The `|S| = ℵ₁` "not coanalytic" claim is not a ZFC theorem.** The ¬CH
+   branch is refutable: there are models of ZFC + ¬CH — any ccc forcing
+   extension of `L` keeping `ω₁^L = ω₁`, e.g. adding `ℵ₂` Cohen reals — in
+   which the largest thin `Π¹₁` set `C₁` is a **coanalytic** dense set of
+   cardinality `ℵ₁`, a legitimate output of the old recipe. By
+   Mansfield–Solovay, a ZFC repair would need to produce `S` with `S ⊄ L[a]`
+   for every real `a`, which the audit could not obtain in ZFC and which fails
+   for the recipe as stated. Only the asymmetric half ("not analytic", by
+   cardinality `ℵ₁ < 𝔠` plus Souslin's perfect set theorem) survived in ZFC
+   under ¬CH.
+2. **The classical analytic/coanalytic pointclasses are the wrong notion in
+   the nonseparable ambient**: `Σ¹₁` sets are separable by definition, and both
+   `BMet(D)` and its complement in `BCPM(D)` have density `2^{ℵ₁}`, so the old
+   theorem was vacuously true under the classical reading and needed a bespoke
+   Souslin-`F` convention to mean anything.
+
+**The Borel statement replaces both**, in v1 and in the received source alike.
+The perfect set theorem for *Borel* sets is a ZFC theorem, making
+`prop:dense-aleph1-nonborel-interval` a clean unconditional dichotomy, and the
+Borel σ-algebra of the nonseparable ambient is generated by its own topology
+with all needed closure properties — no Polish ambient, no Souslin operation,
+no pointclass convention. **No analytic or coanalytic statement appears
+anywhere in the received source**, and none may be reintroduced into the
+verification targets. Any future strengthening toward projective classes must
+reopen the analysis above as a research question, not as a verification
+target.
+
+Correspondingly: `note_by_ishiki_1.pdf`, `note_by_ishiki_2.pdf` and the
+standalone older `main.tex` are that superseded draft's artifacts. None of
+them is the latest source, and no document in this repository may describe
+them as one.
+
+---
+
+## 6. Dependency graph
+
+**Route W — the received source's written proofs** (what §2 audits). Read
+`A + B → C` as "`C`'s printed proof consumes `A` and `B`". Labels are
+abbreviated to their distinguishing part.
+
+*Archimedean.*
+
+```
+E4a, E4b                      → dense-aleph1-nonborel-interval
+dense-aleph1-nonborel-interval → metric-coding → closed-parameter-embedding
+closed-parameter-embedding    → bounded-discrete-nonborel
+closed-parameter-embedding, one-point-amalgamation
+                              → metric-component-nonborel
+metric-component-nonborel, relative-borel-inheritance
+                              → discrete-metric-nonborel
+bounded-discrete-nonborel, E1 → borel-separability
+metric-component-nonborel, E1, E1c
+                              → nonseparable-metric-nonborel
+borel-separability, E4d       → metric-space-complete-separability   [FIX, §8]
+borel-separability, E3, E4d, E5, E6
+                              → bounded-metric-complete-sigma-compact
+metric-coding(completeness), one-point-amalgamation, metric-component-nonborel's
+construction                  → complete-metric-nonborel
+complete-metric-nonborel, E1(4)
+                              → complete-metric-borel-separability
+```
+
+*Non-Archimedean.*
+
+```
+dense-aleph1-nonborel-interval, E4c
+                              → dense-aleph1-nonborel-cantor
+dense-aleph1-nonborel-cantor  → ultrametric-coding
+                              → closed-ultrametric-parameter-embedding
+closed-ultrametric-parameter-embedding
+                              → discrete-ultrametric-nonborel        [leaf]
+closed-ultrametric-parameter-embedding, one-point-amalgamation
+                              → ultrametric-component-nonborel       [leaf]
+ultrametric-component-nonborel's construction, one-point-amalgamation
+                              → complete-ultrametric-nonborel        [leaf]
+ultrametric-coding, one-point-amalgamation, ucpm-complete,
+dense-aleph1-nonborel-cantor(co-density), E2, E2c
+                              → nonseparable-ultrametric-nonborel
+nonseparable-ultrametric-nonborel
+                              → ultrametric-borel-separability
+ultrametric-borel-separability, E4d
+                              → ultrametric-space-complete-separability
+nonseparable-ultrametric-nonborel's construction, E2(N1)
+                              → complete-ultrametric-borel-separability
+```
+
+Four structural facts the graph makes visible, all changed since v1:
+
+1. **`thm:metric-component-nonborel` is now on the critical path.**
+   `cor:nonseparable-metric-nonborel` consumes it, so the component theorem is
+   no longer a "finer independent result" that the main transfer could bypass
+   — which is why its `|Z| ≥ ℵ₁` form is load-bearing (§2.13). The v1 note's
+   Route M observation (the transfer needs only the `Met(Z)`/`BMet(Z)`
+   statements) still describes `thm:borel-separability`, but no longer
+   describes the strongest metric result.
+2. **`prop:dense-aleph1-nonborel-cantor`'s co-density is on the critical
+   path** of `cor:nonseparable-ultrametric-nonborel`, which needs `G = 2^ω ∖ S`
+   dense to extend the coding isometry over the whole Cantor space. In v1,
+   density of `S` was consumed only by
+   `lem:closed-ultrametric-parameter-embedding`, and co-density not at all.
+3. **Three ultrametric discrete results are now leaves.**
+   `thm:discrete-ultrametric-nonborel`, `thm:ultrametric-component-nonborel`
+   and `thm:complete-ultrametric-nonborel` are advertised results that nothing
+   else in the manuscript consumes: `cor:nonseparable-ultrametric-nonborel`
+   and `cor:complete-ultrametric-borel-separability` both re-run the coding on
+   the separated set rather than invoking them. In v1 the corresponding
+   statements were on the critical path of the ultrametric transfer. This is
+   why the ultrametric component theorem did not need the `≥ ℵ₁`
+   strengthening its Archimedean counterpart received (§2.18) — and it is why
+   the Lean lanes for #110 cannot reuse those declarations as drop-in inputs.
+4. **`lem:one-point-amalgamation` is cited six times** across both
+   tracks, where v1 inlined the same construction at each site. Its
+   completeness clause carries no uniform-gap hypothesis, which is what makes
+   the `thm:complete-metric-nonborel` repair a one-liner (§2.3, §2.17).
+
+**Lean work remaining, by node.**
+
+| node | Lean issue | state |
+|---|---|---|
+| `thm:metric-component-nonborel`, `|Z| ≥ ℵ₁` form | #106 | merged (PR #114) |
+| `prop:dense-aleph1-nonborel-cantor`, bi-density | #109 | merged (PR #116) |
+| `cor:nonseparable-metric-nonborel` (+ E1c) | #107 | open |
+| `cor:bounded-metric-complete-sigma-compact`, five-way (+ E5, E6) | #108 | open |
+| `cor:nonseparable-ultrametric-nonborel` (+ E2c) | #110 | open |
+
+---
+
+## 7. Lean correspondence
+
+**Scope of this section.** The per-declaration record for the statements the
+v1 note already gated stays in `notes/borel-preprint-audit.md` §7 and is not
+duplicated here; that section remains accurate, because those Lean statements
+were gated against v1 statements that the received source did not change.
+This section records only what the received source changes: which nodes are
+now formalised in their received-source form, which are not, and what each
+open lane must not do.
+
+**Standing constraints, unchanged.** External theorems enter only as explicit
+hypotheses of Lean statements, never as axioms. Accepted declarations are
+sorry-free with an axiom footprint contained in
+`propext`/`Classical.choice`/`Quot.sound`. Sorry-freeness and the
+`#print axioms` output are review evidence, recorded in the pull request and
+issue trail, never in a committed ledger.
+
+### 7.1 Formalised in the received source's form
+
+* **`thm:metric-component-nonborel`, `|Z| ≥ ℵ₁`** — `Ext/Component.lean`:
+  `component_not_measurableSet` and `componentSet_not_measurableSet`, both
+  under `aleph 1 ≤ #Z`. The uncountable-ball step (`exists_aleph1_ball`) and
+  the `ℵ₁`-selection step (`exists_aleph1_subset`) are separate declarations,
+  and the shared construction `exists_componentSetup` runs over the normalised
+  base `addOneOffDiag d` rather than the raw representative. The
+  v1 note §2.7 and §7.4 record why that normalisation is what makes an
+  arbitrary `ℵ₁`-subset of the ball admissible in Lean. Issue #106, PR #114.
+
+  *Divergence to keep in view.* The manuscript does **not** normalise the base
+  here — it normalises only in `thm:complete-metric-nonborel` — because its
+  compatibility argument for `eq:metric-amalgamation-compatibility` needs no
+  uniform gap outside `H`, only the compatibility of `d` (§2.13). The Lean
+  route's normalisation is therefore a proof-engineering choice, not a repair
+  of the manuscript; the gated statement is the same.
+
+* **`prop:dense-aleph1-nonborel-cantor`, bi-density** — `Ext/CantorUltra.lean`:
+  `exists_bidense_aleph1_nonBorel_cantor`, with the v1 statement
+  `exists_dense_aleph1_nonBorel_cantor` retained as an immediate corollary.
+  The Lean proof takes `S := (T ∖ P) ∪ Q` for the explicit disjoint countable
+  dense pair `P`, `Q` and avoids the Borel isomorphism altogether, so it does
+  not consume E4c. Issue #109, PR #116.
+
+* **The discrete cores and the `Met`/`BMet`/`Comp` transfers** — unchanged
+  from the v1 note §7.1–§7.5 and §7.6. In particular
+  `thm:borel-separability`'s restatement from `Met(X)` to `BMet(X)` costs the
+  Lean layer nothing: both forms were already formalised
+  (`separable_of_measurableSet_CPM_MetOn_of_isometricExtensorOn` and
+  `separable_of_measurableSet_CPM_BMetOn_of_bddIsometricExtensorOn`), the
+  latter being exactly the v1 §2.10 repair that the received source promoted.
+
+### 7.2 Not yet formalised in the received source's form
+
+* **`cor:nonseparable-metric-nonborel`** — Issue **#107**, in progress on a
+  parallel lane. Nothing about its Lean form is settled here, and no
+  declaration name for it should be assumed. Two constraints this audit
+  confirms from the source:
+  (i) the ε-net clause of `lem:maximal-separated-set` is load-bearing, and the
+  existing `exists_aleph1_closed_discrete_separated` does not expose it;
+  (ii) **E1c must not become a field of the existing `IsIsometricExtensorOn`
+  bundle** (§4), and no existing theorem may acquire it as a hypothesis.
+* **`cor:bounded-metric-complete-sigma-compact`, five-way** — Issue **#108**.
+  `Ext/CompleteMetrizability.lean` currently proves the v1 two-way statement
+  and the `Met(X)` complete-metrizability corollary. E5 and E6 must enter as
+  separate provenance-labelled hypotheses, not folded into E1 or E3.
+* **`cor:nonseparable-ultrametric-nonborel`** — Issue **#110**. E2c must not
+  become a field of the existing `IsUltraIsometricExtensor` bundle.
+* **`cor:discrete-metric-nonborel`** — no issue. Clause (1) is
+  `componentSet_not_measurableSet`; clause (2) is the `Met(Z)`-version
+  statement `met_not_borel_of_card`, already proved by the pullback route
+  (v1 note §7.1 items 3–4). What is *not* formalised is the manuscript's
+  derivation of clause (2) from clause (1) through
+  `lem:relative-borel-inheritance`. Nothing depends on it.
+
+### 7.3 Where the Lean development still proves a different route
+
+* **`thm:ultrametric-borel-separability` and
+  `cor:complete-ultrametric-borel-separability`.** `Ext/UltraTransfer.lean`
+  and `Ext/UltraCompleteTransfer.lean` formalise the **v1 audit's own
+  repair** — the dense-uniform extension `ultraExtend` over the closure of
+  `2^ω ∖ S` — because the v1 text had no valid route. The received source
+  proves both as corollaries of `cor:nonseparable-ultrametric-nonborel`
+  instead. The Lean theorems remain sound and remain a verified route to the
+  same statements; they are simply not the manuscript's route any more. Issue
+  #110 decides whether to refactor onto the new route or to keep the existing
+  proof as a documented alternative, and that decision belongs there, not
+  here.
+* **Pullback versus relative closure.** The Lean development consistently
+  proves the obstruction theorems by the pullback identity rather than by the
+  printed relative-closure argument. In v1 that was a divergence the audit had
+  to justify; in the received source it is the printed route
+  (`lem:continuous-pullback-obstruction`). The two now agree.
+
+---
+
+## 8. Record of Issue #113 — `cor:metric-space-complete-separability`
+
+**Verdict: FIX in the 2026-08-27 received source; PASS in v1.** These must not
+be averaged.
+
+**The defect.** The printed proof takes `Met(X)` completely metrizable,
+derives that it is `G_δ` and hence Borel in `CPM(X)` by
+`thm:complete-metrizability-g-delta`, and then concludes "by
+`thm:borel-separability`, `X` is separable". But in the received source
+`thm:borel-separability`'s hypothesis is Borelness of **`BMet(X)`**, not of
+`Met(X)`, so that step does not follow from the theorem as stated. Verified
+directly in the source.
+
+**Why it is a regression, not a long-standing error.** In arXiv:2608.19618 v1
+`thm:borel-separability` is stated for `Met(X)`, and this corollary — which v1
+printed without a proof — appeals to it soundly. The defect appeared when the
+draft restated the theorem for `BMet(X)` without updating the corollary. The
+v1 verdict on this corollary therefore stands (v1 note §2.9, PASS + EXTERNAL);
+only the received source's version is defective.
+
+**The statement is true, and two repairs are available.**
+
+1. *Preferred.* `cor:nonseparable-metric-nonborel`(2) immediately precedes it
+   and gives, for nonseparable `X`, that `Met(X)` is non-Borel in `CPM(X)`.
+   Complete metrizability of `Met(X)` gives Borelness, so the contrapositive
+   gives separability directly. One line, and it uses the draft's own new
+   theorem package.
+2. *Alternative.* The bounded compatible metrics form a single component of
+   `Met(X)`, which the draft itself uses in
+   `cor:bounded-metric-complete-sigma-compact`. Components are clopen in
+   `Met(X)`, so a Borel `Met(X)` makes `BMet(X)` Borel in `CPM(X)` by
+   `lem:relative-borel-inheritance`, and `thm:borel-separability` then applies.
+
+**The nomenclature half.** The abstract and the introduction both announce
+"`Met(X)` Borel implies `X` separable", and the introduction cites
+`thm:borel-separability` for it. That claim is true — it is the contrapositive
+of `cor:nonseparable-metric-nonborel`(2) — but it is not what the cited
+theorem states. Either restate `thm:borel-separability` for `Met(X)` as v1
+did, or give the contrapositive a labelled home of its own. This is the same
+class of defect as the second introduction cross-reference recorded in §2.21,
+which concerns the `Met(Z)` claim.
+
+**Lean impact: none.** `Ext/CompleteMetrizability.lean` proves "`Met(X)`
+completely metrizable implies `X` separable"
+(`separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn`)
+through the verified `Met`-transfer theorem, **not** through the invalid direct
+application of the `BMet` theorem. The Lean route therefore already matches
+the preferred repair rather than the draft's proof text, and no Lean change is
+required by #113. Recording that correspondence, rather than leaving it to
+look like a discrepancy, is what #113's repository-side acceptance criteria
+ask for.
+
+**Disposition.** The two manuscript-edit criteria of #113 are author-side: the
+manuscript is not in this repository and will not be imported. The two
+repository-side criteria are discharged by this note — the theorem-by-theorem
+record above carries the FIX/PASS split, and the Lean correspondence is stated
+in the preceding paragraph.
