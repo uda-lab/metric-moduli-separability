@@ -26,7 +26,15 @@ Borel track and defers to this file for terminology decisions.
 
 External-theorem labels E1/E2/E3 (and E4 for the standard descriptive-set-theory
 inputs) are fixed by `notes/borel-preprint-audit.md` §3, which quotes each
-statement exactly; they enter Lean only as explicit hypotheses.
+statement exactly; `notes/borel-manuscript-20260827-audit.md` §4 carries them
+unchanged and adds E5 (Ishiki's interpolation theorem) and E6 (Hausdorff's
+open-image theorem). They enter Lean only as explicit hypotheses.
+A `c` suffix marks a **construction-specific** dependency — data taken from the
+*proof* of the named source theorem rather than from its statement, such as E1c
+(Lemma 4.4's point estimate, from the proof of E1's Theorem 1.1) and E2c (the
+clopen-net retraction, quotient model and max-form extensor, from the proof of
+E2's Theorem 4.7) — and such a dependency must never be added as a clause of
+the theorem-level bundle whose label it is suffixed from.
 
 ## Japanese terminology (both tracks)
 

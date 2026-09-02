@@ -7,26 +7,30 @@ compatible metrics.
 
 The active external source is the joint preprint by Yoshito Ishiki and Tomoki
 Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**,
-arXiv:2608.19618 (2026). The repository verifies that preprint theorem by
-theorem: `notes/borel-preprint-audit.md` is the mathematical source of truth
+arXiv:2608.19618 (2026), together with the later manuscript source received on
+2026-09-02 (archive timestamp 2026-08-27), which is reference-only and lives
+outside this repository. The repository verifies it theorem by theorem:
+`notes/borel-manuscript-20260827-audit.md` is the mathematical source of truth
 (exact statements, verdicts, verified repairs, and external-theorem
-dependencies), and the Lean development under `lean/IshikiConj51/Ext/`
-(namespace `IshikiExt`) formalises the audited statements. The audit note
-records, per theorem, exactly what is formalised and modulo which explicit
+dependencies) for the received source, `notes/borel-preprint-audit.md` is the
+frozen arXiv v1 record and carries the per-declaration Lean package, and the
+Lean development under `lean/IshikiConj51/Ext/`
+(namespace `IshikiExt`) formalises the audited statements. The audit notes
+record, per theorem, exactly what is formalised and modulo which explicit
 external theorems — including where a Lean statement deliberately differs
 from the printed one (a density-free parameter set, audited proof-route
 repairs, or statements stronger than the preprint's that imply them). The
 published `Met`/`BMet`/`CPM` ambient hypotheses are preserved exactly, never
 replaced by proxies. Two families of results are covered:
 
-- **Archimedean chain** (Proposition 2.1, Lemmas 3.1–3.2, Theorems 3.3–3.5
+- **Archimedean chain** (v1 numbering: Proposition 2.1, Lemmas 3.1–3.2, Theorems 3.3–3.5
   and 3.8, Corollaries 3.6–3.7 and 3.9): the discrete non-Borelness
   obstruction for `Met(Z)`/`BMet(Z)` in `CPM(Z)`, its component and
   complete-metric refinements, and the transfer "moduli space Borel ⇒ base
   space separable". Ishiki's isometric-extensor theorem (E1,
   arXiv:2407.03030) and Koshino's theorem (E3) enter the Lean statements
   only as explicit hypotheses, never as axioms.
-- **Non-Archimedean/ultrametric chain** (Proposition 2.2, Lemmas 3.10–3.11,
+- **Non-Archimedean/ultrametric chain** (v1 numbering: Proposition 2.2, Lemmas 3.10–3.11,
   Theorems 3.12–3.14 and 3.16, Corollaries 3.15 and 3.17): the same
   programme for `R`-valued ultrametrics, with the `UCPM`/`𝒰𝒟^R` ambient
   built from scratch. Ishiki's factorization theorem (E2, Colloq. Math.
@@ -63,8 +67,8 @@ issue explicitly requires a provenance-preserving change.
 ## Superseded analytic/coanalytic track
 
 An earlier draft attempted a stronger analytic/coanalytic theorem package.
-That track is closed and must not be treated as a source of truth: the
-published Borel preprint replaces it, and `notes/borel-preprint-audit.md` §5
+That track is closed and must not be treated as a source of truth: the Borel
+statement replaces it, and §5 of `notes/borel-manuscript-20260827-audit.md`
 records the claims that must not be reinstated — in particular, the draft's
 "not coanalytic" half is not a ZFC theorem. The pointclass-free metric coding
 that work produced remains reusable `IshikiExt` infrastructure.
@@ -79,7 +83,7 @@ that work produced remains reusable `IshikiExt` infrastructure.
 | `notes/` | mathematical audit, terminology, and literature references |
 | `paper/` | archival earlier manuscript workspace |
 
-Module map for `lean/IshikiConj51/Ext/`:
+Module map for `lean/IshikiConj51/Ext/` (theorem numbers are v1's):
 
 | Modules | Content |
 |---|---|
