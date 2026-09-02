@@ -95,5 +95,125 @@ structure IsComponentControlledExtensorOn {X : Type*} [TopologicalSpace X]
   point_estimate : ∀ (x : X) (a : ↥A),
     (toExtensor.toCPM (CPMOn.restrict A d)).1.1 x ↑a ≤ 4 * d.1.1 x ↑a + 1
 
+/-! ## Components of `MetOn(X)` -/
+
+/-- The finite-distance component of `d` in the topology-aware metric locus.
+For a discrete carrier this is transported from `CPM.component` along the
+isometric equivalence `CPMOn.equivCPM`. -/
+def CPMOn.component {X : Type*} [TopologicalSpace X] (d : CPMOn X) : Set (CPMOn X) :=
+  {e | e ∈ CPM.MetOn X ∧ edist d e < ⊤}
+
+theorem CPMOn.component_subset_MetOn {X : Type*} [TopologicalSpace X] (d : CPMOn X) :
+    CPMOn.component d ⊆ CPM.MetOn X :=
+  fun _ he => he.1
+
+theorem CPMOn.self_mem_component {X : Type*} [TopologicalSpace X] {d : CPMOn X}
+    (hd : d ∈ CPM.MetOn X) : d ∈ CPMOn.component d :=
+  ⟨hd, by rw [edist_self]; exact ENNReal.zero_lt_top⟩
+
+/-- The components partition `MetOn(X)`: any member of a component determines
+the same component. -/
+theorem CPMOn.component_eq_of_mem {X : Type*} [TopologicalSpace X] {d e : CPMOn X}
+    (he : e ∈ CPMOn.component d) : CPMOn.component e = CPMOn.component d := by
+  ext f
+  constructor
+  · rintro ⟨hf, hef⟩
+    exact ⟨hf, lt_of_le_of_lt (edist_triangle d e f)
+      (ENNReal.add_lt_top.mpr ⟨he.2, hef⟩)⟩
+  · rintro ⟨hf, hdf⟩
+    refine ⟨hf, lt_of_le_of_lt (edist_triangle e d f)
+      (ENNReal.add_lt_top.mpr ⟨?_, hdf⟩)⟩
+    rw [edist_comm]
+    exact he.2
+
+/-- **Theorem 3.4, transported to the topology-aware ambient.**  For a
+discrete carrier `D` with `|D| ≥ ℵ₁`, the finite-distance component of every
+compatible metric is not Borel in `CPMOn D`.  This is the result
+`IshikiExt.component_not_measurableSet` from `Ext/Component.lean`, transported
+along `CPMOn.equivCPM D`. -/
+theorem CPMOn.component_not_measurableSet {D : Type*} [TopologicalSpace D]
+    [DiscreteTopology D] (hD : Cardinal.aleph 1 ≤ #D) (d : CPMOn D)
+    (hd : d ∈ CPM.MetOn D) : ¬ MeasurableSet (CPMOn.component d) := by
+  have hbare : d.1 ∈ CPM.Met D := by
+    have hpre : d ∈ CPMOn.equivCPM D ⁻¹' CPM.Met D := by
+      rw [CPMOn.preimage_equivCPM_met D]
+      exact hd
+    simpa only [Set.mem_preimage, CPMOn.equivCPM_apply] using hpre
+  have hcomponent : CPMOn.component d =
+      CPMOn.equivCPM D ⁻¹' CPM.component d.1 := by
+    ext e
+    change (e ∈ CPM.MetOn D ∧ edist d e < ⊤) ↔
+      (CPMOn.equivCPM D e ∈ CPM.Met D ∧
+        CPM.edist d.1 (CPMOn.equivCPM D e) < ⊤)
+    constructor
+    · rintro ⟨he, hdist⟩
+      refine ⟨?_, ?_⟩
+      · have he' : e ∈ CPMOn.equivCPM D ⁻¹' CPM.Met D := by
+          rw [CPMOn.preimage_equivCPM_met D]
+          exact he
+        exact he'
+      · simpa only [CPMOn.edist_eq, CPMOn.equivCPM_apply] using hdist
+    · rintro ⟨he, hdist⟩
+      refine ⟨?_, ?_⟩
+      · have he' : e ∈ CPMOn.equivCPM D ⁻¹' CPM.Met D := he
+        rw [CPMOn.preimage_equivCPM_met D] at he'
+        exact he'
+      · simpa only [CPMOn.edist_eq, CPMOn.equivCPM_apply] using hdist
+  intro hmeas
+  have hpreimage : MeasurableSet
+      (CPMOn.equivCPM D ⁻¹' CPM.component d.1) := by
+    rw [← hcomponent]
+    exact hmeas
+  have hbaremeas : MeasurableSet (CPM.component d.1) := by
+    have hdouble : MeasurableSet
+        ((CPMOn.equivCPM D).symm ⁻¹'
+          (CPMOn.equivCPM D ⁻¹' CPM.component d.1)) :=
+      hpreimage.preimage
+        ((CPMOn.equivCPM D).symm.isometry.continuous.measurable)
+    simpa only [Set.preimage_preimage, IsometryEquiv.apply_symm_apply,
+      Set.preimage_id'] using hdouble
+  exact (IshikiExt.component_not_measurableSet hD d.1 hbare) hbaremeas
+
+/-! ## Components and the extensor -/
+
+/-- The extensor preserves the finite-distance metric component locus in both
+directions.  The reverse implication is the restriction argument from
+`Ext/GeneralSeparability.lean`; the forward implication is E1's
+`met_preservation` field. -/
+theorem IsIsometricExtensorOn.toCPM_mem_MetOn_iff {X : Type*} [TopologicalSpace X]
+    [TopologicalSpace.MetrizableSpace X] {A : Set X} (hE : IsIsometricExtensorOn A)
+    [DiscreteTopology ↥A] (e : CPMOn ↥A) :
+    hE.toCPM e ∈ CPM.MetOn X ↔ e ∈ CPM.MetOn ↥A := by
+  constructor
+  · intro he
+    have hbare : e.1 ∈ CPM.Met ↥A :=
+      isMetricOn_restrict_of_mem_MetOn
+        (ι := (Subtype.val : ↥A → X))
+        (tA := (inferInstance : TopologicalSpace ↥A))
+        (d := e.1)
+        (e := hE.toCPM e)
+        (hι := Topology.IsEmbedding.subtypeVal)
+        (htA := DiscreteTopology.eq_bot)
+        (he := he)
+        (hrestrict := hE.extension e)
+    rw [← CPMOn.preimage_equivCPM_met (↥A)]
+    change CPMOn.equivCPM (↥A) e ∈ CPM.Met ↥A
+    simpa only [CPMOn.equivCPM_apply] using hbare
+  · intro he
+    exact hE.met_preservation ⟨e, he, rfl⟩
+
+/-- The extensor pulls back the finite-distance component of an extended
+metric exactly to the component of the original metric. -/
+theorem IsIsometricExtensorOn.preimage_component_eq {X : Type*} [TopologicalSpace X]
+    [TopologicalSpace.MetrizableSpace X] {A : Set X} (hE : IsIsometricExtensorOn A)
+    [DiscreteTopology ↥A] (d : CPMOn ↥A) :
+    hE.toCPM ⁻¹' CPMOn.component (hE.toCPM d) = CPMOn.component d := by
+  ext e
+  change
+    (hE.toCPM e ∈ CPM.MetOn X ∧
+      edist (hE.toCPM d) (hE.toCPM e) < ⊤) ↔
+      (e ∈ CPM.MetOn ↥A ∧ edist d e < ⊤)
+  rw [IsIsometricExtensorOn.toCPM_mem_MetOn_iff hE e, hE.isometry_toCPM d e]
+
 end
 end IshikiExt
