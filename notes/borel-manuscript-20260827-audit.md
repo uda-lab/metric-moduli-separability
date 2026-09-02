@@ -24,8 +24,9 @@
 * **What was received.** `arxiv-source.zip`, supplied by the owner through
   Google Drive on 2026-09-02, containing `main.tex` (69,811 bytes), `main.bbl`
   and an empty `figures/` directory. The archive's internal timestamp is
-  2026-08-27 08:44 UTC. Title, authors, abstract and keywords match the
-  published preprint; the file is a later working draft of it.
+  2026-08-27 08:44 UTC. Title, authors and keywords match the published
+  preprint verbatim, and the abstract differs from it only in typography and
+  in spelling out `ℵ₁`; the file is a later working draft of that preprint.
 * **Where it lives.** Unpacked **outside this repository**, at
   `/private/derived/ishiki-metric-moduli-v2-20260827/`. It is **never** copied
   into the repository, a worktree, a commit, a pull request, or an issue
