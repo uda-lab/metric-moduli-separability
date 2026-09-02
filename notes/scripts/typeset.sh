@@ -110,9 +110,18 @@ process_note() {
     return
   fi
 
-  temp_copy=$(mktemp "$TEMP_DIR/source.XXXXXX")
+  if ! temp_copy=$(mktemp "$TEMP_DIR/source.XXXXXX"); then
+    printf 'error: could not create temporary source copy: %s\n' "$source" >&2
+    failed_notes=$((failed_notes + 1))
+    printf '%s: %d missing character(s)\n' "$notename" "$missing_count"
+    return
+  fi
+
   if ! sed 's/✅/✓/g' "$source" > "$temp_copy"; then
     printf 'error: could not prepare source note: %s\n' "$source" >&2
+    if ! rm -f -- "$temp_copy"; then
+      printf 'warning: could not remove temporary source copy: %s\n' "$temp_copy" >&2
+    fi
     failed_notes=$((failed_notes + 1))
     printf '%s: %d missing character(s)\n' "$notename" "$missing_count"
     return
@@ -120,6 +129,9 @@ process_note() {
 
   if ! render_header "$header_file"; then
     printf 'error: could not render fallback header: %s\n' "$header_file" >&2
+    if ! rm -f -- "$temp_copy"; then
+      printf 'warning: could not remove temporary source copy: %s\n' "$temp_copy" >&2
+    fi
     failed_notes=$((failed_notes + 1))
     printf '%s: %d missing character(s)\n' "$notename" "$missing_count"
     return
@@ -127,6 +139,9 @@ process_note() {
 
   if ! pandoc "$temp_copy" -s -f markdown+east_asian_line_breaks -V documentclass=ltjsarticle --include-in-header="$header_file" -o "$tex_file"; then
     printf 'error: pandoc failed for %s\n' "$note" >&2
+    if ! rm -f -- "$temp_copy"; then
+      printf 'warning: could not remove temporary source copy: %s\n' "$temp_copy" >&2
+    fi
     failed_notes=$((failed_notes + 1))
     printf '%s: %d missing character(s)\n' "$notename" "$missing_count"
     return
@@ -141,6 +156,9 @@ process_note() {
     latex_failed=1
   fi
 
+  if ! rm -f -- "$temp_copy"; then
+    printf 'warning: could not remove temporary source copy: %s\n' "$temp_copy" >&2
+  fi
   if [[ -f "$log_file" ]]; then
     missing_count=$(awk '/Missing character/ { count++ } END { print count + 0 }' "$log_file")
   else
