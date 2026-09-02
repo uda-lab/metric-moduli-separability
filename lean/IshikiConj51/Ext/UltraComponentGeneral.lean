@@ -518,6 +518,125 @@ theorem edist_mCoding (hr : RangeSet.IsScale R r) (hS : Dense S)
 
 end SubsetCoding
 
+/-! ## B3: extension of the coding family from the dense complement -/
+
+section DenseCodingExtension
+
+variable {Y : Type*} [TopologicalSpace Y] {A : Set Y}
+variable {r : ℕ → ℝ} {S : Set (ℕ → Bool)}
+
+/-- The E2c image of the amalgamated coding, restricted to the dense
+complement of the bad parameter set. -/
+def F {d : UCPMOn Y R} {a : ℝ}
+    (hd : d ∈ UMetOn Y R) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y) :
+    ↥(Sᶜ) → UCPMOn Y R := by
+  let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  have hdA : dA ∈ UMet ↥A R := by
+    exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+      (by
+        letI : TopologicalSpace ↥A := ⊥
+        exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+      E2c.toExtensor.domain_discrete hd
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+    intro x y hxy
+    simpa [dA] using hsep x y hxy
+  intro s
+  rcases s with ⟨t, ht⟩
+  exact E2c.toExtensor.toUCPMOn
+    ⟨mCoding hr dA H z hz θ t,
+      (mem_UMet_mCoding_iff hr θ ha hsepA t).mpr ht⟩
+
+/-/ The exact distance formula for `F`; the density of `S` is the lower-bound
+input in `edist_mCoding`. -/
+theorem isometry_F {d : UCPMOn Y R} {a : ℝ}
+    (hd : d ∈ UMetOn Y R) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y) (hS : Dense S) :
+    ∀ s t : ↥(Sᶜ),
+      edist (F hd hr E2c H z hz θ ha hsep s)
+          (F hd hr E2c H z hz θ ha hsep t) =
+        ENNReal.ofReal (cantorDist r s.1 t.1) := by
+  let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  have hdA : dA ∈ UMet ↥A R := by
+    exact UCPM.isCompatible_comap_of_mem_UMetOn (⊥ : TopologicalSpace ↥A)
+      (by
+        letI : TopologicalSpace ↥A := ⊥
+        exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
+      E2c.toExtensor.domain_discrete hd
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+    intro x y hxy
+    simpa [dA] using hsep x y hxy
+  intro s t
+  change edist
+      (E2c.toExtensor.toUCPMOn
+        ⟨mCoding hr dA H z hz θ s.1,
+          (mem_UMet_mCoding_iff hr θ ha hsepA s.1).mpr s.2⟩)
+      (E2c.toExtensor.toUCPMOn
+        ⟨mCoding hr dA H z hz θ t.1,
+          (mem_UMet_mCoding_iff hr θ ha hsepA t.1).mpr t.2⟩) = _
+  rw [E2c.toExtensor.isometry_toUCPMOn]
+  exact edist_mCoding hr hS θ s.1 t.1
+
+/-- A dense-complement coding family has a uniformly continuous extension to
+the whole Cantor space.  The two displayed facts are kept local because only
+the extension and its restriction identity are consumed downstream. -/
+theorem exists_continuous_Fbar {d : UCPMOn Y R} {a : ℝ}
+    (hd : d ∈ UMetOn Y R) (hR : R.IsCharacteristic) (hr : RangeSet.IsScale R r)
+    (E2c : IsUltraComponentControlledExtensorOn R A d a)
+    (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
+    (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
+    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hS : Dense S) (hG : Dense Sᶜ) :
+    ∃ Fbar : (ℕ → Bool) → UCPMOn Y R,
+      Continuous Fbar ∧
+        ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+          Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩ := by
+  letI : MetricSpace (ℕ → Bool) :=
+    PiNat.metricSpaceOfDiscreteUniformity
+      (fun _ => DiscreteUniformity.eq_principal_setRelId (X := Bool))
+  letI : Dense (Sᶜ) := hG
+  let Fbar := (‹Dense (Sᶜ)›).extend
+    (F hd hr E2c H z hz θ ha hsep)
+  have hFuc : UniformContinuous (F hd hr E2c H z hz θ ha hsep) := by
+    rw [EMetric.uniformContinuous_iff]
+    intro ε hε
+    obtain ⟨c, hc, hcε⟩ : ∃ c : ℝ, 0 < c ∧ ENNReal.ofReal c < ε := by
+      obtain ⟨q, hq, hqε⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp hε
+      refine ⟨(q : ℝ), by exact_mod_cast ENNReal.coe_pos.mp hq, ?_⟩
+      rwa [ENNReal.ofReal_coe_nnreal]
+    obtain ⟨n, hn⟩ := hr.exists_lt hc
+    refine ⟨ENNReal.ofReal ((1 / 2 : ℝ) ^ (n + 1)), by positivity, ?_⟩
+    intro s t hst
+    have hst' : dist (s : ℕ → Bool) (t : ℕ → Bool) <
+        (1 / 2 : ℝ) ^ (n + 1) := by
+      apply (ENNReal.ofReal_lt_ofReal_iff (by positivity)).mp
+      simpa only [edist_dist, Subtype.dist_eq] using hst
+    have hagree : ∀ m ≤ n, s.1 m = t.1 m := by
+      intro m hm
+      exact PiNat.apply_eq_of_dist_lt hst' (Nat.le_succ_of_le hm)
+    have hcantor : cantorDist r s.1 t.1 < r n :=
+      (cantorDist_lt_iff hr s.1 t.1 n).mpr hagree
+    rw [isometry_F hd hr E2c H z hz θ ha hsep hS s t]
+    exact ((ENNReal.ofReal_lt_ofReal_iff hc).mpr (hcantor.trans hn)).trans hcε
+  haveI : CompleteSpace (UCPMOn Y R) := completeSpace_UCPMOn hR
+  have hFbar_uc : UniformContinuous Fbar :=
+    Dense.uniformContinuous_extend (‹Dense (Sᶜ)›) hFuc
+  have Continuous_Fbar : Continuous Fbar := hFbar_uc.continuous
+  have Fbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
+      Fbar t = F hd hr E2c H z hz θ ha hsep ⟨t, ht⟩ := by
+    intro t ht
+    simpa [Fbar] using
+      (Dense.extend_of_ind (‹Dense (Sᶜ)›) hFuc ⟨t, ht⟩)
+  exact ⟨Fbar, Continuous_Fbar, Fbar_apply⟩
+
+end DenseCodingExtension
+
 /-! ## B0 capstone statement signatures -/
 
 /-- The component clause of `cor:nonseparable-ultrametric-nonborel` from audit
