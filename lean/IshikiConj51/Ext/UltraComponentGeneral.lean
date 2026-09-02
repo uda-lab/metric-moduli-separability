@@ -82,7 +82,12 @@ in `Y`.
 This is a separate, construction-specific package.  E2c must never become a
 field of either ordinary E2 bundle, `IsUltraIsometricExtensor` or
 `IsUltraIsometricExtensorOn`; adding these estimates there would silently
-strengthen every existing consumer of E2. -/
+strengthen every existing consumer of E2.
+
+The package is now exactly `toExtensor` plus the component-control estimate.
+The restriction, isometry, and compatibility facts are derived one-line
+theorems from `toExtensor` immediately below this structure, rather than
+independent fields, since `IsUltraIsometricExtensor` already supplies them. -/
 structure IsUltraComponentControlledExtensorOn
     {Y : Type*} [TopologicalSpace Y] (R : RangeSet) (A : Set Y)
     (d : UCPMOn Y R) (a : ℝ) where
@@ -90,16 +95,6 @@ structure IsUltraComponentControlledExtensorOn
   toExtensor :
     IsUltraIsometricExtensor (⊥ : TopologicalSpace ↥A) R
       (Subtype.val : ↥A → Y)
-  /-- (b) Restricting the extensor to `A²` returns the input ultrametric. -/
-  restrict : ∀ u : ↥(UMet ↥A R),
-    UCPMOn.restrict (Subtype.val : ↥A → Y) (toExtensor.toUCPMOn u) =
-      (u : UCPM ↥A R)
-  /-- (c) The extensor is an exact isometry for the `𝒰𝒟^R` ambient distance. -/
-  isometry_toUCPMOn : ∀ u v : ↥(UMet ↥A R),
-    edist (toExtensor.toUCPMOn u) (toExtensor.toUCPMOn v) = edist u v
-  /-- (d) The extensor preserves compatibility. -/
-  umet_preservation : ∀ u : ↥(UMet ↥A R),
-    toExtensor.toUCPMOn u ∈ UMetOn Y R
   /-- (e) The extension of `d|_{A²}` lies in the component of `d`.
 
   The subtype proof in this field is the compatibility of the restriction,
@@ -120,6 +115,25 @@ structure IsUltraComponentControlledExtensorOn
                       (Subtype.val : ↥A → Y))
                 toExtensor.domain_discrete hd⟩)
           d < ⊤
+
+theorem IsUltraComponentControlledExtensorOn.restrict
+    {Y : Type*} [TopologicalSpace Y] {A : Set Y} {d : UCPMOn Y R} {a : ℝ}
+    (E : IsUltraComponentControlledExtensorOn R A d a)
+    (u : ↥(UMet ↥A R)) :
+    UCPMOn.restrict (Subtype.val : ↥A → Y) (E.toExtensor.toUCPMOn u) =
+      (u : UCPM ↥A R) := E.toExtensor.restrict_toUCPMOn u
+
+theorem IsUltraComponentControlledExtensorOn.isometry_toUCPMOn
+    {Y : Type*} [TopologicalSpace Y] {A : Set Y} {d : UCPMOn Y R} {a : ℝ}
+    (E : IsUltraComponentControlledExtensorOn R A d a)
+    (u v : ↥(UMet ↥A R)) :
+    edist (E.toExtensor.toUCPMOn u) (E.toExtensor.toUCPMOn v) = edist u v :=
+  E.toExtensor.isometry_toUCPMOn u v
+
+theorem IsUltraComponentControlledExtensorOn.umet_preservation
+    {Y : Type*} [TopologicalSpace Y] {A : Set Y} {d : UCPMOn Y R} {a : ℝ}
+    (E : IsUltraComponentControlledExtensorOn R A d a) (u : ↥(UMet ↥A R)) :
+    E.toExtensor.toUCPMOn u ∈ UMetOn Y R := E.toExtensor.umet_preservation u
 
 /-! ## B0 capstone statement signatures -/
 
