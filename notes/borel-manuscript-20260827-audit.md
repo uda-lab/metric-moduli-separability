@@ -500,8 +500,8 @@ applies this theorem to a maximal `ε`-separated subset of a nonseparable
 `(X,d)`, which `lem:maximal-separated-set` delivers as *uncountable* rather
 than of cardinality exactly `ℵ₁` — and passing to an `ℵ₁`-sized subset would
 destroy the `ε`-net property that the component estimate needs. The
-strengthening is therefore load-bearing, not cosmetic. Lean task: #106
-(merged, PR #114).
+strengthening is therefore load-bearing, not cosmetic. The Lean statement
+gate for this form is #106.
 
 **Note on `cor:discrete-metric-nonborel`.** Clause (1) is the theorem
 restated; clause (2) follows because components are open in `Met(Z)`, so a
@@ -571,10 +571,10 @@ non-Borel in `CPM(X)`; (2) `Met(X)` is non-Borel in `CPM(X)`.
 6. Clause (2) follows from clause (1) because components are open in `Met(X)`
    (`lem:relative-borel-inheritance`). ✓
 
-**Verdict: PASS.** The only external inputs beyond E1 are E4 and the E1
-construction data that makes the two compatible; §4 records them separately
-from the theorem-level bundle, as the acceptance criteria require. Lean task:
-#107 (open; see §7).
+**Verdict: PASS.** The only external input beyond E1 is E1c, the construction
+data from the proof of E1's own theorem; §4 records it separately from the
+theorem-level bundle, as the acceptance criteria require. Statement gate: #107
+(see §7).
 
 ### 2.15 `cor:metric-space-complete-separability` — FIX
 
@@ -656,7 +656,7 @@ completely metrizable" to `thm:borel-separability` compresses the `G_δ` ⇒
 Borel step that the `bmet ⇒ sigma-compact` branch spells out. Immediate, but
 worth stating in a revision for symmetry.
 
-**Verdict: PASS + EXTERNAL.** Lean task: #108 (open).
+**Verdict: PASS + EXTERNAL.** The Lean statement gate for this form is #108.
 
 ### 2.17 `thm:complete-metric-nonborel`, `cor:complete-metric-borel-separability` — PASS + EXTERNAL
 
@@ -799,7 +799,7 @@ transfer route entirely. Checked step by step.
 defect without needing a `UCPM`-level extensor**: the extension is built
 inside the complete ambient `UCPM(Y;R)` from a *dense* parameter domain, which
 is exactly what the strengthening of `prop:dense-aleph1-nonborel-cantor` to
-bi-density was for. Lean task: #110 (open).
+bi-density was for. The Lean statement gate for this form is #110.
 
 ### 2.20 `thm:ultrametric-borel-separability` … `cor:complete-ultrametric-borel-separability` — PASS + EXTERNAL
 
@@ -1262,15 +1262,17 @@ Four structural facts the graph makes visible, all changed since v1:
    completeness clause carries no uniform-gap hypothesis, which is what makes
    the `thm:complete-metric-nonborel` repair a one-liner (§2.3, §2.17).
 
-**Lean work remaining, by node.**
+**Lean statement gates, by node.** Which node each Issue gates, and the
+external dependency it must carry. Whether a gate has been discharged is read
+from the Lean sources and from the Issue, never from this table.
 
-| node | Lean issue | state |
+| node | Lean issue | external dependency the gate must carry |
 |---|---|---|
-| `thm:metric-component-nonborel`, `|Z| ≥ ℵ₁` form | #106 | merged (PR #114) |
-| `prop:dense-aleph1-nonborel-cantor`, bi-density | #109 | merged (PR #116) |
-| `cor:nonseparable-metric-nonborel` (+ E1c) | #107 | open |
-| `cor:bounded-metric-complete-sigma-compact`, five-way (+ E5, E6) | #108 | open |
-| `cor:nonseparable-ultrametric-nonborel` (+ E2c) | #110 | open |
+| `thm:metric-component-nonborel`, `\|Z\| ≥ ℵ₁` form | #106 | none beyond the discrete core |
+| `prop:dense-aleph1-nonborel-cantor`, bi-density | #109 | none; the Lean route avoids E4c |
+| `cor:nonseparable-metric-nonborel` | #107 | E1 and E1c, kept separate |
+| `cor:bounded-metric-complete-sigma-compact`, five-way | #108 | E3, E5 and E6, kept separate |
+| `cor:nonseparable-ultrametric-nonborel` | #110 | E2 and E2c, kept separate |
 
 ---
 
@@ -1300,7 +1302,7 @@ issue trail, never in a committed ledger.
   and the shared construction `exists_componentSetup` runs over the normalised
   base `addOneOffDiag d` rather than the raw representative. The
   v1 note §2.7 and §7.4 record why that normalisation is what makes an
-  arbitrary `ℵ₁`-subset of the ball admissible in Lean. Issue #106, PR #114.
+  arbitrary `ℵ₁`-subset of the ball admissible in Lean. Statement gate: #106.
 
   *Divergence to keep in view.* The manuscript does **not** normalise the base
   here — it normalises only in `thm:complete-metric-nonborel` — because its
@@ -1314,7 +1316,7 @@ issue trail, never in a committed ledger.
   `exists_dense_aleph1_nonBorel_cantor` retained as an immediate corollary.
   The Lean proof takes `S := (T ∖ P) ∪ Q` for the explicit disjoint countable
   dense pair `P`, `Q` and avoids the Borel isomorphism altogether, so it does
-  not consume E4c. Issue #109, PR #116.
+  not consume E4c. Statement gate: #109.
 
 * **The discrete cores and the `Met`/`BMet`/`Comp` transfers** — unchanged
   from the v1 note §7.1–§7.5 and §7.6. In particular
@@ -1326,21 +1328,21 @@ issue trail, never in a committed ledger.
 
 ### 7.2 Not yet formalised in the received source's form
 
-* **`cor:nonseparable-metric-nonborel`** — Issue **#107**, in progress on a
-  parallel lane. Nothing about its Lean form is settled here, and no
-  declaration name for it should be assumed. Two constraints this audit
-  confirms from the source:
+* **`cor:nonseparable-metric-nonborel`** — statement gate **#107**. Nothing
+  about its Lean form is settled here, and no declaration name for it should
+  be assumed. Two constraints this audit confirms from the source:
   (i) the ε-net clause of `lem:maximal-separated-set` is load-bearing, and the
   existing `exists_aleph1_closed_discrete_separated` does not expose it;
   (ii) **E1c must not become a field of the existing `IsIsometricExtensorOn`
   bundle** (§4), and no existing theorem may acquire it as a hypothesis.
-* **`cor:bounded-metric-complete-sigma-compact`, five-way** — Issue **#108**.
+* **`cor:bounded-metric-complete-sigma-compact`, five-way** — statement gate
+  **#108**.
   `Ext/CompleteMetrizability.lean` currently proves the v1 two-way statement
   and the `Met(X)` complete-metrizability corollary. E5 and E6 must enter as
   separate provenance-labelled hypotheses, not folded into E1 or E3.
-* **`cor:nonseparable-ultrametric-nonborel`** — Issue **#110**. E2c must not
+* **`cor:nonseparable-ultrametric-nonborel`** — statement gate **#110**. E2c must not
   become a field of the existing `IsUltraIsometricExtensor` bundle.
-* **`cor:discrete-metric-nonborel`** — no issue. Clause (1) is
+* **`cor:discrete-metric-nonborel`** — no separate gate. Clause (1) is
   `componentSet_not_measurableSet`; clause (2) is the `Met(Z)`-version
   statement `met_not_borel_of_card`, already proved by the pullback route
   (v1 note §7.1 items 3–4). What is *not* formalised is the manuscript's
@@ -1357,9 +1359,8 @@ issue trail, never in a committed ledger.
   proves both as corollaries of `cor:nonseparable-ultrametric-nonborel`
   instead. The Lean theorems remain sound and remain a verified route to the
   same statements; they are simply not the manuscript's route any more. Issue
-  #110 decides whether to refactor onto the new route or to keep the existing
-  proof as a documented alternative, and that decision belongs there, not
-  here.
+  Whether to refactor onto the new route or to keep the existing proof as a
+  documented alternative is decided under #110, not here.
 * **Pullback versus relative closure.** The Lean development consistently
   proves the obstruction theorems by the pullback identity rather than by the
   printed relative-closure argument. In v1 that was a divergence the audit had
