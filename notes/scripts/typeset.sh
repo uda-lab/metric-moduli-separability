@@ -51,7 +51,7 @@ for entry in "${configured_fallbacks[@]}"; do
 done
 
 if (( ${#filtered_fallbacks[@]} == 0 )); then
-  printf '%s\n' "error: no configured fallback font is available on this host; set TYPESET_FALLBACK_FONTS" >&2
+  printf '%s\n' "error: no configured fallback font is available on this host; set TYPESET_FALLBACK_FONTS, or run luaotfload-tool --update and check that HOME is set and writable." >&2
   exit 1
 fi
 
