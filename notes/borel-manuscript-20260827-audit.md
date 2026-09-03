@@ -1353,9 +1353,12 @@ issue trail, never in a committed ledger.
   `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, derived
   from clause (1) via the finite-distance locus being clopen
   (`isClopen_setOf_edist_lt_top`), matching
-  `lem:relative-borel-inheritance`. Clause (2) exposes, rather than derives,
-  `hne : (UMetOn Y R).Nonempty`, sourced to Ishiki's Proposition 2.3; a
-  follow-up to derive it from `hY`/`hR` is filed separately, not in Issue #110.
+  `lem:relative-borel-inheritance`. `(UMetOn Y R).Nonempty` for clause (2) is
+  derived internally from `hY`/`hR` (Issue #124,
+  `nonempty_UMetOn_of_isUltrametrizableSpace` in `Ext/UltraPublished.lean`, a
+  scale transform of the compatible ultrametric from `hY`), so Ishiki's
+  Proposition 2.3 is no longer an exposed premise for the ultrametrizable
+  case.
 
 * **`cor:bounded-metric-complete-sigma-compact`, five-way** — Issue #108.
   `Ext/CompleteMetrizability.lean`'s v1 two-way statement

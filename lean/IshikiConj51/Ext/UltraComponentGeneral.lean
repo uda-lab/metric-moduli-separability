@@ -15,6 +15,9 @@
 -- The 2026-08-27 received source is reference-only; it is not called an
 -- arXiv version and is not copied here beyond the short provenance clause in
 -- the E2c docstring.
+-- `(UMetOn Y R).Nonempty` for clause (2) is derived from `hY`/`hR` via
+-- `nonempty_UMetOn_of_isUltrametrizableSpace` (`Ext/UltraPublished.lean`,
+-- Issue #124), not exposed as a hypothesis.
 --
 -- Public declarations:
 --   * `UCPMOn.component`
@@ -925,18 +928,16 @@ theorem not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensor
 
 /-- The whole-locus clause of `cor:nonseparable-ultrametric-nonborel` from
 audit §2.19: `UMetOn Y R` itself is non-Borel in the same existing ambient
-measurable space, under the same E2c package.  The hypothesis `hne` is sourced
-to Ishiki, *A factorization of metric spaces*, Proposition 2.3: characteristic
-`R` and zero-dimensional metrizable `X` imply `UMet(X;R) ≠ ∅`.  It is exposed
-here as an external hypothesis, not derived from `hY`/`hR` in this lane; a
-follow-up to derive it via a scale transform of the real ultrametric is filed
-separately. -/
+measurable space, under the same E2c package.  `(UMetOn Y R).Nonempty` is
+derived internally from `hY`/`hR` via `nonempty_UMetOn_of_isUltrametrizableSpace`
+(Issue #124: a scale transform of the compatible ultrametric from `hY`), so it
+is no longer an exposed hypothesis — Ishiki's Proposition 2.3 is not needed for
+the ultrametrizable case. -/
 theorem not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
     {Y : Type*} [TopologicalSpace Y]
     (hY : IsUltrametrizableSpace Y)
     (hYsep : ¬ TopologicalSpace.SeparableSpace Y)
     (hR : R.IsCharacteristic)
-    (hne : (UMetOn Y R).Nonempty)
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
@@ -946,7 +947,7 @@ theorem not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ¬ MeasurableSet (UMetOn Y R) := by
   intro hmeas
-  obtain ⟨d₀, hd₀⟩ := hne
+  obtain ⟨d₀, hd₀⟩ := nonempty_UMetOn_of_isUltrametrizableSpace hY hR
   have hnot :=
     not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn
       hY hYsep hR hEx d₀ hd₀
@@ -969,7 +970,6 @@ theorem separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorO
     {Y : Type*} [TopologicalSpace Y]
     (hY : IsUltrametrizableSpace Y)
     (hR : R.IsCharacteristic)
-    (hne : (UMetOn Y R).Nonempty)
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
@@ -980,18 +980,18 @@ theorem separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorO
     MeasurableSet (UMetOn Y R) → TopologicalSpace.SeparableSpace Y :=
   fun hMet => by_contra fun hYsep =>
     not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
-      hY hYsep hR hne hEx hMet
+      hY hYsep hR hEx hMet
 
 /-- This is `cor:ultrametric-space-complete-separability` (audit §2.20,
 second bullet, E4d), the E2c-route counterpart to the existing
 `separable_of_isCompletelyMetrizableSpace_UMetOn_of_ultraExtensors`.  The
 Borelness step uses E4d (Alexandrov–Lavrentiev), via
-`measurableSet_of_isCompletelyMetrizableSpace`; the rest uses E2c and
-Ishiki's Proposition 2.3 through `hne`. -/
+`measurableSet_of_isCompletelyMetrizableSpace`; the rest uses E2c, with
+`(UMetOn Y R).Nonempty` derived from `hY`/`hR` (Issue #124) rather than
+through Ishiki's Proposition 2.3. -/
 theorem separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn
     {Y : Type*} [TopologicalSpace Y]
     (hY : IsUltrametrizableSpace Y) (hR : R.IsCharacteristic)
-    (hne : (UMetOn Y R).Nonempty)
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
@@ -1002,7 +1002,7 @@ theorem separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentContr
     (hMet : TopologicalSpace.IsCompletelyMetrizableSpace ↥(UMetOn Y R)) :
     TopologicalSpace.SeparableSpace Y :=
   separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
-    hY hR hne hEx (measurableSet_of_isCompletelyMetrizableSpace hMet)
+    hY hR hEx (measurableSet_of_isCompletelyMetrizableSpace hMet)
 
 end
 end IshikiExt
