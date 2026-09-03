@@ -483,7 +483,7 @@ theorem RangeSet.IsScale.monotoneOn_rescale {R : RangeSet} {r : ℕ → ℝ}
     by_cases hc2 : 0 < t2
     · rw [dif_pos hc2]
       exact hr.nonneg _
-    · rw [dif_neg hc2]
+    · simp [dif_neg hc2]
 
 theorem RangeSet.IsScale.tendsto_rescale {R : RangeSet} {r : ℕ → ℝ}
     (hr : R.IsScale r) :
