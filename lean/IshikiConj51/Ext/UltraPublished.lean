@@ -416,6 +416,224 @@ theorem separable_of_isCompletelyMetrizableSpace_UCompOn_of_isUltrametrizableSpa
   obtain ⟨hE⟩ := hE2 hYc (Set.range ι) (Set.range_nonempty ι) hce.isClosed_range
   exact ⟨hE.toIsUltraCompIsometricExtensor hce⟩
 
+-- The rescale API lemmas are placed under the `RangeSet.IsScale` namespace.
+-- This block is placed *before* `nonempty_UMetOn_of_isUltrametrizableSpace` below,
+-- since that theorem's proof depends on `RangeSet.rescale` and its API.
+noncomputable def RangeSet.rescale {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) (t : ℝ) : ℝ :=
+  if ht : 0 < t then r (Nat.find (hr.exists_lt ht) - 1) else 0
+
+theorem RangeSet.IsScale.rescale_mem {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) (t : ℝ) :
+    RangeSet.rescale hr t ∈ R.carrier := by
+  unfold RangeSet.rescale
+  split_ifs with ht
+  · exact hr.mem _
+  · exact R.zero_mem
+
+theorem RangeSet.IsScale.rescale_eq_zero {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) (t : ℝ) :
+    RangeSet.rescale hr t = 0 ↔ t ≤ 0 := by
+  unfold RangeSet.rescale
+  split_ifs with ht
+  · exact iff_of_false (hr.pos _).ne' (not_le.mpr ht)
+  · exact iff_of_true rfl (not_lt.mp ht)
+
+/-- Corrected statement: the naive `0 ≤ t → t ≤ rescale hr t` is false once `t`
+exceeds the clamp value `r 0` (e.g. `r n = 1/(n+1)`, `t = 5` gives
+`rescale hr t = r 0 = 1 < 5`). The universally true lower bound is
+`min t (r 0) ≤ rescale hr t`, which is all the downstream topology-equivalence
+argument actually needs. -/
+theorem RangeSet.IsScale.le_rescale {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) (t : ℝ) :
+    min t (r 0) ≤ RangeSet.rescale hr t := by
+  unfold RangeSet.rescale
+  split_ifs with ht
+  · set hp := hr.exists_lt ht with hp_def
+    rcases Nat.eq_zero_or_pos (Nat.find hp) with hm0 | hmpos
+    · have h0 : Nat.find hp - 1 = 0 := by omega
+      rw [h0]
+      exact min_le_right t (r 0)
+    · obtain ⟨k, hk⟩ := Nat.exists_eq_succ_of_ne_zero hmpos.ne'
+      have hkm : k < Nat.find hp := by omega
+      have hnotp : ¬ r k < t := Nat.find_min hp hkm
+      have htk : t ≤ r k := not_lt.mp hnotp
+      have hsub : Nat.find hp - 1 = k := by omega
+      rw [hsub]
+      exact (min_le_left t (r 0)).trans htk
+  · exact (min_le_left t (r 0)).trans (not_lt.mp ht)
+
+theorem RangeSet.IsScale.monotoneOn_rescale {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) :
+    MonotoneOn (RangeSet.rescale hr) (Set.Ici 0) := by
+  intro t1 ht1 t2 ht2 hle
+  simp only [Set.mem_Ici] at ht1 ht2
+  unfold RangeSet.rescale
+  by_cases hc1 : 0 < t1
+  · have hc2 : 0 < t2 := hc1.trans_le hle
+    rw [dif_pos hc1, dif_pos hc2]
+    set hp1 := hr.exists_lt hc1 with hp1_def
+    set hp2 := hr.exists_lt hc2 with hp2_def
+    have hspec1 : r (Nat.find hp1) < t1 := Nat.find_spec hp1
+    have hlt2 : r (Nat.find hp1) < t2 := hspec1.trans_le hle
+    have hle21 : Nat.find hp2 ≤ Nat.find hp1 := Nat.find_min' hp2 hlt2
+    have hsub_le : Nat.find hp2 - 1 ≤ Nat.find hp1 - 1 := by omega
+    exact hr.antitone hsub_le
+  · rw [dif_neg hc1]
+    by_cases hc2 : 0 < t2
+    · rw [dif_pos hc2]
+      exact hr.nonneg _
+    · simp [dif_neg hc2]
+
+theorem RangeSet.IsScale.tendsto_rescale {R : RangeSet} {r : ℕ → ℝ}
+    (hr : R.IsScale r) :
+    Filter.Tendsto (RangeSet.rescale hr)
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+  rw [Metric.tendsto_nhdsWithin_nhds]
+  intro ε hε
+  obtain ⟨n, hn⟩ := hr.exists_lt hε
+  refine ⟨r n, hr.pos n, fun t ht hdist => ?_⟩
+  simp only [Set.mem_Ioi] at ht
+  rw [Real.dist_eq, sub_zero, abs_of_pos ht] at hdist
+  have hnn0 : 0 ≤ RangeSet.rescale hr t := by
+    unfold RangeSet.rescale
+    rw [dif_pos ht]
+    exact hr.nonneg _
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hnn0]
+  unfold RangeSet.rescale
+  rw [dif_pos ht]
+  set hp := hr.exists_lt ht with hp_def
+  have hspecm : r (Nat.find hp) < t := Nat.find_spec hp
+  have hnm : n < Nat.find hp := by
+    by_contra hcon
+    push_neg at hcon
+    have hran : r n ≤ r (Nat.find hp) := hr.antitone hcon
+    linarith
+  have hnle : n ≤ Nat.find hp - 1 := by omega
+  have hcompare : r (Nat.find hp - 1) ≤ r n := hr.antitone hnle
+  linarith
+
+theorem nonempty_UMetOn_of_isUltrametrizableSpace
+    {Y : Type*} [TopologicalSpace Y] (hY : IsUltrametrizableSpace Y)
+    (hR : R.IsCharacteristic) :
+    (UMetOn Y R).Nonempty := by
+  letI : MetricSpace Y := hY.metricSpace
+  haveI hultra : IsUltrametricDist Y := hY.choose_spec.1
+  obtain ⟨r, hr⟩ := RangeSet.exists_isScale hR
+  let d0 : Y → Y → ℝ := fun x y => RangeSet.rescale hr (dist x y)
+  have hrescale_nonneg : ∀ t : ℝ, 0 ≤ RangeSet.rescale hr t :=
+    fun t => R.nonneg (hr.rescale_mem t)
+  -- Step A: `d0` is an `R`-valued pseudo-ultrametric.
+  have hupmet : IsUltraPMetOn R d0 := by
+    have hrescale_max : ∀ a b : ℝ, 0 ≤ a → 0 ≤ b →
+        RangeSet.rescale hr (max a b) = max (RangeSet.rescale hr a) (RangeSet.rescale hr b) := by
+      intro a b ha hb
+      rcases le_total a b with hab | hab
+      · rw [max_eq_right hab,
+          max_eq_right (hr.monotoneOn_rescale (Set.mem_Ici.mpr ha) (Set.mem_Ici.mpr hb) hab)]
+      · rw [max_eq_left hab,
+          max_eq_left (hr.monotoneOn_rescale (Set.mem_Ici.mpr hb) (Set.mem_Ici.mpr ha) hab)]
+    refine ⟨?_, ?_, ?_, ?_⟩
+    · intro x
+      show RangeSet.rescale hr (dist x x) = 0
+      rw [dist_self]
+      exact (hr.rescale_eq_zero 0).mpr le_rfl
+    · intro x y
+      show RangeSet.rescale hr (dist x y) = RangeSet.rescale hr (dist y x)
+      rw [dist_comm]
+    · intro x y z
+      show RangeSet.rescale hr (dist x z) ≤
+        max (RangeSet.rescale hr (dist x y)) (RangeSet.rescale hr (dist y z))
+      have hxy0 : (0 : ℝ) ≤ dist x y := dist_nonneg
+      have hyz0 : (0 : ℝ) ≤ dist y z := dist_nonneg
+      have hxz0 : (0 : ℝ) ≤ dist x z := dist_nonneg
+      have hmax0 : (0 : ℝ) ≤ max (dist x y) (dist y z) := le_trans hxy0 (le_max_left _ _)
+      rw [← hrescale_max (dist x y) (dist y z) hxy0 hyz0]
+      exact hr.monotoneOn_rescale (Set.mem_Ici.mpr hxz0) (Set.mem_Ici.mpr hmax0)
+        (dist_triangle_max x y z)
+    · intro x y
+      exact hr.rescale_mem (dist x y)
+  -- Step B: `d0` is a genuine (separated) metric.
+  have hmin : IsMetricOn d0 := by
+    apply hupmet.toIsMetricOn
+    intro x y hxy
+    have hxy' : RangeSet.rescale hr (dist x y) = 0 := hxy
+    have hxy0 : dist x y ≤ 0 := (hr.rescale_eq_zero (dist x y)).mp hxy'
+    have hxy0' : (0 : ℝ) ≤ dist x y := dist_nonneg
+    exact dist_eq_zero.mp (le_antisymm hxy0 hxy0')
+  -- The original ambient metric, packaged as an `IsMetricOn` witness whose induced
+  -- topology is, by construction of `hY.metricSpace`, the ambient topology.
+  have horig : IsMetricOn (dist : Y → Y → ℝ) :=
+    ⟨dist_self, fun {x y} hxy => dist_eq_zero.mp hxy, dist_comm, dist_triangle⟩
+  have horig_toMetricSpace : horig.toMetricSpace = (inferInstance : MetricSpace Y) := by
+    apply MetricSpace.ext
+    ext x y
+    rfl
+  have horig_top : horig.topology = (inferInstance : TopologicalSpace Y) := by
+    rw [horig.topology_eq_metricSpace_topology, horig_toMetricSpace]
+    with_reducible_and_instances rfl
+  -- Step C: `hmin.topology` is the ambient topology, via the two-directional
+  -- continuity-of-identity argument (mirrors `Ext/FiveWay.lean`'s analogous step).
+  have hforward : @Continuous Y Y horig.topology hmin.topology id := by
+    rw [horig.topology_eq_metricSpace_topology, hmin.topology_eq_metricSpace_topology]
+    refine (@Metric.continuous_iff Y Y
+      horig.toMetricSpace.toPseudoMetricSpace
+      hmin.toMetricSpace.toPseudoMetricSpace id).2 ?_
+    intro b ε hε
+    obtain ⟨δ, hδpos, hδspec⟩ := Metric.tendsto_nhdsWithin_nhds.mp hr.tendsto_rescale ε hε
+    refine ⟨δ, hδpos, fun a hab => ?_⟩
+    have hab' : dist a b < δ := hab
+    show RangeSet.rescale hr (dist a b) < ε
+    have hab0 : (0 : ℝ) ≤ dist a b := dist_nonneg
+    rcases eq_or_lt_of_le hab0 with hc0 | hc0
+    · rw [← hc0, (hr.rescale_eq_zero 0).mpr le_rfl]
+      exact hε
+    · have hmemIoi : dist a b ∈ Set.Ioi (0 : ℝ) := hc0
+      have hxdist : dist (dist a b) (0 : ℝ) < δ := by
+        rw [Real.dist_eq, sub_zero, abs_of_pos hc0]
+        exact hab'
+      have hspec := hδspec hmemIoi hxdist
+      rwa [Real.dist_eq, sub_zero, abs_of_nonneg (hrescale_nonneg (dist a b))] at hspec
+  have hbackward : @Continuous Y Y hmin.topology horig.topology id := by
+    rw [hmin.topology_eq_metricSpace_topology, horig.topology_eq_metricSpace_topology]
+    refine (@Metric.continuous_iff Y Y
+      hmin.toMetricSpace.toPseudoMetricSpace
+      horig.toMetricSpace.toPseudoMetricSpace id).2 ?_
+    intro b ε hε
+    refine ⟨min ε (r 0), lt_min hε (hr.pos 0), fun a hab => ?_⟩
+    have hab' : RangeSet.rescale hr (dist a b) < min ε (r 0) := hab
+    show dist a b < ε
+    have hle := hr.le_rescale (dist a b)
+    have hlt_r0 : min (dist a b) (r 0) < r 0 :=
+      lt_of_le_of_lt hle (lt_of_lt_of_le hab' (min_le_right ε (r 0)))
+    have hdlt : dist a b < r 0 := by
+      by_contra hge
+      push_neg at hge
+      rw [min_eq_right hge] at hlt_r0
+      exact lt_irrefl _ hlt_r0
+    have hmin_eq : min (dist a b) (r 0) = dist a b := min_eq_left hdlt.le
+    have hle' : dist a b ≤ RangeSet.rescale hr (dist a b) :=
+      calc dist a b = min (dist a b) (r 0) := hmin_eq.symm
+        _ ≤ RangeSet.rescale hr (dist a b) := hle
+    exact lt_of_le_of_lt hle' (lt_of_lt_of_le hab' (min_le_left ε (r 0)))
+  have hminTop : hmin.topology = (inferInstance : TopologicalSpace Y) :=
+    (le_antisymm (continuous_id_iff_le.mp hbackward)
+      (continuous_id_iff_le.mp hforward)).trans horig_top
+  -- Step D: assemble `d0` into a member of `UCPMOn Y R`, hence of `UMetOn Y R`.
+  have d0cont : Continuous (Function.uncurry d0) := by
+    have hneq : hmin.toMetricSpace.toUniformSpace.toTopologicalSpace =
+        (inferInstance : TopologicalSpace Y) :=
+      hmin.topology_eq_metricSpace_topology.symm.trans hminTop
+    have hcd := @continuous_dist Y hmin.toMetricSpace.toPseudoMetricSpace
+    rw [hneq] at hcd
+    have hfe : (fun p : Y × Y => @dist Y hmin.toMetricSpace.toPseudoMetricSpace.toDist p.1 p.2)
+        = Function.uncurry d0 := by
+      funext p
+      exact hmin.dist_toMetricSpace p.1 p.2
+    rwa [hfe] at hcd
+  let d : UCPMOn Y R := ⟨⟨d0, hupmet⟩, d0cont⟩
+  exact ⟨d, hmin, hminTop⟩
+
 end
 
 end IshikiExt
