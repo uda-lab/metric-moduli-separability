@@ -14,6 +14,7 @@
 --   * `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
 
 import IshikiConj51.Ext.UltraPublished
+import IshikiConj51.Ext.BMetClopen
 import IshikiConj51.Ext.Component
 import IshikiConj51.Ext.GeneralSpace
 
@@ -44,18 +45,15 @@ def UCPMOn.component {Y : Type*} [TopologicalSpace Y] (R : RangeSet)
 
 @[simp] theorem UCPMOn.mem_component {Y : Type*} [TopologicalSpace Y]
     (R : RangeSet) (d e : UCPMOn Y R) :
-    e ∈ UCPMOn.component R d ↔ e ∈ UMetOn Y R ∧ edist d e < ⊤ := by
-  sorry
+    e ∈ UCPMOn.component R d ↔ e ∈ UMetOn Y R ∧ edist d e < ⊤ := Iff.rfl
 
 theorem UCPMOn.component_subset_UMetOn {Y : Type*} [TopologicalSpace Y]
     (R : RangeSet) (d : UCPMOn Y R) :
-    UCPMOn.component R d ⊆ UMetOn Y R := by
-  sorry
+    UCPMOn.component R d ⊆ UMetOn Y R := fun _ he => he.1
 
 theorem UCPMOn.self_mem_component {Y : Type*} [TopologicalSpace Y]
     (R : RangeSet) {d : UCPMOn Y R} (hd : d ∈ UMetOn Y R) :
-    d ∈ UCPMOn.component R d := by
-  sorry
+    d ∈ UCPMOn.component R d := ⟨hd, by rw [edist_self]; exact ENNReal.zero_lt_top⟩
 
 /-- Components are constant along their own finite-distance locus.  The
 statement is included at B0 so later proof blocks have the intended
@@ -63,7 +61,16 @@ component interface visible. -/
 theorem UCPMOn.component_eq_of_mem {Y : Type*} [TopologicalSpace Y]
     (R : RangeSet) {d e : UCPMOn Y R} (he : e ∈ UCPMOn.component R d) :
     UCPMOn.component R e = UCPMOn.component R d := by
-  sorry
+  ext f
+  constructor
+  · rintro ⟨hf, hef⟩
+    exact ⟨hf, lt_of_le_of_lt (edist_triangle d e f)
+      (ENNReal.add_lt_top.mpr ⟨he.2, hef⟩)⟩
+  · rintro ⟨hf, hdf⟩
+    refine ⟨hf, lt_of_le_of_lt (edist_triangle e d f)
+      (ENNReal.add_lt_top.mpr ⟨?_, hdf⟩)⟩
+    rw [edist_comm]
+    exact he.2
 
 /-! ## E2c: construction-controlled data for a general space -/
 
@@ -895,7 +902,18 @@ theorem not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
             (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ¬ MeasurableSet (UMetOn Y R) := by
-  sorry
+  intro hmeas
+  obtain ⟨d₀, hd₀⟩ := hne
+  have hnot :=
+    not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn
+      hY hYsep hR hEx d₀ hd₀
+  have hcomponent : UCPMOn.component R d₀ =
+      UMetOn Y R ∩ {e : UCPMOn Y R | edist d₀ e < ⊤} := by
+    rfl
+  have hcompmeas : MeasurableSet (UCPMOn.component R d₀) := by
+    rw [hcomponent]
+    exact hmeas.inter (isClopen_setOf_edist_lt_top d₀).isOpen.measurableSet
+  exact hnot hcompmeas
 
 end
 end IshikiExt
