@@ -239,7 +239,7 @@ $A_n$ も $\sigma$-コンパクト，したがって可分である．Koshino �
 $\operatorname{BMet}(A_n)$ は完備距離化可能であり，$\operatorname{BCPM}(A_n)$ の
 $G_\delta$ 集合である．制限写像
 $r_n \colon P_d \to \operatorname{BCPM}(A_n)$ は 1-Lipschitz ゆえ連続であり，
-$d$ が $A_n^2$ 上で有界で $p$ が $d$ から有限距離にあるから well-defined である．
+$d$ が $A_n^2$ 上で有界で $p$ が $d$ から有限距離にあるから良定義である．
 そして $P_d$ の中で
 
 $$\mathfrak{c} = \bigcap_{n} r_n^{-1}\bigl(\operatorname{BMet}(A_n)\bigr)$$
