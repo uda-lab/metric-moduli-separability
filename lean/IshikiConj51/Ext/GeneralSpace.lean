@@ -35,7 +35,7 @@ noncomputable section
   This is shared infrastructure for the ultrametric general-component track
   of Issue #110 as well as the existing Archimedean one.
 -/
-theorem exists_maximal_separated {X : Type*} [MetricSpace X]
+private theorem exists_maximal_separated {X : Type*} [MetricSpace X]
     (ε : ℝ) (hε : 0 < ε) :
     ∃ s : Set X, s.Pairwise (fun x y => ε < dist x y) ∧
       ∀ x : X, ∃ y ∈ s, dist x y ≤ ε := by
