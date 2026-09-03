@@ -213,77 +213,99 @@ theorem exists_maximal_aScale_separated_net
   exact ⟨a, ha_mem, ne_of_gt ha_pos, A, hAsep, hAstrictnet, hAnet, hAunc,
     hAclosed, inferInstance⟩
 
-/-- Choose, from an `a`-net, one point of the net at `d`-distance at most
-`a` from each point.  The definition is expressed using `d.1.1`, so it is
+open Classical in
+/-- Choose a centre from the strict outside-net clause, while fixing every
+point of the net.  The definition is expressed using `d.1.1`, so it is
 available without making a particular transported `MetricSpace` instance
 part of the declaration's type. -/
 noncomputable def centreMap
     {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R) (a : ℝ) (A : Set Y)
-    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) : Y → ↥A :=
+    (hnet : ∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) : Y → ↥A :=
   fun x =>
-    ⟨Classical.choose (hnet x), (Classical.choose_spec (hnet x)).1⟩
+    if hx : x ∈ A then ⟨x, hx⟩
+    else ⟨Classical.choose (hnet x hx), (Classical.choose_spec (hnet x hx)).1⟩
 
 /-- The chosen centre is within the net radius of its source point. -/
 theorem centreMap_dist_le
     {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R) (a : ℝ) (A : Set Y)
-    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) (x : Y) :
+    (hnet : ∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) (ha : 0 ≤ a) (x : Y) :
     d.1.1 x (centreMap d a A hnet x : Y) ≤ a := by
-  exact (Classical.choose_spec (hnet x)).2
+  classical
+  by_cases hx : x ∈ A
+  · rw [centreMap, dif_pos hx, d.1.2.dist_self]
+    exact ha
+  · rw [centreMap, dif_neg hx]
+    exact (Classical.choose_spec (hnet x hx)).2.le
 
 /-- The centre map is continuous for the topology induced by a compatible
-ultrametric.  The proof uses the clopen equal-radius closed-ball partition:
-the chosen centre is in a closed `a`-ball, and strict separation makes two
-such centre balls disjoint unless their centres agree. -/
+ultrametric.  Strictness comes from the outside-net clause and the fixed-point
+case; non-strict separation then forces centres of sufficiently nearby points
+to agree. -/
 theorem continuous_centreMap
     {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R)
     (hd : d ∈ UMetOn Y R) (a : ℝ) (A : Set Y) (ha : 0 < a)
-    (hAsep : A.Pairwise (fun x y => a < d.1.1 x y))
-    (hnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) :
+    (hAsep : A.Pairwise (fun x y => a ≤ d.1.1 x y))
+    (hnet : ∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) :
     Continuous (centreMap d a A hnet) := by
+  classical
   obtain ⟨hmetric, htop⟩ := hd
   letI : MetricSpace Y := hmetric.toMetricSpace.replaceTopology htop.symm
   have hUltra : @IsUltrametricDist Y ⟨d.1.1⟩ :=
     d.1.2.toIsUltrametricDist
   letI : IsUltrametricDist Y := hUltra
-  have hlocal : ∀ x x' : Y, x' ∈ Metric.closedBall x a →
+  have hcentre_mem : ∀ x : Y,
+      (centreMap d a A hnet x : Y) ∈ A := by
+    intro x
+    by_cases hx : x ∈ A
+    · rw [centreMap, dif_pos hx]
+      exact hx
+    · rw [centreMap, dif_neg hx]
+      exact (Classical.choose_spec (hnet x hx)).1
+  have hdist_lt : ∀ x : Y,
+      dist x (centreMap d a A hnet x : Y) < a := by
+    intro x
+    by_cases hx : x ∈ A
+    · rw [centreMap, dif_pos hx]
+      change d.1.1 x x < a
+      rw [d.1.2.dist_self]
+      exact ha
+    · rw [centreMap, dif_neg hx]
+      exact (Classical.choose_spec (hnet x hx)).2
+  have hlocal : ∀ x x' : Y, x' ∈ Metric.ball x a →
       centreMap d a A hnet x' = centreMap d a A hnet x := by
     intro x x' hx'
-    have hx'dist : dist x' x ≤ a := by
-      simpa only [Metric.mem_closedBall] using hx'
-    have hx'centre : x' ∈ Metric.closedBall
-        (centreMap d a A hnet x : Y) a := by
-      rw [Metric.mem_closedBall]
-      exact (dist_triangle_max x' x (centreMap d a A hnet x : Y)).trans
-        (max_le hx'dist (by
-          change d.1.1 x (centreMap d a A hnet x : Y) ≤ a
-          exact centreMap_dist_le d a A hnet x))
-    have hx'centre' : x' ∈ Metric.closedBall
-        (centreMap d a A hnet x' : Y) a := by
-      rw [Metric.mem_closedBall]
-      change d.1.1 x' (centreMap d a A hnet x' : Y) ≤ a
-      exact centreMap_dist_le d a A hnet x'
-    rcases IsUltrametricDist.closedBall_eq_or_disjoint
-        (x := (centreMap d a A hnet x : Y))
-        (y := (centreMap d a A hnet x' : Y)) (r := a) with hballs | hdisj
-    · have hcentre : (centreMap d a A hnet x' : Y) ∈
-          Metric.closedBall (centreMap d a A hnet x : Y) a := by
-        rw [hballs]
-        exact Metric.mem_closedBall_self ha.le
-      have hcentre_dist : dist (centreMap d a A hnet x' : Y)
-          (centreMap d a A hnet x : Y) ≤ a := by
-        simpa only [Metric.mem_closedBall] using hcentre
-      apply Subtype.ext
-      by_contra hne
-      have hlt : a < dist (centreMap d a A hnet x' : Y)
-          (centreMap d a A hnet x : Y) := by
-        exact hAsep (centreMap d a A hnet x').property
-          (centreMap d a A hnet x).property hne
-      exact (not_lt_of_ge hcentre_dist) hlt
-    · exact (hdisj.le_bot ⟨hx'centre, hx'centre'⟩).elim
+    have hx'dist : dist x' x < a := by
+      simpa only [Metric.mem_ball] using hx'
+    have hcentre_x' : dist (centreMap d a A hnet x' : Y) x' < a := by
+      calc
+        dist (centreMap d a A hnet x' : Y) x' =
+            dist x' (centreMap d a A hnet x' : Y) := dist_comm _ _
+        _ < a := hdist_lt x'
+    have hcentre_x : dist x (centreMap d a A hnet x : Y) < a :=
+      hdist_lt x
+    apply Subtype.ext
+    by_contra hne
+    have hcentre_lt : dist (centreMap d a A hnet x' : Y)
+        (centreMap d a A hnet x : Y) < a := by
+      calc
+        dist (centreMap d a A hnet x' : Y)
+            (centreMap d a A hnet x : Y) ≤
+            max (dist (centreMap d a A hnet x' : Y) x')
+              (dist x' (centreMap d a A hnet x : Y)) :=
+          dist_triangle_max _ _ _
+        _ ≤ max (dist (centreMap d a A hnet x' : Y) x')
+              (max (dist x' x) (dist x (centreMap d a A hnet x : Y))) := by
+          exact max_le_max le_rfl
+            (dist_triangle_max x' x (centreMap d a A hnet x : Y))
+        _ < a := max_lt hcentre_x' (max_lt hx'dist hcentre_x)
+    have hsep : a ≤ dist (centreMap d a A hnet x' : Y)
+        (centreMap d a A hnet x : Y) :=
+      hAsep (hcentre_mem x') (hcentre_mem x) hne
+    exact (not_lt_of_ge hsep) hcentre_lt
   refine continuous_iff_continuousAt.mpr (fun x => ?_)
   refine Filter.EventuallyEq.continuousAt
     (y := centreMap d a A hnet x) ?_
-  filter_upwards [Metric.closedBall_mem_nhds x ha] with x' hx'
+  filter_upwards [Metric.ball_mem_nhds x ha] with x' hx'
   exact hlocal x x' hx'
 
 /-! ## B2: coding on an `ℵ₁`-subset of an uncountable ball
