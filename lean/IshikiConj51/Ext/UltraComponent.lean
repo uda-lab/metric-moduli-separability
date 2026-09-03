@@ -512,3 +512,83 @@ theorem ucomponent_not_borel_of_card (hR : R.IsCharacteristic)
 end
 
 end IshikiExt
+
+namespace IshikiExt
+
+noncomputable section
+
+variable {Z W : Type*} {R : RangeSet}
+
+/-! ## The arbitrary-subset one-point max-amalgam
+
+This is the subset-indexed form of `uRetract`, `uInto`, and `uAmalgam`.
+Unlike the closed-ball construction above, its definitions use only a subset
+`H` and a chosen point `z ∈ H`; no numerical ball property is built in. -/
+
+open Classical in
+/-- Collapse an arbitrary subset `H` to its chosen point `z`. -/
+def hRetract (H : Set Z) (z : Z) (x : Z) : Z :=
+  if x ∈ H then z else x
+
+open Classical in
+/-- Map `H` identically into its subtype and collapse its complement to `z`. -/
+def hInto (H : Set Z) (z : Z) (hz : z ∈ H) (x : Z) : ↥H :=
+  if h : x ∈ H then ⟨x, h⟩ else ⟨z, hz⟩
+
+theorem hRetract_of_mem {H : Set Z} {z x : Z} (hx : x ∈ H) :
+    hRetract H z x = z := by
+  rw [hRetract, if_pos hx]
+
+theorem hRetract_of_notMem {H : Set Z} {z x : Z} (hx : x ∉ H) :
+    hRetract H z x = x := by
+  rw [hRetract, if_neg hx]
+
+theorem hInto_of_mem {H : Set Z} {z x : Z} {hz : z ∈ H} (hx : x ∈ H) :
+    hInto H z hz x = ⟨x, hx⟩ := by
+  rw [hInto, dif_pos hx]
+
+theorem hInto_of_notMem {H : Set Z} {z x : Z} {hz : z ∈ H} (hx : x ∉ H) :
+    hInto H z hz x = ⟨z, hz⟩ := by
+  rw [hInto, dif_neg hx]
+
+/-- The one-point max-amalgam over an arbitrary subset `H`. -/
+def hAmalgam (d : UCPM Z R) (H : Set Z) (z : Z) (hz : z ∈ H)
+    (κ : ↥H → W) (e : UCPM W R) : UCPM Z R :=
+  UCPM.sup (UCPM.comap (hRetract H z) d) (UCPM.comap (κ ∘ hInto H z hz) e)
+
+section HAmalgam
+
+variable {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
+  {κ : ↥H → W} {e : UCPM W R}
+
+theorem hAmalgam_val (x y : Z) :
+    (hAmalgam d H z hz κ e).1 x y
+      = max (d.1 (hRetract H z x) (hRetract H z y))
+        (e.1 (κ (hInto H z hz x)) (κ (hInto H z hz y))) := rfl
+
+theorem base_le_hAmalgam (x y : Z) :
+    d.1 (hRetract H z x) (hRetract H z y) ≤ (hAmalgam d H z hz κ e).1 x y :=
+  le_max_left _ _
+
+theorem coding_le_hAmalgam (x y : Z) :
+    e.1 (κ (hInto H z hz x)) (κ (hInto H z hz y))
+      ≤ (hAmalgam d H z hz κ e).1 x y :=
+  le_max_right _ _
+
+theorem hAmalgam_in_in {x y : Z} (hx : x ∈ H) (hy : y ∈ H) :
+    (hAmalgam d H z hz κ e).1 x y = e.1 (κ ⟨x, hx⟩) (κ ⟨y, hy⟩) := by
+  rw [hAmalgam_val, hRetract_of_mem hx, hRetract_of_mem hy, hInto_of_mem hx,
+    hInto_of_mem hy, d.2.dist_self z]
+  exact max_eq_right (e.2.nonneg _ _)
+
+theorem hAmalgam_out_out {x y : Z} (hx : x ∉ H) (hy : y ∉ H) :
+    (hAmalgam d H z hz κ e).1 x y = d.1 x y := by
+  rw [hAmalgam_val, hRetract_of_notMem hx, hRetract_of_notMem hy,
+    hInto_of_notMem hx, hInto_of_notMem hy, e.2.dist_self _]
+  exact max_eq_left (d.2.nonneg x y)
+
+end HAmalgam
+
+end
+
+end IshikiExt

@@ -52,3 +52,4 @@ import IshikiConj51.Ext.UltraCompleteTransfer
 -- Non-Archimedean track (Issue #96): the published-interface wrappers for
 -- Theorem 3.14 and Corollaries 3.15 and 3.17.
 import IshikiConj51.Ext.UltraPublished
+import IshikiConj51.Ext.UltraComponentGeneral
