@@ -2,16 +2,27 @@
 --
 -- Issue #110 / `cor:nonseparable-ultrametric-nonborel`, per
 -- `notes/borel-manuscript-20260827-audit.md` §2.19 and §4 (E2c).
--- This module is currently at the B0 fidelity-gate stage: signatures only,
--- `sorry`-filled, and pending orchestrator approval before proof work.
+-- This module formalises `cor:nonseparable-ultrametric-nonborel` in the
+-- received source's own form, per §4's E2c provenance.
+-- `IsUltraComponentControlledExtensorOn` is a separate E2c hypothesis
+-- package and is never folded into the ordinary E2 bundles
+-- (`IsUltraIsometricExtensor`/`IsUltraIsometricExtensorOn`).
+-- `Ext/UltraTransfer.lean`/`Ext/UltraCompleteTransfer.lean` retain the
+-- v1-repair proofs of `thm:ultrametric-borel-separability`/
+-- `cor:ultrametric-space-complete-separability` as a documented,
+-- independently-verified alternative route; they are not replaced by this
+-- file's new corollaries.
 -- The 2026-08-27 received source is reference-only; it is not called an
 -- arXiv version and is not copied here beyond the short provenance clause in
 -- the E2c docstring.
 --
--- Proposed declarations for review:
+-- Public declarations:
+--   * `UCPMOn.component`
 --   * `IsUltraComponentControlledExtensorOn`
 --   * `not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn`
 --   * `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
+--   * `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
+--   * `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`
 -- `cor:complete-ultrametric-borel-separability` is the `UCompOn`-locus variant,
 -- distinct from the `UMetOn`-locus corollary added below; it depends on E2(N1)
 -- alone rather than E2c, and is already proved as

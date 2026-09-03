@@ -1341,6 +1341,22 @@ issue trail, never in a committed ledger.
   derived from clause (1) via openness of the finite-distance locus
   (`isClopen_setOf_edist_lt_top`), matching `lem:relative-borel-inheritance`.
 
+* **`cor:nonseparable-ultrametric-nonborel`** — new file
+  `Ext/UltraComponentGeneral.lean` (Issue #110). `UCPMOn.component` is the
+  general-space `R`-component. `IsUltraComponentControlledExtensorOn` is E2c:
+  it contains exactly `toExtensor` and `component_control`, with `restrict`,
+  `isometry_toUCPMOn` and `umet_preservation` as one-line derived theorems
+  rather than fields, since they duplicate what the contained
+  `IsUltraIsometricExtensor` already supplies. Clause (1) is
+  `not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn`;
+  clause (2) is
+  `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, derived
+  from clause (1) via the finite-distance locus being clopen
+  (`isClopen_setOf_edist_lt_top`), matching
+  `lem:relative-borel-inheritance`. Clause (2) exposes, rather than derives,
+  `hne : (UMetOn Y R).Nonempty`, sourced to Ishiki's Proposition 2.3; a
+  follow-up to derive it from `hY`/`hR` is filed separately, not in Issue #110.
+
 * **`cor:bounded-metric-complete-sigma-compact`, five-way** — Issue #108.
   `Ext/CompleteMetrizability.lean`'s v1 two-way statement
   (`isCompletelyMetrizableSpace_CPM_BMetOn_iff_sigmaCompactSpace`) is
@@ -1388,8 +1404,6 @@ issue trail, never in a committed ledger.
 
 ### 7.2 Not yet formalised in the received source's form
 
-* **`cor:nonseparable-ultrametric-nonborel`** — statement gate **#110**. E2c must not
-  become a field of the existing `IsUltraIsometricExtensor` bundle.
 * **`cor:discrete-metric-nonborel`** — no separate gate. Clause (1) is
   `componentSet_not_measurableSet`; clause (2) is the `Met(Z)`-version
   statement `met_not_borel_of_card`, already proved by the pullback route
@@ -1400,15 +1414,19 @@ issue trail, never in a committed ledger.
 ### 7.3 Where the Lean development still proves a different route
 
 * **`thm:ultrametric-borel-separability` and
-  `cor:complete-ultrametric-borel-separability`.** `Ext/UltraTransfer.lean`
-  and `Ext/UltraCompleteTransfer.lean` formalise the **v1 audit's own
-  repair** — the dense-uniform extension `ultraExtend` over the closure of
-  `2^ω ∖ S` — because the v1 text had no valid route. The received source
-  proves both as corollaries of `cor:nonseparable-ultrametric-nonborel`
-  instead. The Lean theorems remain sound and remain a verified route to the
-  same statements; they are simply not the manuscript's route any more. Issue
-  Whether to refactor onto the new route or to keep the existing proof as a
-  documented alternative is decided under #110, not here.
+  `cor:ultrametric-space-complete-separability`.** The new E2c route in
+  `Ext/UltraComponentGeneral.lean` also proves these as
+  `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`
+  and
+  `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`,
+  respectively. `Ext/UltraTransfer.lean` and
+  `Ext/UltraCompleteTransfer.lean` retain the v1-repair proofs as a
+  documented, independently-verified alternative route, per Issue #110; they
+  are not refactored away.
+* **`cor:complete-ultrametric-borel-separability`.** This is the different
+  `UCompOn`-locus corollary, not
+  `cor:ultrametric-space-complete-separability`. It is untouched by Issue #110
+  and remains proved solely via E2(N1) in `Ext/UltraCompleteTransfer.lean`.
 * **Pullback versus relative closure.** The Lean development consistently
   proves the obstruction theorems by the pullback identity rather than by the
   printed relative-closure argument. In v1 that was a divergence the audit had
