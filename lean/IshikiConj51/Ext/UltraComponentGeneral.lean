@@ -838,7 +838,45 @@ theorem not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensor
             (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ∀ d ∈ UMetOn Y R, ¬ MeasurableSet (UCPMOn.component R d) := by
-  sorry
+  intro d hd
+  obtain ⟨a, haR, ha_ne, A, hAsep, hAnet, hAunc, hAclosed, hAdisc⟩ :=
+    exists_maximal_aScale_separated_net d hd hYsep hR
+  have hAsep_le : A.Pairwise (fun x y => a ≤ d.1.1 x y) := by
+    intro x hx y hy hxy
+    exact (hAsep hx hy hxy).le
+  have hAnet' : ∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a := by
+    rintro x -
+    exact hAnet x
+  obtain ⟨z⟩ : Nonempty (↥A) := by
+    by_contra hne
+    rw [not_nonempty_iff] at hne
+    have hAeq : A = ∅ := Set.isEmpty_coe_sort.mp hne
+    exact hAunc (hAeq.symm ▸ Set.countable_empty)
+  obtain ⟨E2c⟩ :=
+    hEx d hd a haR ha_ne A ⟨(z : Y), z.property⟩ hAclosed hAdisc hAsep_le hAnet'
+  obtain ⟨S, hS, hG, hScard, hSnonmeas⟩ :=
+    exists_bidense_aleph1_nonBorel_cantor
+  obtain ⟨r, hr⟩ := RangeSet.exists_isScale hR
+  let dA : UCPM (↥A) R :=
+    UCPMOn.restrict (Subtype.val : ↥A → Y) d
+  obtain ⟨q, hqR, H, hHball, hzH, hHcard, ⟨θ⟩⟩ :=
+    exists_aleph1_subset_uBall_equiv dA z hAunc hScard
+  have ha : 0 < a := lt_of_le_of_ne (R.nonneg haR) (Ne.symm ha_ne)
+  have hsepA : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y := by
+    intro x y hxy
+    exact hAsep x.property y.property (by
+      intro hxy'
+      exact hxy (Subtype.ext hxy'))
+  obtain ⟨Fbar, hFbar, hFbar_apply⟩ :=
+    exists_continuous_Fbar hd hR hr E2c H z hzH θ ha hsepA hS hG
+  have hpull : Fbar ⁻¹' UCPMOn.component R d = Sᶜ :=
+    preimage_UCPMOn_component_Fbar hd hR hr E2c H z hzH θ ha hsepA hS hG
+      hqR hHball Fbar hFbar hFbar_apply
+  intro hcomp
+  have hpre : MeasurableSet (Fbar ⁻¹' UCPMOn.component R d) :=
+    hcomp.preimage hFbar.measurable
+  rw [hpull] at hpre
+  exact hSnonmeas (by simpa using hpre.compl)
 
 /-- The whole-locus clause of `cor:nonseparable-ultrametric-nonborel` from
 audit §2.19: `UMetOn Y R` itself is non-Borel in the same existing ambient
