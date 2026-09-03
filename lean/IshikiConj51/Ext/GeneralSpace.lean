@@ -77,6 +77,50 @@ theorem exists_maximal_separated {X : Type*} [MetricSpace X]
     exact hx (hsmax.mem_of_prop_insert hsinsertF)
 
 /--
+  The non-strict-separation sibling is kept separate from
+  `exists_maximal_separated`: maximality for `a ≤ dist` gives the strict net
+  clause needed by the ultrametric component construction.
+-/
+theorem exists_maximal_separated_ge {X : Type*} [MetricSpace X]
+    (a : ℝ) (ha : 0 < a) :
+    ∃ s : Set X, s.Pairwise (fun x y => a ≤ dist x y) ∧
+      ∀ x : X, x ∉ s → ∃ y ∈ s, dist x y < a := by
+  let F : Set (Set X) := {s | s.Pairwise (fun x y => a ≤ dist x y)}
+  have hF : Order.IsOfFiniteCharacter F := by
+    intro s
+    constructor
+    · intro hs t hts htfinite
+      exact hs.mono hts
+    · intro hfinite x hx y hy hxy
+      have hxy_mem : ({x, y} : Set X) ⊆ s := by
+        intro z hz
+        simp only [mem_insert_iff, mem_singleton_iff] at hz
+        rcases hz with rfl | rfl
+        · exact hx
+        · exact hy
+      have hxy_pair : ({x, y} : Set X).Pairwise
+          (fun x y => a ≤ dist x y) :=
+        hfinite {x, y} hxy_mem (Set.toFinite _)
+      exact hxy_pair (by simp) (by simp) hxy
+  obtain ⟨s, _, hsmax⟩ :=
+    Order.IsOfFiniteCharacter.exists_maximal (x := (∅ : Set X)) hF (by simp [F])
+  have hs : s.Pairwise (fun x y => a ≤ dist x y) := by
+    simpa [F] using hsmax.1
+  refine ⟨s, hs, ?_⟩
+  intro x hxs
+  by_contra hcover
+  push Not at hcover
+  have hsinsert : (insert x s).Pairwise (fun x y => a ≤ dist x y) := by
+    haveI : Std.Symm (fun x y : X => a ≤ dist x y) := by
+      simp [symm_def, dist_comm]
+    refine (pairwise_insert_of_symm_of_notMem hxs).2 ⟨hs, ?_⟩
+    intro y hy
+    exact hcover y hy
+  have hsinsertF : insert x s ∈ F := by
+    simpa [F] using hsinsert
+  exact hxs (hsmax.mem_of_prop_insert hsinsertF)
+
+/--
   A nonseparable metric space has a positive radius with no countable net.
 
   This is the standalone form of the nonseparability argument already inline

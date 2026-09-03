@@ -147,17 +147,16 @@ theorem IsUltraComponentControlledExtensorOn.umet_preservation
 /-! ## B1: the maximal separated net and its centre map -/
 
 /-- A compatible ultrametric on a nonseparable space has a maximal separated
-net at a characteristic scale.  The strict separation retained in the first
-clause is the form supplied by `exists_maximal_separated`; its non-strict
-version is used to derive closedness and discreteness exactly through the
-standard metric lemmas. -/
+net at a characteristic scale.  The separation is non-strict, while
+maximality supplies the strict net outside the separated set. -/
 theorem exists_maximal_aScale_separated_net
     {Y : Type*} [TopologicalSpace Y] (d : UCPMOn Y R)
     (hd : d ∈ UMetOn Y R)
     (hY : ¬ TopologicalSpace.SeparableSpace Y)
     (hR : R.IsCharacteristic) :
     ∃ a : ℝ, a ∈ R.carrier ∧ a ≠ 0 ∧ ∃ A : Set Y,
-      A.Pairwise (fun x y => a < d.1.1 x y) ∧
+      A.Pairwise (fun x y => a ≤ d.1.1 x y) ∧
+        (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) ∧
         (∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a) ∧
           ¬ A.Countable ∧ IsClosed A ∧ DiscreteTopology ↥A := by
   obtain ⟨hmetric, htop⟩ := hd
@@ -170,28 +169,33 @@ theorem exists_maximal_aScale_separated_net
     exact RangeSet.smallElt_pos R hR hε
   have ha_lt : a < ε := by
     exact RangeSet.smallElt_lt R hR hε
-  obtain ⟨A, hAsep, hAnet⟩ :=
-    exists_maximal_separated (X := Y) a ha_pos
-  have hAsep_le : A.Pairwise (fun x y => a ≤ d.1.1 x y) := by
-    intro x hx y hy hxy
-    exact (hAsep hx hy hxy).le
+  obtain ⟨A, hAsep, hAstrictnet⟩ :=
+    exists_maximal_separated_ge (X := Y) a ha_pos
+  have hAnet : ∀ x : Y, ∃ y ∈ A, d.1.1 x y ≤ a := by
+    intro x
+    by_cases hx : x ∈ A
+    · exact ⟨x, hx, by rw [hmetric.dist_self]; exact ha_pos.le⟩
+    · obtain ⟨y, hyA, hxy⟩ := hAstrictnet x hx
+      exact ⟨y, hyA, hxy.le⟩
   have hAunc : ¬ A.Countable := by
     intro hAcount
     apply hεnet
     refine ⟨A, hAcount, ?_⟩
     intro x
-    obtain ⟨y, hyA, hxy⟩ := hAnet x
-    exact ⟨y, hyA, hxy.trans ha_lt.le⟩
+    by_cases hx : x ∈ A
+    · exact ⟨x, hx, by simpa using hε.le⟩
+    · obtain ⟨y, hyA, hxy⟩ := hAstrictnet x hx
+      exact ⟨y, hyA, hxy.le.trans ha_lt.le⟩
   have hAclosed : IsClosed A :=
-    Metric.isClosed_of_pairwise_le_dist ha_pos hAsep_le
+    Metric.isClosed_of_pairwise_le_dist ha_pos hAsep
   letI : DiscreteTopology (A) :=
     DiscreteTopology.of_forall_le_dist ha_pos (by
       intro x y hxy
-      exact hAsep_le x.2 y.2 (by
+      exact hAsep x.2 y.2 (by
         intro hxy'
         exact hxy (Subtype.ext hxy')))
-  exact ⟨a, ha_mem, ne_of_gt ha_pos, A, hAsep, hAnet, hAunc, hAclosed,
-    inferInstance⟩
+  exact ⟨a, ha_mem, ne_of_gt ha_pos, A, hAsep, hAstrictnet, hAnet, hAunc,
+    hAclosed, inferInstance⟩
 
 /-- Choose, from an `a`-net, one point of the net at `d`-distance at most
 `a` from each point.  The definition is expressed using `d.1.1`, so it is
@@ -332,19 +336,19 @@ theorem mCoding_val_symm (hr : RangeSet.IsScale R r) {d : UCPM Z R}
   rw [mCoding_in_in hr (θ.symm u).2 (θ.symm v).2, Subtype.coe_eta,
     Subtype.coe_eta, θ.apply_symm_apply, θ.apply_symm_apply]
 
-/-- Compatibility for `t ∉ S`.  The strict `a`-separation of the base carrier
+/-- Compatibility for `t ∉ S`.  The non-strict `a`-separation of the base carrier
 supplies the uniform isolating radius in every branch crossing or outside
 `H`; no ball-membership implication is used. -/
 theorem mCoding_topology_eq_bot (hr : RangeSet.IsScale R r)
     {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
     (θ : ↥H ≃ UltraIndex S) {a : ℝ} (ha : 0 < a)
-    (hsep : ∀ x y : Z, x ≠ y → a < d.1 x y)
+    (hsep : ∀ x y : Z, x ≠ y → a ≤ d.1 x y)
     {t : ℕ → Bool} (htS : t ∉ S) :
     UCPM.IsCompatible (mCoding hr d H z hz θ t) := by
   have hdm : IsMetricOn d.1 := by
     refine d.2.toIsMetricOn fun x y hxy => ?_
     by_contra hne
-    exact absurd hxy (ne_of_gt (ha.trans (hsep x y hne)))
+    exact absurd hxy (ne_of_gt (ha.trans_le (hsep x y hne)))
   have hbase : ∀ x y : Z,
       d.1 (hRetract H z x) (hRetract H z y) ≤
         (mCoding hr d H z hz θ t).1 x y :=
@@ -361,13 +365,13 @@ theorem mCoding_topology_eq_bot (hr : RangeSet.IsScale R r)
         have hle := hbase x y
         rw [hRetract_of_mem hx, hRetract_of_notMem hy, hxy] at hle
         have hzy : z ≠ y := fun h => hy (h ▸ hz)
-        exact (not_lt_of_ge hle) (ha.trans (hsep z y hzy))
+        exact (not_lt_of_ge hle) (ha.trans_le (hsep z y hzy))
     · by_cases hy : y ∈ H
       · exfalso
         have hle := hbase x y
         rw [hRetract_of_notMem hx, hRetract_of_mem hy, hxy] at hle
         have hxz : x ≠ z := fun h => hx (h ▸ hz)
-        exact (not_lt_of_ge hle) (ha.trans (hsep x z hxz))
+        exact (not_lt_of_ge hle) (ha.trans_le (hsep x z hxz))
       · rw [mCoding_out_out hr hx hy] at hxy
         exact hdm.eq_of_dist_eq_zero hxy
   refine ⟨hcm, hcm.topology_eq_bot_iff.mpr fun u => ?_⟩
@@ -386,17 +390,17 @@ theorem mCoding_topology_eq_bot (hr : RangeSet.IsScale R r)
       have hvz : v ≠ z := fun h => hvH (h ▸ hz)
       have hvza : d.1 v z < a :=
         lt_of_le_of_lt hle (lt_of_lt_of_le hv (min_le_right _ _))
-      exact (not_lt_of_ge (hsep v z hvz).le) hvza
+      exact (not_lt_of_ge (hsep v z hvz)) hvza
   · refine ⟨a, ha, fun v hv => ?_⟩
     by_cases hvH : v ∈ H
     · exfalso
       have hle := hbase v u
       rw [hRetract_of_mem hvH, hRetract_of_notMem hu] at hle
       have hzu : z ≠ u := fun h => hu (h ▸ hz)
-      exact (not_lt_of_ge (hsep z u hzu).le) (lt_of_le_of_lt hle hv)
+      exact (not_lt_of_ge (hsep z u hzu)) (lt_of_le_of_lt hle hv)
     · rw [mCoding_out_out hr hvH hu] at hv
       by_contra hvu
-      exact (not_lt_of_ge (hsep v u hvu).le) hv
+      exact (not_lt_of_ge (hsep v u hvu)) hv
 
 /-- Compatibility fails for `t ∈ S`; the non-isolated coding centre and its
 approaching spokes all lie inside `H`. -/
@@ -427,7 +431,7 @@ theorem mCoding_topology_ne_bot (hr : RangeSet.IsScale R r)
 theorem mem_UMet_mCoding_iff (hr : RangeSet.IsScale R r)
     {d : UCPM Z R} {H : Set Z} {z : Z} {hz : z ∈ H}
     (θ : ↥H ≃ UltraIndex S) {a : ℝ} (ha : 0 < a)
-    (hsep : ∀ x y : Z, x ≠ y → a < d.1 x y) (t : ℕ → Bool) :
+    (hsep : ∀ x y : Z, x ≠ y → a ≤ d.1 x y) (t : ℕ → Bool) :
     mCoding hr d H z hz θ t ∈ UMet Z R ↔ t ∉ S :=
   ⟨fun h htS => mCoding_topology_ne_bot hr θ htS h,
     fun htS => mCoding_topology_eq_bot hr θ ha hsep htS⟩
@@ -539,7 +543,7 @@ def F {d : UCPMOn Y R} {a : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y) :
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y) :
     ↥(Sᶜ) → UCPMOn Y R := by
   let dA := UCPMOn.restrict (Subtype.val : ↥A → Y) d
   have hdA : dA ∈ UMet ↥A R := by
@@ -548,7 +552,7 @@ def F {d : UCPMOn Y R} {a : ℝ}
         letI : TopologicalSpace ↥A := ⊥
         exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
       E2c.toExtensor.domain_discrete hd
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ dA.1 x y := by
     intro x y hxy
     simpa [dA] using hsep x y hxy
   intro s
@@ -564,7 +568,7 @@ theorem isometry_F {d : UCPMOn Y R} {a : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y) (hS : Dense S) :
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y) (hS : Dense S) :
     ∀ s t : ↥(Sᶜ),
       edist (F hd hr E2c H z hz θ ha hsep s)
           (F hd hr E2c H z hz θ ha hsep t) =
@@ -576,7 +580,7 @@ theorem isometry_F {d : UCPMOn Y R} {a : ℝ}
         letI : TopologicalSpace ↥A := ⊥
         exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
       E2c.toExtensor.domain_discrete hd
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ dA.1 x y := by
     intro x y hxy
     simpa [dA] using hsep x y hxy
   intro s t
@@ -598,7 +602,7 @@ theorem exists_continuous_Fbar {d : UCPMOn Y R} {a : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y)
     (hS : Dense S) (hG : Dense Sᶜ) :
     ∃ Fbar : (ℕ → Bool) → UCPMOn Y R,
       Continuous Fbar ∧
@@ -658,7 +662,7 @@ theorem restrict_Fbar_eq_mCoding {d : UCPMOn Y R} {a : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y)
     (hS : Dense S) (hG : Dense Sᶜ)
     (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
     (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
@@ -673,7 +677,7 @@ theorem restrict_Fbar_eq_mCoding {d : UCPMOn Y R} {a : ℝ}
         letI : TopologicalSpace ↥A := ⊥
         exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
       E2c.toExtensor.domain_discrete hd
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ dA.1 x y := by
     intro x y hxy
     simpa [dA] using hsep x y hxy
   have heq :
@@ -702,7 +706,7 @@ theorem mem_UMetOn_Fbar_iff {d : UCPMOn Y R} {a : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y)
     (hS : Dense S) (hG : Dense Sᶜ)
     (Fbar : (ℕ → Bool) → UCPMOn Y R) (hFbar : Continuous Fbar)
     (hFbar_apply : ∀ (t : ℕ → Bool) (ht : t ∈ Sᶜ),
@@ -716,7 +720,7 @@ theorem mem_UMetOn_Fbar_iff {d : UCPMOn Y R} {a : ℝ}
         letI : TopologicalSpace ↥A := ⊥
         exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
       E2c.toExtensor.domain_discrete hd
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ dA.1 x y := by
     intro x y hxy
     simpa [dA] using hsep x y hxy
   constructor
@@ -746,7 +750,7 @@ theorem edist_Fbar_lt_top {d : UCPMOn Y R} {a q : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y)
     (hS : Dense S) (hG : Dense Sᶜ)
     (hqR : q ∈ R.carrier)
     (hHball : H ⊆ uBall
@@ -763,7 +767,7 @@ theorem edist_Fbar_lt_top {d : UCPMOn Y R} {a q : ℝ}
         letI : TopologicalSpace ↥A := ⊥
         exact E2c.toExtensor.closedEmbedding.toIsEmbedding)
       E2c.toExtensor.domain_discrete hd
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < dA.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ dA.1 x y := by
     intro x y hxy
     simpa [dA] using hsep x y hxy
   let dHat := E2c.toExtensor.toUCPMOn (⟨dA, hdA⟩ : ↥(UMet ↥A R))
@@ -804,7 +808,7 @@ theorem preimage_UCPMOn_component_Fbar {d : UCPMOn Y R} {a q : ℝ}
     (E2c : IsUltraComponentControlledExtensorOn R A d a)
     (H : Set (↥A)) (z : ↥A) (hz : z ∈ H)
     (θ : ↥H ≃ UltraIndex S) (ha : 0 < a)
-    (hsep : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y)
+    (hsep : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y)
     (hS : Dense S) (hG : Dense Sᶜ)
     (hqR : q ∈ R.carrier)
     (hHball : H ⊆ uBall
@@ -840,27 +844,23 @@ theorem not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensor
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
-          A.Nonempty → IsClosed A → DiscreteTopology ↥A →
+            A.Nonempty → IsClosed A → DiscreteTopology ↥A →
             A.Pairwise (fun x y => a ≤ d.1.1 x y) →
-            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
+            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ∀ d ∈ UMetOn Y R, ¬ MeasurableSet (UCPMOn.component R d) := by
   intro d hd
-  obtain ⟨a, haR, ha_ne, A, hAsep, hAnet, hAunc, hAclosed, hAdisc⟩ :=
+  obtain ⟨a, haR, ha_ne, A, hAsep, hAstrictnet, hAnet, hAunc, hAclosed,
+      hAdisc⟩ :=
     exists_maximal_aScale_separated_net d hd hYsep hR
-  have hAsep_le : A.Pairwise (fun x y => a ≤ d.1.1 x y) := by
-    intro x hx y hy hxy
-    exact (hAsep hx hy hxy).le
-  have hAnet' : ∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a := by
-    rintro x -
-    exact hAnet x
   obtain ⟨z⟩ : Nonempty (↥A) := by
     by_contra hne
     rw [not_nonempty_iff] at hne
     have hAeq : A = ∅ := Set.isEmpty_coe_sort.mp hne
     exact hAunc (hAeq.symm ▸ Set.countable_empty)
   obtain ⟨E2c⟩ :=
-    hEx d hd a haR ha_ne A ⟨(z : Y), z.property⟩ hAclosed hAdisc hAsep_le hAnet'
+    hEx d hd a haR ha_ne A ⟨(z : Y), z.property⟩ hAclosed hAdisc hAsep
+      hAstrictnet
   obtain ⟨S, hS, hG, hScard, hSnonmeas⟩ :=
     exists_bidense_aleph1_nonBorel_cantor
   obtain ⟨r, hr⟩ := RangeSet.exists_isScale hR
@@ -869,7 +869,7 @@ theorem not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensor
   obtain ⟨q, hqR, H, hHball, hzH, hHcard, ⟨θ⟩⟩ :=
     exists_aleph1_subset_uBall_equiv dA z hAunc hScard
   have ha : 0 < a := lt_of_le_of_ne (R.nonneg haR) (Ne.symm ha_ne)
-  have hsepA : ∀ x y : ↥A, x ≠ y → a < d.1.1 x y := by
+  have hsepA : ∀ x y : ↥A, x ≠ y → a ≤ d.1.1 x y := by
     intro x y hxy
     exact hAsep x.property y.property (by
       intro hxy'
@@ -897,9 +897,9 @@ theorem not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
-          A.Nonempty → IsClosed A → DiscreteTopology ↥A →
+            A.Nonempty → IsClosed A → DiscreteTopology ↥A →
             A.Pairwise (fun x y => a ≤ d.1.1 x y) →
-            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
+            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ¬ MeasurableSet (UMetOn Y R) := by
   intro hmeas
