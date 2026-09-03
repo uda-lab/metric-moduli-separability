@@ -835,7 +835,7 @@ theorem not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensor
         ∀ (A : Set Y),
           A.Nonempty → IsClosed A → DiscreteTopology ↥A →
             A.Pairwise (fun x y => a ≤ d.1.1 x y) →
-            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) →
+            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ∀ d ∈ UMetOn Y R, ¬ MeasurableSet (UCPMOn.component R d) := by
   sorry
@@ -848,12 +848,13 @@ theorem not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn
     (hY : IsUltrametrizableSpace Y)
     (hYsep : ¬ TopologicalSpace.SeparableSpace Y)
     (hR : R.IsCharacteristic)
+    (hne : (UMetOn Y R).Nonempty)
     (hEx : ∀ (d : UCPMOn Y R), d ∈ UMetOn Y R →
       ∀ (a : ℝ), a ∈ R.carrier → a ≠ 0 →
         ∀ (A : Set Y),
           A.Nonempty → IsClosed A → DiscreteTopology ↥A →
             A.Pairwise (fun x y => a ≤ d.1.1 x y) →
-            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y < a) →
+            (∀ x : Y, x ∉ A → ∃ y ∈ A, d.1.1 x y ≤ a) →
           Nonempty (IsUltraComponentControlledExtensorOn R A d a)) :
     ¬ MeasurableSet (UMetOn Y R) := by
   sorry
