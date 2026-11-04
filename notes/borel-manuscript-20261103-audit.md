@@ -528,16 +528,16 @@ statement level, or enters as an explicit hypothesis, except as noted in §7.2.
 | `lem:ultrametric-coding` … `thm:ultrametric-component-nonborel` | 4.1–4.4 | `UltraCoding.lean`, `UltraComponent.lean` (`#Z = aleph 1`) |
 | `lem:ultrametric-extensor-preserving-component` | 4.5 | `UltraNetExtensor.lean`: `exists_isUltraComponentControlledExtensorOn` (the E2c provider `hEx`, no external input), by §2.2's `E′` (`netExtensor`); `netExtensor_toUCPMOn_restrict` is `E′(d|_{A²}) = d`, i.e. `τ = 0` |
 | `cor:nonseparable-ultrametric-nonborel` | 4.6 | `not_measurableSet_UCPMOn_component`, `not_measurableSet_UMetOn` (no extensor hypothesis); `hEx` forms `not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn`, `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn` |
-| `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` | 4.7, 4.8 | `separable_of_measurableSet_UMetOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn` (no extensor hypothesis; 4.8 adds E4d); `hEx` forms `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`; v1 route in `UltraTransfer.lean` |
+| `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` | 4.7, 4.8 | `separable_of_measurableSet_UMetOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn` (no extensor hypothesis; 4.8's E4d step is proved, `measurableSet_of_isCompletelyMetrizableSpace`); `hEx` forms `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`; v1 route in `UltraTransfer.lean` |
 | `thm:complete-ultrametric-nonborel`, `cor:complete-ultrametric-borel-separability` | 4.9, 4.10 | `UltraComplete.lean`; `separable_of_{measurableSet,isCompletelyMetrizableSpace}_UCompOn_of_isUltrametrizableSpace` (both claims, with `UComp ≠ ∅`) |
 | E1 / E2 / E3 / E4d / E5 / E6 | 2.3, 2.11, 2.2, 2.16 | explicit hypothesis bundles; 2.16's reverse direction is proved (`GDeltaCompletelyMetrizable.lean`) |
 | standard lemmas 2.4, 2.8, 2.10, 2.12 (clopen), 2.15 | — | `Amalgam.lean`, `Completeness.lean`, `completeSpace_UCPMOn`, `isClopen_setOf_edist_lt_top` |
 
 The hypothesis-free forms of 4.6–4.8 are stronger than the printed
 dependencies: the printed proofs consume E2c′ (and, for `UMet(Y;R) ≠ ∅`,
-Proposition 2.3), while the Lean forms take only `IsUltrametrizableSpace Y`,
-characteristic `R` and, for 4.8, E4d. This is the Lean-side counterpart of
-§2.2's audit observation.
+Proposition 2.3), while the Lean forms take only `IsUltrametrizableSpace Y`
+and characteristic `R`. This is the Lean-side counterpart of §2.2's audit
+observation.
 
 ### 7.2 Gaps
 

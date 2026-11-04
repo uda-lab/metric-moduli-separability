@@ -56,7 +56,8 @@ section Centre
 
 variable {Y : Type*} {A : Set Y} {a : ℝ}
 
-/-- A point lies strictly within `a` of its centre. -/
+/-- **Uniqueness of the centre.** A point of `A` within `a` of `x` is the
+centre of `x`, by the `a`-separation of `A`. -/
 theorem centre_eq_of_dist_lt {d : UCPM Y R} {π : Y → ↥A}
     (hAsep : A.Pairwise fun x y => a ≤ d.1 x y) (hπ : ∀ x, d.1 x (π x) < a)
     {x : Y} {b : ↥A} (h : d.1 x b < a) : π x = b := by
@@ -486,7 +487,8 @@ theorem separable_of_measurableSet_UMetOn
     hY hR exists_isUltraComponentControlledExtensorOn
 
 /-- **`cor:ultrametric-space-complete-separability` (4.8)**, with no extensor
-hypothesis; the Borelness step still uses E4d (Alexandrov–Lavrentiev). -/
+hypothesis.  The Borelness step is the forward direction of E4d
+(Alexandrov–Lavrentiev), proved as `measurableSet_of_isCompletelyMetrizableSpace`. -/
 theorem separable_of_isCompletelyMetrizableSpace_UMetOn
     {Y : Type*} [TopologicalSpace Y]
     (hY : IsUltrametrizableSpace Y) (hR : R.IsCharacteristic)
