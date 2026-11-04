@@ -31,7 +31,9 @@ inputs) are fixed by `notes/borel-preprint-audit.md` §3, which quotes each
 statement exactly; `notes/borel-manuscript-20260827-audit.md` §4 carries them
 unchanged and adds E5 (Ishiki's interpolation theorem) and E6 (Hausdorff's
 open-image theorem); `notes/borel-manuscript-20261103-audit.md` §4 keeps them
-and re-scopes E2c as E2c′. They enter Lean only as explicit hypotheses.
+and re-scopes E2c as E2c′. They enter Lean only as explicit hypotheses;
+E2c′ does not enter at all, since `Ext/UltraNetExtensor.lean` proves
+`lem:ultrametric-extensor-preserving-component` directly.
 A `c` suffix marks a **construction-specific** dependency — data taken from the
 *proof* of the named source theorem rather than from its statement, such as E1c
 (Lemma 4.4's point estimate, from the proof of E1's Theorem 1.1) and E2c (the

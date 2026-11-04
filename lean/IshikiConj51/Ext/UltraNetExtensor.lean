@@ -24,12 +24,13 @@
 --
 -- `IsUltraComponentControlledExtensorOn` and the `hEx`-taking theorems of
 -- `Ext/UltraComponentGeneral.lean` are unchanged; this file supplies `hEx` and
--- restates their four consumers without it.  The restatements are stronger
--- than the printed dependency of 4.6–4.8 on E2c′ (audit §7.1).
+-- restates their four consumers without it.  The restatements state 4.6–4.8
+-- as printed; their proofs need no external input, whereas the printed proofs
+-- consume E2c′ (audit §7.1).
 --
 -- Public declarations:
---   * `centre_eq_of_dist_lt`, `centre_eq_iff`, `dist_eq_centre_of_ne`,
---     `centreMap_dist_lt`
+--   * `centre_eq_of_dist_lt`, `centre_apply_coe`, `centre_eq_iff`,
+--     `dist_eq_centre_of_ne`, `centreMap_dist_lt`
 --   * `netPMet` (`v′`), `netExtend` (`E′`) and their API
 --   * `netExtensor`, `netExtensor_toUCPMOn_val`, `netExtensor_toUCPMOn_restrict`
 --   * `exists_isUltraComponentControlledExtensorOn`

@@ -533,17 +533,17 @@ statement level, or enters as an explicit hypothesis, except as noted in §7.2.
 | E1 / E2 / E3 / E4d / E5 / E6 | 2.3, 2.11, 2.2, 2.16 | explicit hypothesis bundles; 2.16's reverse direction is proved (`GDeltaCompletelyMetrizable.lean`) |
 | standard lemmas 2.4, 2.8, 2.10, 2.12 (clopen), 2.15 | — | `Amalgam.lean`, `Completeness.lean`, `completeSpace_UCPMOn`, `isClopen_setOf_edist_lt_top` |
 
-The hypothesis-free forms of 4.6–4.8 are stronger than the printed
-dependencies: the printed proofs consume E2c′ (and, for `UMet(Y;R) ≠ ∅`,
-Proposition 2.3), while the Lean forms take only `IsUltrametrizableSpace Y`
-and characteristic `R`. This is the Lean-side counterpart of §2.2's audit
+The hypothesis-free forms state 4.6–4.8 as printed and are proved with no
+external input, whereas the printed proofs consume E2c′ (and Proposition 2.3
+for `UMet(Y;R) ≠ ∅`). This is the Lean-side counterpart of §2.2's audit
 observation.
 
 ### 7.2 Gaps
 
-* **`lem:ultrametric-extensor-preserving-component` (4.5) — closed.** `hEx`
-  is removed by `exists_isUltraComponentControlledExtensorOn`
-  (`Ext/UltraNetExtensor.lean`), with no external input: §2.2's `E′` is built
+* **`lem:ultrametric-extensor-preserving-component` (4.5).** `hEx` is
+  discharged by `exists_isUltraComponentControlledExtensorOn`
+  (`Ext/UltraNetExtensor.lean`) and is absent from the hypothesis-free forms of
+  4.6–4.8; no external input is used: §2.2's `E′` is built
   along the centre map, is an exact `𝒰𝒟^R`-isometry and returns `d` from
   `d|_{A²}`. The E2c structure `IsUltraComponentControlledExtensorOn` and the
   `hEx`-taking theorems are kept unchanged. The structure's `component_control`
