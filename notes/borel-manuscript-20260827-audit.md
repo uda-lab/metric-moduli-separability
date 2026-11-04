@@ -5,8 +5,12 @@
 > 2026-09-02, whose archive carries the internal timestamp 2026-08-27 08:44
 > UTC. This note calls it **the 2026-08-27 received source** (or *the received
 > manuscript*). It is **not** an arXiv version: arXiv carries v1 only.
-> **Role:** this note is the active mathematical source of truth for the Borel
-> track and the statement gate for its Lean formalisation.
+> **Frozen record.** The active source of truth for the Borel track is the
+> successor note `notes/borel-manuscript-20261103-audit.md`, which audits the
+> manuscript source received on 2026-11-03 and carries every verdict here into
+> its own **2026-08-27 verdict** column. Read this note for the 2026-08-27
+> record, for the exact external statements of §4 and for the Lean record of
+> §7; read the successor for what the 2026-11-03 source says.
 > `notes/borel-preprint-audit.md` is the frozen v1 record; its verdicts are
 > v1 verdicts and are carried into the **v1 verdict** column of §2 here.
 > **Verdicts:** **PASS** (statement and proof check out), **FIX** (statement

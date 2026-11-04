@@ -7,13 +7,16 @@ compatible metrics.
 
 The active external source is the joint preprint by Yoshito Ishiki and Tomoki
 Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**,
-arXiv:2608.19618 (2026), together with the later manuscript source received on
-2026-09-02 (archive timestamp 2026-08-27), which is reference-only and lives
-outside this repository. The repository verifies it theorem by theorem:
-`notes/borel-manuscript-20260827-audit.md` is the mathematical source of truth
-(exact statements, verdicts, verified repairs, and external-theorem
-dependencies) for the received source, `notes/borel-preprint-audit.md` is the
-frozen arXiv v1 record and carries the per-declaration Lean package, and the
+arXiv:2608.19618 (2026), together with the latest manuscript source received
+on 2026-11-03, which is reference-only and lives outside this repository
+(arXiv carries v1 only). The repository verifies it theorem by theorem:
+`notes/borel-manuscript-20261103-audit.md` is the mathematical source of truth
+(statements, verdicts, verified repairs, external-theorem dependencies, and
+the label-level Lean correspondence) for that source;
+`notes/borel-manuscript-20260827-audit.md` is the frozen record of the
+previous received source (2026-08-27) and holds the exact external
+statements; `notes/borel-preprint-audit.md` is the frozen arXiv v1 record and
+carries the per-declaration Lean package; and the
 Lean development under `lean/IshikiConj51/Ext/`
 (namespace `IshikiExt`) formalises the audited statements. The audit notes
 record, per theorem, exactly what is formalised and modulo which explicit
@@ -68,7 +71,7 @@ issue explicitly requires a provenance-preserving change.
 
 An earlier draft attempted a stronger analytic/coanalytic theorem package.
 That track is closed and must not be treated as a source of truth: the Borel
-statement replaces it, and §5 of `notes/borel-manuscript-20260827-audit.md`
+statement replaces it, and §5 of `notes/borel-manuscript-20261103-audit.md`
 records the claims that must not be reinstated — in particular, the draft's
 "not coanalytic" half is not a ZFC theorem. The pointclass-free metric coding
 that work produced remains reusable `IshikiExt` infrastructure.
@@ -84,7 +87,8 @@ that work produced remains reusable `IshikiExt` infrastructure.
 | `paper/` | archival earlier manuscript workspace |
 
 Module map for `lean/IshikiConj51/Ext/` (v1 theorem numbers are retained for
-orientation; the correspondence column uses the received-source labels):
+orientation; labels are the stable identifiers, and the correspondence column
+uses the labels of the 2026-11-03 received source):
 
 | Modules | Content | Received-source correspondence |
 |---|---|---|
@@ -92,11 +96,11 @@ orientation; the correspondence column uses the received-source labels):
 | `Borel`, `CPM`, `Relabel` | discrete non-Borel obstruction (Theorem 3.3) in the bounded and unbounded ambients; arbitrary-carrier relabelling | `thm:bounded-discrete-nonborel`, `cor:discrete-metric-nonborel` → `Borel`, `CPM`, `Relabel`; v1 coverage retained, with the received-source pullback and relative-Borel repairs already reflected in the route |
 | `Amalgam`, `Component` | one-point amalgamation; component non-Borelness (Theorem 3.4) | `lem:one-point-amalgamation`, `thm:metric-component-nonborel` → `Amalgam`, `Component`; strengthened to `|Z| ≥ ℵ₁` (#106, PR #114) |
 | `Completeness`, `CompleteMetric` | complete-metric branch (Theorem 3.8, Corollary 3.9) | `thm:complete-metric-nonborel`, `cor:complete-metric-borel-separability` → `Completeness`, `CompleteMetric`; received-source complete-amalgam repair is already reflected in this route |
-| `GeneralSpace`, `GeneralSeparability` | general-space Borel/separability transfer (Theorem 3.5), E1 as explicit hypothesis | `thm:borel-separability` → `GeneralSpace`, `GeneralSeparability`; received-source BMet transfer and pullback repairs are already reflected in the existing route. `cor:nonseparable-metric-nonborel` → Issue #107 |
-| `CompleteMetrizability` | Alexandrov–Lavrentiev for a metrizable ambient; Corollaries 3.6 and 3.7 | `thm:complete-metrizability-g-delta`, `cor:metric-space-complete-separability` → `CompleteMetrizability`; `cor:bounded-metric-complete-sigma-compact`'s five-way form → Issue #108 |
+| `GeneralSpace`, `GeneralSeparability` | general-space Borel/separability transfer (Theorem 3.5), E1 as explicit hypothesis | `thm:borel-separability` → `GeneralSpace`, `GeneralSeparability`; received-source BMet transfer and pullback repairs are already reflected in the existing route. `cor:nonseparable-metric-nonborel` → `GeneralComponent` (E1, E1c) |
+| `CompleteMetrizability` | Alexandrov–Lavrentiev for a metrizable ambient; Corollaries 3.6 and 3.7 | `thm:complete-metrizability-g-delta`, `cor:metric-space-complete-separability` → `CompleteMetrizability`, `GDeltaCompletelyMetrizable`; `cor:bounded-metric-complete-sigma-compact`'s five-way form → `FiveWay` (E1, E3, E5, E6) |
 | `UltraPMet`, `CantorUltra`, `UltraCoding`, `UltraComponent` | discrete ultrametric core (Proposition 2.2, Lemmas 3.10–3.11, Theorems 3.12–3.13) | `prop:dense-aleph1-nonborel-cantor`, `lem:ultrametric-coding`, `lem:closed-ultrametric-parameter-embedding`, `thm:discrete-ultrametric-nonborel`, `thm:ultrametric-component-nonborel` → `UltraPMet`, `CantorUltra`, `UltraCoding`, `UltraComponent`; Cantor witness strengthened to bi-density (#109, PR #116) |
-| `UltraGeneral`, `UltraTransfer` | ultrametric transfer (Theorem 3.14, Corollary 3.15), E2 as explicit hypothesis | `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` → `UltraGeneral`, `UltraTransfer`; the v1 ambient-transfer repair remains reflected here. `cor:nonseparable-ultrametric-nonborel` → Issue #110 |
-| `UltraComplete`, `UltraCompleteTransfer` | complete-ultrametric branch (Theorem 3.16, Corollary 3.17) | `thm:complete-ultrametric-nonborel`, `cor:complete-ultrametric-borel-separability` → `UltraComplete`, `UltraCompleteTransfer`; the received-source proof replacement through `cor:nonseparable-ultrametric-nonborel` → Issue #110 |
+| `UltraGeneral`, `UltraTransfer` | ultrametric transfer (Theorem 3.14, Corollary 3.15), E2 as explicit hypothesis | `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` → `UltraGeneral`, `UltraTransfer`; the v1 ambient-transfer repair remains reflected here as an alternative route. `cor:nonseparable-ultrametric-nonborel` and the E2c-route forms of both theorems → `UltraComponentGeneral`, with `lem:ultrametric-extensor-preserving-component` entering as the explicit E2c hypothesis |
+| `UltraComplete`, `UltraCompleteTransfer` | complete-ultrametric branch (Theorem 3.16, Corollary 3.17) | `thm:complete-ultrametric-nonborel`, `cor:complete-ultrametric-borel-separability` → `UltraComplete`, `UltraCompleteTransfer`, `UltraPublished` (E2(N1); both the Borel and the completely-metrizable claim) |
 
 ## Workflow
 

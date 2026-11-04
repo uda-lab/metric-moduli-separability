@@ -7,6 +7,7 @@ OUTPUT_DIR="$NOTES_DIR/typeset"
 
 if (( $# == 0 )); then
   notes=(
+    borel-manuscript-20261103-audit.md
     borel-manuscript-20260827-audit.md
     borel-manuscript-20260827-corrections-ja.md
     borel-preprint-audit.md
