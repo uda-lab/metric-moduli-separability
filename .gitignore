@@ -12,3 +12,6 @@ paper/arxiv-v1.tar.gz
 report/*.pdf
 notes/*.pdf
 notes/typeset/
+
+# Owner-local workspace with reference-only material; never commit
+Claude outputs/
