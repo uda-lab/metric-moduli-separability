@@ -391,7 +391,7 @@ first but proves `(A2)` first.
 | §2.1 / §4 E3, Koshino "Corollary 1.2" number | **outstanding** — still cited as Corollary 1.2 |
 | §4 E6, cite Hausdorff directly rather than Michael–Stone §3.4 | **outstanding** (recommendation) |
 
-#113 was closed on 2026-11-04 on this basis. The Lean side needed no change:
+The Lean side needs no change:
 `separable_of_isCompletelyMetrizableSpace_CPM_MetOn_of_isometricExtensorOn`
 already follows the repaired route.
 
