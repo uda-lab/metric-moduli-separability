@@ -53,3 +53,6 @@ import IshikiConj51.Ext.UltraCompleteTransfer
 -- Theorem 3.14 and Corollaries 3.15 and 3.17.
 import IshikiConj51.Ext.UltraPublished
 import IshikiConj51.Ext.UltraComponentGeneral
+-- Issue #132: `lem:ultrametric-extensor-preserving-component` without external
+-- input, discharging the E2c hypothesis of `UltraComponentGeneral`.
+import IshikiConj51.Ext.UltraNetExtensor

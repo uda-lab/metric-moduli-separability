@@ -526,24 +526,29 @@ statement level, or enters as an explicit hypothesis, except as noted in §7.2.
 | `cor:bounded-metric-complete-sigma-compact` | 3.9 | `tfae_isCompletelyMetrizableSpace_iff_sigmaCompactSpace` (E1, E3, E5, E6) |
 | `thm:complete-metric-nonborel`, `cor:complete-metric-borel-separability` | 3.10, 3.11 | `CompleteMetric.lean` (under `aleph 1 ≤ #Z`, stronger than printed) |
 | `lem:ultrametric-coding` … `thm:ultrametric-component-nonborel` | 4.1–4.4 | `UltraCoding.lean`, `UltraComponent.lean` (`#Z = aleph 1`) |
-| `lem:ultrametric-extensor-preserving-component` | 4.5 | **not formalised**; enters as the hypothesis `hEx : … IsUltraComponentControlledExtensorOn …` |
-| `cor:nonseparable-ultrametric-nonborel` | 4.6 | `not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn`, `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn` |
-| `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` | 4.7, 4.8 | `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`; v1 route in `UltraTransfer.lean` |
+| `lem:ultrametric-extensor-preserving-component` | 4.5 | `UltraNetExtensor.lean`: `exists_isUltraComponentControlledExtensorOn` (the E2c provider `hEx`, no external input), by §2.2's `E′` (`netExtensor`); `netExtensor_toUCPMOn_restrict` is `E′(d|_{A²}) = d`, i.e. `τ = 0` |
+| `cor:nonseparable-ultrametric-nonborel` | 4.6 | `not_measurableSet_UCPMOn_component`, `not_measurableSet_UMetOn` (no extensor hypothesis); `hEx` forms `not_measurableSet_UCPMOn_component_of_isUltraComponentControlledExtensorOn`, `not_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn` |
+| `thm:ultrametric-borel-separability`, `cor:ultrametric-space-complete-separability` | 4.7, 4.8 | `separable_of_measurableSet_UMetOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn` (no extensor hypothesis; 4.8 adds E4d); `hEx` forms `separable_of_measurableSet_UMetOn_of_isUltraComponentControlledExtensorOn`, `separable_of_isCompletelyMetrizableSpace_UMetOn_of_isUltraComponentControlledExtensorOn`; v1 route in `UltraTransfer.lean` |
 | `thm:complete-ultrametric-nonborel`, `cor:complete-ultrametric-borel-separability` | 4.9, 4.10 | `UltraComplete.lean`; `separable_of_{measurableSet,isCompletelyMetrizableSpace}_UCompOn_of_isUltrametrizableSpace` (both claims, with `UComp ≠ ∅`) |
 | E1 / E2 / E3 / E4d / E5 / E6 | 2.3, 2.11, 2.2, 2.16 | explicit hypothesis bundles; 2.16's reverse direction is proved (`GDeltaCompletelyMetrizable.lean`) |
 | standard lemmas 2.4, 2.8, 2.10, 2.12 (clopen), 2.15 | — | `Amalgam.lean`, `Completeness.lean`, `completeSpace_UCPMOn`, `isClopen_setOf_edist_lt_top` |
 
+The hypothesis-free forms of 4.6–4.8 are stronger than the printed
+dependencies: the printed proofs consume E2c′ (and, for `UMet(Y;R) ≠ ∅`,
+Proposition 2.3), while the Lean forms take only `IsUltrametrizableSpace Y`,
+characteristic `R` and, for 4.8, E4d. This is the Lean-side counterpart of
+§2.2's audit observation.
+
 ### 7.2 Gaps
 
-* **`lem:ultrametric-extensor-preserving-component` (4.5).** The E2c structure
-  `IsUltraComponentControlledExtensorOn` and its provider `hEx` quantify over
-  exactly 4.5's data (an `R`-valued compatible ultrametric `d`, `a ∈ R ∖ {0}`,
-  a nonempty closed discrete `a`-separated `a`-net `A`). Lean's
-  `component_control` asks only for `edist … < ⊤`, weaker than `≤ τ`, which
-  is all its consumers need. The E2c docstring attributes the hypothesis to
-  4.5 and maps each field to the lemma. Discharging it outright is #132: by
-  §2.2's audit observation the construction `E′` needs no external input and
-  gives `E′(d|_{A²}) = d`.
+* **`lem:ultrametric-extensor-preserving-component` (4.5) — closed.** `hEx`
+  is removed by `exists_isUltraComponentControlledExtensorOn`
+  (`Ext/UltraNetExtensor.lean`), with no external input: §2.2's `E′` is built
+  along the centre map, is an exact `𝒰𝒟^R`-isometry and returns `d` from
+  `d|_{A²}`. The E2c structure `IsUltraComponentControlledExtensorOn` and the
+  `hEx`-taking theorems are kept unchanged. The structure's `component_control`
+  asks only for `edist … < ⊤`, weaker than 4.5's `≤ τ`; the exact equality
+  `E′(d|_{A²}) = d` is `netExtensor_toUCPMOn_restrict`.
 * **`lem:continuous-pullback-obstruction` (2.14), second assertion** (compact
   `P`, Hausdorff `Z`, injective `f` ⇒ `f(A)` is a closed subspace of `B`
   homeomorphic to `A`). No general Lean declaration; its instances are

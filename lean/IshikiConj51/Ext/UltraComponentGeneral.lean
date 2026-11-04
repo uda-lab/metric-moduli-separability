@@ -7,7 +7,9 @@
 -- `notes/borel-manuscript-20261103-audit.md` §2.2, §4 (E2c′) and §7.
 -- This module formalises `cor:nonseparable-ultrametric-nonborel` in the
 -- received source's own form.  The E2c hypothesis is the statement of
--- `lem:ultrametric-extensor-preserving-component` (2026-11-03 source).
+-- `lem:ultrametric-extensor-preserving-component` (2026-11-03 source);
+-- `Ext/UltraNetExtensor.lean` proves it (Issue #132) and restates the four
+-- consumers below without it.
 -- `IsUltraComponentControlledExtensorOn` is a separate E2c hypothesis
 -- package and is never folded into the ordinary E2 bundles
 -- (`IsUltraIsometricExtensor`/`IsUltraIsometricExtensorOn`).
@@ -107,8 +109,10 @@ extensor `E : UMet(A;R) → UMet(Y;R)` and `τ ∈ R` with
 metric spaces*, Propositions 2.3, 2.6 and 2.8 and the max-form extensor formula
 from the proof of its Theorem 4.7 (E2c′,
 `notes/borel-manuscript-20261103-audit.md` §4).  That audit's §2.2 records an
-elementary construction with `E(d|_{A²}) = d`, so E2c′ is eliminable; until it
-is formalised (Issue #132), the data enters here as an explicit hypothesis.
+elementary construction with `E(d|_{A²}) = d`, so E2c′ is eliminable:
+`exists_isUltraComponentControlledExtensorOn` (`Ext/UltraNetExtensor.lean`)
+proves this package with no external input.  The consumers below keep it as
+the explicit hypothesis `hEx`.
 
 Field by field: `toExtensor.closedEmbedding` and `domain_discrete` come from
 `A` being closed and discrete (the consumers' `IsClosed A` and
