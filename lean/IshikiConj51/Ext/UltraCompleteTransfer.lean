@@ -4,7 +4,7 @@
 -- compatible-ultrametric locus `UComp(Y;R)` in the preprint's continuous
 -- ambient, and Corollary 3.17 of arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.15 (the
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.15 (the
 -- Corollary 3.17 paragraph, verdict FIX + EXTERNAL), §2.14 (the Theorem 3.14
 -- ambient-transfer repair this corollary inherits verbatim) and §3 (E2,
 -- including clause (N1), and E4d).

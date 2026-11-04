@@ -3,7 +3,7 @@
 -- Issue #82, scope items 3 and 4: Theorem 3.14 and Corollary 3.15 of
 -- arXiv:2608.19618, by the compact-witness repair of the audit.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.14 (the
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.14 (the
 -- Theorem 3.14 paragraph, its *Gap*, and the *Repair* — including the
 -- completeness sub-lemma formalised in `Ext/UltraGeneral.lean`), §2.14's
 -- Corollary 3.15 paragraph, and §3 (E2, E4d).

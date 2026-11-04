@@ -4,7 +4,7 @@
 -- the Borel metric locus, the Route M theorems, and the bridge that makes them
 -- conditional on E1 as audited rather than on a transported bundle.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions), §2.8 (Theorem 3.5), §3 (E1), §4 (Route M), and §7.  E1 is
 -- represented below by an explicit hypothesis bundle; it is not added to Lean
 -- as an axiom or an instance.

@@ -503,6 +503,11 @@ evidence lives in the PR and issue trail. The per-declaration record of the
 v1-gated statements stays in `notes/borel-preprint-audit.md` §7, and the
 received-source additions in the 2026-08-27 note §7.
 
+**Lean file headers.** Each `Ext/` file names its *statement gate*: the
+frozen audit note, and section, against which its statements were accepted.
+Bare "audit §" references inside a file are to that note. The label-level
+correspondence with the current source is §7.1 here.
+
 ### 7.1 Statement-level correspondence
 
 Every labelled result of the 2026-11-03 source has a Lean counterpart at
@@ -535,9 +540,10 @@ statement level, or enters as an explicit hypothesis, except as noted in §7.2.
   exactly 4.5's data (an `R`-valued compatible ultrametric `d`, `a ∈ R ∖ {0}`,
   a nonempty closed discrete `a`-separated `a`-net `A`). Lean's
   `component_control` asks only for `edist … < ⊤`, weaker than `≤ τ`, which
-  is all its consumers need. Two lanes: re-attribute the hypothesis to 4.5
-  (#131), and discharge it outright (#132) — by §2.2's audit observation the
-  construction `E′` needs no external input and gives `E′(d|_{A²}) = d`.
+  is all its consumers need. The E2c docstring attributes the hypothesis to
+  4.5 and maps each field to the lemma. Discharging it outright is #132: by
+  §2.2's audit observation the construction `E′` needs no external input and
+  gives `E′(d|_{A²}) = d`.
 * **`lem:continuous-pullback-obstruction` (2.14), second assertion** (compact
   `P`, Hausdorff `Z`, injective `f` ⇒ `f(A)` is a closed subspace of `B`
   homeomorphic to `A`). No general Lean declaration; its instances are

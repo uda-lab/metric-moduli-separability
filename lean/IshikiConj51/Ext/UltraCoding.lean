@@ -3,7 +3,7 @@
 -- Issue #81, scope items 4–6: Lemma 3.10, Lemma 3.11 and Theorem 3.12 of
 -- arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.13 (the
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.13 (the
 -- setup, Lemma 3.10 and Lemma 3.11) and the Theorem 3.12 paragraph of §2.14.
 --
 -- Setup (audit §2.13).  A characteristic range set `R`, a scale `r`

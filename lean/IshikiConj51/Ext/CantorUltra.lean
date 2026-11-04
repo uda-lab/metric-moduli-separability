@@ -3,7 +3,7 @@
 -- Issue #81, scope items 2–3: the Cantor-space inputs of the non-Archimedean
 -- track of arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.2
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.2
 -- (Proposition 2.2, with the audited repair) and the setup paragraph of §2.13
 -- (the standard `R`-valued Cantor ultrametric).
 --

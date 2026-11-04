@@ -4,7 +4,7 @@
 -- underlying discrete carrier, and the arbitrary-carrier form of the
 -- Borel obstruction.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §7 item 4
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §7 item 4
 -- (Issue #63).  The theorems of Issue #56 (`bmet_not_borel`,
 -- `bmet_not_borel_cpm`, `met_not_borel`) are stated for the *concrete*
 -- carrier `ExtIndex S` produced by the bounded star coding, whereas the

@@ -5,7 +5,7 @@
 -- ambients: `CPM.Comp Z` for a discrete carrier and `CPM.CompOn X` for the
 -- preprint's continuous-pseudometric ambient of a topological space.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions, `Comp(X)` = the complete members of `Met(X)`), §2.11 (the
 -- repair of Theorem 3.8, whose three completeness ingredients are proved
 -- here) and §3 (the standard facts used silently by the preprint: one-point

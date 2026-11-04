@@ -1,9 +1,13 @@
 -- Ext.UltraComponentGeneral
 --
--- Issue #110 / `cor:nonseparable-ultrametric-nonborel`, per
--- `notes/borel-manuscript-20260827-audit.md` §2.19 and §4 (E2c).
+-- Issue #110 / `cor:nonseparable-ultrametric-nonborel`.
+-- Statement gate (frozen audit record):
+-- `notes/borel-manuscript-20260827-audit.md` §2.19 and §4 (E2c); bare
+-- "audit §" references below are to that note.  Current record:
+-- `notes/borel-manuscript-20261103-audit.md` §2.2, §4 (E2c′) and §7.
 -- This module formalises `cor:nonseparable-ultrametric-nonborel` in the
--- received source's own form, per §4's E2c provenance.
+-- received source's own form.  The E2c hypothesis is the statement of
+-- `lem:ultrametric-extensor-preserving-component` (2026-11-03 source).
 -- `IsUltraComponentControlledExtensorOn` is a separate E2c hypothesis
 -- package and is never folded into the ordinary E2 bundles
 -- (`IsUltraIsometricExtensor`/`IsUltraIsometricExtensorOn`).
@@ -12,9 +16,9 @@
 -- `cor:ultrametric-space-complete-separability` as a documented,
 -- independently-verified alternative route; they are not replaced by this
 -- file's new corollaries.
--- The 2026-08-27 received source is reference-only; it is not called an
--- arXiv version and is not copied here beyond the short provenance clause in
--- the E2c docstring.
+-- The received sources are reference-only; they are not called arXiv
+-- versions and are not copied here beyond the short provenance clause in the
+-- E2c docstring.
 -- `(UMetOn Y R).Nonempty` for clause (2) is derived from `hY`/`hR` via
 -- `nonempty_UMetOn_of_isUltrametrizableSpace` (`Ext/UltraPublished.lean`,
 -- Issue #124), not exposed as a hypothesis.
@@ -95,10 +99,24 @@ theorem UCPMOn.component_eq_of_mem {Y : Type*} [TopologicalSpace Y]
 
 /-- **E2c, the construction-controlled ultrametric extensor data.**
 
-This is “construction data from the proofs of Theorem 3.1 and Theorem 4.7 of
-Ishiki, *A factorization of metric spaces*”, as recorded in §4 of the active
-audit note.  It is attached to a compatible ambient ultrametric `d`, a
-nonzero `a ∈ R`, and a closed discrete maximal `a`-separated set `A`.
+Provenance: `lem:ultrametric-extensor-preserving-component` of the
+2026-11-03 received source.  For a compatible `R`-valued ultrametric `d`, a
+nonzero `a ∈ R` and a maximal `a`-separated set `A`, it supplies an isometric
+extensor `E : UMet(A;R) → UMet(Y;R)` and `τ ∈ R` with
+`𝒰𝒟^R(E(d|_{A²}), d) ≤ τ`.  The printed proof uses Ishiki, *A factorization of
+metric spaces*, Propositions 2.3, 2.6 and 2.8 and the max-form extensor formula
+from the proof of its Theorem 4.7 (E2c′,
+`notes/borel-manuscript-20261103-audit.md` §4).  That audit's §2.2 records an
+elementary construction with `E(d|_{A²}) = d`, so E2c′ is eliminable; until it
+is formalised (Issue #132), the data enters here as an explicit hypothesis.
+
+Field by field: `toExtensor.closedEmbedding` and `domain_discrete` come from
+`A` being closed and discrete (the consumers' `IsClosed A` and
+`DiscreteTopology ↥A`); `toUCPMOn`, `extension`, `isometry_toUCPMOn` and
+`umet_preservation` are the lemma's isometric extensor `E`; and
+`component_control` is the bound `≤ τ`, weakened to `< ⊤`, which is all the
+consumers use.  The consumers' `a`-separation and strict `a`-net hypotheses
+are exactly maximality of the `a`-separated set `A`.
 
 The contained ordinary bundle is `IsUltraIsometricExtensor`, using the bottom
 topology on `↥A`: its domain is already the bare `UMet ↥A R` used by the

@@ -3,7 +3,7 @@
 -- Issue #108: the reverse Alexandrov theorem needed for the five-way
 -- complete-metrizability/component/σ-compactness equivalence.
 --
--- Mathematical source of truth: `notes/borel-manuscript-20260827-audit.md`
+-- Statement gate (frozen audit record): `notes/borel-manuscript-20260827-audit.md`
 -- §2.16 and §4 row E4d; Kechris, *Classical Descriptive Set Theory*,
 -- Theorem 3.11, reverse direction.
 --

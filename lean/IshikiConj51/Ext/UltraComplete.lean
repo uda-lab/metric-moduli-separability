@@ -4,7 +4,7 @@
 -- locus `UComp(Z;R)` on a discrete carrier, and Theorem 3.16 of
 -- arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.15 (the
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.15 (the
 -- Theorem 3.16 paragraph), together with §2.13–§2.14 for the coding and
 -- amalgamation machinery it reuses.  `report/report-ja.md` is *not* the source
 -- of truth here: it stays frozen as the Conjecture 5.1 archival report by the

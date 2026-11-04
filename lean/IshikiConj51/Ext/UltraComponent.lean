@@ -3,7 +3,7 @@
 -- Issue #81, scope item 6: Theorem 3.13 of arXiv:2608.19618 — every
 -- `R`-component of `UMet(Z;R)` is non-Borel in `UCPM(Z;R)`.
 --
--- Mathematical source of truth: the Theorem 3.13 paragraph of
+-- Statement gate (frozen audit record): the Theorem 3.13 paragraph of
 -- `notes/borel-preprint-audit.md` §2.14.
 --
 -- The argument, following the audit exactly:

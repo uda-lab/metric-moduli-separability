@@ -4,12 +4,12 @@
 -- bounded star-metric coding on a discrete carrier, and the exact pullback
 -- identity that carries the descriptive-set obstruction.
 --
--- Mathematical source of truth for this track: `notes/borel-preprint-audit.md`
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md`
 -- §7 items 1–2 (Issue #56), which gates the Borel-preprint extension track.
 -- `report/report-ja.md` is *not* the source of truth here: it stays frozen as
 -- the Conjecture 5.1 archival report by the Issue #46 decision, and carries
 -- no extension claim.  Section references below refer to the corresponding
--- Layer 1 statements in that active audit note.
+-- Layer 1 statements in that audit note.
 --
 -- Nothing here uses an analytic/coanalytic pointclass: the pullback
 -- statement below is a plain equality of sets, which is exactly why it is
