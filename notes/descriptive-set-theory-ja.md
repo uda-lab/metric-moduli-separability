@@ -1,7 +1,7 @@
 # 記述集合論用語・Borel 版学習ノート
 
 > **Purpose:** 伊敷–宇田，*Borelness of Moduli Spaces of Metrics Implies Separability*，arXiv:2608.19618 の記述集合論的な道具と証明の流れを日本語で整理する．
-> **数学的な source of truth:** `notes/borel-manuscript-20260827-audit.md`（2026-08-27 受領原稿の監査）が Borel track 全体の現行の source of truth である．`notes/borel-preprint-audit.md`（arXiv:2608.19618 v1 の監査）は凍結された v1 の記録であり，本文の「Prop. 2.1」「Lemma 3.1」など v1 の番号付けと，その番号が付いた記述の歴史的な経緯についてのみ参照する．§5.3 の bi-density の強化形は受領原稿の監査 §2.11，§10 の非アルキメデス的距離への移行は同 §2.19 に，それぞれ直接対応する．
+> **数学的な source of truth:** `notes/borel-manuscript-20261103-audit.md`（2026-11-03 受領原稿の監査）が Borel track 全体の現行の source of truth であり，`notes/borel-manuscript-20260827-audit.md`（2026-08-27 受領原稿の監査）はその直前の凍結された記録である．`notes/borel-preprint-audit.md`（arXiv:2608.19618 v1 の監査）は凍結された v1 の記録であり，本文の「Prop. 2.1」「Lemma 3.1」など v1 の番号付けと，その番号が付いた記述の歴史的な経緯についてのみ参照する．§5.3 の bi-density の強化形は 2026-08-27 受領原稿の監査 §2.11，§10 の非アルキメデス的距離への移行は同 §2.19 に，それぞれ直接対応する（2026-11-03 受領原稿での変更は現行の監査 §2.2 を参照）．
 > **用語:** 日本語術語の正典は `notes/terminology.md`．
 > **範囲:** 11 Aug の analytic/coanalytic 版ではなく，20 Aug 2026 v1 の Borel 版と，非アルキメデス的距離への移行を扱う．`report/report-ja.md` は Conjecture 5.1 の archival track であり，本ノートでは変更しない．
 

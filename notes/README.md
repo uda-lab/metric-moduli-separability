@@ -20,8 +20,9 @@
 notes/scripts/typeset.sh terminology.md
 ```
 
-引数を省略すると、数学的な記号が特に多い次の五つを処理します。
+引数を省略すると、数学的な記号が特に多い次の六つを処理します。
 
+- `borel-manuscript-20261103-audit.md`
 - `borel-manuscript-20260827-audit.md`
 - `borel-manuscript-20260827-corrections-ja.md`
 - `borel-preprint-audit.md`
