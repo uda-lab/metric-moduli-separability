@@ -3,7 +3,7 @@
 -- Issue #56, items 1–2: the Borel obstruction for the bounded discrete
 -- Ishiki-extension coding.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §7 items 1–2
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §7 items 1–2
 -- (the statement gate for the Borel-preprint track).  The parameter-set
 -- theorem uses the CH/¬CH dichotomy recorded there; the obstruction pulls it
 -- back through the already verified `phiFull` coding.

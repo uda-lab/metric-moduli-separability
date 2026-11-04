@@ -2,7 +2,7 @@
 --
 -- Issue #81, scope item 1: the non-Archimedean ambient of arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions) and §§2.13–2.14 (the statements this ambient carries).
 -- `report/report-ja.md` is *not* the source of truth here: it stays frozen as
 -- the Conjecture 5.1 archival report by the Issue #46 decision.

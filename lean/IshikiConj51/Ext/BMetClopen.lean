@@ -2,7 +2,7 @@
 --
 -- Issue #96, scope item 2: Lemma 3.2's closedness clause relative to `Met(Z)`.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.5 (Lemma
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.5 (Lemma
 -- 3.2, whose printed closedness clause is "`Φ([0,1] ∖ S)` is closed in
 -- `Met(Z)`") and §1 (the component conventions; "each class is clopen in
 -- `Met(Z)`" is recalled there).

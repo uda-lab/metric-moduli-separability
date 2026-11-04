@@ -4,7 +4,7 @@
 -- unbounded pseudometric ambient corresponding to the preprint's
 -- continuous-pseudometric space on a discrete carrier.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §7 item 3.
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §7 item 3.
 -- Since the carrier is discrete, continuity is vacuous; `CPM` records the
 -- pseudometric content without adding a misleading continuity field.  For a
 -- general topological space the preprint's ambient is strictly smaller, and

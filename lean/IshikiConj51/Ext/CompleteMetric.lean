@@ -10,7 +10,7 @@
 -- `exists_componentSetup` with Theorem 3.4 v2 (`Ext/Component.lean`); see
 -- audit §7.5.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.11
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.11
 -- (Theorem 3.8, verdict FIX, with the repair formalised here), §2.12
 -- (Corollary 3.9) and §3 (E1, whose clause (4) is the external input of 3.9).
 --

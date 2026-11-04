@@ -4,7 +4,7 @@
 -- non-Archimedean track of arXiv:2608.19618, its completeness, and the E2
 -- interface used by Theorem 3.14.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §1 (ambient
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §1 (ambient
 -- conventions), §2.14 (the completeness sub-lemma, whose three steps are
 -- transcribed below) and §3 (E2, together with its domain caveat).
 -- `report/report-ja.md` is *not* the source of truth here: it stays frozen as

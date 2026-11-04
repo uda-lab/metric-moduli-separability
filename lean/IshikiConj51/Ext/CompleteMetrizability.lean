@@ -4,7 +4,7 @@
 -- metrizability of the metric locus forces separability, and the σ-compactness
 -- equivalence for the bounded locus.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.9
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.9
 -- (Corollary 3.6), §2.10 (Corollary 3.7, its gap and the repair this file
 -- formalises), §3 (E1, E3, E4d).  E1 and E3 enter as explicit hypotheses; both
 -- proofs stay external and neither becomes an axiom or an instance.

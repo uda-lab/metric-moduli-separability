@@ -5,7 +5,7 @@
 --
 --     ρ(d, e) = sup_{u,v} |d(u,v) − e(u,v)|.
 --
--- Mathematical source of truth for this track: `notes/borel-preprint-audit.md`
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md`
 -- §7 items 1–2 (Issue #56), which gates the Borel-preprint extension track.
 -- `report/report-ja.md` is *not* the
 -- source of truth here: it stays frozen as the Conjecture 5.1 archival

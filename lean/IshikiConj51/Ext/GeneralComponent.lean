@@ -4,7 +4,7 @@
 -- arbitrary nonseparable metrizable space, and the non-Borelness of `Met(X)`
 -- that follows from it.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` (§1 ambient
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` (§1 ambient
 -- and component conventions, §2.7 for the discrete input, §3 for the external
 -- dependencies).  The statement being formalised is the 2026-08-27 received
 -- manuscript's `cor:nonseparable-metric-nonborel`; the discrete input is

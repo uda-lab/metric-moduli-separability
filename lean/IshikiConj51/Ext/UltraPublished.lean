@@ -3,7 +3,7 @@
 -- Issue #96, scope items 3–4: the published-interface layer for Theorem 3.14
 -- and Corollaries 3.15 and 3.17 of arXiv:2608.19618.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.14–§2.15
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.14–§2.15
 -- (the printed statements: `Y` *ultrametrizable* is the standing hypothesis of
 -- the whole 3.14/3.15/3.17 line) and §3 (E2 = Ishiki, *A factorization of
 -- metric spaces*, Colloq. Math. 174 (2023), arXiv:2212.13409, Theorem 4.7,

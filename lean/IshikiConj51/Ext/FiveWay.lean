@@ -3,7 +3,7 @@
 -- Issue #108: the five-way complete-metrizability/component/σ-compactness
 -- equivalence for the topology-aware metric loci.
 --
--- Mathematical source of truth: `notes/borel-manuscript-20260827-audit.md`
+-- Statement gate (frozen audit record): `notes/borel-manuscript-20260827-audit.md`
 -- §2.16 (statement) and §4 rows E3, E5, and E6.
 --
 -- Status: sorry-free; no custom axioms.

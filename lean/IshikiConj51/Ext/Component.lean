@@ -7,7 +7,7 @@
 -- v1 (`|Z| = ℵ₁`) verdict as still standing and this as a strengthening, not
 -- a repair.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.7, whose
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.7, whose
 -- verdict is PASS and which records the two steps the preprint leaves
 -- implicit — (i) the amalgam stays at finite sup distance from the base
 -- metric, (ii) membership in the component is equivalent to compatibility,

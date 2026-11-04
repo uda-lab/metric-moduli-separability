@@ -4,7 +4,7 @@
 -- does not import or define the CPM/extensor layer: every result below is
 -- independent of it.
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.8 and §7.
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.8 and §7.
 -- Status: sorry-free; no custom axioms.
 
 import Mathlib.Order.TeichmullerTukey

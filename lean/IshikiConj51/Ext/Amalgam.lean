@@ -3,7 +3,7 @@
 -- One-point amalgamation of metrics: reusable machinery for the component
 -- statements of the Borel preprint (arXiv:2608.19618, Theorems 3.4 and 3.8).
 --
--- Mathematical source of truth: `notes/borel-preprint-audit.md` §2.7, which
+-- Statement gate (frozen audit record): `notes/borel-preprint-audit.md` §2.7, which
 -- records the construction and the two facts the preprint leaves implicit.
 --
 -- Setting.  A metric `d` on a carrier `Z`, a subset `E ⊆ Z`, a metric `e` on
