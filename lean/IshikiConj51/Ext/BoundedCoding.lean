@@ -38,18 +38,18 @@
 --   * draft `l_n(α,t)`    ↦ `spokeLen n a t = |t − a| + (1/2)^n`
 --
 -- What is proved here:
---   `dExt_isMetricOn`        — each `d_t`, `t ∈ [0,1]`, is a metric (audit §4).
---   `dExt_le_four`           — each `d_t` is bounded by `4` (audit §4).
+--   `dExt_isMetricOn`        — each `d_t`, `t ∈ [0,1]`, is a metric (audit §2.4).
+--   `dExt_le_four`           — each `d_t` is bounded by `4` (audit §2.4).
 --   `dExt_isCompatible_iff`  — `d_t` induces the discrete topology **iff**
---                              `t ∉ S` (audit §4; both directions).
---   `dist_phiFull_le`        — `ρ(d_s,d_t) ≤ 2|s−t|` (audit §5, upper bound).
---   `abs_sub_le_dist_phiFull`— `|s−t| ≤ ρ(d_s,d_t)` (audit §5, anchor readout).
+--                              `t ∉ S` (audit §2.4; both directions).
+--   `dist_phiFull_le`        — `ρ(d_s,d_t) ≤ 2|s−t|` (audit §2.5, upper bound).
+--   `abs_sub_le_dist_phiFull`— `|s−t| ≤ ρ(d_s,d_t)` (audit §2.5, anchor readout).
 --   `lipschitzWith_phiFull`  — `Φ_full : [0,1] → BCPM(D)` is 2-Lipschitz.
 --   `preimage_BMet_phiFull`  — the pullback identity `Φ_full⁻¹(BMet(D))`
---                              `= [0,1] \ S` (audit §5, recommended
+--                              `= [0,1] \ S` (audit §2.5, recommended
 --                              strengthening).
 --   `isClosed_image_phiFull` — the image `Φ_full([0,1] \ S)` is closed in
---                              `BMet(D)` (audit §5, closed image).
+--                              `BMet(D)` (audit §2.5, closed image).
 --   `card_extIndex`          — `|D| = ℵ₁` when `|S| = ℵ₁`.
 --   `bounded_star_coding`    — the four Layer 1 clauses in one statement.
 --
@@ -136,7 +136,7 @@ theorem abs_sub_le_one_of_mem_Icc {t a : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1)
   rw [abs_le]
   constructor <;> linarith
 
-/-- `0 < l_n ≤ 2` on the relevant parameter range (audit §4). -/
+/-- `0 < l_n ≤ 2` on the relevant parameter range (audit §2.4). -/
 theorem spokeLen_le_two {t a : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1) (ha : a ∈ Set.Icc (0 : ℝ) 1)
     (n : ℕ) : spokeLen n a t ≤ 2 := by
   simp only [spokeLen]
@@ -226,7 +226,7 @@ theorem dExt_nonneg {S : Set ℝ} {t : ℝ} (ht0 : 0 ≤ t) (u v : ExtIndex S) :
     · linarith [extRadius_nonneg (a : ℝ) t i, extRadius_nonneg (a : ℝ) t j]
     · norm_num
 
-/-- **Boundedness** (audit §4): `d_t` takes values in `[0,4]`. -/
+/-- **Boundedness** (audit §2.4): `d_t` takes values in `[0,4]`. -/
 theorem dExt_le_four {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
     (ht : t ∈ Set.Icc (0 : ℝ) 1) (u v : ExtIndex S) : dExt S t u v ≤ 4 := by
   obtain ⟨ht0, ht1⟩ := ht
@@ -245,7 +245,7 @@ theorem dExt_le_four {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
 /-- The star-shaped triangle inequality in the abstract: if the points of a
 set carry nonnegative radii `σ` and distinct points are joined through a common
 centre (`d i j = σ i + σ j`), then the triangle inequality holds.  This is the
-within-a-star case of audit §4.
+within-a-star case of audit §2.4.
 
 (Restated here rather than imported from `Conj51/MetricConstruction.lean`, so
 that the extension development does not depend on the Conjecture 5.1 claim
@@ -270,7 +270,7 @@ theorem starLike_triangle {ι : Type*} [DecidableEq ι] (σ : ι → ℝ) (hσ :
       · rw [if_neg hjk]
         linarith [hσ j]
 
-/-- **Metricity** (audit §4).  `d_t` is a metric on `D` for *every* `t ∈ [0,1]`
+/-- **Metricity** (audit §2.4).  `d_t` is a metric on `D` for *every* `t ∈ [0,1]`
 — including `t ∈ S`, where it merely fails to be compatible with the discrete
 topology. -/
 theorem dExt_isMetricOn {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
@@ -324,7 +324,7 @@ theorem dExt_isBddPMetOn {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ
 
 /-! ## Compatibility with the discrete topology -/
 
-/-- **Compatibility, `t ∉ S`** (audit §4).  For `t ∈ [0,1] \ S` every
+/-- **Compatibility, `t ∉ S`** (audit §2.4).  For `t ∈ [0,1] \ S` every
 point of `D` is isolated, so `d_t` induces the discrete topology.  The
 isolating radii are `1` at the anchors, `l_n(a,t)` at the `n`-th spoke of the
 star at `a`, and `|t − a|` at the centre of that star — the last positive
@@ -378,7 +378,7 @@ theorem dExt_topology_eq_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
           · rw [dExt, if_neg hab] at hlt
             linarith [abs_sub_le_one_of_mem_Icc ⟨ht0, ht1⟩ hmem]
 
-/-- **Compatibility, `t ∈ S`** (audit §4).  At a parameter `t ∈ S` the
+/-- **Compatibility, `t ∈ S`** (audit §2.4).  At a parameter `t ∈ S` the
 function `d_t` is still a metric, but the centre of the star at `t` is no
 longer isolated: `d_t(b_t, c_{t,n}) = 2^{-n} → 0`. -/
 theorem dExt_topology_ne_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
@@ -400,7 +400,7 @@ theorem dExt_topology_ne_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
 metric. -/
 abbrev UnitParam : Type := ↥(Set.Icc (0 : ℝ) 1)
 
-/-- The draft's `Φ_full : [0,1] → BCPM(D)`, `t ↦ d_t` (audit §5).  It is
+/-- The draft's `Φ_full : [0,1] → BCPM(D)`, `t ↦ d_t` (audit §2.5).  It is
 defined on *all* of `[0,1]`, not only on `[0,1] \ S`; that is what makes the
 pullback identity below available. -/
 noncomputable def phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t : UnitParam) :
@@ -410,7 +410,7 @@ noncomputable def phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t : Un
 @[simp] theorem phiFull_coe (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t : UnitParam) :
     (phiFull S hS t).1 = dExt S (t : ℝ) := rfl
 
-/-! ## The Lipschitz estimates (audit §5) -/
+/-! ## The Lipschitz estimates (audit §2.5) -/
 
 theorem spokeLen_sub_le (n : ℕ) (a t s : ℝ) :
     |spokeLen n a t - spokeLen n a s| ≤ |t - s| := by
@@ -425,7 +425,7 @@ theorem extRadius_sub_le (a t s : ℝ) : ∀ i, |extRadius a t i - extRadius a s
   | some n => spokeLen_sub_le n a t s
 
 /-- Every pair-value of the family is `2`-Lipschitz in the parameter
-(audit §5, upper bound). -/
+(audit §2.5, upper bound). -/
 theorem dExt_sub_le (S : Set ℝ) (t s : ℝ) (u v : ExtIndex S) :
     |dExt S t u v - dExt S s u v| ≤ 2 * |t - s| := by
   have habs := abs_nonneg (t - s)
@@ -455,18 +455,18 @@ theorem dExt_sub_le (S : Set ℝ) (t s : ℝ) (u v : ExtIndex S) :
       linarith
     · simp only [sub_self, abs_zero]; linarith
 
-/-- The anchor pair recovers the parameter exactly (audit §5, lower bound). -/
+/-- The anchor pair recovers the parameter exactly (audit §2.5, lower bound). -/
 theorem dExt_anchor_sub (S : Set ℝ) (t s : ℝ) :
     |dExt S t (Sum.inl true) (Sum.inl false) - dExt S s (Sum.inl true) (Sum.inl false)|
       = |t - s| := by
   rw [dExt_anchor, dExt_anchor, show (1 + t) - (1 + s) = t - s by ring]
 
-/-- **Upper Lipschitz bound** (audit §5): `ρ(d_t, d_s) ≤ 2|t − s|`. -/
+/-- **Upper Lipschitz bound** (audit §2.5): `ρ(d_t, d_s) ≤ 2|t − s|`. -/
 theorem dist_phiFull_le (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t s : UnitParam) :
     dist (phiFull S hS t) (phiFull S hS s) ≤ 2 * |(t : ℝ) - (s : ℝ)| :=
   BddPMet.dist_le (by positivity) fun u v => dExt_sub_le S (t : ℝ) (s : ℝ) u v
 
-/-- **Lower bound** (audit §5): evaluation at the anchor pair gives
+/-- **Lower bound** (audit §2.5): evaluation at the anchor pair gives
 `|t − s| ≤ ρ(d_t, d_s)`.  Together with `dist_phiFull_le` this makes the
 restriction of `Φ_full` to `[0,1] \ S` bi-Lipschitz. -/
 theorem abs_sub_le_dist_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t s : UnitParam) :
@@ -478,7 +478,7 @@ theorem abs_sub_le_dist_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (
     _ ≤ dist (phiFull S hS t) (phiFull S hS s) :=
         BddPMet.le_dist (phiFull S hS t) (phiFull S hS s) (Sum.inl true) (Sum.inl false)
 
-/-- **`Φ_full` is 2-Lipschitz on all of `[0,1]`** (audit §5). -/
+/-- **`Φ_full` is 2-Lipschitz on all of `[0,1]`** (audit §2.5). -/
 theorem lipschitzWith_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) :
     LipschitzWith 2 (phiFull S hS) :=
   LipschitzWith.of_dist_le_mul fun t s => by
@@ -493,10 +493,10 @@ theorem injective_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) :
   have : (t : ℝ) - (s : ℝ) = 0 := abs_eq_zero.mp (le_antisymm hle (abs_nonneg _))
   exact Subtype.ext (by linarith)
 
-/-! ## The pullback identity (audit §5, recommended strengthening) -/
+/-! ## The pullback identity (audit §2.5, recommended strengthening) -/
 
 /-- `d_t` is compatible with the discrete topology **iff** `t ∉ S`
-(audit §4).  This is the pointwise form of the pullback identity. -/
+(audit §2.4).  This is the pointwise form of the pullback identity. -/
 theorem dExt_isCompatible_iff (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t : UnitParam) :
     IsCompatible (phiFull S hS t) ↔ (t : ℝ) ∉ S := by
   constructor
@@ -505,7 +505,7 @@ theorem dExt_isCompatible_iff (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) (t 
   · intro htS
     exact ⟨dExt_isMetricOn hS t.2, dExt_topology_eq_bot hS t.2 htS⟩
 
-/-- **The pullback identity** (audit §5):
+/-- **The pullback identity** (audit §2.5):
 `Φ_full⁻¹(BMet(D)) = {t ∈ [0,1] : t ∉ S}`, as an equality of subsets of the
 parameter interval.  No descriptive-set-theoretic notion appears; this is the
 set equality that the Theorem 3.3 obstruction is applied to once the ambient
@@ -528,7 +528,7 @@ theorem image_preimage_BMet_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 
   · rintro ⟨hx1, hx2⟩
     exact ⟨⟨x, hx1⟩, hx2, rfl⟩
 
-/-! ## Closed image (audit §5) -/
+/-! ## Closed image (audit §2.5) -/
 
 /-- `Φ_full` has compact, hence closed, range in the ambient `BCPM(D)`:
 `[0,1]` is compact and `Φ_full` is continuous. -/
@@ -548,7 +548,7 @@ theorem image_compl_eq_range_inter (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1
   · rintro ⟨⟨t, rfl⟩, hd⟩
     exact ⟨t, (dExt_isCompatible_iff S hS t).mp hd, rfl⟩
 
-/-- **Closed image** (audit §5): `Φ_full([0,1] \ S)` is closed in `BMet(D)`
+/-- **Closed image** (audit §2.5): `Φ_full([0,1] \ S)` is closed in `BMet(D)`
 with its subspace topology. -/
 theorem isClosed_image_phiFull (S : Set ℝ) (hS : S ⊆ Set.Icc (0 : ℝ) 1) :
     IsClosed (Subtype.val ⁻¹' (phiFull S hS '' {t : UnitParam | (t : ℝ) ∉ S}) :
@@ -578,7 +578,7 @@ theorem card_extIndex {S : Set ℝ} (hS : #(↥S) = aleph 1) : #(ExtIndex S) = a
 
 /-! ## Layer 1 in one statement -/
 
-/-- **The Layer 1 package** (audit §4–§5).
+/-- **The Layer 1 package** (audit §2.4–§2.5).
 
 Given a parameter set `S ⊆ [0,1]` with `|S| = ℵ₁`, the bounded star coding
 produces a carrier `D = ExtIndex S` of cardinality `ℵ₁` and a family
@@ -594,7 +594,7 @@ produces a carrier `D = ExtIndex S` of cardinality `ℵ₁` and a family
 5. the pullback identity `Φ_full⁻¹(BMet(D)) = [0,1] \ S` holds exactly.
 
 The components remain available individually; `isClosed_image_phiFull` adds
-the closed-image statement of audit §5. -/
+the closed-image statement of audit §2.5. -/
 theorem bounded_star_coding {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) (hcard : #(↥S) = aleph 1) :
     #(ExtIndex S) = aleph 1 ∧
     (∀ t ∈ Set.Icc (0 : ℝ) 1, IsMetricOn (dExt S t) ∧
