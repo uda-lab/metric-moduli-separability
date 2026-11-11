@@ -5,11 +5,17 @@ compatible metrics.
 
 ## Public-preprint track
 
-The active external source is the joint preprint by Yoshito Ishiki and Tomoki
-Uda, **Borelness of Moduli Spaces of Metrics Implies Separability**,
-arXiv:2608.19618 (2026), together with the latest manuscript source received
-on 2026-11-03, which is reference-only and lives outside this repository
-(arXiv carries v1 only). The repository verifies it theorem by theorem:
+The joint preprint by Yoshito Ishiki and Tomoki Uda,
+**Borelness of Moduli Spaces of Metrics Implies Separability**, is available as
+[arXiv:2608.19618v2](https://arxiv.org/abs/2608.19618v2), posted on
+2026-11-03. The earlier [v1](https://arxiv.org/abs/2608.19618v1) remains
+available as a versioned reference.
+
+The formalisation's statement gate is the manuscript source received on
+2026-11-03, which is reference-only and lives outside this repository.
+The public v2 and that received archive are distinct source references;
+the matching date alone does not establish that their contents are identical.
+The repository verifies the received source theorem by theorem:
 `notes/borel-manuscript-20261103-audit.md` is the mathematical source of truth
 (statements, verdicts, verified repairs, external-theorem dependencies, and
 the label-level Lean correspondence) for that source;
@@ -114,14 +120,54 @@ the PR review trail.
 
 ## Lean build
 
+Install [elan](https://github.com/leanprover/elan) and Git, then run from a
+checkout of this repository:
+
 ```sh
 cd lean
 lake exe cache get   # fetch mathlib oleans; never cold-build mathlib
-lake build
+flock /tmp/lean-build.lock lake build
 ```
 
-No CI is configured; validation is local/manual.
+`lean/lean-toolchain` pins Lean **4.32.2**, and `lean/lake-manifest.json`
+pins mathlib and its transitive dependencies. Keep the manifest when
+reproducing a build; `lake update` changes the dependency resolution and is
+not part of this procedure. Allow at least 2 GiB of free memory and do not
+run concurrent builds in a shared environment. The `flock` command above
+is for Linux; on other systems, run `lake build` with equivalent exclusive
+access to the checkout.
+
+The default target imports the archival and public-preprint modules through
+`lean/IshikiConj51.lean`. A successful build checks those Lean declarations;
+it does not establish source fidelity or discharge external theorems that
+remain explicit hypotheses. The audit notes describe those boundaries.
+Independent `#print axioms` checks of accepted declarations use an
+untracked scratch file and are recorded with the corresponding PR.
+
+For the mathematical notes' PDF build, dependencies and missing-glyph
+checks, see [notes/README.md](notes/README.md). No CI is configured;
+validation is local/manual, with execution evidence in Issues and PRs.
+
+## Citation
+
+For the mathematical results, cite:
+
+Yoshito Ishiki and Tomoki Uda, *Borelness of Moduli Spaces of Metrics Implies
+Separability*, arXiv:2608.19618v2 (2026).
+[DOI: 10.48550/arXiv.2608.19618](https://doi.org/10.48550/arXiv.2608.19618).
+
+The DOI identifies the e-print; the versioned arXiv link identifies v2.
+For a result about this Lean development, also identify the repository commit
+and the relevant declaration or module. [CITATION.cff](CITATION.cff) provides
+machine-readable citation metadata. The earlier single-author paper and
+Conjecture 5.1 materials remain archival artifacts, not the source of the
+joint preprint's attribution.
 
 ## License
 
-See `LICENSE`.
+The repository's existing license is [Apache-2.0](LICENSE).
+The externally hosted joint preprint v2 is distributed under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), as recorded on its
+[arXiv page](https://arxiv.org/abs/2608.19618v2). A citation or link does not
+change either license. The reference-only received manuscript archives are
+not included in this repository.

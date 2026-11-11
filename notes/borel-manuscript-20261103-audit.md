@@ -3,7 +3,9 @@
 > **Subject:** Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics
 > Implies Separability*, the manuscript source received from the owner on
 > 2026-11-03 (`\date{November 3, 2026}`). This note calls it **the 2026-11-03
-> received source**. It is **not** an arXiv version: arXiv carries v1 only.
+> received source**. The public [arXiv:2608.19618v2](https://arxiv.org/abs/2608.19618v2)
+> was posted on 2026-11-03. This note continues to audit the received source;
+> it does not assert that the received archive is identical to public v2.
 > **Role:** this note is the active mathematical source of truth for the Borel
 > track and the statement gate for its Lean formalisation.
 > `notes/borel-manuscript-20260827-audit.md` is the frozen record of the
@@ -31,8 +33,10 @@
 * **Reference-only, by owner directive.** The ceiling for this note is: LaTeX
   `\label` references, statement-level paraphrase, and short one-line
   quotations. No proof is reproduced.
-* **Naming.** The public e-print arXiv:2608.19618 carries **v1 only**. Neither
-  received source may be called "arXiv v2".
+* **Naming.** Public arXiv:2608.19618 has a v1 posted 2026-08-20 and a v2
+  posted 2026-11-03. Refer to those by their versioned arXiv links. The two
+  received sources retain their received-source names; a matching date is
+  not evidence that an archive is identical to an arXiv version.
 * **Comparison basis.** The 2026-08-27 archive is not available to this audit.
   Every "changed since 2026-08-27" statement below is a comparison against the
   record in `notes/borel-manuscript-20260827-audit.md`, not a textual diff.
