@@ -120,7 +120,9 @@ lake exe cache get   # fetch mathlib oleans; never cold-build mathlib
 lake build
 ```
 
-No CI is configured; validation is local/manual.
+No CI is configured; validation is local/manual. `lean/scripts/check-comparator.sh` runs an
+optional, manual Comparator pilot for one `IshikiExt` result against a frozen reference
+(`notes/comparator-pilot-contract.md`); it is not part of the build above.
 
 ## License
 
