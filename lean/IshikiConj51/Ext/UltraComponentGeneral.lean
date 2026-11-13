@@ -257,9 +257,9 @@ theorem centreMap_dist_le
     d.1.1 x (centreMap d a A hnet x : Y) ≤ a := by
   classical
   by_cases hx : x ∈ A
-  · rw [centreMap, dif_pos hx, d.1.2.dist_self]
+  · rw [centreMap, dite_eq_left hx, d.1.2.dist_self]
     exact ha
-  · rw [centreMap, dif_neg hx]
+  · rw [centreMap, dite_eq_right hx]
     exact (Classical.choose_spec (hnet x hx)).2.le
 
 /-- The centre map is continuous for the topology induced by a compatible
@@ -282,19 +282,19 @@ theorem continuous_centreMap
       (centreMap d a A hnet x : Y) ∈ A := by
     intro x
     by_cases hx : x ∈ A
-    · rw [centreMap, dif_pos hx]
+    · rw [centreMap, dite_eq_left hx]
       exact hx
-    · rw [centreMap, dif_neg hx]
+    · rw [centreMap, dite_eq_right hx]
       exact (Classical.choose_spec (hnet x hx)).1
   have hdist_lt : ∀ x : Y,
       dist x (centreMap d a A hnet x : Y) < a := by
     intro x
     by_cases hx : x ∈ A
-    · rw [centreMap, dif_pos hx]
+    · rw [centreMap, dite_eq_left hx]
       change d.1.1 x x < a
       rw [d.1.2.dist_self]
       exact ha
-    · rw [centreMap, dif_neg hx]
+    · rw [centreMap, dite_eq_right hx]
       exact (Classical.choose_spec (hnet x hx)).2
   have hlocal : ∀ x x' : Y, x' ∈ Metric.ball x a →
       centreMap d a A hnet x' = centreMap d a A hnet x := by
@@ -477,7 +477,7 @@ theorem mCoding_topology_ne_bot (hr : RangeSet.IsScale R r)
       (θ.symm ((⟨t, htS⟩ : ↥S), none) : Z)
   obtain ⟨n, hn⟩ := hr.exists_lt hε
   have hval : dU r S t ((⟨t, htS⟩ : ↥S), some n) ((⟨t, htS⟩ : ↥S), none) = r n := by
-    rw [dU_same, clusterDist, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+    rw [dU_same, clusterDist, ite_eq_right (by simp : (some n : Option ℕ) ≠ none)]
     show max (uRadius r t t (some n)) (uRadius r t t none) = r n
     rw [uRadius_some, uRadius_none, cantorDist_self, max_eq_right (hr.nonneg n),
       max_eq_left (hr.nonneg n)]

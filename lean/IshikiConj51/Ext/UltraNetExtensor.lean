@@ -133,12 +133,12 @@ def netPMetFun (d : UCPM Y R) (π : Y → ↥A) (x y : Y) : ℝ :=
 theorem netPMetFun_of_eq {d : UCPM Y R} {π : Y → ↥A} {x y : Y} (h : π x = π y) :
     netPMetFun d π x y = d.1 x y := by
   unfold netPMetFun
-  exact if_pos h
+  exact ite_eq_left h
 
 theorem netPMetFun_of_ne {d : UCPM Y R} {π : Y → ↥A} {x y : Y} (h : π x ≠ π y) :
     netPMetFun d π x y = max (d.1 x (π x)) (d.1 y (π y)) := by
   unfold netPMetFun
-  exact if_neg h
+  exact ite_eq_right h
 
 /-- `v′` is an `R`-valued pseudo-ultrametric for an arbitrary map `π`; no
 property of the net is needed. -/
@@ -379,9 +379,9 @@ theorem centreMap_dist_lt (d : UCPMOn Y R) (A : Set Y)
     d.1.1 x (centreMap d a A hnet x : Y) < a := by
   classical
   by_cases hx : x ∈ A
-  · rw [centreMap, dif_pos hx, d.1.2.dist_self]
+  · rw [centreMap, dite_eq_left hx, d.1.2.dist_self]
     exact ha
-  · rw [centreMap, dif_neg hx]
+  · rw [centreMap, dite_eq_right hx]
     exact (Classical.choose_spec (hnet x hx)).2
 
 /-! ## The isometric extensor of 4.5 -/

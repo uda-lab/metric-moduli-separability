@@ -127,7 +127,7 @@ theorem CPM.isClopen_val_preimage_BMet (Z : Type*) :
   have heq : (Subtype.val ⁻¹' CPM.BMet Z : Set ↥(CPM.Met Z))
       = Subtype.val ⁻¹' {e : CPM Z | CPM.edist (CPM.discrete Z) e < ⊤} := by
     ext d
-    simp only [Set.mem_preimage, Set.mem_setOf_eq]
+    simp only [Set.mem_preimage, Set.mem_ofPred_eq]
     rw [CPM.BMet_eq_component_discrete]
     exact ⟨fun h => h.2, fun h => ⟨d.2, h⟩⟩
   rw [heq]
@@ -152,7 +152,7 @@ theorem isClosed_val_preimage_Met_of_isClosed_val_preimage_BMet
     ⟨C ∩ {e : CPM Z | CPM.edist (CPM.discrete Z) e < ⊤},
       hCclosed.inter (CPM.isClopen_setOf_edist_lt_top (CPM.discrete Z)).isClosed, ?_⟩
   ext d
-  simp only [Set.mem_preimage, Set.mem_inter_iff, Set.mem_setOf_eq]
+  simp only [Set.mem_preimage, Set.mem_inter_iff, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨hdC, hdF⟩
     have hdB : (d : CPM Z) ∈ CPM.BMet Z := by

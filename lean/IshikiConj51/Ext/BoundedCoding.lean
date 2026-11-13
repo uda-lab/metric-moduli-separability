@@ -255,19 +255,19 @@ theorem starLike_triangle {ι : Type*} [DecidableEq ι] (σ : ι → ℝ) (hσ :
     (if i = k then 0 else σ i + σ k)
       ≤ (if i = j then 0 else σ i + σ j) + (if j = k then 0 else σ j + σ k) := by
   by_cases hik : i = k
-  · rw [if_pos hik]
+  · rw [ite_eq_left hik]
     have h1 := hσ i; have h2 := hσ j; have h3 := hσ k
     split_ifs <;> linarith
-  · rw [if_neg hik]
+  · rw [ite_eq_right hik]
     by_cases hij : i = j
     · have hjk : j ≠ k := by rw [← hij]; exact hik
-      rw [if_pos hij, if_neg hjk, hij]
+      rw [ite_eq_left hij, ite_eq_right hjk, hij]
       linarith
-    · rw [if_neg hij]
+    · rw [ite_eq_right hij]
       by_cases hjk : j = k
-      · rw [if_pos hjk, ← hjk]
+      · rw [ite_eq_left hjk, ← hjk]
         linarith
-      · rw [if_neg hjk]
+      · rw [ite_eq_right hjk]
         linarith [hσ j]
 
 /-- **Metricity** (audit §2.4).  `d_t` is a metric on `D` for *every* `t ∈ [0,1]`
@@ -282,16 +282,16 @@ theorem dExt_isMetricOn {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t : ℝ}
     rcases u with b | ⟨a, i⟩ <;> rcases v with c | ⟨a', j⟩
     · by_cases h : b = c
       · rw [h]
-      · rw [dExt, if_neg h] at huv; linarith
+      · rw [dExt, ite_eq_right h] at huv; linarith
     · rw [dExt] at huv; linarith
     · rw [dExt] at huv; linarith
     · by_cases hab : a = a'
       · subst hab
         by_cases hij : i = j
         · rw [hij]
-        · rw [dExt, if_pos rfl, if_neg hij] at huv
+        · rw [dExt, ite_eq_left rfl, ite_eq_right hij] at huv
           linarith [extRadius_pos_of_ne (a : ℝ) t hij]
-      · rw [dExt, if_neg hab] at huv; linarith
+      · rw [dExt, ite_eq_right hab] at huv; linarith
   · -- triangle inequality, organised by how the three points meet the partition
     intro u v w
     by_cases huw : extBlock S u = extBlock S w
@@ -340,7 +340,7 @@ theorem dExt_topology_eq_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
     rintro (c | ⟨a', j⟩) hlt
     · by_cases h : c = b
       · rw [h]
-      · rw [dExt, if_neg h] at hlt; linarith
+      · rw [dExt, ite_eq_right h] at hlt; linarith
     · rw [dExt] at hlt; linarith
   · have hmem := hS a.2
     match i with
@@ -354,10 +354,10 @@ theorem dExt_topology_eq_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
           · subst hab
             by_cases hij : j = some n
             · rw [hij]
-            · rw [dExt, if_pos rfl, if_neg hij] at hlt
+            · rw [dExt, ite_eq_left rfl, ite_eq_right hij] at hlt
               rw [show extRadius (a' : ℝ) t (some n) = spokeLen n (a' : ℝ) t from rfl] at hlt
               linarith [extRadius_nonneg (a' : ℝ) t j]
-          · rw [dExt, if_neg hab] at hlt
+          · rw [dExt, ite_eq_right hab] at hlt
             linarith [spokeLen_le_two ⟨ht0, ht1⟩ hmem n]
     | none =>
         -- centre: isolating radius |t − a|, positive since t ∉ S ∋ a
@@ -372,10 +372,10 @@ theorem dExt_topology_eq_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
             match j with
             | none => rfl
             | some m =>
-                rw [dExt, if_pos rfl, if_neg (by simp : (some m : Option ℕ) ≠ none)] at hlt
+                rw [dExt, ite_eq_left rfl, ite_eq_right (by simp : (some m : Option ℕ) ≠ none)] at hlt
                 simp only [extRadius, add_zero] at hlt
                 linarith [abs_sub_le_spokeLen m (a' : ℝ) t]
-          · rw [dExt, if_neg hab] at hlt
+          · rw [dExt, ite_eq_right hab] at hlt
             linarith [abs_sub_le_one_of_mem_Icc ⟨ht0, ht1⟩ hmem]
 
 /-- **Compatibility, `t ∈ S`** (audit §2.4).  At a parameter `t ∈ S` the
@@ -390,7 +390,7 @@ theorem dExt_topology_ne_bot {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {t :
   obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one hε (by norm_num : (1 / 2 : ℝ) < 1)
   have hne : (Sum.inr (⟨t, htS⟩, some n) : ExtIndex S) ≠ Sum.inr (⟨t, htS⟩, none) := by simp
   refine hne (hall _ ?_)
-  rw [dExt, if_pos rfl, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+  rw [dExt, ite_eq_left rfl, ite_eq_right (by simp : (some n : Option ℕ) ≠ none)]
   simp only [extRadius, add_zero, spokeLen, sub_self, abs_zero, zero_add]
   exact hn
 

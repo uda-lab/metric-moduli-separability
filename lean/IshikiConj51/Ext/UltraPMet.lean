@@ -134,17 +134,17 @@ def smallElt (R : RangeSet) (hR : R.IsCharacteristic) (ε : ℝ) : ℝ :=
 
 theorem smallElt_mem (R : RangeSet) (hR : R.IsCharacteristic) {ε : ℝ} (hε : 0 < ε) :
     smallElt R hR ε ∈ R.carrier := by
-  rw [smallElt, dif_pos hε]
+  rw [smallElt, dite_eq_left hε]
   exact (Classical.choose_spec (hR ε hε)).1
 
 theorem smallElt_pos (R : RangeSet) (hR : R.IsCharacteristic) {ε : ℝ} (hε : 0 < ε) :
     0 < smallElt R hR ε := by
-  rw [smallElt, dif_pos hε]
+  rw [smallElt, dite_eq_left hε]
   exact (Classical.choose_spec (hR ε hε)).2.1
 
 theorem smallElt_lt (R : RangeSet) (hR : R.IsCharacteristic) {ε : ℝ} (hε : 0 < ε) :
     smallElt R hR ε < ε := by
-  rw [smallElt, dif_pos hε]
+  rw [smallElt, dite_eq_left hε]
   exact (Classical.choose_spec (hR ε hε)).2.2
 
 /-- The scale built from a characteristic `R`: each term is a member of
@@ -289,7 +289,7 @@ def edist (d e : UCPM Z R) : ℝ≥0∞ := ⨅ r ∈ tolerances d e, ENNReal.ofR
 
 theorem tolerances_comm (d e : UCPM Z R) : tolerances d e = tolerances e d := by
   ext r
-  simp only [tolerances, mem_setOf_eq, and_congr_right_iff]
+  simp only [tolerances, mem_ofPred_eq, and_congr_right_iff]
   exact fun _ => ⟨fun h x y => (h x y).symm, fun h x y => (h x y).symm⟩
 
 /-- Every admissible tolerance bounds `𝒰𝒟^R`. -/
@@ -473,7 +473,7 @@ def sup (d e : UCPM Z R) : UCPM Z R :=
 theorem tolerances_comap (σ : Z ≃ W) (d e : UCPM W R) :
     tolerances (comap σ d) (comap σ e) = tolerances d e := by
   ext r
-  simp only [tolerances, mem_setOf_eq, comap_val, and_congr_right_iff]
+  simp only [tolerances, mem_ofPred_eq, comap_val, and_congr_right_iff]
   refine fun _ => ⟨fun h x y => ?_, fun h x y => ?_⟩
   · simpa using h (σ.symm x) (σ.symm y)
   · exact h (σ x) (σ y)

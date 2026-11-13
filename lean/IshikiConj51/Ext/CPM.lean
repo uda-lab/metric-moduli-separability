@@ -149,8 +149,10 @@ noncomputable instance instCompleteSpace : CompleteSpace (CPM D) := by
       exact hdinf y x
     · exact le_of_tendsto_of_tendsto' (hdinf x z) ((hdinf x y).add (hdinf y z))
         fun n => (u n).2.dist_triangle x y z
-  refine ⟨⟨dinf, hpm⟩, ?_⟩
+  let dlim : CPM D := ⟨dinf, hpm⟩
+  refine ⟨dlim, ?_⟩
   -- Uniform convergence: let the second index of the Cauchy modulus tend to `∞`.
+  show Filter.Tendsto u Filter.atTop (nhds dlim)
   rw [EMetric.tendsto_atTop]
   intro ε hε
   obtain ⟨r, hr0, hrε⟩ := ENNReal.lt_iff_exists_nnreal_btwn.mp hε
