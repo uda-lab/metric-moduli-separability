@@ -289,7 +289,7 @@ theorem isCompleteMetricOn_dExt {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {
     · rw [hc, hUN, hcb]
     · exfalso
       have hlt := hN n hn N le_rfl
-      rw [hc, hUN, dExt, if_neg hcb] at hlt
+      rw [hc, hUN, dExt, ite_eq_right hcb] at hlt
       linarith [ht.1]
   · -- a star block: off-diagonal distances are at least `|t − a| > 0`
     have hta : t ≠ (a : ℝ) := fun h => htS (h ▸ a.2)
@@ -308,7 +308,7 @@ theorem isCompleteMetricOn_dExt {S : Set ℝ} (hS : S ⊆ Set.Icc (0 : ℝ) 1) {
     · rw [hj, hk, hjk]
     · exfalso
       have hlt := hN₂ n (le_trans (le_max_right N N₂) hn) (max N N₂) (le_max_right N N₂)
-      rw [hj, hk, dExt, if_pos rfl, if_neg hjk] at hlt
+      rw [hj, hk, dExt, ite_eq_left rfl, ite_eq_right hjk] at hlt
       linarith [abs_sub_le_extRadius_add (a : ℝ) t hjk]
 
 /-! ## Completeness of the one-point amalgam (audit §2.11)
@@ -349,7 +349,7 @@ theorem isCompleteMetricOn_amalgam {E : Set Z} {z : Z} {d : Z → Z → ℝ} {e 
     set w : ℕ → ↥E := fun n => if h : u n ∈ E then ⟨u n, h⟩ else ⟨z, hz⟩ with hw
     have hwval : ∀ (n : ℕ) (h : u n ∈ E), w n = ⟨u n, h⟩ := by
       intro n h
-      simp only [hw, dif_pos h]
+      simp only [hw, dite_eq_left h]
     have hwCauchy : IsCauchySeqOn e w := by
       intro ε hε
       obtain ⟨N, hN⟩ := hu ε hε
@@ -374,7 +374,7 @@ theorem isCompleteMetricOn_amalgam {E : Set Z} {z : Z} {d : Z → Z → ℝ} {e 
     set v : ℕ → Z := fun n => if u n ∈ E then z else u n with hv
     have hvval : ∀ n ≥ N₀, v n = u n := by
       intro n hn
-      simp only [hv, if_neg (htail n hn)]
+      simp only [hv, ite_eq_right (htail n hn)]
     have hvCauchy : IsCauchySeqOn d v := by
       intro ε hε
       obtain ⟨N, hN⟩ := hu ε hε

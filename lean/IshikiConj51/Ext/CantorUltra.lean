@@ -170,8 +170,8 @@ theorem eventuallyConst_dense (b : Bool) : Dense (eventuallyConst b) := by
   rw [(PiNat.isTopologicalBasis_cylinders (fun _ : ℕ => Bool)).dense_iff]
   rintro o ⟨x, n, rfl⟩ -
   exact ⟨fun i => if i < n then x i else b,
-    PiNat.mem_cylinder_iff.mpr fun i hi => if_pos hi,
-    n, fun i hi => if_neg (not_lt.mpr hi)⟩
+    PiNat.mem_cylinder_iff.mpr fun i hi => ite_eq_left hi,
+    n, fun i hi => ite_eq_right (not_lt.mpr hi)⟩
 
 /-- A sequence cannot be eventually `false` and eventually `true` at once. -/
 theorem eventuallyConst_disjoint :

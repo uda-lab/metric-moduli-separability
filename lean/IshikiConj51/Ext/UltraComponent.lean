@@ -152,19 +152,19 @@ def uInto (d : UCPM Z R) (z : Z) (q : ℝ) (hq : 0 ≤ q) (x : Z) : ↥(uBall d 
 
 theorem uRetract_of_mem {d : UCPM Z R} {z : Z} {q : ℝ} {x : Z} (hx : x ∈ uBall d z q) :
     uRetract d z q x = z := by
-  rw [uRetract, if_pos hx]
+  rw [uRetract, ite_eq_left hx]
 
 theorem uRetract_of_notMem {d : UCPM Z R} {z : Z} {q : ℝ} {x : Z} (hx : x ∉ uBall d z q) :
     uRetract d z q x = x := by
-  rw [uRetract, if_neg hx]
+  rw [uRetract, ite_eq_right hx]
 
 theorem uInto_of_mem {d : UCPM Z R} {z : Z} {q : ℝ} {hq : 0 ≤ q} {x : Z}
     (hx : x ∈ uBall d z q) : uInto d z q hq x = ⟨x, hx⟩ := by
-  rw [uInto, dif_pos hx]
+  rw [uInto, dite_eq_left hx]
 
 theorem uInto_of_notMem {d : UCPM Z R} {z : Z} {q : ℝ} {hq : 0 ≤ q} {x : Z}
     (hx : x ∉ uBall d z q) : uInto d z q hq x = ⟨z, mem_uBall_self d z hq⟩ := by
-  rw [uInto, dif_neg hx]
+  rw [uInto, dite_eq_right hx]
 
 /-- **The one-point max-amalgam** of the base `d` with a coding `e` transported
 into the ball along `κ`.  It is the pointwise maximum of two pullbacks, so it
@@ -349,7 +349,7 @@ theorem psiU_topology_ne_bot (hq : 0 ≤ q) (θ : ↥(uBall d z q) ≃ UltraInde
     hcm.topology_eq_bot_iff.mp hbot (θ.symm ((⟨t, htS⟩ : ↥S), none) : Z)
   obtain ⟨n, hn⟩ := hr.exists_lt hε
   have hval : dU r S t ((⟨t, htS⟩ : ↥S), some n) ((⟨t, htS⟩ : ↥S), none) = r n := by
-    rw [dU_same, clusterDist, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+    rw [dU_same, clusterDist, ite_eq_right (by simp : (some n : Option ℕ) ≠ none)]
     show max (uRadius r t t (some n)) (uRadius r t t none) = r n
     rw [uRadius_some, uRadius_none, cantorDist_self, max_eq_right (hr.nonneg n),
       max_eq_left (hr.nonneg n)]
@@ -537,19 +537,19 @@ def hInto (H : Set Z) (z : Z) (hz : z ∈ H) (x : Z) : ↥H :=
 
 theorem hRetract_of_mem {H : Set Z} {z x : Z} (hx : x ∈ H) :
     hRetract H z x = z := by
-  rw [hRetract, if_pos hx]
+  rw [hRetract, ite_eq_left hx]
 
 theorem hRetract_of_notMem {H : Set Z} {z x : Z} (hx : x ∉ H) :
     hRetract H z x = x := by
-  rw [hRetract, if_neg hx]
+  rw [hRetract, ite_eq_right hx]
 
 theorem hInto_of_mem {H : Set Z} {z x : Z} {hz : z ∈ H} (hx : x ∈ H) :
     hInto H z hz x = ⟨x, hx⟩ := by
-  rw [hInto, dif_pos hx]
+  rw [hInto, dite_eq_left hx]
 
 theorem hInto_of_notMem {H : Set Z} {z x : Z} {hz : z ∈ H} (hx : x ∉ H) :
     hInto H z hz x = ⟨z, hz⟩ := by
-  rw [hInto, dif_neg hx]
+  rw [hInto, dite_eq_right hx]
 
 /-- The one-point max-amalgam over an arbitrary subset `H`. -/
 def hAmalgam (d : UCPM Z R) (H : Set Z) (z : Z) (hz : z ∈ H)

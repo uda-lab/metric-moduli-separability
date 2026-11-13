@@ -199,8 +199,10 @@ theorem completeSpace_UCPM (hR : R.IsCharacteristic) : CompleteSpace (UCPM Z R) 
       tendsto_nhds_unique (hL x y) (tendsto_atTop_of_eventually_const hconst)
     rw [this]
     exact (u N).2.mem_range x y
-  refine ⟨⟨L, ⟨hself, hcomm, htri, hmem⟩⟩, ?_⟩
+  let dlim : UCPM Z R := ⟨L, ⟨hself, hcomm, htri, hmem⟩⟩
+  refine ⟨dlim, ?_⟩
   -- Step (iii): uniform convergence is `𝒰𝒟^R`-convergence.
+  show Tendsto u atTop (𝓝 dlim)
   rw [EMetric.tendsto_atTop]
   intro δ hδ
   obtain ⟨c, hc0, hcδ⟩ : ∃ c : ℝ, 0 < c ∧ ENNReal.ofReal c < δ := by

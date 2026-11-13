@@ -70,22 +70,22 @@ variable {E : Set Z} {z : Z} {d : Z → Z → ℝ} {e : ↥E → ↥E → ℝ}
 theorem amalgam_mem_mem (hz : z ∈ E) {x y : Z} (hx : x ∈ E) (hy : y ∈ E) :
     amalgam E z hz d e x y = e ⟨x, hx⟩ ⟨y, hy⟩ := by
   simp only [amalgam]
-  rw [dif_pos hx, dif_pos hy]
+  rw [dite_eq_left hx, dite_eq_left hy]
 
 theorem amalgam_mem_notMem (hz : z ∈ E) {x y : Z} (hx : x ∈ E) (hy : y ∉ E) :
     amalgam E z hz d e x y = e ⟨x, hx⟩ ⟨z, hz⟩ + d z y := by
   simp only [amalgam]
-  rw [dif_pos hx, dif_neg hy]
+  rw [dite_eq_left hx, dite_eq_right hy]
 
 theorem amalgam_notMem_mem (hz : z ∈ E) {x y : Z} (hx : x ∉ E) (hy : y ∈ E) :
     amalgam E z hz d e x y = d x z + e ⟨z, hz⟩ ⟨y, hy⟩ := by
   simp only [amalgam]
-  rw [dif_neg hx, dif_pos hy]
+  rw [dite_eq_right hx, dite_eq_left hy]
 
 theorem amalgam_notMem_notMem (hz : z ∈ E) {x y : Z} (hx : x ∉ E) (hy : y ∉ E) :
     amalgam E z hz d e x y = d x y := by
   simp only [amalgam]
-  rw [dif_neg hx, dif_neg hy]
+  rw [dite_eq_right hx, dite_eq_right hy]
 
 /-- **The amalgam is a metric.**  No hypothesis beyond `d` and `e` being
 metrics is needed: routing cross pairs through `z` is exactly what makes the

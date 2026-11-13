@@ -285,7 +285,7 @@ theorem isCompleteMetricOn_uAmalgam {d : UCPM Z R} {z : Z} {q : ℝ} (hq : 0 ≤
     set v : ℕ → Z := fun n => if u n ∈ uBall d z q then z else u n with hv
     have hvval : ∀ n ≥ N₀, v n = u n := by
       intro n hn
-      simp only [hv, if_neg (htail n hn)]
+      simp only [hv, ite_eq_right (htail n hn)]
     have hvCauchy : IsCauchySeqOn d.1 v := by
       intro ε hε
       obtain ⟨N, hN⟩ := hu ε hε

@@ -471,7 +471,7 @@ theorem RangeSet.IsScale.monotoneOn_rescale {R : RangeSet} {r : ℕ → ℝ}
   unfold RangeSet.rescale
   by_cases hc1 : 0 < t1
   · have hc2 : 0 < t2 := hc1.trans_le hle
-    rw [dif_pos hc1, dif_pos hc2]
+    rw [dite_eq_left hc1, dite_eq_left hc2]
     set hp1 := hr.exists_lt hc1 with hp1_def
     set hp2 := hr.exists_lt hc2 with hp2_def
     have hspec1 : r (Nat.find hp1) < t1 := Nat.find_spec hp1
@@ -479,11 +479,11 @@ theorem RangeSet.IsScale.monotoneOn_rescale {R : RangeSet} {r : ℕ → ℝ}
     have hle21 : Nat.find hp2 ≤ Nat.find hp1 := Nat.find_min' hp2 hlt2
     have hsub_le : Nat.find hp2 - 1 ≤ Nat.find hp1 - 1 := by omega
     exact hr.antitone hsub_le
-  · rw [dif_neg hc1]
+  · rw [dite_eq_right hc1]
     by_cases hc2 : 0 < t2
-    · rw [dif_pos hc2]
+    · rw [dite_eq_left hc2]
       exact hr.nonneg _
-    · simp [dif_neg hc2]
+    · simp [dite_eq_right hc2]
 
 theorem RangeSet.IsScale.tendsto_rescale {R : RangeSet} {r : ℕ → ℝ}
     (hr : R.IsScale r) :
@@ -497,16 +497,16 @@ theorem RangeSet.IsScale.tendsto_rescale {R : RangeSet} {r : ℕ → ℝ}
   rw [Real.dist_eq, sub_zero, abs_of_pos ht] at hdist
   have hnn0 : 0 ≤ RangeSet.rescale hr t := by
     unfold RangeSet.rescale
-    rw [dif_pos ht]
+    rw [dite_eq_left ht]
     exact hr.nonneg _
   rw [Real.dist_eq, sub_zero, abs_of_nonneg hnn0]
   unfold RangeSet.rescale
-  rw [dif_pos ht]
+  rw [dite_eq_left ht]
   set hp := hr.exists_lt ht with hp_def
   have hspecm : r (Nat.find hp) < t := Nat.find_spec hp
   have hnm : n < Nat.find hp := by
     by_contra hcon
-    push_neg at hcon
+    push Not at hcon
     have hran : r n ≤ r (Nat.find hp) := hr.antitone hcon
     linarith
   have hnle : n ≤ Nat.find hp - 1 := by omega
@@ -608,7 +608,7 @@ theorem nonempty_UMetOn_of_isUltrametrizableSpace
       lt_of_le_of_lt hle (lt_of_lt_of_le hab' (min_le_right ε (r 0)))
     have hdlt : dist a b < r 0 := by
       by_contra hge
-      push_neg at hge
+      push Not at hge
       rw [min_eq_right hge] at hlt_r0
       exact lt_irrefl _ hlt_r0
     have hmin_eq : min (dist a b) (r 0) = dist a b := min_eq_left hdlt.le

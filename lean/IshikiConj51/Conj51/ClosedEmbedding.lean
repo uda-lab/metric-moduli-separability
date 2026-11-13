@@ -167,7 +167,7 @@ theorem isClosed_starRange (A : Set ℝ) : IsClosed (StarRange A) := by
         ⋂ (u : StarIndex A) (v : StarIndex A),
           {e : MetD (StarIndex A) | e.1 u v = dStar A (anchorParam A e) u v} := by
     ext e
-    simp only [StarRange, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_preimage,
+    simp only [StarRange, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_preimage,
       Set.mem_iInter]
   rw [hset]
   refine (isClosed_Icc.preimage hcont).inter
