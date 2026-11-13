@@ -1,0 +1,7 @@
+{
+  "challenge_module": "ComparatorChallenge.Reference",
+  "solution_module": "IshikiConj51.Ext.BMetClopen",
+  "theorem_names": ["IshikiExt.isClopen_setOf_edist_lt_top"],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Classical.choice", "Quot.sound"]
+}
