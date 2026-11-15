@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: >-
+  Cite the joint preprint for the mathematical results. When referring to
+  this Lean development, also identify the repository commit and declaration
+  or module used.
+type: software
+title: "Metric moduli / separability project"
+authors:
+  - name: "metric-moduli-separability contributors"
+repository-code: "https://github.com/uda-lab/metric-moduli-separability"
+license: Apache-2.0
+preferred-citation:
+  type: article
+  title: "Borelness of Moduli Spaces of Metrics Implies Separability"
+  authors:
+    - family-names: Ishiki
+      given-names: Yoshito
+    - family-names: Uda
+      given-names: Tomoki
+  year: 2026
+  date-published: "2026-11-03"
+  doi: "10.48550/arXiv.2608.19618"
+  url: "https://arxiv.org/abs/2608.19618v2"
+  version: "2"

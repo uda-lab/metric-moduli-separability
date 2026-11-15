@@ -1,5 +1,11 @@
 # Borel manuscript audit — 2026-08-27 received source
 
+> **Historical-source record.** [arXiv:2608.19618v2](https://arxiv.org/abs/2608.19618v2)
+> was subsequently posted on 2026-11-03. The "v1 only" wording preserved
+> below belongs to this record's original source context. It is not a claim
+> about current arXiv availability or an identification of the received
+> archive with public v2.
+
 > **Subject:** Y. Ishiki and T. Uda, *Borelness of Moduli Spaces of Metrics
 > Implies Separability*, the manuscript source received from the owner on
 > 2026-09-02, whose archive carries the internal timestamp 2026-08-27 08:44

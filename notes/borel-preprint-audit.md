@@ -1,5 +1,10 @@
 # Borel preprint audit — arXiv:2608.19618 v1
 
+> **Historical-source record.** Public [arXiv:2608.19618v2](https://arxiv.org/abs/2608.19618v2)
+> was posted on 2026-11-03. The "v1 only" wording and received-source "v2"
+> shorthand preserved below describe the historical record, not current
+> arXiv availability. They do not identify a received archive with public v2.
+
 > **Frozen v1 record.** This note audits **arXiv:2608.19618 v1** and its
 > verdicts are v1 verdicts. The active source of truth for the Borel track is
 > `notes/borel-manuscript-20261103-audit.md` (manuscript source received on
