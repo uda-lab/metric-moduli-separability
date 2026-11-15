@@ -129,7 +129,7 @@ lake exe cache get   # fetch mathlib oleans; never cold-build mathlib
 flock /tmp/lean-build.lock lake build
 ```
 
-`lean/lean-toolchain` pins Lean **4.32.2**, and `lean/lake-manifest.json`
+`lean/lean-toolchain` pins Lean **4.35.0**, and `lean/lake-manifest.json`
 pins mathlib and its transitive dependencies. Keep the manifest when
 reproducing a build; `lake update` changes the dependency resolution and is
 not part of this procedure. Allow at least 2 GiB of free memory and do not
@@ -147,6 +147,9 @@ untracked scratch file and are recorded with the corresponding PR.
 For the mathematical notes' PDF build, dependencies and missing-glyph
 checks, see [notes/README.md](notes/README.md). No CI is configured;
 validation is local/manual, with execution evidence in Issues and PRs.
+`lean/scripts/check-comparator.sh` runs an optional, manual Comparator pilot
+for one `IshikiExt` result against a frozen reference
+(`notes/comparator-pilot-contract.md`); it is not part of the build above.
 
 ## Citation
 

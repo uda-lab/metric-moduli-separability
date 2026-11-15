@@ -5,7 +5,11 @@ defaultTargets = ["IshikiConj51"]
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"
-rev = "v4.32.2"
+rev = "v4.35.0"
 
 [[lean_lib]]
 name = "IshikiConj51"
+
+# Keep the Comparator reference separate; do not import it from the production root.
+[[lean_lib]]
+name = "ComparatorChallenge"

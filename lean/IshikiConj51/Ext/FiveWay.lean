@@ -127,11 +127,9 @@ theorem isCompletelyMetrizableSpace_CPM_MetOn_of_forall_component
     Equiv.ofBijective (TopologicalSpace.Fiber.sigmaIsoHom g)
       ⟨TopologicalSpace.Fiber.sigmaIsoHom_inj g,
         TopologicalSpace.Fiber.sigmaIsoHom_surj g⟩
-  have hsigma_continuous : Continuous sigmaEquiv := by
-    simpa only [sigmaEquiv, Equiv.coe_ofBijective] using
-      (TopologicalSpace.Fiber.sigmaIsoHom g).continuous
-  have hsigma_open_equiv : IsOpenMap sigmaEquiv := by
-    simpa only [sigmaEquiv, Equiv.coe_ofBijective] using hsigma_open
+  have hsigma_continuous : Continuous sigmaEquiv :=
+    (TopologicalSpace.Fiber.sigmaIsoHom g).continuous
+  have hsigma_open_equiv : IsOpenMap sigmaEquiv := hsigma_open
   let eSigma :
       (Σ c : Function.Fiber g, c.val) ≃ₜ ↥(CPM.MetOn X) :=
     sigmaEquiv.toHomeomorphOfContinuousOpen hsigma_continuous hsigma_open_equiv
@@ -786,7 +784,7 @@ theorem isCompletelyMetrizableSpace_component_of_sigmaCompactSpace
       · intro hp n
         have hpcomponent : ((p : Y) : CPMOn X) ∈ CPMOn.component d := by
           refine ⟨?_, ?_⟩
-          · simpa only [C, Set.mem_setOf_eq] using hp
+          · simpa only [C, Set.mem_ofPred_eq] using hp
           · rw [edist_comm]
             exact p.2
         simpa only [R] using
@@ -798,7 +796,7 @@ theorem isCompletelyMetrizableSpace_component_of_sigmaCompactSpace
             ((p : Y) : CPMOn X) hd o p.2 (by
               intro n
               simpa only [R] using hp n)
-        simpa only [C, Set.mem_setOf_eq] using hpmet
+        simpa only [C, Set.mem_ofPred_eq] using hpmet
     have hCgdelta : IsGδ C := by
       rw [hcharacterization]
       exact IsGδ.iInter fun n =>
@@ -818,7 +816,7 @@ theorem isCompletelyMetrizableSpace_component_of_sigmaCompactSpace
       constructor
       · rintro ⟨p, rfl⟩
         refine ⟨?_, ?_⟩
-        · simpa only [C, Set.mem_setOf_eq] using p.2
+        · simpa only [C, Set.mem_ofPred_eq] using p.2
         · rw [edist_comm]
           exact p.1.2
       · intro hq
@@ -826,7 +824,7 @@ theorem isCompletelyMetrizableSpace_component_of_sigmaCompactSpace
         · change edist q d < ⊤
           rw [edist_comm]
           exact hq.2
-        · simpa only [C, Set.mem_setOf_eq] using hq.1
+        · simpa only [C, Set.mem_ofPred_eq] using hq.1
     let eC : ↥C ≃ₜ ↥(CPMOn.component d) :=
       hfC.toHomeomorph.trans (Homeomorph.setCongr hrange)
     exact isCompletelyMetrizableSpace_of_homeomorph eC hCcomplete

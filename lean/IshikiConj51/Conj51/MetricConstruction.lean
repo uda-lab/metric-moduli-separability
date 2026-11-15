@@ -188,19 +188,19 @@ theorem star_dist_triangle {ι : Type*} [DecidableEq ι] (σ : ι → ℝ) (hσ 
     (if i = k then 0 else σ i + σ k)
       ≤ (if i = j then 0 else σ i + σ j) + (if j = k then 0 else σ j + σ k) := by
   by_cases hik : i = k
-  · rw [if_pos hik]
+  · rw [ite_eq_left hik]
     have h1 := hσ i; have h2 := hσ j; have h3 := hσ k
     split_ifs <;> linarith
-  · rw [if_neg hik]
+  · rw [ite_eq_right hik]
     by_cases hij : i = j
     · have hjk : j ≠ k := by rw [← hij]; exact hik
-      rw [if_pos hij, if_neg hjk, hij]
+      rw [ite_eq_left hij, ite_eq_right hjk, hij]
       linarith
-    · rw [if_neg hij]
+    · rw [ite_eq_right hij]
       by_cases hjk : j = k
-      · rw [if_pos hjk, ← hjk]
+      · rw [ite_eq_left hjk, ← hjk]
         linarith
-      · rw [if_neg hjk]
+      · rw [ite_eq_right hjk]
         linarith [hσ j]
 
 /-- **(C1)** (report §3.3).  `d_t` is a metric on `D` for *every* `t ∈ [0,1]`
@@ -216,16 +216,16 @@ theorem dStar_isMetricOn (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : ℝ) 1
     rcases u with b | ⟨a, i⟩ <;> rcases v with c | ⟨a', j⟩
     · by_cases h : b = c
       · rw [h]
-      · rw [dStar, if_neg h] at huv; linarith
+      · rw [dStar, ite_eq_right h] at huv; linarith
     · rw [dStar] at huv; linarith
     · rw [dStar] at huv; linarith
     · by_cases hab : a = a'
       · subst hab
         by_cases hij : i = j
         · rw [hij]
-        · rw [dStar, if_pos rfl, if_neg hij] at huv
+        · rw [dStar, ite_eq_left rfl, ite_eq_right hij] at huv
           linarith [starRadius_pos_of_ne (a : ℝ) t hij]
-      · rw [dStar, if_neg hab] at huv; linarith
+      · rw [dStar, ite_eq_right hab] at huv; linarith
   · -- Triangle inequality: report §3.3 (C1) cases (a)–(c), organised by how
     -- the three points meet the partition.
     intro u v w
@@ -270,7 +270,7 @@ theorem dStar_topology_eq_bot (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : �
     rintro (c | ⟨a', j⟩) hlt
     · by_cases h : c = b
       · rw [h]
-      · rw [dStar, if_neg h] at hlt; linarith
+      · rw [dStar, ite_eq_right h] at hlt; linarith
     · rw [dStar] at hlt; linarith
   · match i with
     | some n =>
@@ -283,10 +283,10 @@ theorem dStar_topology_eq_bot (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : �
           · subst hab
             by_cases hij : j = some n
             · rw [hij]
-            · rw [dStar, if_pos rfl, if_neg hij] at hlt
+            · rw [dStar, ite_eq_left rfl, ite_eq_right hij] at hlt
               rw [show starRadius (a' : ℝ) t (some n) = starSpoke n (a' : ℝ) t from rfl] at hlt
               linarith [starRadius_nonneg (a' : ℝ) t j]
-          · rw [dStar, if_neg hab] at hlt
+          · rw [dStar, ite_eq_right hab] at hlt
             linarith [starSpoke_le_one n (a : ℝ) t]
     | none =>
         -- centre: δ(y_a) = min(1, |t − a|), positive since t ∉ A ∋ a
@@ -301,13 +301,13 @@ theorem dStar_topology_eq_bot (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : �
             match j with
             | none => rfl
             | some m =>
-                rw [dStar, if_pos rfl, if_neg (by simp : (some m : Option ℕ) ≠ none)] at hlt
+                rw [dStar, ite_eq_left rfl, ite_eq_right (by simp : (some m : Option ℕ) ≠ none)] at hlt
                 simp only [starRadius, add_zero, starSpoke] at hlt
                 have hmono : min 1 |t - (a' : ℝ)|
                     ≤ min 1 (|t - (a' : ℝ)| + 1 / ((m : ℝ) + 1)) :=
                   min_le_min le_rfl (le_add_of_nonneg_right (by positivity))
                 linarith
-          · rw [dStar, if_neg hab] at hlt
+          · rw [dStar, ite_eq_right hab] at hlt
             linarith [min_le_left (1 : ℝ) |t - (a : ℝ)|]
 
 /-- **(C3)** (report §3.3).  At a parameter `t ∈ A` the function `d_t` is
@@ -323,7 +323,7 @@ theorem dStar_topology_ne_bot (A : Set ℝ) {t : ℝ} (ht : t ∈ Set.Icc (0 : �
   intro ε hε
   obtain ⟨n, hn⟩ := exists_nat_one_div_lt hε
   refine ⟨Sum.inr (⟨t, htA⟩, some n), ?_, by simp⟩
-  rw [dStar, if_pos rfl, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+  rw [dStar, ite_eq_left rfl, ite_eq_right (by simp : (some n : Option ℕ) ≠ none)]
   simp only [starRadius, add_zero, starSpoke, sub_self, abs_zero, zero_add]
   exact lt_of_le_of_lt (min_le_right _ _) hn
 

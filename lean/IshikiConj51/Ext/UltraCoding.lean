@@ -125,7 +125,7 @@ theorem clusterDist_comm (σ : Option ℕ → ℝ) (i j : Option ℕ) :
     clusterDist σ i j = clusterDist σ j i := by
   by_cases h : i = j
   · rw [h]
-  · rw [clusterDist, clusterDist, if_neg h, if_neg (Ne.symm h), max_comm]
+  · rw [clusterDist, clusterDist, ite_eq_right h, ite_eq_right (Ne.symm h), max_comm]
 
 theorem clusterDist_nonneg {σ : Option ℕ → ℝ} (hσ : ∀ i, 0 ≤ σ i) (i j : Option ℕ) :
     0 ≤ clusterDist σ i j := by
@@ -143,7 +143,7 @@ theorem clusterDist_le {σ : Option ℕ → ℝ} {c : ℝ} (hc : 0 ≤ c) (hσ :
 
 theorem le_clusterDist_of_ne {σ : Option ℕ → ℝ} {i j : Option ℕ} (h : i ≠ j) :
     σ i ≤ clusterDist σ i j := by
-  rw [clusterDist, if_neg h]
+  rw [clusterDist, ite_eq_right h]
   exact le_max_left _ _
 
 /-- Off the diagonal of a cluster at least one of the two indices is a spoke. -/
@@ -164,21 +164,21 @@ theorem clusterDist_triangle_max {σ : Option ℕ → ℝ} (hσ : ∀ i, 0 ≤ �
     clusterDist σ i k ≤ max (clusterDist σ i j) (clusterDist σ j k) := by
   simp only [clusterDist]
   by_cases hik : i = k
-  · rw [if_pos hik]
+  · rw [ite_eq_left hik]
     refine le_trans ?_ (le_max_left _ _)
     split_ifs
     · exact le_rfl
     · exact le_max_of_le_left (hσ i)
-  · rw [if_neg hik]
+  · rw [ite_eq_right hik]
     by_cases hij : i = j
     · have hjk : j ≠ k := fun h => hik (hij.trans h)
-      rw [if_pos hij, if_neg hjk, ← hij]
+      rw [ite_eq_left hij, ite_eq_right hjk, ← hij]
       exact le_max_right _ _
-    · rw [if_neg hij]
+    · rw [ite_eq_right hij]
       by_cases hjk : j = k
-      · rw [if_pos hjk, ← hjk]
+      · rw [ite_eq_left hjk, ← hjk]
         exact le_max_left _ _
-      · rw [if_neg hjk]
+      · rw [ite_eq_right hjk]
         exact max_le (le_max_of_le_left (le_max_left _ _))
           (le_max_of_le_right (le_max_right _ _))
 
@@ -188,7 +188,7 @@ theorem exists_head_le_clusterDist (r : ℕ → ℝ) (w t : ℕ → Bool) {i j :
     (h : i ≠ j) : ∃ n : ℕ, r n ≤ clusterDist (uRadius r w t) i j := by
   obtain ⟨n, hn⟩ := exists_spoke h
   refine ⟨n, ?_⟩
-  rw [clusterDist, if_neg h]
+  rw [clusterDist, ite_eq_right h]
   rcases hn with hn | hn
   · rw [hn]; exact le_max_of_le_left (head_le_uRadius r w t n)
   · rw [hn]; exact le_max_of_le_right (head_le_uRadius r w t n)
@@ -199,7 +199,7 @@ theorem exists_head_le_clusterDist (r : ℕ → ℝ) (w t : ℕ → Bool) {i j :
 theorem cantorDist_le_clusterDist (r : ℕ → ℝ) (w t : ℕ → Bool) {i j : Option ℕ}
     (h : i ≠ j) : cantorDist r t w ≤ clusterDist (uRadius r w t) i j := by
   obtain ⟨n, hn⟩ := exists_spoke h
-  rw [clusterDist, if_neg h]
+  rw [clusterDist, ite_eq_right h]
   rcases hn with hn | hn
   · rw [hn]; exact le_max_of_le_left (cantorDist_le_uRadius r w t n)
   · rw [hn]; exact le_max_of_le_right (cantorDist_le_uRadius r w t n)
@@ -231,11 +231,11 @@ def dU (r : ℕ → ℝ) (S : Set (ℕ → Bool)) (t : ℕ → Bool) (u v : Ultr
 theorem dU_of_fst_eq {S : Set (ℕ → Bool)} {t : ℕ → Bool} {u v : UltraIndex S}
     (h : u.1 = v.1) :
     dU r S t u v = clusterDist (uRadius r (u.1 : ℕ → Bool) t) u.2 v.2 := by
-  rw [dU, if_pos h]
+  rw [dU, ite_eq_left h]
 
 theorem dU_of_fst_ne {S : Set (ℕ → Bool)} {t : ℕ → Bool} {u v : UltraIndex S}
     (h : u.1 ≠ v.1) : dU r S t u v = r 0 := by
-  rw [dU, if_neg h]
+  rw [dU, ite_eq_right h]
 
 /-- The value inside one cluster, with both endpoints displayed as pairs; this
 is the form the isolating-radius and separating-pair arguments rewrite with. -/
@@ -363,7 +363,7 @@ theorem dU_topology_ne_bot (hr : RangeSet.IsScale R r) {S : Set (ℕ → Bool)} 
   obtain ⟨n, hn⟩ := hr.exists_lt hε
   have hne : ((⟨t, htS⟩ : ↥S), some n) ≠ ((⟨t, htS⟩ : ↥S), none) := by simp
   refine hne (hall _ ?_)
-  rw [dU_same, clusterDist, if_neg (by simp : (some n : Option ℕ) ≠ none)]
+  rw [dU_same, clusterDist, ite_eq_right (by simp : (some n : Option ℕ) ≠ none)]
   show max (uRadius r t t (some n)) (uRadius r t t none) < ε
   rw [uRadius_some, uRadius_none, cantorDist_self, max_eq_right (hr.nonneg n),
     max_eq_left (hr.nonneg n)]
@@ -473,13 +473,13 @@ theorem exists_separating_pair (hr : RangeSet.IsScale R r) {S : Set (ℕ → Boo
   have hswρ : cantorDist r s w < cantorDist r s t := hw.trans hn
   have htw : cantorDist r t w = cantorDist r s t := cantorDist_isosceles hr hswρ
   refine ⟨((⟨w, hwS⟩ : ↥S), none), ((⟨w, hwS⟩ : ↥S), some n), ?_, ?_⟩
-  · rw [dU_same, clusterDist, if_neg (by simp : (none : Option ℕ) ≠ some n)]
+  · rw [dU_same, clusterDist, ite_eq_right (by simp : (none : Option ℕ) ≠ some n)]
     show max (uRadius r w s none) (uRadius r w s (some n)) < cantorDist r s t
     rw [uRadius_none, uRadius_some,
       max_eq_right (le_max_of_le_right (hr.nonneg n) :
         (0 : ℝ) ≤ max (cantorDist r s w) (r n))]
     exact max_lt hswρ hn
-  · rw [dU_same, clusterDist, if_neg (by simp : (none : Option ℕ) ≠ some n)]
+  · rw [dU_same, clusterDist, ite_eq_right (by simp : (none : Option ℕ) ≠ some n)]
     show max (uRadius r w t none) (uRadius r w t (some n)) = cantorDist r s t
     rw [uRadius_none, uRadius_some, htw, max_eq_left (le_of_lt hn),
       max_eq_right hρpos.le]

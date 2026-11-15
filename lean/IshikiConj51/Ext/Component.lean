@@ -207,7 +207,7 @@ theorem exists_aleph1_ball (hZ : aleph 1 ≤ #Z) (d : Z → Z → ℝ)
     push Not at hall
     have hcov : (Set.univ : Set Z) = ⋃ n : ℕ, {x : Z | d z x ≤ (n : ℝ)} := by
       ext x
-      simp only [Set.mem_univ, true_iff, Set.mem_iUnion, Set.mem_setOf_eq]
+      simp only [Set.mem_univ, true_iff, Set.mem_iUnion, Set.mem_ofPred_eq]
       exact exists_nat_ge (d z x)
     have hcount : (Set.univ : Set Z).Countable := by
       rw [hcov]
@@ -224,7 +224,7 @@ theorem exists_aleph1_ball (hZ : aleph 1 ≤ #Z) (d : Z → Z → ℝ)
     exact hn (Cardinal.le_aleph0_iff_set_countable.mp hcon)
   have hsub : {x : Z | d z x ≤ (n : ℝ)} ⊆ {x : Z | d z x ≤ max (n : ℝ) 1} := by
     intro x hx
-    simp only [Set.mem_setOf_eq] at hx ⊢
+    simp only [Set.mem_ofPred_eq] at hx ⊢
     exact le_trans hx (le_max_left _ _)
   exact ⟨max (n : ℝ) 1, le_max_right _ _, hge.trans (Cardinal.mk_le_mk_of_subset hsub)⟩
 

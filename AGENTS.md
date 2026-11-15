@@ -18,6 +18,7 @@
 ~~~sh
 cd lean && lake exe cache get   # mathlib oleans; NEVER cold-build mathlib here
 flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2GiB free
+bash lean/scripts/check-comparator.sh   # optional, manual: the issue #139 Comparator pilot (notes/comparator-pilot-contract.md)
 ~~~
 
 ## Code Conventions
@@ -26,6 +27,7 @@ flock /tmp/lean-build.lock lake build   # container-wide single build; need ≥2
 - If an external extensor/descriptive-set theorem is absent from Mathlib, expose it as an explicit hypothesis or formalise it separately; never hide it behind a custom axiom.
 - Accepted Lean results must be sorry-free with an explained `#print axioms` audit; the axiom footprint must be a subset of `propext`/`Classical.choice`/`Quot.sound` — no `sorryAx`, no custom axioms. The reviewer/shepherd re-runs the audit independently in a throwaway untracked scratch file (`import IshikiConj51` + `#print axioms`), never committed. Record failed proof attempts in audit notes, not reader-facing reports.
 - Japanese mathematical prose uses comma/period punctuation; `notes/terminology.md` is the terminology SoT for both tracks (`notes/descriptive-set-theory-ja.md` is the expository reference).
+- The Comparator pilot's reference (`lean/ComparatorChallenge/`) and config (`lean/comparator.json`) are a frozen contract per `notes/comparator-pilot-contract.md`; a change needs a scoped Issue and an independent source ↔ Lean review before any proof work on the new reference.
 
 ## Architecture
 
